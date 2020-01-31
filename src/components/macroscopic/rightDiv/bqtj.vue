@@ -86,12 +86,11 @@ export default {
           itemStyle: { color: "#f41e1e" }
         },
         {
-          value: 5,
+          value: 7,
           name: "大南",
           itemStyle: { color: "#fef5cc" }
         }
       ],
-      dataHJ: [30], //合计损失
       dataName: [
         "21日",
         "22日",
@@ -101,10 +100,11 @@ export default {
         "26日",
         "27日",
         "28日",
-        "29"
+        "29日",
+        "30"
       ],
-      dataQS: [2, 4, 6, 10, 18, 32, 60, 114, 172],
-      dataLC: [0, 0, 0, 0, 5, 10, 17, 27, 29]
+      dataQS: [2, 4, 6, 10, 18, 32, 60, 114, 172, 227],
+      dataLC: [0, 0, 0, 0, 5, 10, 17, 27, 29, 32]
     };
   },
   methods: {
@@ -114,16 +114,8 @@ export default {
       chart.setOption({
         grid: {
           left: "8%",
-          right: "5%"
-        },
-        title: {
-          text: `确诊病例 ${this.dataHJ} 例`,
-          textStyle: {
-            fontSize: 16,
-            color: "#fff"
-          },
-          top: "3%",
-          left: "center"
+          right: "5%",
+          top: "14%"
         },
         xAxis: {
           type: "category",

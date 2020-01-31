@@ -42,9 +42,7 @@ export default {
     this.$props.leftOptions &&
       this.$props.leftOptions.map(_item => {
         _item.children.map(item => {
-          //  id,fun 都存在表明有该选项的对应画图函数
-          if (!item.id) return;
-          that.doFun(item);
+          item.id && that.doFun(item);
         });
       });
   },
@@ -68,17 +66,22 @@ export default {
      * @param {Object} item 单个元素
      */
     doFun(item) {
+      const shallYT = this.$parent.$refs.leftOptions.shallYT;
+      const _id_ = (shallYT ? "yt_" : "") + item.id;
       if (item.check) {
-        this.map && this.map.findLayerById(item.id)
-          ? (this.map.findLayerById(item.id).visible = true)
-          : this.addFeatures(item);
-
+        this.map && this.map.findLayerById(_id_)
+          ? (this.map.findLayerById(_id_).visible = true)
+          : this.addFeatures(item, _id_);
         this.map && this.map.findLayerById("fangkong")
           ? (this.map.findLayerById("fangkong").visible = false)
           : null;
       } else {
+        // console.log(item.id, "yt_" + item.id);
         this.map && this.map.findLayerById(item.id)
           ? (this.map.findLayerById(item.id).visible = false)
+          : null;
+        this.map && this.map.findLayerById("yt_" + item.id)
+          ? (this.map.findLayerById("yt_" + item.id).visible = false)
           : null;
       }
     },
@@ -196,7 +199,7 @@ export default {
                   <th class="esri-feature__field-header">${fieldAliases[k] ||
                     k}</th>
                   <td class="esri-feature__field-data">${attributes[k] ||
-                    "无"}</td>
+                    ""}</td>
                 </tr>`;
               })
               .join("")}
@@ -335,18 +338,30 @@ export default {
         });
       }
     },
-    addFeatures(item) {
+    addFeatures(item, _id_) {
+      const id = _id_.replace(/yt_/g, "");
       const that = this;
-      const { url, id } = item;
+      const { url } = item;
+      const shallYT = this.$parent.$refs.leftOptions.shallYT;
       return new Promise((resolve, reject) => {
         loadModules(
           ["esri/layers/FeatureLayer", "esri/layers/MapImageLayer"],
           OPTION
         ).then(([FeatureLayer, MapImageLayer]) => {
-          const option = { url, id, outFields: "*" };
+          const option = { url, id: _id_, outFields: "*" };
           if (tipHash[id] && Hash[tipHash[id]]) {
+            const _hash_ = Hash[tipHash[id]];
             option.popupTemplate = {
-              content: Hash[tipHash[id]]
+              content: `<table class="esri-widget__table" summary="属性和值列表"><tbody>
+            ${_hash_
+              .map(k => {
+                return `<tr>
+                  <th class="esri-feature__field-header">${k.label}</th>
+                  <td class="esri-feature__field-data">{${k.fieldName}}</td>
+                </tr>`;
+              })
+              .join("")}
+          </tbody></table>`
             };
           }
           const _layers_ = item.isImg ? MapImageLayer : FeatureLayer;
@@ -357,12 +372,15 @@ export default {
               option.url = option.url + "/" + item.sublayers;
             }
           }
-          if (item.definitionExpression) {
+          if (item.definitionExpression || shallYT) {
+            const d = [];
+            item.definitionExpression && d.push(item.definitionExpression);
+            shallYT && item.ytd && d.push(item.ytd);
             if (item.isImg) {
-              option.sublayers[0].definitionExpression =
-                item.definitionExpression;
+              d.length &&
+                (option.sublayers[0].definitionExpression = d.join(" and "));
             } else {
-              option.definitionExpression = item.definitionExpression;
+              d.length && (option.definitionExpression = d.join(" and "));
             }
           }
           item.icon &&

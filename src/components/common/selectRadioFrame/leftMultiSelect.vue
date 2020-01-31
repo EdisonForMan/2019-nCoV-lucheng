@@ -2,7 +2,9 @@
   <div class="leftMultiSelect">
     <div class="topic">
       <header>
-        专题展示
+        <span :class="{active:!shallYT}" @click="()=>{shallYT=false}">全区疫情专题</span>
+        <i>/</i>
+        <span :class="{active:shallYT}" @click="()=>{shallYT=true}">银泰疫情专题</span>
         <!-- <span class="stateTipHeaderBar"></span> -->
       </header>
       <div class="selectFrame no_select">
@@ -22,9 +24,11 @@
             <li
               v-for="(oitem,oindex) in item.children"
               :key="oindex"
-              :class="oitem.isSub ? 'sub':''"
+              v-if="!((shallYT && oitem.ytname == -1) || (!shallYT && oitem.name == -1))"
             >
-              <p @click="ShowResult(oitem,item),changeTree(oitem)">{{oitem.name}}</p>
+              <p
+                @click="ShowResult(oitem,item),changeTree(oitem)"
+              >{{shallYT?(oitem.ytname||oitem.name) : oitem.name}}</p>
               <input
                 type="checkbox"
                 v-if="!item.disabled"
@@ -58,6 +62,7 @@ export default {
       tree: [],
       items: {},
       server,
+      shallYT: false,
       URL: null
     };
   },
@@ -67,8 +72,6 @@ export default {
     this.tree = this.leftOptions;
     this.items = this.leftformdata;
   },
-  mounted() {},
-  computed: {},
   methods: {
     hidden() {
       this.icon_show = !this.icon_show;
@@ -98,7 +101,6 @@ export default {
       }
     },
     ShowResult(oitem, item) {
-      console.log(oitem.id, oitem.isImg);
       if (!this.$parent || !oitem.id || oitem.isImg) return;
       this.$parent.$refs.table.getItem(oitem, item.label);
     },
@@ -145,6 +147,10 @@ export default {
     },
     leftOptions(newV, oldV) {
       this.tree = newV;
+    },
+    shallYT(newV, oldV) {
+      console.log("[YT]", newV);
+      this.clean();
     }
   }
 };
@@ -189,29 +195,16 @@ export default {
       line-height: 50px;
       text-align: left;
       font-size: 20px;
-      font-weight: 700;
       color: #4cd7ec;
       text-shadow: 0px 0px 4px rgba(76, 215, 236, 0.3);
       padding-left: 20px;
-      .stateTipHeaderBar:before {
-        content: "";
-        width: 4px;
-        height: 24px;
-        background: #15f9fd;
-        display: inline-block;
-        float: left;
-        margin-top: -7px;
+      cursor: pointer;
+      .active {
+        font-weight: 700;
       }
-
-      .stateTipHeaderBar {
-        width: 120px;
-        height: 12px;
-        background: linear-gradient(
-          90deg,
-          rgba(47, 253, 255, 0.5) 0%,
-          rgba(21, 249, 253, 0) 100%
-        );
-        display: inline-block;
+      i {
+        font-style: normal;
+        margin: 0 10px;
       }
     }
     .selectFrame::-webkit-scrollbar {

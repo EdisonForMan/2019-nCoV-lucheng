@@ -3,29 +3,41 @@ export const leftOptions = [{
     check: false,
     show: true,
     children: [{
-        name: "确诊病例 (30例)",
+        name: "确诊病例 (32例)",
+        ytname: "确诊病例 (19例)",
+        ytd: "ContactHistory like '%银泰%'",
         id: "qzbl",
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
         sublayers: "0",
         icon: "确诊病例",
         check: true
     }, {
-        name: "疑似病例 (8例)",
+        name: "疑似病例 (17例)",
+        ytname: "疑似病例 (1例)",
+        ytd: "ContactHistory like '%银泰%'",
         id: "zzbl",
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
         sublayers: "1",
         icon: "疑似病例",
         check: false
     }, {
+        name: "-1",
+        ytname: "银泰员工 (615例)",
+        id: "ytyg",
+        icon: "银泰员工",
+        check: false
+    }, {
         name: "医院发热待查 (15例)",
         id: "yydc",
+        ytname: -1,
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
         sublayers: "2",
         icon: "医院发热待查",
         check: false
     }, {
-        name: "社区发热待查 (8例)",
+        name: "社区发热待查 (7例)",
         id: "sqdc",
+        ytname: -1,
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
         sublayers: "3",
         icon: "社区发热待查",
@@ -38,19 +50,23 @@ export const leftOptions = [{
         icon: "治愈",
         check: false
     }, {
-        name: "居家隔离人员 (例)",
+        name: "居家隔离人员",
         id: "",
+        ytname: -1,
         icon: "死亡",
         check: false
     }, {
         name: "留观场所 (18个)",
         id: "lg",
+        ytname: -1,
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/mqjcz/MapServer",
         sublayers: "1",
         icon: "留观",
         check: false
     }, {
-        name: "密切接触者 (282例)",
+        name: "密切接触者 (99例)",
+        ytname: "密切接触者 (8例)",
+        ytd: "身份类型 = '鹿城银泰'",
         id: "mj",
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/mqjcz/MapServer",
         sublayers: "0",
@@ -159,15 +175,15 @@ export const leftOptions = [{
     }, {
         name: "城市书房 (93个)",
         id: "people_type_6",
-        url: "https://services.wzmap.gov.cn/server/rest/services/MEIZHOUYT/WZ_MZYT_2019/MapServer",
-        sublayers: "9",
+        url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/crowded/MapServer",
+        sublayers: "6",
         icon: "城市书房",
         check: false
     }, {
-        name: "健身房 (71个)",
+        name: "健身房 (28个)",
         id: "people_type_7",
-        url: "https://services.wzmap.gov.cn/server/rest/services/MEIZHOUYT/WZ_MZYT_2019/MapServer",
-        sublayers: "7",
+        url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/crowded/MapServer",
+        sublayers: "5",
         icon: "健身房",
         check: false
     }, {
@@ -190,8 +206,10 @@ export const leftOptions = [{
         icon: "农贸市场",
         check: false
     }, {
-        name: "博物馆 (1个)",
-        id: "",
+        name: "博物馆 (14个)",
+        id: "people_type_10",
+        url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/crowded/MapServer",
+        sublayers: "7",
         icon: "博物馆",
         check: false
     }, {

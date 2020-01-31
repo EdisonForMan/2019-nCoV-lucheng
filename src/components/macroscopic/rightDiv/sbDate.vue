@@ -26,10 +26,10 @@
           v-if="item.label == '人员密集场所' && item.id == 'people_type_3'"
         >{{++index}}.{{item.attributes.name}}</span>
         <span
-          v-if="item.label == '人员密集场所' && (item.id == 'people_type_6' || item.id == 'people_type_7')"
-        >{{++index}}.{{item.attributes.NAME}}</span>
+          v-if="item.label == '人员密集场所' && (item.id == 'people_type_7')"
+        >{{++index}}.{{item.attributes.Address}}</span>
         <span
-          v-if="item.label == '人员密集场所' && item.id != 'people_type_3' && item.id != 'people_type_6' && item.id != 'people_type_7'"
+          v-if="item.label == '人员密集场所' && item.id != 'people_type_3' && item.id != 'people_type_7'"
         >{{++index}}.{{item.attributes.Name}}</span>
         <span v-if="item.id == 'xq'">{{++index}}.{{item.attributes.name}}</span>
         <span v-if="item.id == 'xqjck'">{{++index}}.{{item.attributes.NAME}}</span>
@@ -73,14 +73,19 @@ export default {
           attributes.name ||
           attributes.Name ||
           attributes.NAME ||
+          attributes.Address ||
+          attributes.short_name ||
           attributes.姓名;
         tag && ~tag.indexOf(this.text) && forceData.push(item);
       });
       this.forceData = forceData;
       this.isLoading = false;
     },
-    getItem({ url, sublayers, id, name }, label) {
+    getItem({ url, sublayers, id, name, definitionExpression, ytd }, label) {
       this.isLoading = true;
+      const d = [];
+      definitionExpression && d.push(definitionExpression);
+      this.$parent.$refs.leftOptions.shallYT && ytd && d.push(ytd);
       loadModules(
         ["esri/tasks/QueryTask", "esri/tasks/support/Query"],
         OPTION
@@ -88,7 +93,7 @@ export default {
         const queryTask = new QueryTask({ url: `${url}/${sublayers}` });
         const query = new Query();
         query.outFields = "*";
-        query.where = `1=1`;
+        query.where = d.length ? d.join(" and ") : "1=1";
         query.returnGeometry = true;
         const { fields, features } = await queryTask.execute(query);
         const fieldAliases = {};
