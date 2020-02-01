@@ -258,7 +258,15 @@ export default {
         content: `<table class="esri-widget__table" summary="属性和值列表"><tbody>
             ${Object.keys(attributes)
               .filter(k => {
-                return ["OBJECTID", "FEATUREGUID", "Bid"].indexOf(k) < 0;
+                return (
+                  [
+                    "OBJECTID",
+                    "FEATUREGUID",
+                    "Bid",
+                    "Question",
+                    "question"
+                  ].indexOf(k) < 0
+                );
               })
               .map(k => {
                 return `<tr>

@@ -2,11 +2,11 @@
   <div id="topDateDiv">
     <ul>
       <li>
-        <h3 style="color:#ff283a">36人</h3>
+        <h3 style="color:#ff283a">39人</h3>
         <p>确诊病例</p>
       </li>
       <li>
-        <h3 style="color:#fcc659">25人</h3>
+        <h3 style="color:#fcc659">23人</h3>
         <p>疑似病例</p>
       </li>
       <li>

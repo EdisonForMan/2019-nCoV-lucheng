@@ -29,7 +29,11 @@ export const tipHash = {
     clinic_type_7: "hospitalHash",
     xq: "xqHash",
     xqjck: "xqjckHash",
-    wg: "wgHash"
+    wg: "wgHash",
+    jzgd: "jzgdHash",
+    nj_zdqy: "njzdqyHash",
+    nj_xm_1: "njxmHash",
+    nj_xm_2: "njxmHash"
 }
 
 const ytygHash = [{
@@ -64,43 +68,43 @@ const bwgHash = [{
 }]
 
 const wgHash = [{
-    fieldName: "Name",
-    label: "名称"
-},
-{
-    fieldName: "数据来源",
-    label: "数据来源"
-}, {
-    fieldName: "jd",
-    label: "街镇"
-}, {
-    fieldName: "jwh",
-    label: "居委会、村委会名称"
-}, {
-    fieldName: "sq",
-    label: "社（小）区、自然村名称"
-}, {
-    fieldName: "wgpzlxdh",
-    label: "网格片长（街镇领导）联系电话"
-}, {
-    fieldName: "wgpzxm",
-    label: "网格片长（街镇领导）姓名"
-}, {
-    fieldName: "wgzdylxdh",
-    label: "网格指导员（楼栋长）联系电话"
-}, {
-    fieldName: "wgzdyxm",
-    label: "网格指导员（楼栋长）姓名"
-}, {
-    fieldName: "wgzlxdh",
-    label: "网格长（社区主任）联系电话"
-}, {
-    fieldName: "wgzxm",
-    label: "网格长（社区主任）姓名"
-}, {
-    fieldName: "问题描述",
-    label: "问题描述"
-}
+        fieldName: "Name",
+        label: "名称"
+    },
+    {
+        fieldName: "数据来源",
+        label: "数据来源"
+    }, {
+        fieldName: "jd",
+        label: "街镇"
+    }, {
+        fieldName: "jwh",
+        label: "居委会、村委会名称"
+    }, {
+        fieldName: "sq",
+        label: "社（小）区、自然村名称"
+    }, {
+        fieldName: "wgpzlxdh",
+        label: "网格片长（街镇领导）联系电话"
+    }, {
+        fieldName: "wgpzxm",
+        label: "网格片长（街镇领导）姓名"
+    }, {
+        fieldName: "wgzdylxdh",
+        label: "网格指导员（楼栋长）联系电话"
+    }, {
+        fieldName: "wgzdyxm",
+        label: "网格指导员（楼栋长）姓名"
+    }, {
+        fieldName: "wgzlxdh",
+        label: "网格长（社区主任）联系电话"
+    }, {
+        fieldName: "wgzxm",
+        label: "网格长（社区主任）姓名"
+    }, {
+        fieldName: "问题描述",
+        label: "问题描述"
+    }
 ]
 // 居家隔离
 const jjglHash = [{
@@ -169,35 +173,35 @@ const hbhwHash = [{
 }]
 
 const gldHash = [{
-    fieldName: "Name",
-    label: "集中隔离点名称"
-},
-{
-    fieldName: "Country",
-    label: "街道"
-}, {
-    fieldName: "Address",
-    label: "地点"
-},
-{
-    fieldName: "Rooms",
-    label: "房间数"
-}, {
-    fieldName: "UseNumber",
-    label: "使用人数"
-}, {
-    fieldName: "Linkman",
-    label: "联络人"
-}, {
-    fieldName: "Phone",
-    label: "联络电话"
-}, {
-    fieldName: "RemainRooms",
-    label: "剩余可用房间数"
-}, {
-    fieldName: "HBtoLCNumber",
-    label: "其中湖北回鹿人数"
-},
+        fieldName: "Name",
+        label: "集中隔离点名称"
+    },
+    {
+        fieldName: "Country",
+        label: "街道"
+    }, {
+        fieldName: "Address",
+        label: "地点"
+    },
+    {
+        fieldName: "Rooms",
+        label: "房间数"
+    }, {
+        fieldName: "UseNumber",
+        label: "使用人数"
+    }, {
+        fieldName: "Linkman",
+        label: "联络人"
+    }, {
+        fieldName: "Phone",
+        label: "联络电话"
+    }, {
+        fieldName: "RemainRooms",
+        label: "剩余可用房间数"
+    }, {
+        fieldName: "HBtoLCNumber",
+        label: "其中湖北回鹿人数"
+    },
 ]
 // 留观
 const lgHash = [{
@@ -270,17 +274,17 @@ const scHash = [{
 }]
 // 书房
 const sfHash = [{
-    fieldName: "Name",
-    label: "名称"
-},
-{
-    fieldName: "Address",
-    label: "地址"
-},
-{
-    fieldName: "Question",
-    label: "问题"
-}
+        fieldName: "Name",
+        label: "名称"
+    },
+    {
+        fieldName: "Address",
+        label: "地址"
+    },
+    {
+        fieldName: "Question",
+        label: "问题"
+    }
 ]
 // 健身房
 const jsHash = [{
@@ -349,67 +353,67 @@ const subwayHash = [{
 }]
 //  汽车
 const carHash = [{
-    fieldName: "name",
-    label: "名称"
-},
-{
-    fieldName: "address",
-    label: "地点"
-},
-{
-    fieldName: "type",
-    label: "类型"
-}
+        fieldName: "name",
+        label: "名称"
+    },
+    {
+        fieldName: "address",
+        label: "地点"
+    },
+    {
+        fieldName: "type",
+        label: "类型"
+    }
 ]
 //  市场
 const marketHash = [{
-    fieldName: "name",
-    label: "名称"
-},
-{
-    fieldName: "ssjd",
-    label: "街道"
-}
+        fieldName: "name",
+        label: "名称"
+    },
+    {
+        fieldName: "ssjd",
+        label: "街道"
+    }
 ]
 //  文化
 const cultureHash = [{
-    fieldName: "NAME",
-    label: "名称"
-},
-{
-    fieldName: "ADDRESS",
-    label: "地址"
-},
-{
-    fieldName: "Classify",
-    label: "教别"
-},
-{
-    fieldName: "ChargeMan",
-    label: "负责人"
-},
-{
-    fieldName: "ChargeManPhone",
-    label: "联系电话"
-}
+        fieldName: "NAME",
+        label: "名称"
+    },
+    {
+        fieldName: "ADDRESS",
+        label: "地址"
+    },
+    {
+        fieldName: "Classify",
+        label: "教别"
+    },
+    {
+        fieldName: "ChargeMan",
+        label: "负责人"
+    },
+    {
+        fieldName: "ChargeManPhone",
+        label: "联系电话"
+    }
 ]
 //  医院诊所
 const hospitalHash = [{
-    fieldName: "NAME",
-    label: "名称"
-},
-{
-    fieldName: "ADDRESS",
-    label: "地址"
-},
-{
-    fieldName: "TYPE",
-    label: "类型"
-},
-{
-    fieldName: "GRADE",
-    label: "等级"
-}
+        fieldName: "NAME",
+        label: "名称"
+    },
+    {
+        fieldName: "ADDRESS",
+        label: "地址"
+    },
+    {
+        fieldName: "TYPE",
+        label: "类型"
+    },
+    {
+        fieldName: "GRADE",
+        label: "等级"
+    }
 ]
 //  病例
 const illHash = [{
@@ -447,6 +451,98 @@ const illHash = [{
     label: "入库时间"
 }]
 
+
+// 民办培训机构
+const jzgdHash = [{
+    fieldName: "Name",
+    label: "名称"
+}, {
+    fieldName: "Address",
+    label: "地址"
+}, {
+    fieldName: "ConstructionCompany",
+    label: "建设单位"
+}, {
+    fieldName: "ConstructionCompanyLinkMan",
+    label: "建设单位联系人"
+}, {
+    fieldName: "ConstructionCompanyLinkManPhone",
+    label: "建设单位联系电话"
+}, {
+    fieldName: "ResponsibilityCompany",
+    label: "责任单位"
+}, {
+    fieldName: "ResponsibilityCompanyLinkMan",
+    label: "责任单位联系人"
+}, {
+    fieldName: "ResponsibilityCompanyLinkManPho",
+    label: "责任单位联系电话"
+}]
+
+// 南郊重点企业
+const njzdqyHash = [{
+    fieldName: "CompanyName",
+    label: "单位名称"
+}, {
+    fieldName: "Address",
+    label: "地址"
+}, {
+    fieldName: "LinkMan",
+    label: "联系人"
+}, {
+    fieldName: "LinkManPhone",
+    label: "手机号码"
+}, {
+    fieldName: "CompanyCode",
+    label: "组织机构代码"
+}, {
+    fieldName: "Type",
+    label: "类型"
+}, {
+    fieldName: "MajorBusiness",
+    label: "主要业务活动"
+}, {
+    fieldName: "JPCode",
+    label: "经营码"
+}]
+
+
+
+// 南郊在建自建项目
+const njxmHash = [{
+    fieldName: "ProjectName",
+    label: "项目名称"
+}, {
+    fieldName: "ConstructionCompanyLinkMan",
+    label: "施工单位联系人"
+}, {
+    fieldName: "LinkManPhone",
+    label: "联络电话"
+}, {
+    fieldName: "DepartmentLinkMan",
+    label: "科室联络人"
+}, {
+    fieldName: "WorkTime",
+    label: "复工时间"
+}, {
+    fieldName: "EstimateToWZ",
+    label: "预计返温的务工人数"
+}, {
+    fieldName: "HBNumber",
+    label: "湖北籍人数"
+}, {
+    fieldName: "WHNumber",
+    label: "武汉人数"
+}, {
+    fieldName: "CompanyName",
+    label: "企业名称"
+}, {
+    fieldName: "CompanyType",
+    label: "企业类别"
+}]
+
+
+
 export const Hash = {
     hospitalHash,
     illHash,
@@ -467,5 +563,8 @@ export const Hash = {
     wgHash,
     bwgHash,
     ytygHash,
-    mbpxHash
+    mbpxHash,
+    jzgdHash,
+    njzdqyHash,
+    njxmHash
 }

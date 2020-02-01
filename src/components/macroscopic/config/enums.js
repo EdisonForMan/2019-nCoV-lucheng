@@ -3,7 +3,7 @@ export const leftOptions = [{
         check: false,
         show: true,
         children: [{
-                name: "确诊病例 (36例)",
+                name: "确诊病例 (39例)",
                 ytname: "确诊病例 (20例)",
                 ytd: "ContactHistory like '%银泰%'",
                 id: "qzbl",
@@ -12,7 +12,7 @@ export const leftOptions = [{
                 icon: "确诊病例",
                 check: true
             }, {
-                name: "疑似病例 (25例)",
+                name: "疑似病例 (23例)",
                 ytname: "疑似病例 (5例)",
                 ytd: "ContactHistory like '%银泰%'",
                 id: "zzbl",
@@ -29,7 +29,7 @@ export const leftOptions = [{
                 icon: "银泰员工",
                 check: false
             }, {
-                name: "医院发热待查 (15例)",
+                name: "医院发热待查 (26例)",
                 id: "yydc",
                 ytname: -1,
                 url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
@@ -97,7 +97,7 @@ export const leftOptions = [{
             name: "社区网格",
             id: "wg",
             sublayers: "12",
-                url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
+            url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
             check: false
         }, {
             name: "小区、大厦、物业",
@@ -291,23 +291,33 @@ export const leftOptions = [{
         check: false,
         show: true,
         children: [{
-            name: "建筑工地信息",
-            id: "",
+            name: "建筑工地信息 (195家)",
+            id: "jzgd",
+            url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
+            sublayers: "13",
             icon: "建筑工地",
             check: false
         }, {
-            name: "南郊重点企业",
-            id: "",
+            name: "南郊重点企业 (30家)",
+            id: "nj_zdqy",
+            url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/nanjiao/MapServer",
+            sublayers: "4",
             icon: "重点企业",
             check: false
         }, {
-            name: "南郊街道自建项目企业排查表",
-            id: "",
+            name: "南郊街道自建项目企业 (5家)",
+            id: "nj_xm_1",
+            url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/nanjiao/MapServer",
+            sublayers: "1",
+            definitionExpression: "CompanyType = '南郊街道自建项目企业'",
             icon: "自建项目",
             check: false
         }, {
-            name: "南郊街道辖区在建项目企业排查表",
-            id: "",
+            name: "南郊街道在建项目企业 (14家)",
+            id: "nj_xm_2",
+            url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/nanjiao/MapServer",
+            sublayers: "1",
+            definitionExpression: "CompanyType = '南郊街道辖区在建项目企业'",
             icon: "在建项目",
             check: false
         }]

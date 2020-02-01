@@ -15,10 +15,10 @@
       <li v-for="(item,index) in forceData" :key="index" @click="goLocation(item)">
         <span
           v-if="item.label == '疫情分布' && item.id != 'gld' && item.id != 'mj' && item.id != 'mj2'"
-        >{{++index}}.患者：{{item.attributes.Name.slice(0,1)}}**，{{item.attributes.Sex}}，{{item.attributes.Address}}，{{item.attributes.Age}}</span>
+        >{{++index}}.患者：{{item.attributes.Name?item.attributes.Name.slice(0,1):''}}**，{{item.attributes.Sex}}，{{item.attributes.Address}}，{{item.attributes.Age}}</span>
         <span
           v-if="item.id == 'mj' || item.id == 'mj2'"
-        >{{++index}}.患者：{{item.attributes.Name.slice(0,1)}}**，{{item.attributes.Sex}}，{{item.attributes.Address_Department}}</span>
+        >{{++index}}.患者：{{item.attributes.Name?item.attributes.Name.slice(0,1):''}}**，{{item.attributes.Sex}}，{{item.attributes.Address_Department}}</span>
         <span
           v-if="item.label == '疫情分布' && item.id == 'gld'"
         >{{++index}}.{{item.attributes.Name}}，{{item.attributes.Address}}</span>
@@ -42,6 +42,9 @@
         <span v-if="item.id == 'xq'">{{++index}}.{{item.attributes.name}}</span>
         <span v-if="item.id == 'xqjck'">{{++index}}.{{item.attributes.NAME}}</span>
         <span v-if="item.id == 'wg'">{{++index}}.{{item.attributes.Name}}</span>
+        <span
+          v-if="item.label == '其它'"
+        >{{++index}}.{{item.attributes.Name?item.attributes.Name:(item.attributes.ProjectName?item.attributes.ProjectName:item.attributes.CompanyName)}}</span>
       </li>
     </ul>
     <Loading v-if="isLoading" />
