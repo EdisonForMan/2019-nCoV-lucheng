@@ -16,6 +16,7 @@ export const tipHash = {
     people_type_6: "sfHash",
     people_type_7: "jsHash",
     people_type_10: "bwgHash",
+    people_type_12: "mbpxHash",
     highway_type_1: "subwayHash",
     highway_type_2: "subwayHash",
     highway_type_3: "carHash",
@@ -268,6 +269,14 @@ const jsHash = [{
     fieldName: "Question",
     label: "问题"
 }]
+// 民办培训机构
+const mbpxHash = [{
+    fieldName: "Name",
+    label: "名称"
+}, {
+    fieldName: "Address",
+    label: "地址"
+}]
 // 小区出入口
 const xqjckHash = [{
     fieldName: "NAME",
@@ -433,5 +442,6 @@ export const Hash = {
     mjHash,
     wgHash,
     bwgHash,
-    ytygHash
+    ytygHash,
+    mbpxHash
 }

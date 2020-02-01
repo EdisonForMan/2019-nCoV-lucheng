@@ -198,12 +198,14 @@ export const leftOptions = [{
                 icon: "健身房",
                 check: false
             },
-            // {
-            //     name: "民办培训机构 (1个)",
-            //     id: "",
-            //     icon: "民办培训机构",
-            //     check: false
-            // },
+            {
+                name: "民办培训机构 (251个)",
+                id: "people_type_12",
+                url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/crowded/MapServer",
+                sublayers: "12",
+                icon: "民办培训机构",
+                check: false
+            },
             {
                 name: "博物馆 (14个)",
                 id: "people_type_10",
