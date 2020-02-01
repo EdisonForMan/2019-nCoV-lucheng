@@ -45,6 +45,7 @@ export default {
           item.id && that.doFun(item);
         });
       });
+    this.jQueryBind();
   },
   watch: {
     leftOptions: {
@@ -83,6 +84,11 @@ export default {
         this.map && this.map.findLayerById("yt_" + item.id)
           ? (this.map.findLayerById("yt_" + item.id).visible = false)
           : null;
+        if (item.id == "qzbl") {
+          this.map &&
+            this.map.findLayerById("mj_link") &&
+            this.map.remove(this.map.findLayerById("mj_link"));
+        }
       }
     },
     /**
@@ -137,6 +143,59 @@ export default {
         );
       });
     },
+    jQueryBind() {
+      const context = this;
+      $("body").on("click", ".bottomBtn", function() {
+        const val = $(this).attr("data-val");
+        context.addQZLinkFeature(val);
+      });
+    },
+    addQZLinkFeature(name) {
+      this.map &&
+        this.map.findLayerById("mj_link") &&
+        this.map.remove(this.map.findLayerById("mj_link"));
+      const nameFix = name.slice(0, 1) + "*" + name.slice(2);
+      const that = this;
+      loadModules(["esri/layers/FeatureLayer"], OPTION).then(
+        ([FeatureLayer]) => {
+          const id = "mj_link";
+          const option = {
+            url:
+              "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/5",
+            id: "mj_link",
+            outFields: "*"
+          };
+          if (tipHash["mj"] && Hash[tipHash["mj"]]) {
+            const _hash_ = Hash[tipHash["mj"]];
+            option.popupTemplate = {
+              content: `<table class="esri-widget__table" summary="属性和值列表"><tbody>
+            ${_hash_
+              .map(k => {
+                return `<tr>
+                    <th class="esri-feature__field-header">${k.label}</th>
+                    <td class="esri-feature__field-data">{${k.fieldName}}</td>
+                  </tr>`;
+              })
+              .join("")}
+          </tbody></table>`
+            };
+          }
+          console.log(option.popupTemplate);
+          option.definitionExpression = `Patient like '%${name}%' or Patient like '%${nameFix}'`;
+          option.renderer = {
+            type: "simple", // autocasts as new SimpleRenderer()
+            symbol: {
+              type: "picture-marker",
+              url: `${server}/icon/other/密接.png`,
+              width: "30px",
+              height: "32px"
+            }
+          };
+          const feature = new FeatureLayer(option);
+          that.map.add(feature);
+        }
+      );
+    },
     //  添加区划图
     addQh() {
       const that = this;
@@ -170,7 +229,14 @@ export default {
         );
       });
     },
-    goloaction({ attributes, geometry, fieldAliases, highWayList, mjList }) {
+    goloaction({
+      id,
+      attributes,
+      geometry,
+      fieldAliases,
+      highWayList,
+      mjList
+    }) {
       const that = this;
       let x = geometry.x,
         y = geometry.y;
@@ -204,6 +270,11 @@ export default {
               })
               .join("")}
           </tbody></table>
+          ${
+            id == "qzbl"
+              ? `<div class="bottomBtn" data-val="${attributes.Name}">密切接触者分布</div>`
+              : ``
+          }
           ${
             // 密接额外添加
             mjList
@@ -392,7 +463,12 @@ export default {
                   </tr>`;
               })
               .join("")}
-          </tbody></table>`
+          </tbody></table>
+          ${
+            id == "qzbl"
+              ? `<div class="bottomBtn" data-val="{Name}">密切接触者分布</div>`
+              : ``
+          }`
             };
           }
 
