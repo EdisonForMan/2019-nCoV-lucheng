@@ -14,14 +14,19 @@
     <ul>
       <li v-for="(item,index) in forceData" :key="index" @click="goLocation(item)">
         <span
-          v-if="item.label == '疫情分布' && item.id != 'gld' && item.id != 'mj'"
+          v-if="item.label == '疫情分布' && item.id != 'gld' && item.id != 'mj' && item.id != 'mj2'"
         >{{++index}}.患者：{{item.attributes.Name.slice(0,1)}}**，{{item.attributes.Sex}}，{{item.attributes.Address}}，{{item.attributes.Age}}</span>
-        <span v-if="item.label == '疫情分布' && item.id == 'gld'">{{++index}}.{{item.attributes.Name}}</span>
-        <span v-if="item.label == '疫情分布' && item.id == 'mj'">{{++index}}.{{item.attributes.姓名}}</span>
+        <span
+          v-if="item.id == 'mj' || item.id == 'mj2'"
+        >{{++index}}.患者：{{item.attributes.Name.slice(0,1)}}**，{{item.attributes.Sex}}，{{item.attributes.Address_Department}}</span>
+        <span
+          v-if="item.label == '疫情分布' && item.id == 'gld'"
+        >{{++index}}.{{item.attributes.Name}}，{{item.attributes.Address}}</span>
+        <!-- <span v-if="item.label == '疫情分布' && item.id == 'mj'">{{++index}}.{{item.attributes.Name}}</span> -->
         <span v-if="item.label == '医疗资源'">{{++index}}.{{item.attributes.NAME}}</span>
         <span v-if="item.id == 'highway_type_1'">{{++index}}.{{item.attributes.Name}}</span>
         <span v-if="item.id == 'highway_type_2'">{{++index}}.{{item.attributes.Name}}</span>
-        <span v-if="item.id == 'highway_type_3'">{{++index}}.{{item.attributes.short_name}}</span>
+        <span v-if="item.id == 'highway_type_3'">{{++index}}.{{item.attributes.name}}</span>
         <span
           v-if="item.label == '人员密集场所' && item.id == 'people_type_3'"
         >{{++index}}.{{item.attributes.name}}</span>
@@ -30,6 +35,9 @@
         >{{++index}}.{{item.attributes.Address}}</span>
         <span
           v-if="item.label == '人员密集场所' && item.id != 'people_type_3' && item.id != 'people_type_7'"
+        >{{++index}}.{{item.attributes.Name}}</span>
+        <span
+          v-if="item.id == 'people_type_8' || item.id == 'people_type_9'"
         >{{++index}}.{{item.attributes.Name}}</span>
         <span v-if="item.id == 'xq'">{{++index}}.{{item.attributes.name}}</span>
         <span v-if="item.id == 'xqjck'">{{++index}}.{{item.attributes.NAME}}</span>
@@ -95,6 +103,8 @@ export default {
         query.outFields = "*";
         query.where = d.length ? d.join(" and ") : "1=1";
         query.returnGeometry = true;
+        query.start = 0;
+        query.num = 20;
         const { fields, features } = await queryTask.execute(query);
         const fieldAliases = {};
         fields.map(item => {
@@ -122,6 +132,31 @@ export default {
             return item;
           });
         }
+        // 密接关联
+        if (id == "qzbl") {
+          const mjList = await this.getMj(url);
+          const mjObject = {};
+          mjList.map(item => {
+            if (
+              item.attributes.RelatingCodes != "" &&
+              (item.attributes.RelatingCodes != null) &
+                !mjObject[item.attributes.RelatingCodes]
+            ) {
+              mjObject[item.attributes.RelatingCodes] = [];
+            }
+            if (
+              item.attributes.RelatingCodes != "" &&
+              item.attributes.RelatingCodes != null
+            ) {
+              mjObject[item.attributes.RelatingCodes].push(item);
+            }
+          });
+          list.map(item => {
+            mjObject[item.attributes.Bid] &&
+              (item.mjList = mjObject[item.attributes.Bid]);
+            return item;
+          });
+        }
         this.data = list;
         this.forceData = list;
         this.text = undefined;
@@ -135,6 +170,31 @@ export default {
           OPTION
         ).then(async ([QueryTask, Query]) => {
           const queryTask = new QueryTask({ url: `${url}/1` });
+          const query = new Query();
+          query.outFields = ["*"];
+          query.where = `1=1`;
+          const { fields, features } = await queryTask.execute(query);
+          const fieldAliases = {};
+          fields.map(item => {
+            fieldAliases[item.name] = item.alias;
+          });
+          const list = features.map(item => {
+            item.fieldAliases = fieldAliases;
+            return item;
+          });
+          resolve(list);
+        });
+      });
+    },
+    getMj(url) {
+      return new Promise((resolve, reject) => {
+        loadModules(
+          ["esri/tasks/QueryTask", "esri/tasks/support/Query"],
+          OPTION
+        ).then(async ([QueryTask, Query]) => {
+          const queryTask = new QueryTask({
+            url: `http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/4`
+          });
           const query = new Query();
           query.outFields = ["*"];
           query.where = `1=1`;

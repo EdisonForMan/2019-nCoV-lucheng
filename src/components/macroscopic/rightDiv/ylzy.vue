@@ -1,11 +1,15 @@
 <template>
   <div id="ylzyDiv">
     <h3>
+      <a
+        v-on:click="popShowFun(1)"
+        style="font-size: 14px;color: #fff;cursor: pointer;position: absolute;left: 10px;"
+      >隔离人员详情</a>
       - 各街镇集中隔离点空闲房间数 -
       <a
-        v-on:click="popShowFun"
+        v-on:click="popShowFun(2)"
         style="font-size: 14px;color: #fff;cursor: pointer;position: absolute;right: 10px;"
-      >查看更多</a>
+      >隔离点详情</a>
     </h3>
     <div class="ylzySelect" style="display:none">
       <select name id>
@@ -49,16 +53,16 @@ export default {
       phname: [
         "南汇街道-锦江之星",
         "五马街道-锐思特（飞霞路店）",
+        "大南街道-瑞都酒店",
         "蒲鞋市街道-金丝桥瑞都商旅酒店",
         "双屿街道-瑞都连锁酒店",
-        "广化街道-众豪酒店",
         "仰义街道-双屿欣悦宾馆",
-        "滨江街道-唯乐创意酒店",
-        "南郊街道-聚商连锁酒店",
-        "七都街道-老涂酒店"
+        "松台街道-威斯顿时尚酒店",
+        "广化街道-众豪酒店",
+        "滨江街道-唯乐创意酒店"
       ],
-      phData: [80, 80, 70, 63, 50, 51, 46, 27, 8],
-      phsy: [0, 65, 16, 29, 0, 6, 43, 3, 0]
+      sumData: [80, 80, 72, 70, 63, 51, 50, 50, 46],
+      usedData: [0, 65, 58, 16, 29, 6, 50, 0, 43]
     };
   },
   methods: {
@@ -66,12 +70,11 @@ export default {
       const chart = this.$echarts.init(document.getElementById("ylzyChart"));
       chart.setOption({
         grid: {
-          show: "true",
-          borderWidth: "0",
-          height: "78%",
-          width: "62%",
-          x: "40%",
-          y: "10%"
+          left: "3%",
+          right: "7%",
+          top: "3%",
+          bottom: "3%",
+          containLabel: true
         },
         tooltip: {
           trigger: "axis",
@@ -81,43 +84,41 @@ export default {
           formatter: "{b0}: {c0}"
         },
         legend: {
-          show: true,
           icon: "roundRect",
           bottom: "0%",
           textStyle: {
-            color: "#fff",
-            fontSize: 12
-          }
+            color: "#fff"
+          },
+          data: ["已用房间数", "总房间数"]
         },
         xAxis: {
-          show: false, //是否显示x轴
+          show: false,
           type: "value"
         },
         yAxis: {
           type: "category",
-          inverse: true, //让y轴数据逆向
+          inverse: true,
           axisLabel: {
             show: true,
             textStyle: {
-              color: "#64c4e4" //y轴字体颜色
+              color: "#64c4e4"
             }
           },
-          splitLine: { show: false }, //横向的线
-          axisTick: { show: false }, //y轴的端点
-          axisLine: { show: false }, //y轴的线
+          splitLine: { show: false },
+          axisTick: { show: false },
+          axisLine: { show: false },
           data: this.phname
         },
         series: [
           {
             type: "bar",
-            name: "房间总数",
-            stack: "2",
+            name: "总房间数",
+            barGap: "-100%",
             label: {
               normal: {
                 show: true,
-                position: "inside",
-                color: "#fff",
-                fontSize: 12
+                position: "right",
+                color: "#fff"
               }
             },
             legendHoverLink: false,
@@ -130,20 +131,20 @@ export default {
                 color: "#7E47FF"
               }
             },
-            data: this.phData
+            data: this.sumData
           },
           {
             type: "bar",
-            name: "使用房间数",
+            name: "已用房间数",
+            barGap: "-100%",
             stack: "2",
             legendHoverLink: false,
-            barWidth: 40,
+            barWidth: 10,
             label: {
               normal: {
                 show: true,
                 position: "inside",
-                color: "#fff",
-                fontSize: 12
+                color: "#fff"
               }
             },
             itemStyle: {
@@ -154,17 +155,17 @@ export default {
                 color: "#FD5916"
               }
             },
-            data: this.phsy
+            data: this.usedData
           }
         ]
       });
       chart.on("click", function(params) {
-        alert(params.name);//点击事件在这里，这里写方法
+        alert(params.name); //点击事件在这里，这里写方法
       });
     },
-    popShowFun() {
+    popShowFun(type) {
       //执行
-      util.$emit("popshow");
+      util.$emit("popshow",type);
     }
   },
   mounted() {

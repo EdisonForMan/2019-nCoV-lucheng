@@ -5,7 +5,7 @@
       <select @change="bqSelect($event)">
         <option value="0">确诊病例</option>
         <option value="1">确诊人员增长趋势</option>
-        <option value>疑似病例</option>
+        <!-- <option value>疑似病例</option> -->
       </select>
     </h3>
     <div id="bqtjChart"></div>
@@ -14,97 +14,18 @@
 
 <script>
 /* eslint-disable */
+import util from "../util";
+import data from "../../data.json";
 export default {
   data() {
     return {
       charts: " ",
       titleData: "灾情统计",
-      dataAge: [
-        {
-          value: 0,
-          name: "滨江",
-          itemStyle: { color: "#f41e1e" }
-        },
-        {
-          value: 0,
-          name: "山福镇",
-          itemStyle: { color: "#4dc075" }
-        },
-        {
-          value: 6,
-          name: "藤桥镇",
-          itemStyle: { color: "#b8d94c" }
-        },
-        {
-          value: 0,
-          name: "仰义",
-          itemStyle: { color: "#ffb738" }
-        },
-        {
-          value: 2,
-          name: "南郊",
-          itemStyle: { color: "#ab64cc" }
-        },
-        {
-          value: 0,
-          name: "丰门",
-          itemStyle: { color: "#ffdd55" }
-        },
-        {
-          value: 10,
-          name: "南汇",
-          itemStyle: { color: "#fe4d69" }
-        },
-        {
-          value: 1,
-          name: "双屿",
-          itemStyle: { color: "#ffefa1" }
-        },
-        {
-          value: 3,
-          name: "五马",
-          itemStyle: { color: "#ff8e66" }
-        },
-        {
-          value: 2,
-          name: "松台",
-          itemStyle: { color: "#ff936a" }
-        },
-        {
-          value: 0,
-          name: "七都",
-          itemStyle: { color: "#aa63cb" }
-        },
-        {
-          value: 1,
-          name: "蒲鞋市",
-          itemStyle: { color: "#bace53" }
-        },
-        {
-          value: 0,
-          name: "广化",
-          itemStyle: { color: "#f41e1e" }
-        },
-        {
-          value: 7,
-          name: "大南",
-          itemStyle: { color: "#fef5cc" }
-        }
-      ],
-      dataName: [
-        "21日",
-        "22日",
-        "23日",
-        "24日",
-        "25日",
-        "26日",
-        "27日",
-        "28日",
-        "29日",
-        "30"
-      ],
-      dataQS: [2, 4, 6, 10, 18, 32, 60, 114, 172, 227],
-      dataLC: [0, 0, 0, 0, 5, 10, 17, 27, 29, 32]
+      dataAge: data.dataAge,
+      YTdataAge: data.YTdataAge,
+      dataName: data.dataName,
+      dataQS: data.dataQS,
+      dataLC: data.dataLC
     };
   },
   methods: {
@@ -174,14 +95,13 @@ export default {
         ]
       });
     },
-    //确诊趋势
+    // 确诊趋势
     qzqs() {
       const chart = this.$echarts.init(document.getElementById("bqtjChart"));
       chart.setOption({
         tooltip: {
           trigger: "axis",
           axisPointer: {
-            //type: "line",
             label: {
               backgroundColor: "#6a7985"
             }
@@ -197,11 +117,6 @@ export default {
           }
         },
         color: ["#0080ff", "#4cd5ce"],
-        toolbox: {
-          // feature: {
-          //     saveAsImage: {}
-          // }
-        },
         grid: {
           left: "3%",
           right: "6%",
@@ -209,58 +124,49 @@ export default {
           bottom: "15%",
           containLabel: true
         },
-        // legend: {
-        //   orient: "vertical",
-        //   top: "12%",
-        //   left: "50%",
-        // },
-        xAxis: [
-          {
-            type: "category",
-            boundaryGap: false,
-            data: this.dataName,
-            axisLabel: {
-              show: true,
-              textStyle: {
-                color: "#fff",
-                fontSize: 12
-              }
-            },
-            axisTick: false, //刻度不显示
-            axisLine: {
-              lineStyle: {
-                color: "#9fdbfd",
-                width: 2 //这里是为了突出显示加上的
-              }
+        xAxis: {
+          type: "category",
+          boundaryGap: false,
+          data: this.dataName,
+          axisLabel: {
+            show: true,
+            textStyle: {
+              color: "#fff",
+              fontSize: 12
+            }
+          },
+          axisTick: false,
+          axisLine: {
+            lineStyle: {
+              color: "#9fdbfd",
+              width: 2
             }
           }
-        ],
-        yAxis: [
-          {
-            type: "value",
-            axisLine: {
-              onZero: false,
-              lineStyle: {
-                width: 2, //这里是为了突出显示加上的
-                color: "#9fdbfd"
-              }
-            },
-            axisTick: false, //刻度不显示
-            axisLabel: {
-              show: true,
-              textStyle: {
-                color: "#fff" //字体颜色
-              }
-            },
-            splitLine: {
-              show: true,
-              lineStyle: {
-                type: "solid",
-                color: "#17035a"
-              }
+        },
+        yAxis: {
+          type: "value",
+          axisLine: {
+            onZero: false,
+            lineStyle: {
+              width: 2,
+              color: "#9fdbfd"
+            }
+          },
+          axisTick: false,
+          axisLabel: {
+            show: true,
+            textStyle: {
+              color: "#fff"
+            }
+          },
+          splitLine: {
+            show: true,
+            lineStyle: {
+              type: "solid",
+              color: "#17035a"
             }
           }
-        ],
+        },
         series: [
           {
             name: "温州市确诊人员增长趋势(例)",
@@ -269,9 +175,8 @@ export default {
             //  symbol: "none", //去掉折线点
             itemStyle: {
               normal: {
-                color: "rgba(14,255,216)", //背景色
+                color: "rgba(14, 255, 216)",
                 lineStyle: {
-                  // 系列级个性化折线样式
                   width: 2,
                   type: "solid",
                   color: "#1ff4fa"
@@ -279,7 +184,7 @@ export default {
                 label: { show: true, color: "#fff" }
               }
             },
-            symbolSize: 5, //折线点的大小
+            symbolSize: 5,
             areaStyle: {
               normal: {}
             },
@@ -294,7 +199,6 @@ export default {
               normal: {
                 color: "rgba(254,77,105)", //背景色
                 lineStyle: {
-                  // 系列级个性化折线样式
                   width: 2,
                   type: "solid",
                   color: "rgb(254,77,105)"
@@ -302,7 +206,7 @@ export default {
                 label: { show: true, color: "#fff" }
               }
             },
-            symbolSize: 5, //折线点的大小
+            symbolSize: 5,
             areaStyle: {
               normal: {}
             },
@@ -312,8 +216,7 @@ export default {
       });
     },
     bqSelect: function(event) {
-      // `this` 在方法里指向当前 Vue 实例
-      console.log(event.target.value);
+      // console.log(event.target.value);
       if (event.target.value == "1") {
         this.$echarts.init(document.getElementById("bqtjChart")).clear();
         this.qzqs();
@@ -326,6 +229,19 @@ export default {
   },
   mounted() {
     this.zqzb();
+    //修改数值
+    var that = this;
+    util.$on("chartDataMod", function(newV) {
+      // console.log(newV);
+      that.dataAge = data.YTdataAge;
+      if (newV) {
+        // console.log(that.dataAge);
+      } else {
+        that.dataAge = data.dataAge;
+      }
+      this.$echarts.init(document.getElementById("bqtjChart")).clear();
+      that.zqzb();
+    });
   }
 };
 </script>

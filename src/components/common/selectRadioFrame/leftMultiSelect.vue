@@ -53,6 +53,7 @@
 
 <script>
 import { WRT_config } from "@/components/common/Tmap";
+import util from "../../macroscopic/util";
 const { server } = WRT_config;
 export default {
   name: "leftMultiSelect",
@@ -150,6 +151,7 @@ export default {
     },
     shallYT(newV, oldV) {
       console.log("[YT]", newV);
+      util.$emit("chartDataMod", newV);
       this.clean();
     }
   }

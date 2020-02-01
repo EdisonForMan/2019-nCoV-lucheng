@@ -131,7 +131,7 @@ export default {
             that.legend = new Legend({
               view: that.view
             });
-            // that.view.on("click", function(evt) {});
+            that.view.on("click", function(evt) {});
             resolve(true);
           }
         );
@@ -170,7 +170,7 @@ export default {
         );
       });
     },
-    goloaction({ attributes, geometry, fieldAliases, highWayList }) {
+    goloaction({ attributes, geometry, fieldAliases, highWayList, mjList }) {
       const that = this;
       let x = geometry.x,
         y = geometry.y;
@@ -204,6 +204,36 @@ export default {
               })
               .join("")}
           </tbody></table>
+          ${
+            // 密接额外添加
+            mjList
+              ? `<div><p>密切接触者</p><table class="esri-widget__table" summary="密接">
+              <thead>
+              <tr>
+              <th style="width: 20%">姓名</th>
+              <th style="width: 20%">关系</th>
+              <th style="width: 30%">电话</th>
+              <th style="width: 20%">街道</th>
+              </tr>
+              </thead>
+              <tbody>
+              ${mjList
+                .map(item => {
+                  return `<tr>
+                   <td style="width: 20%;text-align: left;">${item.attributes
+                     .Name || "无"}</th>
+                  <td style="width: 20%;text-align: left;">${item.attributes
+                    .Relation || "无"}</td>
+                    <td style="width: 30%;text-align: left;">${item.attributes
+                      .Phone || "无"}</th>
+                  <td style="width: 20%;text-align: left;">${item.attributes
+                    .Country || "无"}</td>
+                </tr>`;
+                })
+                .join("")}
+              </tbody></table></div>`
+              : ``
+          }
           ${
             // 高速值班表额外添加
             highWayList
@@ -339,6 +369,7 @@ export default {
       }
     },
     addFeatures(item, _id_) {
+      // console.log(item);
       const id = _id_.replace(/yt_/g, "");
       const that = this;
       const { url } = item;
@@ -356,14 +387,15 @@ export default {
             ${_hash_
               .map(k => {
                 return `<tr>
-                  <th class="esri-feature__field-header">${k.label}</th>
-                  <td class="esri-feature__field-data">{${k.fieldName}}</td>
-                </tr>`;
+                    <th class="esri-feature__field-header">${k.label}</th>
+                    <td class="esri-feature__field-data">{${k.fieldName}}</td>
+                  </tr>`;
               })
               .join("")}
           </tbody></table>`
             };
           }
+
           const _layers_ = item.isImg ? MapImageLayer : FeatureLayer;
           if (item.sublayers) {
             if (item.isImg) {
@@ -398,6 +430,78 @@ export default {
           resolve(true);
         });
       });
+    },
+    //  查询
+    IdentifyTaskFun({ mapPoint }, fn) {
+      const that = this;
+      loadModules(
+        [
+          "esri/tasks/IdentifyTask",
+          "esri/tasks/support/IdentifyParameters",
+          "esri/tasks/QueryTask",
+          "esri/tasks/support/Query",
+          "esri/layers/MapImageLayer"
+        ],
+        OPTION
+      ).then(
+        ([
+          IdentifyTask,
+          IdentifyParameters,
+          QueryTask,
+          Query,
+          MapImageLayer
+        ]) => {
+          const url =
+            "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer";
+          const identifyTask = new IdentifyTask(url);
+          const params = new IdentifyParameters();
+          params.tolerance = 10;
+          // params.layerIds = [0, 4];
+          // params.layerOption = "top";
+          params.returnGeometry = true;
+          params.geometry = mapPoint;
+          params.mapExtent = that.view.extent;
+          identifyTask.execute(params).then(res => {
+            console.log(res);
+
+            if (res.results.length > 0) {
+              const queryTask = new QueryTask({
+                url: `http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/4`
+              });
+              const query = new Query();
+              query.outFields = ["*"];
+              console.log(res.results[0].feature.attributes["唯一码"]);
+              query.where = `RelatingCodes like '%${res.results[0].feature.attributes["唯一码"]}%'`;
+              query.returnGeometry = true;
+              queryTask.execute(query).then(_res => {
+                console.log(_res);
+                const mbk = new MapImageLayer({
+                  url: QHMB,
+                  id: "mbk",
+                  sublayers: [{ id: 1 }]
+                });
+                that.map.add(mbk, 4);
+              });
+            }
+          });
+          //   if (!response.results[0].feature.attributes["统一社会信"]) {
+          //     that.indexPoint(response.results[0].feature.attributes);
+          //     that.view.goTo({ center: [mapPoint.x, mapPoint.y] });
+          //     that.setLocationSymbol(response.results[0].feature.geometry);
+          //     that.change(false);
+          //     // that.Eightchange(false);
+          //   } else if (that.treePoint.length) {
+          //     that.fetchCompany(
+          //       response.results[0].feature.attributes,
+          //       response.results[0].feature.geometry
+          //     );
+          //     that.indexchange(false);
+          //     that.eightShow = false;
+          //   }
+          //   fn && fn();
+          // });
+        }
+      );
     }
   }
 };

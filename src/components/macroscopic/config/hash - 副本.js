@@ -1,14 +1,11 @@
 export const tipHash = {
-    qzbl: "illHash",
+    qzbl: "illHash2",
     zzbl: "illHash",
     yydc: "illHash",
     sqdc: "illHash",
-    jjgl: "jjglHash",
     gld: "gldHash",
     lg: "lgHash",
     mj: "mjHash",
-    ytyg: "ytygHash",
-    hbhw: "hbhwHash",
     people_type_1: "cultureHash",
     people_type_2: "cultureHash",
     // people_type_2: "marketHash",
@@ -30,20 +27,6 @@ export const tipHash = {
     xqjck: "xqjckHash",
     wg: "wgHash"
 }
-
-const ytygHash = [{
-    fieldName: "姓名",
-    label: "姓名"
-}, {
-    fieldName: "通讯地址",
-    label: "通讯地址"
-}, {
-    fieldName: "手机号",
-    label: "手机号"
-}, {
-    fieldName: "区域",
-    label: "区域"
-}];
 
 const bwgHash = [{
     fieldName: "Name",
@@ -77,71 +60,6 @@ const wgHash = [{
         label: "备注"
     }
 ]
-// 居家隔离
-const jjglHash = [{
-    fieldName: "Name",
-    label: "姓名"
-}, {
-    fieldName: "Sex",
-    label: "性别"
-}, {
-    fieldName: "Phone",
-    label: "联系方式"
-}, {
-    fieldName: "Address",
-    label: "家庭住址"
-}, {
-    fieldName: "Country",
-    label: "街道"
-}, {
-    fieldName: "StartDivideTime",
-    label: "开始隔离时间"
-}, {
-    fieldName: "IsDivide",
-    label: "是否接触隔离"
-}]
-
-// 湖北回温
-const hbhwHash = [{
-    fieldName: "Name",
-    label: "姓名"
-}, {
-    fieldName: "Sex",
-    label: "性别"
-}, {
-    fieldName: "Age",
-    label: "年龄"
-}, {
-    fieldName: "Phone",
-    label: "联系方式"
-}, {
-    fieldName: "Address",
-    label: "家庭住址"
-}, {
-    fieldName: "District",
-    label: "区县"
-}, {
-    fieldName: "Country",
-    label: "乡镇街道"
-}, {
-    fieldName: "ChargeManPhone",
-    label: "责任人手机号"
-}, {
-    fieldName: "OtherPhone",
-    label: "其他联系电话"
-}, {
-    fieldName: "ToWZTime",
-    label: "到温时间"
-}, {
-    fieldName: "Type",
-    label: "类型"
-}, {
-    fieldName: "Status",
-    label: "状态"
-}, {
-    fieldName: "StatusIllustration",
-    label: "状态说明"
-}]
 
 const gldHash = [{
         fieldName: "Name",
@@ -190,49 +108,49 @@ const lgHash = [{
 }]
 // 密接
 const mjHash = [{
-    fieldName: "Name",
+    fieldName: "姓名",
     label: "姓名"
 }, {
-    fieldName: "Sex",
+    fieldName: "性别",
     label: "性别"
 }, {
-    fieldName: "Age",
+    fieldName: "年龄",
     label: "年龄"
 }, {
-    fieldName: "Supervision",
+    fieldName: "是否监管",
     label: "是否监管"
 }, {
-    fieldName: "DividePlace",
+    fieldName: "隔离地点",
     label: "隔离地点"
 }, {
-    fieldName: "StartDivideTime",
+    fieldName: "开始隔离时间",
     label: "开始隔离时间"
 }, {
-    fieldName: "Patient",
+    fieldName: "病人",
     label: "病人"
 }, {
-    fieldName: "IdentityType",
+    fieldName: "身份类型",
     label: "身份类型"
 }, {
-    fieldName: "Relation",
+    fieldName: "关系",
     label: "关系"
 }, {
-    fieldName: "Phone",
+    fieldName: "电话",
     label: "电话"
 }, {
-    fieldName: "Address_Department",
+    fieldName: "现住址_工作单位",
     label: "现住址_工作单位"
 }, {
-    fieldName: "Country",
+    fieldName: "责任街道",
     label: "责任街道"
 }, {
-    fieldName: "HealthCenter",
+    fieldName: "属地所属卫生院",
     label: "属地所属卫生院"
 }, {
-    fieldName: "StartobserveTime",
+    fieldName: "开始观察日期",
     label: "开始观察日期"
 }, {
-    fieldName: "Note",
+    fieldName: "备注",
     label: "备注"
 }]
 // 专业市场
@@ -378,6 +296,7 @@ const hospitalHash = [{
         label: "等级"
     }
 ]
+
 //  病例
 const illHash = [{
     fieldName: "Name",
@@ -414,9 +333,49 @@ const illHash = [{
     label: "入库时间"
 }]
 
+
+const illHash2 = [{
+    fieldName: "Name",
+    label: "姓名"
+}, {
+    fieldName: "Sex",
+    label: "性别"
+}, {
+    fieldName: "Age",
+    label: "年龄"
+}, {
+    fieldName: "Profession",
+    label: "职业"
+}, {
+    fieldName: "Country",
+    label: "街道"
+}, {
+    fieldName: "Address",
+    label: "现住址"
+}, {
+    fieldName: "DiseaseTime",
+    label: "发病时间"
+}, {
+    fieldName: "Hospital",
+    label: "现住医院"
+}, {
+    fieldName: "ContactHistory",
+    label: "接触史"
+}, {
+    fieldName: "InWZTime",
+    label: "到温时间"
+}, {
+    fieldName: "WarehousingTime",
+    label: "入库时间"
+}, {
+    a: "查看详情",
+    label: "密切接触者"
+}]
+
 export const Hash = {
     hospitalHash,
     illHash,
+    illHash2,
     cultureHash,
     marketHash,
     subwayHash,
@@ -426,12 +385,9 @@ export const Hash = {
     scHash,
     sfHash,
     jsHash,
-    jjglHash,
-    hbhwHash,
     gldHash,
     lgHash,
     mjHash,
     wgHash,
-    bwgHash,
-    ytygHash
+    bwgHash
 }
