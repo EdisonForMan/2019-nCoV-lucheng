@@ -96,8 +96,8 @@ export const leftOptions = [{
         }, {
             name: "社区网格",
             id: "wg",
-            sublayers: "0",
-            url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/shequ/MapServer",
+            sublayers: "12",
+                url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
             check: false
         }, {
             name: "小区、大厦、物业",
