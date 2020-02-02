@@ -20,15 +20,15 @@ Vue.prototype.$goRoute = function(index) {
  * 生产环境入口页面:9003上跳转内部页面:5001带token
  * 若有token获取token存放并重定向
  */
-// const tokenCatch = () => {
-//   const { access_token } = Vue.prototype.$util.fetchQuerys();
-//   if (access_token) {
-//     localStorage.setItem("access_token", access_token);
-//     // Vue.prototype.$util.setStorage("access_token", access_token);
-//     window.location.href = "./index.html";
-//   }
-// };
-// tokenCatch();
+const tokenCatch = () => {
+  const { access_token } = Vue.prototype.$util.fetchQuerys();
+  if (access_token) {
+    localStorage.setItem("access_token", access_token);
+    // Vue.prototype.$util.setStorage("access_token", access_token);
+    window.location.href = "./index.html";
+  }
+};
+tokenCatch();
 /**
  * 本地调试、对外环境不需要手动登录
  * dev      admin
@@ -44,8 +44,8 @@ const app = async fn => {
   // }else{
     
   // }
-  // await auth_token("admin");
-  // const [{ au_username, group, style, au_userid }] = await auth_token_info();
+  await auth_token("admin");
+  const [{ au_username, group, style, au_userid }] = await auth_token_info();
   // window.user = {
   //   au_username,
   //   group,
