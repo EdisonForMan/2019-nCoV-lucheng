@@ -143,12 +143,12 @@ export default {
           }
         ],
         quezhen: {
-          value: 36,
+          value: 41,
           add: 4,
           percent: "-"
         },
         yisi: {
-          value: 25,
+          value: 18,
           add: 13,
           percent: "-"
         },

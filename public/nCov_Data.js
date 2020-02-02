@@ -15,7 +15,7 @@ const nCov_luchengData = {
             zzbl: 18, //  疑似病例 
             yydc: 26,
             sqdc: 7,
-            gld: 18,
+            gld: 28,
             jjgl: 2416,
             mj: 337,
             hbhw: 1305
@@ -24,7 +24,7 @@ const nCov_luchengData = {
             qzbl: 20,
             zzbl: 5,
             ytyg: 575,
-            gld: 18,
+            gld: 28,
             mj: 193
         },
         highway_type_1: 4,
