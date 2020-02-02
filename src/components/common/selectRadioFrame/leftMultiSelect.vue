@@ -2,15 +2,20 @@
   <div class="leftMultiSelect">
     <div class="topic">
       <header>
-        <span :class="{active:!shallYT}" @click="()=>{shallYT=false}">全区疫情专题</span>
+        <span :class="{active:tabIndex == 0}" @click="()=>{tabIndex = 0}">全区疫情</span>
         <i>/</i>
-        <span :class="{active:shallYT}" @click="()=>{shallYT=true}">银泰疫情专题</span>
+        <span :class="{active:tabIndex == 1}" @click="()=>{tabIndex = 1}">银泰疫情</span>
+        <i>/</i>
+        <span :class="{active:tabIndex == 2}" @click="()=>{tabIndex = 2}">三返专题</span>
         <!-- <span class="stateTipHeaderBar"></span> -->
       </header>
       <div class="selectFrame no_select">
         <div v-for="(item,index) in this.tree" :key="index">
-          <span @click="toggleTree(item.label,index)">
-            {{item.label}}
+          <span
+            @click="toggleTree(item.label,index)"
+            v-if="!((tabIndex==2&&item.sflabel==-1)||(tabIndex!=2&&item.label==-1))"
+          >
+            {{tabIndex==2?item.sflabel:item.label}}
             <input
               v-if="!item.disabled"
               type="checkbox"
@@ -20,15 +25,18 @@
             />
             <i :class="`iconfont ${item.show?`icon-angle-double-up`:`icon-angle-double-down`}`"></i>
           </span>
-          <ul v-show="item.show">
+          <ul
+            v-show="item.show"
+            v-if="!((tabIndex==2&&item.sflabel==-1)||(tabIndex!=2&&item.label==-1))"
+          >
             <li
               v-for="(oitem,oindex) in item.children"
               :key="oindex"
-              v-if="!((shallYT && oitem.ytname == -1) || (!shallYT && oitem.name == -1))"
+              v-if="!((tabIndex==1 && oitem.ytname == -1) || (tabIndex!=1 && oitem.name == -1))"
             >
               <p
                 @click="ShowResult(oitem,item),changeTree(oitem)"
-              >{{shallYT?(oitem.ytname||oitem.name) : oitem.name}}</p>
+              >{{tabIndex==1?(oitem.ytname||oitem.name) : oitem.name}}</p>
               <ToggleSwitch
                 v-if="oitem.id == 'jjgl' || oitem.id == 'hbhw'"
                 @change="change(oitem.id)"
@@ -69,7 +77,7 @@ export default {
       tree: [],
       items: {},
       server,
-      shallYT: false,
+      tabIndex: 0,
       URL: null,
       check1: false,
       check2: false
@@ -173,8 +181,8 @@ export default {
     leftOptions(newV, oldV) {
       this.tree = newV;
     },
-    shallYT(newV, oldV) {
-      console.log("[YT]", newV);
+    tabIndex(newV, oldV) {
+      console.log(newV);
       util.$emit("chartDataMod", newV);
       this.clean();
     }

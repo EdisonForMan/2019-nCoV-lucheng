@@ -49,7 +49,7 @@
         <span v-if="item.id == 'xqjck'">{{++index}}.{{item.attributes.NAME}}</span>
         <span v-if="item.id == 'wg'">{{++index}}.{{item.attributes.Name}}</span>
         <span
-          v-if="item.label == '其它'"
+          v-if="item.label == -1"
         >{{++index}}.{{item.attributes.Name?item.attributes.Name:(item.attributes.ProjectName?item.attributes.ProjectName:item.attributes.CompanyName)}}</span>
       </li>
     </ul>
@@ -102,7 +102,7 @@ export default {
       this.isLoading = true;
       const d = [];
       definitionExpression && d.push(definitionExpression);
-      this.$parent.$refs.leftOptions.shallYT && ytd && d.push(ytd);
+      this.$parent.$refs.leftOptions.tabIndex == 1 && ytd && d.push(ytd);
       loadModules(
         ["esri/tasks/QueryTask", "esri/tasks/support/Query"],
         OPTION
@@ -119,6 +119,7 @@ export default {
         fields.map(item => {
           fieldAliases[item.name] = item.alias;
         });
+        console.log(features);
         const list = features.map(item => {
           item.fieldAliases = fieldAliases;
           item.label = label;
@@ -166,6 +167,7 @@ export default {
             return item;
           });
         }
+        console.log("list", list);
         this.data = list;
         this.forceData = list.filter((item, index) => {
           return index < 20;

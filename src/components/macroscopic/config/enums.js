@@ -7,6 +7,7 @@ const {
 } = macroscopic;
 export const leftOptions = [{
         label: "疫情分布",
+        sflabel: -1,
         check: false,
         show: true,
         children: [{
@@ -88,6 +89,7 @@ export const leftOptions = [{
     },
     {
         label: "网格管理",
+        sflabel: -1,
         check: false,
         show: true,
         children: [{
@@ -120,6 +122,7 @@ export const leftOptions = [{
     },
     {
         label: "卡口值班",
+        sflabel: -1,
         check: false,
         show: true,
         children: [{
@@ -164,6 +167,7 @@ export const leftOptions = [{
     },
     {
         label: "人员密集场所",
+        sflabel: -1,
         check: false,
         show: true,
         children: [{
@@ -236,6 +240,7 @@ export const leftOptions = [{
     },
     {
         label: "医疗资源",
+        sflabel: -1,
         check: false,
         show: true,
         children: [{
@@ -298,14 +303,15 @@ export const leftOptions = [{
         ]
     },
     {
-        label: "其它",
+        label: -1,
+        sflabel: "三返专题",
         check: false,
         show: true,
         children: [{
             name: `建筑工地信息 (${macroscopic.jzgd}家)`,
-            id: "jzgd",
-            url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
-            sublayers: "13",
+            id: "",
+            // url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
+            // sublayers: "13",
             icon: "建筑工地",
             check: false
         }, {

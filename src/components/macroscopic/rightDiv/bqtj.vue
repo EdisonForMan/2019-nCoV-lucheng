@@ -234,7 +234,7 @@ export default {
     util.$on("chartDataMod", function(newV) {
       // console.log(newV);
       that.dataAge = data.YTdataAge;
-      if (newV) {
+      if (newV == 1) {
         // console.log(that.dataAge);
       } else {
         that.dataAge = data.dataAge;

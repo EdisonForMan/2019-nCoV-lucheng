@@ -1,11 +1,11 @@
 <template>
-  <div id="sbxqDateDiv">
-    <head>
-      <span>{{this.title}}详情列表</span>
-      <span id="close" @click="sbclose()">x</span>
-    </head>
-    <!-- <h3>- 确诊病例动态更新 -</h3> -->
-    <div>
+<div id="sbxqDateDiv">
+  <head>
+    <span>{{this.title}}详情列表</span>
+    <span id="close" @click="sbclose()">x</span>
+  </head>
+  <!-- <h3>- 确诊病例动态更新 -</h3> -->
+  <div>
     <ul>
       <li v-for="(item,index) in forceData" :key="index" @click="goLocation(item)">
         <span
@@ -39,8 +39,8 @@
         <span v-if="item.id == 'wg'">{{++index}}.{{item.attributes.Name}}</span>
       </li>
     </ul>
-    </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -56,14 +56,14 @@ export default {
       text: undefined,
       data: [],
       forceData: [],
-      title:""
+      title: ""
     };
   },
   created() {},
   mounted() {
     this.getItem(leftOptions[0].children[0], leftOptions[0].label);
   },
-  components: {  },
+  components: {},
   methods: {
     // filteItem() {
     //   const data = this.data;
@@ -84,7 +84,7 @@ export default {
     getItem({ url, sublayers, id, name, definitionExpression, ytd }, label) {
       const d = [];
       definitionExpression && d.push(definitionExpression);
-      this.$parent.$refs.leftOptions.shallYT && ytd && d.push(ytd);
+      this.$parent.$refs.leftOptions.tabIndex == 1 && ytd && d.push(ytd);
       this.title = `${name}`.split(" ")[0];
       loadModules(
         ["esri/tasks/QueryTask", "esri/tasks/support/Query"],
@@ -205,7 +205,7 @@ export default {
     goLocation(item) {
       this.$parent.$refs.macroArcgis.goloaction(item);
     },
-    sbclose(){
+    sbclose() {
       this.$parent.xqShow = false;
     }
   }
@@ -221,38 +221,36 @@ export default {
   overflow-y: scroll;
   position: relative; */
   position: absolute;
-    width: 80%;
-    height: 78%;
-    background: #24386a;
-    border: 1px solid #04ecff;
-    z-index: 20;
-    top: 0;
-    margin: auto;
-    left: 10%;
-    top: 10%;
-    box-sizing: border-box;
-    
- 
+  width: 80%;
+  height: 78%;
+  background: #24386a;
+  border: 1px solid #04ecff;
+  z-index: 20;
+  top: 0;
+  margin: auto;
+  left: 10%;
+  top: 10%;
+  box-sizing: border-box;
 }
-#sbxqDateDiv head{
+#sbxqDateDiv head {
   display: block;
-    box-sizing: border-box;
-    padding: 5px;
-    height: 40px;
+  box-sizing: border-box;
+  padding: 5px;
+  height: 40px;
 }
-#sbxqDateDiv #close{
+#sbxqDateDiv #close {
   float: right;
   padding: 5px;
   font-size: 17px;
   cursor: pointer;
 }
-#sbxqDateDiv head span{
+#sbxqDateDiv head span {
   font-size: 20px;
 }
-#sbxqDateDiv div{
-    overflow: auto;
-    height: 90%;
-    width: 100%;
+#sbxqDateDiv div {
+  overflow: auto;
+  height: 90%;
+  width: 100%;
 }
 #sbxqDateDiv div::-webkit-scrollbar {
   display: none;
@@ -266,7 +264,7 @@ export default {
   width: 96%;
   margin-left: 2%;
 }
- #sbxqDateDiv ul li {
+#sbxqDateDiv ul li {
   padding: 10px 0;
   background: #122960;
   text-align: left;
@@ -275,7 +273,7 @@ export default {
   white-space: nowrap; /*不换行*/
   text-overflow: ellipsis; /*超出部分文字以...显示*/
 }
- #sbxqDateDiv ul li:nth-child(even) {
+#sbxqDateDiv ul li:nth-child(even) {
   background: #081942;
 }
 #sbxqDateDiv ul li:hover {

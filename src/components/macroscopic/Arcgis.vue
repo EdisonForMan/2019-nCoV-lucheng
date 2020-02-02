@@ -68,7 +68,9 @@ export default {
      * @param {Object} item 单个元素
      */
     doFun(item) {
-      const shallYT = this.$parent.$refs.leftOptions.shallYT;
+      // const shallYT = this.$parent.$refs.leftOptions.shallYT;
+      // const _id_ = (shallYT ? "yt_" : "") + item.id;
+      const shallYT = this.$parent.$refs.leftOptions.tabIndex == 1;
       const _id_ = (shallYT ? "yt_" : "") + item.id;
       if (item.check) {
         this.map && this.map.findLayerById(_id_)
@@ -453,7 +455,7 @@ export default {
       const id = _id_.replace(/yt_/g, "");
       const that = this;
       const { url } = item;
-      const shallYT = this.$parent.$refs.leftOptions.shallYT;
+      const shallYT = this.$parent.$refs.leftOptions.tabIndex == 1;
       return new Promise((resolve, reject) => {
         loadModules(
           ["esri/layers/FeatureLayer", "esri/layers/MapImageLayer"],
