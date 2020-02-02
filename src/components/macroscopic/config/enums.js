@@ -72,7 +72,7 @@ export const leftOptions = [{
                 check: false
             },
             {
-                name: "湖北回鹿人员信令 (6605例)",
+                name: "湖北回鹿人员信令 (1305例)",
                 id: "hbhw",
                 ytname: -1,
                 url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
