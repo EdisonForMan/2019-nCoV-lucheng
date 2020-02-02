@@ -12,10 +12,8 @@ import Vue from "vue";
  */
 window.env =
   location.host.includes("localhost") || location.host.includes("192.168.0.200") ?
-  "prod" :
-  location.host.includes("lysb.lucheng.gov.cn") ?
-  "outside" :
-  "prod";
+    "prod" :
+    "prod";
 Vue.prototype.$env = window.env;
 /**
  * 是否需要登录
@@ -41,32 +39,19 @@ const CONFIG_DEV = {
 };
 //  生产环境配置
 const CONFIG_PROVIDE = {
-  ARCGIS_API_URL: "http://172.20.89.68:5001/lc/libs/arcgis_js_v412_api/arcgis_js_api/library/4.12/dojo/dojo.js",
+  ARCGIS_API_URL: "http://172.20.89.88:5001/lc/libs/arcgis_js_v412_api/arcgis_js_api/library/4.12/dojo/dojo.js",
   LOCAL_DOMAIN: "https://server.lcmap.com",
   LOCAL_HOST: "http://172.20.89.59/server/rest/services",
   FORWARD_HOST: "http://172.20.89.59/server/rest/services",
   OTHER_HOST: "https://services.wzmap.gov.cn/server/rest/services",
-  SERVER_HOST: "http://172.20.89.68:5001/s/lc",
-  API_HOST: "http://172.20.89.68:5001",
-  LOGIN_HOST: "http://lysb.lucheng.gov.cn"
-};
-//  外网环境配置
-const CONFIG_OUTSIDE = {
-  ARCGIS_API_URL: "https://lysb.lucheng.gov.cn/lc/libs/arcgis_js_v412_api/arcgis_js_api/library/4.12/dojo/dojo.js",
-  LOCAL_DOMAIN: "https://jjdtgis.lucheng.gov.cn",
-  LOCAL_HOST: "https://jjdtgis.lucheng.gov.cn/arcgis/rest/services",
-  FORWARD_HOST: "https://jjdtgis.lucheng.gov.cn/arcgis/rest/services",
-  OTHER_HOST: "https://services.wzmap.gov.cn/server/rest/services",
-  SERVER_HOST: "https://lysb.lucheng.gov.cn/s/lc",
-  API_HOST: "https://lysb.lucheng.gov.cn",
-  LOGIN_HOST: " https://lysb.lucheng.gov.cn"
+  SERVER_HOST: "http://172.20.89.88:5001/s/lc",
+  API_HOST: "http://172.20.89.88:5001",
+  LOGIN_HOST: "http://172.20.89.88:5001"
 };
 const TO_CONFIG =
   Vue.prototype.$env == "dev" ?
-  CONFIG_DEV :
-  Vue.prototype.$env == "outside" ?
-  CONFIG_OUTSIDE :
-  CONFIG_PROVIDE;
+    CONFIG_DEV :
+    CONFIG_PROVIDE;
 //  环境变量 配置信息获取
 const {
   ARCGIS_API_URL,
@@ -92,13 +77,13 @@ export const OPTION = {
   dojoConfig: {
     parseOnLoad: true,
     packages: [{
-        location: `${SERVER_HOST}/libs/plugin`,
-        name: "plugin"
-      },
-      {
-        name: "src",
-        location: location.pathname.replace(/\/[^/]+$/, "") + "../src"
-      }
+      location: `${SERVER_HOST}/libs/plugin`,
+      name: "plugin"
+    },
+    {
+      name: "src",
+      location: location.pathname.replace(/\/[^/]+$/, "") + "../src"
+    }
     ]
   }
 };
@@ -141,17 +126,17 @@ export const XZJD = `http://172.20.89.7:6082/arcgis/rest/services/weijian/xzjd/M
 //     : `${LOCAL_HOST}/Hosted/kfq_WGS84/VectorTileServer`;
 export const IMAGELAYER =
   window.env == "outside" ?
-  `${OTHER_HOST}/Hosted/JYB/VectorTileServer` :
-  `${LOCAL_HOST}/Hosted/TDT_SLDT/VectorTileServer`;
+    `${OTHER_HOST}/Hosted/JYB/VectorTileServer` :
+    `${LOCAL_HOST}/Hosted/TDT_SLDT/VectorTileServer`;
 export const IMAGELAYERDSJ =
   window.env == "outside" ?
-  `${OTHER_HOST}/Hosted/DSJ/VectorTileServer` :
-  `${LOCAL_HOST}/Hosted/kfq_WGS84/VectorTileServer`;
+    `${OTHER_HOST}/Hosted/DSJ/VectorTileServer` :
+    `${LOCAL_HOST}/Hosted/kfq_WGS84/VectorTileServer`;
 
 // mapbox底图
 export const MAPBOXLAYER = `${FORWARD_HOST}/${
   window.env == "dev" ? `DT1022` : `lcjjdt/LCDT1115`
-}/MapServer`;
+  }/MapServer`;
 //  三维-白模房屋面
 export const BUILD_POLYGON = `${FORWARD_HOST}/lcjjdt/fwm1021/MapServer`;
 //  三维-亿元楼
@@ -167,8 +152,8 @@ export const BUILD_TDT = `http://services.wzmap.gov.cn/server/rest/services/Host
 //  天地图-大数据
 export const TDTDSJ =
   window.env == "outside" ?
-  `${OTHER_HOST}/Hosted/DSJ/VectorTileServer` :
-  `${LOCAL_HOST}/Hosted/kfq_WGS84/VectorTileServer`;
+    `${OTHER_HOST}/Hosted/DSJ/VectorTileServer` :
+    `${LOCAL_HOST}/Hosted/kfq_WGS84/VectorTileServer`;
 //  天地图-行政区划
 export const TDTXZQH = `${OTHER_HOST}/Hosted/XZQH/VectorTileServer`;
 //  天地图-绿化园林
@@ -202,8 +187,8 @@ export const TDTIMAGE60 =
 //  天地图-招商-简约地图
 export const TDTJY =
   window.env == "outside" ?
-  `${OTHER_HOST}/Hosted/JYB/VectorTileServer` :
-  `${FORWARD_HOST}/Hosted/TDT_SLDT/VectorTileServer`;
+    `${OTHER_HOST}/Hosted/JYB/VectorTileServer` :
+    `${FORWARD_HOST}/Hosted/TDT_SLDT/VectorTileServer`;
 
 //  天地图-25维
 export const TDT25D =
@@ -253,4 +238,4 @@ export const spatialReference = {
   wkid: 4326
 };
 //  天地图-2.5维配置
-export const TDT25DCONFIG = `{"dpi":96,"rows":256,"cols":256,"compressionQuality":0,"origin":{"x":-180,"y":90},"spatialReference":{"wkid":4326},"lods":[{"level":0,"resolution":1.406249999978297,"scale":591658710.9},{"level":1,"resolution":0.7031249999891486,"scale":295829355.45},{"level":2,"resolution":0.3515624999945743,"scale":147914677.73},{"level":3,"resolution":0.1757812499972872,"scale":73957338.86},{"level":4,"resolution":0.0878906249986436,"scale":36978669.43},{"level":5,"resolution":0.0439453124993218,"scale":18489334.72},{"level":6,"resolution":0.0219726562496609,"scale":9244667.36},{"level":7,"resolution":0.0109863281248304,"scale":4622333.68},{"level":8,"resolution":0.0054931640624152,"scale":2311166.84},{"level":9,"resolution":0.0027465820312076,"scale":1155583.42},{"level":10,"resolution":0.0013732910156038,"scale":577791.71},{"level":11,"resolution":0.0006866455078019029,"scale":288895.85},{"level":12,"resolution":0.0003433227539009515,"scale":144447.93},{"level":13,"resolution":0.0001716613769504757,"scale":72223.96},{"level":14,"resolution":0.00008583068847523788,"scale":36111.98},{"level":15,"resolution":0.00004291534423761893,"scale":18055.99},{"level":16,"resolution":0.00002145767211880947,"scale":9028},{"level":17,"resolution":0.00001072883605940473,"scale":4514},{"level":18,"resolution":0.0000053644180297860626,"scale":2254.4677204803465},{"level":19,"resolution":0.0000026822090148930313,"scale":1127.2338602401733},{"level":20,"resolution":0.0000013411045074465156,"scale":563.6169301200866}]}`;
+export const TDT25DCONFIG = `{"dpi":96,"rows":256,"cols":256,"compressionQuality":0,"origin":{"x":-180,"y":90},"spatialReference":{"wkid":4326},"lods":[{"level":0,"resolution":1.406249999978297,"scale":591658710.9},{"level":1,"resolution":0.7031249999891486,"scale":295829355.45},{"level":2,"resolution":0.3515624999945743,"scale":147914677.73},{"level":3,"resolution":0.1757812499972872,"scale":73957338.86},{"level":4,"resolution":0.0878906249986436,"scale":36978669.43},{"level":5,"resolution":0.0439453124993218,"scale":18489334.72},{"level":6,"resolution":0.0219726562496609,"scale":9244667.36},{"level":7,"resolution":0.0109863281248304,"scale":4622333.88},{"level":8,"resolution":0.0054931640624152,"scale":2311166.84},{"level":9,"resolution":0.0027465820312076,"scale":1155583.42},{"level":10,"resolution":0.0013732910156038,"scale":577791.71},{"level":11,"resolution":0.0006866455078019029,"scale":288895.85},{"level":12,"resolution":0.0003433227539009515,"scale":144447.93},{"level":13,"resolution":0.0001716613769504757,"scale":72223.96},{"level":14,"resolution":0.00008583068847523788,"scale":36111.98},{"level":15,"resolution":0.00004291534423761893,"scale":18055.99},{"level":16,"resolution":0.00002145767211880947,"scale":9028},{"level":17,"resolution":0.00001072883605940473,"scale":4514},{"level":18,"resolution":0.0000053644180297860626,"scale":2254.4677204803465},{"level":19,"resolution":0.0000026822090148930313,"scale":1127.2338602401733},{"level":20,"resolution":0.0000013411045074465156,"scale":563.6169301200866}]}`;

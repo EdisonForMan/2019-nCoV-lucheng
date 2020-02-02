@@ -1,6 +1,7 @@
 {
     "comment": "鹿城区病例统计",
-    "dataAge": [{
+    "dataAge": [
+        {
             "value": 0,
             "name": "滨江",
             "itemStyle": {
@@ -15,7 +16,7 @@
             }
         },
         {
-            "value": 6,
+            "value": 5,
             "name": "藤桥",
             "itemStyle": {
                 "color": "#b8d94c"
@@ -29,7 +30,7 @@
             }
         },
         {
-            "value": 2,
+            "value": 5,
             "name": "南郊",
             "itemStyle": {
                 "color": "#ab64cc"
@@ -64,7 +65,7 @@
             }
         },
         {
-            "value": 4,
+            "value": 3,
             "name": "松台",
             "itemStyle": {
                 "color": "#ff936a"
@@ -78,7 +79,7 @@
             }
         },
         {
-            "value": 1,
+            "value": 4,
             "name": "蒲鞋市",
             "itemStyle": {
                 "color": "#bace53"
@@ -111,10 +112,11 @@
         "28日",
         "29日",
         "30日",
-        "31"
+        "31日"
     ],
     "comment": "银泰病例统计",
-    "YTdataAge": [{
+    "YTdataAge": [
+        {
             "value": 0,
             "name": "滨江",
             "itemStyle": {

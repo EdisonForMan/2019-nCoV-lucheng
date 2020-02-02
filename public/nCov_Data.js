@@ -24,7 +24,7 @@ const nCov_luchengData = {
             zzbl: 5,
             ytyg: 575,
             gld: 18,
-            mj: 150
+            mj: 193
         },
         highway_type_1: 4,
         highway_type_2: 1,

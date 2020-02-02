@@ -55,15 +55,6 @@ export const leftOptions = [{
         icon: "治愈",
         check: false
     }, {
-        name: `居家隔离人员 (${lc.jjgl}例)`,
-        id: "jjgl",
-        ytname: -1,
-        url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
-        sublayers: "7",
-        icon: "死亡",
-        check: false
-    },
-    {
         name: `密切接触者 (${lc.mj}例)`,
         ytname: `密切接触者 (${lc_yt.mj}例)`,
         ytd: "IdentityType like '%银泰%'",
@@ -71,6 +62,15 @@ export const leftOptions = [{
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
         sublayers: "5",
         icon: "密接",
+        check: false
+    },
+    {
+        name: `居家隔离人员 (${lc.jjgl}例)`,
+        id: "jjgl",
+        ytname: -1,
+        url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
+        sublayers: "7",
+        icon: "死亡",
         check: false
     },
     {
