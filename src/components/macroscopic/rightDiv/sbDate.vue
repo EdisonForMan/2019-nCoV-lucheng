@@ -22,7 +22,9 @@
         <span
           v-if="item.label == '疫情分布' && item.id == 'gld'"
         >{{++index}}.{{item.attributes.Name}}，{{item.attributes.Address}}</span>
-        <span v-if="item.label == '疫情分布' && item.id == 'hbhw'">{{++index}}.{{item.attributes.Name?item.attributes.Name.slice(0,1):''}}**,{{item.attributes.Address}}</span>
+        <span
+          v-if="item.label == '疫情分布' && item.id == 'hbhw'"
+        >{{++index}}.{{item.attributes.Name?item.attributes.Name.slice(0,1):''}}**,{{item.attributes.Address}}</span>
         <span v-if="item.label == '医疗资源'">{{++index}}.{{item.attributes.NAME}}</span>
         <span v-if="item.id == 'highway_type_1'">{{++index}}.{{item.attributes.Name}}</span>
         <span v-if="item.id == 'highway_type_2'">{{++index}}.{{item.attributes.Name}}</span>
@@ -161,7 +163,9 @@ export default {
           });
         }
         this.data = list;
-        this.forceData = list;
+        this.forceData = list.filter((item, index) => {
+          return index < 20;
+        });
         this.text = undefined;
         this.isLoading = false;
       });
