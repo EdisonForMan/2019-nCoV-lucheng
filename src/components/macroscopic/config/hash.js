@@ -11,6 +11,7 @@ export const tipHash = {
     hbhw: "hbhwHash",
     people_type_1: "cultureHash",
     people_type_2: "cultureHash",
+    people_type_13: "cultureHash",
     // people_type_2: "marketHash",
     people_type_3: "scHash",
     people_type_6: "sfHash",

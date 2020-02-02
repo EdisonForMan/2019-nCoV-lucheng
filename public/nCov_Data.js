@@ -5,14 +5,14 @@
 const nCov_luchengData = {
     /** 防疫布控  */
     macroscopic: {
-        updateTime: "2020年2月2日13点",
+        updateTime: "2020年2月2日24点",
         /** daily  */
-        death: 0,               //  死亡
-        cure: 1,                //  治愈
+        death: 0, //  死亡
+        cure: 1, //  治愈
         /** leftOptions  */
         lc: {
-            qzbl: 41,           //  确诊病例
-            zzbl: 18,           //  疑似病例 
+            qzbl: 41, //  确诊病例
+            zzbl: 18, //  疑似病例 
             yydc: 26,
             sqdc: 7,
             gld: 18,
@@ -39,6 +39,7 @@ const nCov_luchengData = {
         people_type_10: 14,
         people_type_11: 4,
         people_type_12: 251,
+        people_type_13: 1,
         clinic_type_1: 8,
         clinic_type_2: 1,
         clinic_type_3: 122,

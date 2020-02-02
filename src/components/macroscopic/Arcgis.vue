@@ -39,6 +39,7 @@ export default {
     await this.addQh();
     await this.addmbk();
     await this.addChanyePlate();
+    // await this.addHeat();
     this.$props.leftOptions &&
       this.$props.leftOptions.map(_item => {
         _item.children.map(item => {
@@ -568,24 +569,69 @@ export default {
               });
             }
           });
-          //   if (!response.results[0].feature.attributes["统一社会信"]) {
-          //     that.indexPoint(response.results[0].feature.attributes);
-          //     that.view.goTo({ center: [mapPoint.x, mapPoint.y] });
-          //     that.setLocationSymbol(response.results[0].feature.geometry);
-          //     that.change(false);
-          //     // that.Eightchange(false);
-          //   } else if (that.treePoint.length) {
-          //     that.fetchCompany(
-          //       response.results[0].feature.attributes,
-          //       response.results[0].feature.geometry
-          //     );
-          //     that.indexchange(false);
-          //     that.eightShow = false;
-          //   }
-          //   fn && fn();
-          // });
         }
       );
+    },
+    //  监听热力图
+    changeHeat(id, checked) {
+      if (!this.map) return;
+
+      if (id == "jjgl") {
+        this.map && this.map.findLayerById("heat7")
+          ? (this.map.findLayerById("heat7").visible = checked)
+          : checked == false
+          ? null
+          : this.addHeat(7);
+      } else if (id == "hbhw") {
+        this.map && this.map.findLayerById("heat9")
+          ? (this.map.findLayerById("heat9").visible = checked)
+          : checked == false
+          ? null
+          : this.addHeat(9);
+      }
+    },
+    // 添加热力图
+    addHeat(sublayers) {
+      const that = this;
+      loadModules(
+        ["esri/layers/FeatureLayer", "esri/renderers/HeatmapRenderer"],
+        OPTION
+      ).then(([FeatureLayer, HeatmapRenderer]) => {
+        const heatmapRenderer = new HeatmapRenderer({
+          blurRadius: 6,
+          colorStops: [
+            { ratio: 0, color: "rgba(0, 255, 0, 0)" },
+            { ratio: 0.02, color: "rgb(34, 151, 143)" },
+            { ratio: 0.04, color: "rgb(0, 255, 0)" },
+            { ratio: 0.06, color: "rgb(50, 255, 0)" },
+            { ratio: 0.08, color: "rgb(250, 255, 0)" },
+            { ratio: 0.1, color: "rgb(255, 205, 0)" },
+            { ratio: 0.12, color: "rgb(255, 150, 0)" },
+            { ratio: 0.14, color: "rgb(255, 95, 0)" },
+            { ratio: 0.16, color: "rgb(255, 40, 0)" },
+            { ratio: 0.2, color: "rgb(255, 0, 0)" }
+          ],
+          maxPixelIntensity: 100,
+          minPixelIntensity: 1
+        });
+        const heat = new FeatureLayer({
+          url: `http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/${sublayers}`,
+          id: `heat${sublayers}`,
+          renderer: heatmapRenderer,
+          opacity: 0.7
+        });
+        that.map.add(heat, 4);
+      });
+    },
+    // 移除热力图
+    removeHeat() {
+      const that = this;
+      that.map &&
+        that.map.findLayerById("heat7") &&
+        that.map.remove(that.map.findLayerById("heat7"));
+      that.map &&
+        that.map.findLayerById("heat9") &&
+        that.map.remove(that.map.findLayerById("heat9"));
     }
   }
 };

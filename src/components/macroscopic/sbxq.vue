@@ -1,34 +1,23 @@
 <template>
-  <div id="sbDateDiv">
-    <input
-      type="text"
-      v-model="text"
-      placeholder="请输入查询"
-      style="width: 60%;margin-top: 10px;background-color: #162449;border: 1px solid #75c8f4;border-radius: 8px;padding: 8px 9px; color:#fff"
-    />
-    <button
-      style="background-color: #162449;border: 1px solid #75c8f4;border-radius: 8px;padding: 7px 9px; color:#fff;margin-right:4px"
-      @click="()=>{text && filteItem()}"
-    >查询</button>
-    <button
-      style="background-color: #162449;border: 1px solid #75c8f4;border-radius: 8px;padding: 7px 9px; color:#fff;cursor: pointer;"
-      @click="show()"
-    >详情</button>
+  <div id="sbxqDateDiv">
+    <head>
+      <span>{{this.title}}详情列表</span>
+      <span id="close" @click="sbclose()">x</span>
+    </head>
     <!-- <h3>- 确诊病例动态更新 -</h3> -->
+    <div>
     <ul>
       <li v-for="(item,index) in forceData" :key="index" @click="goLocation(item)">
         <span
-          v-if="item.label == '疫情分布' && item.id != 'gld' && item.id != 'mj' && item.id != 'mj2' && item.id != 'hbhw'"
-        >{{++index}}.患者：{{item.attributes.Name?item.attributes.Name.slice(0,1):''}}**，{{item.attributes.Sex}}，{{item.attributes.Address}}，{{item.attributes.Age}}</span>
+          v-if="item.label == '疫情分布' && item.id != 'gld' && item.id != 'mj' && item.id != 'mj2'"
+        >{{++index}}.患者：{{item.attributes.Name.slice(0,1)}}**，{{item.attributes.Sex}}，{{item.attributes.Address}}，{{item.attributes.Age}}</span>
         <span
           v-if="item.id == 'mj' || item.id == 'mj2'"
-        >{{++index}}.患者：{{item.attributes.Name?item.attributes.Name.slice(0,1):''}}**，{{item.attributes.Sex}}，{{item.attributes.Address_Department}}</span>
+        >{{++index}}.患者：{{item.attributes.Name.slice(0,1)}}**，{{item.attributes.Sex}}，{{item.attributes.Address_Department}}</span>
         <span
           v-if="item.label == '疫情分布' && item.id == 'gld'"
         >{{++index}}.{{item.attributes.Name}}，{{item.attributes.Address}}</span>
-        <span
-          v-if="item.label == '疫情分布' && item.id == 'hbhw'"
-        >{{++index}}.{{item.attributes.Name?item.attributes.Name.slice(0,1):''}}**,{{item.attributes.Address}}</span>
+        <!-- <span v-if="item.label == '疫情分布' && item.id == 'mj'">{{++index}}.{{item.attributes.Name}}</span> -->
         <span v-if="item.label == '医疗资源'">{{++index}}.{{item.attributes.NAME}}</span>
         <span v-if="item.id == 'highway_type_1'">{{++index}}.{{item.attributes.Name}}</span>
         <span v-if="item.id == 'highway_type_2'">{{++index}}.{{item.attributes.Name}}</span>
@@ -48,12 +37,9 @@
         <span v-if="item.id == 'xq'">{{++index}}.{{item.attributes.name}}</span>
         <span v-if="item.id == 'xqjck'">{{++index}}.{{item.attributes.NAME}}</span>
         <span v-if="item.id == 'wg'">{{++index}}.{{item.attributes.Name}}</span>
-        <span
-          v-if="item.label == '其它'"
-        >{{++index}}.{{item.attributes.Name?item.attributes.Name:(item.attributes.ProjectName?item.attributes.ProjectName:item.attributes.CompanyName)}}</span>
       </li>
     </ul>
-    <Loading v-if="isLoading" />
+    </div>
   </div>
 </template>
 
@@ -61,8 +47,7 @@
 /* eslint-disable */
 import { loadModules } from "esri-loader";
 import { OPTION } from "@/components/common/Tmap";
-import Loading from "@/components/common/loading";
-import { leftOptions } from "../config/enums";
+import { leftOptions } from "./config/enums";
 
 export default {
   name: "sbDate",
@@ -71,38 +56,36 @@ export default {
       text: undefined,
       data: [],
       forceData: [],
-      isLoading: false
+      title:""
     };
   },
   created() {},
   mounted() {
     this.getItem(leftOptions[0].children[0], leftOptions[0].label);
   },
-  components: { Loading },
+  components: {  },
   methods: {
-    filteItem() {
-      this.isLoading = true;
-      const data = this.data;
-      const forceData = [];
-      data.map(item => {
-        const { attributes } = item;
-        const tag =
-          attributes.name ||
-          attributes.Name ||
-          attributes.NAME ||
-          attributes.Address ||
-          attributes.short_name ||
-          attributes.姓名;
-        tag && ~tag.indexOf(this.text) && forceData.push(item);
-      });
-      this.forceData = forceData;
-      this.isLoading = false;
-    },
+    // filteItem() {
+    //   const data = this.data;
+    //   const forceData = [];
+    //   data.map(item => {
+    //     const { attributes } = item;
+    //     const tag =
+    //       attributes.name ||
+    //       attributes.Name ||
+    //       attributes.NAME ||
+    //       attributes.Address ||
+    //       attributes.short_name ||
+    //       attributes.姓名;
+    //     tag && ~tag.indexOf(this.text) && forceData.push(item);
+    //   });
+    //   this.forceData = forceData;
+    // },
     getItem({ url, sublayers, id, name, definitionExpression, ytd }, label) {
-      this.isLoading = true;
       const d = [];
       definitionExpression && d.push(definitionExpression);
       this.$parent.$refs.leftOptions.shallYT && ytd && d.push(ytd);
+      this.title = `${name}`.split(" ")[0];
       loadModules(
         ["esri/tasks/QueryTask", "esri/tasks/support/Query"],
         OPTION
@@ -167,11 +150,8 @@ export default {
           });
         }
         this.data = list;
-        this.forceData = list.filter((item, index) => {
-          return index < 20;
-        });
+        this.forceData = list;
         this.text = undefined;
-        this.isLoading = false;
       });
     },
     getHighWay(url) {
@@ -225,36 +205,68 @@ export default {
     goLocation(item) {
       this.$parent.$refs.macroArcgis.goloaction(item);
     },
-    show() {
-      this.$parent.xqShow = true;
+    sbclose(){
+      this.$parent.xqShow = false;
     }
   }
 };
 </script>
 
 <style>
-#fy-rightDiv #sbDateDiv {
-  width: 100%;
+#sbxqDateDiv {
+  /* width: 100%;
   height: 32%;
   background-color: rgba(5, 26, 79, 0.5);
   border: 1px solid #035acd;
   overflow-y: scroll;
-  position: relative;
+  position: relative; */
+  position: absolute;
+    width: 80%;
+    height: 78%;
+    background: #24386a;
+    border: 1px solid #04ecff;
+    z-index: 20;
+    top: 0;
+    margin: auto;
+    left: 10%;
+    top: 10%;
+    box-sizing: border-box;
+    
+ 
 }
-#fy-rightDiv #sbDateDiv::-webkit-scrollbar {
+#sbxqDateDiv head{
+  display: block;
+    box-sizing: border-box;
+    padding: 5px;
+    height: 40px;
+}
+#sbxqDateDiv #close{
+  float: right;
+  padding: 5px;
+  font-size: 17px;
+  cursor: pointer;
+}
+#sbxqDateDiv head span{
+  font-size: 20px;
+}
+#sbxqDateDiv div{
+    overflow: auto;
+    height: 90%;
+    width: 100%;
+}
+#sbxqDateDiv div::-webkit-scrollbar {
   display: none;
 }
-#fy-rightDiv #sbDateDiv h3 {
+#sbxqDateDiv h3 {
   color: #23c9f3;
   margin-top: 10px;
 }
-#fy-rightDiv #sbDateDiv ul {
+#sbxqDateDiv ul {
   list-style: none;
   width: 96%;
   margin-left: 2%;
-  margin-top: 3%;
 }
-#fy-rightDiv #sbDateDiv ul li {
+ #sbxqDateDiv ul li {
   padding: 10px 0;
   background: #122960;
   text-align: left;
@@ -263,10 +275,10 @@ export default {
   white-space: nowrap; /*不换行*/
   text-overflow: ellipsis; /*超出部分文字以...显示*/
 }
-#fy-rightDiv #sbDateDiv ul li:nth-child(even) {
+ #sbxqDateDiv ul li:nth-child(even) {
   background: #081942;
 }
-#fy-rightDiv #sbDateDiv ul li:hover {
+#sbxqDateDiv ul li:hover {
   cursor: pointer;
   background-color: #0b5cc7;
 }

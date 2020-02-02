@@ -29,6 +29,10 @@
               <p
                 @click="ShowResult(oitem,item),changeTree(oitem)"
               >{{shallYT?(oitem.ytname||oitem.name) : oitem.name}}</p>
+              <ToggleSwitch
+                v-if="oitem.id == 'jjgl' || oitem.id == 'hbhw'"
+                @change="change(oitem.id)"
+              />
               <input
                 type="checkbox"
                 v-if="!item.disabled"
@@ -52,6 +56,8 @@
 </template>
 
 <script>
+/* eslint-disable */
+import ToggleSwitch from "./Switch";
 import { WRT_config } from "@/components/common/Tmap";
 import util from "../../macroscopic/util";
 const { server } = WRT_config;
@@ -64,10 +70,12 @@ export default {
       items: {},
       server,
       shallYT: false,
-      URL: null
+      URL: null,
+      check1: false,
+      check2: false
     };
   },
-  components: {},
+  components: { ToggleSwitch },
   props: { leftOptions: Array, leftformdata: Object, imgUrl: String },
   created() {
     this.tree = this.leftOptions;
@@ -104,6 +112,7 @@ export default {
     ShowResult(oitem, item) {
       if (!this.$parent || !oitem.id || oitem.isImg) return;
       this.$parent.$refs.table.getItem(oitem, item.label);
+      this.$parent.$refs.sbxq.getItem(oitem, item.label);
     },
     intercept() {
       const _tree = this.$util.clone(this.tree);
@@ -133,6 +142,21 @@ export default {
       }
       this.tree = _tree;
       this.$parent.leftOptions = this.tree;
+      // 清除热力图
+      this.$parent.$refs.macroArcgis.removeHeat();
+    },
+    change(id) {
+      const that = this;
+
+      let checked;
+
+      if (id == "jjgl") {
+        checked = this.check1 = !this.check1;
+      } else if (id == "hbhw") {
+        checked = this.check2 = !this.check2;
+      }
+
+      this.$parent.$refs.macroArcgis.changeHeat(id, checked);
     }
   },
   watch: {
@@ -203,6 +227,7 @@ export default {
       cursor: pointer;
       .active {
         font-weight: 700;
+        color: #fff;
       }
       i {
         font-style: normal;
@@ -218,26 +243,26 @@ export default {
       box-sizing: border-box;
       padding: 10px;
       text-align: left;
-      span {
-        display: block;
-        height: 52px;
-        line-height: 54px;
-        height: 52px;
-        background: rgba(102, 164, 255, 0.45);
-        box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        padding-left: 12px;
-        font-size: 18px;
-        margin-bottom: 10px;
-        i {
-          cursor: pointer;
-          color: #fff;
-          float: right;
-          padding-right: 15px;
-        }
-      }
 
       > div {
+        > span {
+          display: block;
+          height: 52px;
+          line-height: 54px;
+          height: 52px;
+          background: rgba(102, 164, 255, 0.45);
+          box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          padding-left: 12px;
+          font-size: 18px;
+          margin-bottom: 10px;
+          i {
+            cursor: pointer;
+            color: #fff;
+            float: right;
+            padding-right: 15px;
+          }
+        }
         > ul:first-child {
           // p {
           color: rgba(42, 255, 250, 1);
@@ -268,7 +293,7 @@ export default {
           top: 4px;
         }
         li {
-          height: 44px;
+          // height: 44px;
           line-height: 28px;
           list-style: none;
           background: rgba(120, 171, 246, 0.2);
