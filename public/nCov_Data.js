@@ -5,13 +5,14 @@
 const nCov_luchengData = {
     /** 防疫布控  */
     macroscopic: {
+        updateTime: "2020年2月2日13点",
         /** daily  */
         death: 0,               //  死亡
         cure: 1,                //  治愈
         /** leftOptions  */
         lc: {
             qzbl: 41,           //  确诊病例
-            zzbl: 24,           //  疑似病例 
+            zzbl: 18,           //  疑似病例 
             yydc: 26,
             sqdc: 7,
             gld: 18,

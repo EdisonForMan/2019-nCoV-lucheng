@@ -11,7 +11,7 @@
             @click="$goRoute(item.route),selected(index)"
           >{{item.label}}</li>
         </ul>
-        <p>截至日期：2020年2月1日24点</p>
+        <p>截至日期：{{$window.nCov_luchengData.macroscopic.updateTime}}</p>
         <p style="position: absolute;right: 15px;top: 15px;">温州设计集团勘测院</p>
         <p style="position: absolute;right: 15px;top: 40px;">{{time}}</p>
       </div>
