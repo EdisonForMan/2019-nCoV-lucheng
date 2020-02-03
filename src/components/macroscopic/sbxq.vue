@@ -1,46 +1,27 @@
 <template>
-<div id="sbxqDateDiv">
-  <head>
-    <span>{{this.title}}详情列表</span>
-    <span id="close" @click="sbclose()">x</span>
-  </head>
-  <!-- <h3>- 确诊病例动态更新 -</h3> -->
-  <div>
-    <ul>
-      <li v-for="(item,index) in forceData" :key="index" @click="goLocation(item)">
-        <span
-          v-if="item.label == '疫情分布' && item.id != 'gld' && item.id != 'mj' && item.id != 'mj2'"
-        >{{++index}}.患者：{{item.attributes.Name.slice(0,1)}}**，{{item.attributes.Sex}}，{{item.attributes.Address}}，{{item.attributes.Age}}</span>
-        <span
-          v-if="item.id == 'mj' || item.id == 'mj2'"
-        >{{++index}}.{{item.attributes.NAME.slice(0,1)}}**，{{item.attributes.Sex}}，{{item.attributes.Address_Department}}</span>
-        <span
-          v-if="item.label == '疫情分布' && item.id == 'gld'"
-        >{{++index}}.{{item.attributes.Name}}，{{item.attributes.Address}}</span>
-        <!-- <span v-if="item.label == '疫情分布' && item.id == 'mj'">{{++index}}.{{item.attributes.Name}}</span> -->
-        <span v-if="item.label == '医疗资源'">{{++index}}.{{item.attributes.NAME}}</span>
-        <span v-if="item.id == 'highway_type_1'">{{++index}}.{{item.attributes.Name}}</span>
-        <span v-if="item.id == 'highway_type_2'">{{++index}}.{{item.attributes.Name}}</span>
-        <span v-if="item.id == 'highway_type_3'">{{++index}}.{{item.attributes.name}}</span>
-        <span
-          v-if="item.label == '人员密集场所' && item.id == 'people_type_3'"
-        >{{++index}}.{{item.attributes.name}}</span>
-        <span
-          v-if="item.label == '人员密集场所' && (item.id == 'people_type_7')"
-        >{{++index}}.{{item.attributes.Address}}</span>
-        <span
-          v-if="item.label == '人员密集场所' && item.id != 'people_type_3' && item.id != 'people_type_7'"
-        >{{++index}}.{{item.attributes.Name}}</span>
-        <span
-          v-if="item.id == 'people_type_8' || item.id == 'people_type_9'"
-        >{{++index}}.{{item.attributes.Name}}</span>
-        <span v-if="item.id == 'xq'">{{++index}}.{{item.attributes.name}}</span>
-        <span v-if="item.id == 'xqjck'">{{++index}}.{{item.attributes.NAME}}</span>
-        <span v-if="item.id == 'wg'">{{++index}}.{{item.attributes.Name}}</span>
-      </li>
-    </ul>
+  <div id="sbxqDateDiv">
+    <div class="head">
+      <span>{{ title }} 详情列表</span>
+      <a v-on:click="sbclose">×</a>
+    </div>
+
+    <div class="content">
+      <table border="0" cellpadding="0" cellspacing="0">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th v-for="(k,i) in keyData" :key="i">{{ forceData[0].fieldAliases[k] }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item,index) in forceData" :key="index">
+            <td>{{ ++index }}</td>
+            <td v-for="(k,i) in keyData" :key="i">{{ item.attributes[k] || "无" }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -56,7 +37,24 @@ export default {
       text: undefined,
       data: [],
       forceData: [],
-      title: ""
+      keyData: [],
+      title: "",
+      countryHash: {
+        山福镇: 0,
+        藤桥镇: 1,
+        仰义街道: 2,
+        丰门街道: 3,
+        双屿街道: 4,
+        广化街道: 5,
+        五马街道: 6,
+        松台街道: 7,
+        大南街道: 8,
+        南郊街道: 9,
+        南汇街道: 10,
+        蒲鞋市街道: 11,
+        滨江街道: 12,
+        七都街道: 13
+      }
     };
   },
   created() {},
@@ -104,8 +102,6 @@ export default {
         });
         const list = features.map(item => {
           item.fieldAliases = fieldAliases;
-          item.label = label;
-          item.id = id;
           return item;
         });
         //  高速额外请求个服务
@@ -150,7 +146,31 @@ export default {
           });
         }
         this.data = list;
-        this.forceData = list;
+        this.forceData = list.sort((a, b) => {
+          return (
+            this.countryHash[b.attributes.Country] -
+            this.countryHash[a.attributes.Country]
+          );
+        });
+        this.keyData = Object.keys(this.forceData[0].fieldAliases).filter(k => {
+          return (
+            [
+              "序号",
+              "隔离点编码",
+              "OBJECTID",
+              "OBJECTID_1",
+              "Bid",
+              "bid",
+              "Question",
+              "question",
+              "yy",
+              "Note",
+              "RelatingCodes",
+              "Shape.STArea()",
+              "Shape.STLength()"
+            ].indexOf(k) < 0
+          );
+        });
         this.text = undefined;
       });
     },
@@ -212,70 +232,50 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less" scoped>
 #sbxqDateDiv {
   position: absolute;
-  width: 80%;
+  width: 88%;
   height: 78%;
   background: #24386a;
   border: 1px solid #04ecff;
   z-index: 20;
   top: 0;
   margin: auto;
-  left: 10%;
+  left: 6%;
   top: 10%;
-  box-sizing: border-box;
-}
-#sbxqDateDiv head {
-  display: block;
-  box-sizing: border-box;
-  padding: 5px;
-  height: 40px;
-}
-#sbxqDateDiv #close {
-  float: right;
-  padding: 5px;
-  font-size: 17px;
-  cursor: pointer;
-}
-#sbxqDateDiv head span {
-  font-size: 20px;
-}
-#sbxqDateDiv div {
-  overflow: auto;
-  height: 90%;
-  width: 100%;
-}
-#sbxqDateDiv div::-webkit-scrollbar {
-  display: none;
-}
-#sbxqDateDiv h3 {
-  color: #23c9f3;
-  margin-top: 10px;
-}
-#sbxqDateDiv ul {
-  list-style: none;
-  width: 96%;
-  margin-left: 2%;
-}
-#sbxqDateDiv ul li {
-  padding: 10px 0;
-  background: #122960;
-  text-align: left;
-  padding-left: 15px;
-  overflow: hidden; /*超出部分隐藏*/
-  white-space: nowrap; /*不换行*/
-  text-overflow: ellipsis; /*超出部分文字以...显示*/
-}
-#sbxqDateDiv ul li:nth-child(even) {
-  background: #081942;
-}
-#sbxqDateDiv ul li:hover {
-  cursor: pointer;
-  background-color: #0b5cc7;
-}
-input::-webkit-input-placeholder {
-  /* placeholder颜色  */
-  color: #fff;
+
+  .head {
+    height: 7%;
+    margin-top: 1%;
+
+    span {
+      font-size: 30px;
+    }
+
+    a {
+      float: right;
+      font-size: 40px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+  }
+
+  .content {
+    height: 88%;
+    overflow: auto;
+
+    table {
+      border: 1px solid #ccc;
+      width: 96%;
+      margin: 0% 2%;
+
+      th,
+      td {
+        border-bottom: 1px solid #ccc;
+        padding: 10px 5px;
+      }
+    }
+  }
 }
 </style>

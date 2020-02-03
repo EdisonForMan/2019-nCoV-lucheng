@@ -18,14 +18,20 @@
     <ul>
       <li v-for="(item,index) in forceData" :key="index" @click="goLocation(item)">
         <span
-          v-if="item.label == '疫情分布' && ['gld','gld_list','mj','mj2','hbhw'].indexOf(item.id) < 0"
-        >{{++index}}.患者：{{item.attributes.Name?item.attributes.Name.slice(0,1):''}}**，{{item.attributes.Sex}}，{{item.attributes.Address}}，{{item.attributes.Age}}</span>
+          v-if="item.label == '疫情分布' && ['gld','gld_list','mj','mj2','hbhw','ytyg'].indexOf(item.id) < 0"
+        >{{++index}}.患者：{{item.attributes.Name?item.attributes.Name.slice(0,1):''}}**,{{item.attributes.Sex}},{{item.attributes.Address}},{{item.attributes.Age}}</span>
         <span
           v-if="~['mj','mj2'].indexOf(item.id)"
-        >{{++index}}.{{item.attributes.NAME?item.attributes.NAME.slice(0,1):''}}**，{{item.attributes.Sex}}，{{item.attributes.Address_Department}}</span>
+        >{{++index}}.{{item.attributes.NAME?item.attributes.NAME.slice(0,1):''}}**,{{item.attributes.Sex}},{{item.attributes.Address_Department}}</span>
         <span
-          v-if="~['gld','gld_list'].indexOf(item.id)"
-        >{{++index}}.{{item.attributes.Name}}，{{item.attributes.Address}}</span>
+          v-if="~['gld'].indexOf(item.id)"
+        >{{++index}}.{{item.attributes.Name}},{{item.attributes.Address}}</span>
+        <span
+          v-if="~['gld_list'].indexOf(item.id)"
+        >{{++index}}.{{item.attributes.姓名?item.attributes.姓名.slice(0,1):''}}**,{{item.attributes.家庭住址}}</span>
+        <span
+          v-if="item.id == 'ytyg'"
+        >{{++index}}.{{item.attributes.姓名?item.attributes.姓名.slice(0,1):''}}**,{{item.attributes.通讯地址}}</span>
         <span
           v-if="item.id == 'hbhw'"
         >{{++index}}.{{item.attributes.Name?item.attributes.Name.slice(0,1):''}}**,{{item.attributes.Address}}</span>
@@ -50,7 +56,7 @@
         <span v-if="item.id == 'wg'">{{++index}}.{{item.attributes.Name}}</span>
         <span
           v-if="item.label == -1"
-        >{{++index}}.{{item.attributes.Name?item.attributes.Name:(item.attributes.ProjectName?item.attributes.ProjectName:item.attributes.CompanyName)}}</span>
+        >{{++index}}.{{item.attributes.Name?item.attributes.Name:(item.attributes.ProjectName?item.attributes.ProjectName:(item.attributes.CompanyName?item.attributes.CompanyName:item.attributes.项目名称))}}</span>
       </li>
     </ul>
     <Loading v-if="isLoading" />
@@ -119,7 +125,7 @@ export default {
         fields.map(item => {
           fieldAliases[item.name] = item.alias;
         });
-        console.log(features);
+        // console.log(features);
         const list = features.map(item => {
           item.fieldAliases = fieldAliases;
           item.label = label;

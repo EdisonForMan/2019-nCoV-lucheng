@@ -1,65 +1,36 @@
 <template>
   <div id="popDiv" v-show="popShow">
-    <a
-      v-on:click="popClose"
-      style="float: right;font-size: 40px;margin-right: 10px;cursor: pointer;"
-    >×</a>
-    <!-- <head>
-    <span>详情列表</span>
-    <span id="close" @click="popClose">x</span>
-  </head>
-    <div>-->
-    <table border="0" cellpadding="0" cellspacing="0">
-      <thead>
-        <tr v-if="type==1">
-          <th>序号</th>
-          <th>姓名</th>
-          <th>性别</th>
-          <th>联系电话</th>
-          <th>家庭住址</th>
-          <th>是否湖北回鹿</th>
-        </tr>
-        <tr v-if="type==2">
-          <th>序号</th>
-          <th>街镇</th>
-          <th>集中隔离点名称</th>
-          <th>地点</th>
-          <th>联络人</th>
-          <th>联系电话</th>
-          <th>房间数</th>
-          <th>使用人数</th>
-          <th>其中湖北回鹿人数</th>
-          <th>剩余可用房间数</th>
-          <th>是否启用</th>
-        </tr>
-      </thead>
-      <tbody v-if="type==1">
-        <tr v-for="(item,index) in manData" :key="index">
-          <td>{{ ++index }}</td>
-          <td>{{ item.attributes.Name }}</td>
-          <td>{{ item.attributes.Sex }}</td>
-          <td>{{ item.attributes.Phone }}</td>
-          <td>{{ item.attributes.Address }}</td>
-          <td>{{ item.attributes.IsHBtoLC }}</td>
-        </tr>
-      </tbody>
-      <tbody v-if="type==2">
-        <tr v-for="(item,index) in roomData" :key="index">
-          <td>{{ ++index }}</td>
-          <td>{{ item.attributes.Country }}</td>
-          <td>{{ item.attributes.Name }}</td>
-          <td>{{ item.attributes.Address }}</td>
-          <td>{{ item.attributes.Linkman }}</td>
-          <td>{{ item.attributes.Phone }}</td>
-          <td>{{ item.attributes.Rooms }}</td>
-          <td>{{ item.attributes.UseNumber }}</td>
-          <td>{{ item.attributes.HBtoLCNumber ? item.attributes.HBtoLCNumber : 0 }}</td>
-          <td>{{ item.attributes.RemainRooms }}</td>
-          <td>是</td>
-        </tr>
-      </tbody>
-    </table>
-    <!-- </div> -->
+    <div class="head">
+      <span>{{ type==1 ? "隔离人员" : "隔离点" }} 详情列表</span>
+      <a v-on:click="popClose">×</a>
+    </div>
+
+    <div class="content">
+      <table border="0" cellpadding="0" cellspacing="0">
+        <thead>
+          <tr v-if="type==1">
+            <th>序号</th>
+            <th v-for="(k,i) in keyData1" :key="i">{{ manData[0].fieldAliases[k] }}</th>
+          </tr>
+          <tr v-if="type==2">
+            <th>序号</th>
+            <th v-for="(k,i) in keyData2" :key="i">{{ roomData[0].fieldAliases[k] }}</th>
+          </tr>
+        </thead>
+        <tbody v-if="type==1">
+          <tr v-for="(item,index) in manData" :key="index">
+            <td>{{ ++index }}</td>
+            <td v-for="(k,i) in keyData1" :key="i">{{ item.attributes[k] || "无" }}</td>
+          </tr>
+        </tbody>
+        <tbody v-if="type==2">
+          <tr v-for="(item,index) in roomData" :key="index">
+            <td>{{ ++index }}</td>
+            <td v-for="(k,i) in keyData2" :key="i">{{ item.attributes[k] || "无" }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -75,6 +46,9 @@ export default {
       popShow: false, //弹出框默认隐藏
       roomData: [],
       manData: [],
+      // keyData: [],
+      keyData1: [],
+      keyData2: [],
       type: 1
     };
   },
@@ -84,7 +58,7 @@ export default {
       if (type == 1) {
         that.type = 1;
         that.getItem(
-          `http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer/7`
+          `http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer/5`
         );
       } else if (type == 2) {
         that.type = 2;
@@ -110,11 +84,46 @@ export default {
         query.outFields = "*";
         query.where = `1=1`;
         query.returnGeometry = true;
-        const { features } = await queryTask.execute(query);
+        const { fields, features } = await queryTask.execute(query);
+        const fieldAliases = {};
+        fields.map(item => {
+          fieldAliases[item.name] = item.alias;
+        });
+        const list = features.map(item => {
+          item.fieldAliases = fieldAliases;
+          return item;
+        });
+
         if (that.type == 1) {
-          that.manData = features;
+          that.manData = list;
+          that.keyData1 = Object.keys(list[0].fieldAliases).filter(k => {
+            return (
+              [
+                "序号",
+                "隔离点编码",
+                "OBJECTID",
+                "Bid",
+                "Question",
+                "question"
+              ].indexOf(k) < 0
+            );
+          });
         } else if (that.type == 2) {
-          that.roomData = features;
+          that.roomData = list;
+          that.keyData2 = Object.keys(list[0].fieldAliases).filter(k => {
+            console.log(k);
+            return (
+              [
+                "序号",
+                "隔离点编码",
+                "OBJECTID",
+                "Bid",
+                "Question",
+                "question",
+                "yy"
+              ].indexOf(k) < 0
+            );
+          });
         }
       });
     }
@@ -128,45 +137,50 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less" scoped>
 #popDiv {
   position: absolute;
-  width: 80%;
+  width: 88%;
   height: 78%;
   background: #24386a;
   border: 1px solid #04ecff;
   z-index: 20;
   top: 0;
   margin: auto;
-  left: 10%;
+  left: 6%;
   top: 10%;
-  overflow: auto;
-}
-#popDiv head {
-  display: block;
-  box-sizing: border-box;
-  padding: 5px;
-  height: 40px;
-}
-#popDiv #close {
-  float: right;
-  padding: 5px;
-  font-size: 17px;
-  cursor: pointer;
-}
-#popDiv head span {
-  font-size: 20px;
-}
-#popDiv table {
-  border: 1px solid #ccc;
-  width: 96%;
-  margin: 3% 2% 3%;
-  /* margin-left: 2%;
-  margin-top: 3%; */
-}
-#popDiv table td,
-#popDiv table th {
-  border-bottom: 1px solid #ccc;
-  padding: 10px 5px;
+
+  .head {
+    height: 7%;
+    margin-top: 1%;
+
+    span {
+      font-size: 30px;
+    }
+
+    a {
+      float: right;
+      font-size: 40px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+  }
+
+  .content {
+    height: 88%;
+    overflow: auto;
+
+    table {
+      border: 1px solid #ccc;
+      width: 96%;
+      margin: 0% 2%;
+
+      th,
+      td {
+        border-bottom: 1px solid #ccc;
+        padding: 10px 5px;
+      }
+    }
+  }
 }
 </style>

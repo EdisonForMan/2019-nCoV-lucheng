@@ -293,7 +293,8 @@ export default {
                     "FEATUREGUID",
                     "Bid",
                     "Question",
-                    "question"
+                    "question",
+                    "yy"
                   ].indexOf(k) < 0
                 );
               })

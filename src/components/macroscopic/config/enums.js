@@ -67,7 +67,7 @@ export const leftOptions = [{
         id: "gld_list",
         ytname: `集中隔离点人员名单 (${lc_yt.gld_list}个)`,
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer",
-        sublayers: "7",
+        sublayers: "5",
         icon: "治愈",
         check: false
     }, {
@@ -319,9 +319,9 @@ export const leftOptions = [{
     show: true,
     children: [{
         name: `建筑工地信息 (${macroscopic.jzgd}家)`,
-        id: "",
-        // url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
-        // sublayers: "13",
+        id: "jzgd",
+        url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
+        sublayers: "13",
         icon: "建筑工地",
         check: false
     }, {
