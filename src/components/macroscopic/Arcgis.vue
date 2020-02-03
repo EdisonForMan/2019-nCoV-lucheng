@@ -577,7 +577,6 @@ export default {
     //  监听热力图
     changeHeat(id, checked) {
       if (!this.map) return;
-
       if (id == "jjgl") {
         this.map && this.map.findLayerById("heat7")
           ? (this.map.findLayerById("heat7").visible = checked)

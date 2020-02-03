@@ -44,8 +44,8 @@ const app = async fn => {
   // }else{
     
   // }
-  await auth_token("admin");
-  const [{ au_username, group, style, au_userid }] = await auth_token_info();
+  // await auth_token("admin");
+  // const [{ au_username, group, style, au_userid }] = await auth_token_info();
   // window.user = {
   //   au_username,
   //   group,
