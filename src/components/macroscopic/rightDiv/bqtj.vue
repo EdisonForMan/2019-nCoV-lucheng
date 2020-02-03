@@ -15,17 +15,11 @@
 <script>
 /* eslint-disable */
 import util from "../util";
-import data from "../../data.json";
 export default {
   data() {
     return {
-      charts: " ",
-      titleData: "灾情统计",
-      dataAge: data.dataAge,
-      YTdataAge: data.YTdataAge,
-      dataName: data.dataName,
-      dataQS: data.dataQS,
-      dataLC: data.dataLC
+      charts: "",
+      titleData: "灾情统计"
     };
   },
   methods: {
@@ -227,17 +221,31 @@ export default {
       }
     }
   },
+  created() {
+    const {
+      dataAge,
+      YTdataAge,
+      dataName,
+      dataQS,
+      dataLC
+    } = this.$window.nCov_luchengChart;
+    this.dataAge = dataAge;
+    this.YTdataAge = YTdataAge;
+    this.dataName = dataName;
+    this.dataQS = dataQS;
+    this.dataLC = dataLC;
+  },
   mounted() {
     this.zqzb();
     //修改数值
     var that = this;
     util.$on("chartDataMod", function(newV) {
       // console.log(newV);
-      that.dataAge = data.YTdataAge;
+      that.dataAge = this.$window.nCov_luchengChart.YTdataAge;
       if (newV == 1) {
         // console.log(that.dataAge);
       } else {
-        that.dataAge = data.dataAge;
+        that.dataAge = this.$window.nCov_luchengChart.dataAge;
       }
       this.$echarts.init(document.getElementById("bqtjChart")).clear();
       that.zqzb();

@@ -69,43 +69,43 @@ const bwgHash = [{
 }]
 
 const wgHash = [{
-        fieldName: "Name",
-        label: "名称"
-    },
-    {
-        fieldName: "数据来源",
-        label: "数据来源"
-    }, {
-        fieldName: "jd",
-        label: "街镇"
-    }, {
-        fieldName: "jwh",
-        label: "居委会、村委会名称"
-    }, {
-        fieldName: "sq",
-        label: "社（小）区、自然村名称"
-    }, {
-        fieldName: "wgpzlxdh",
-        label: "网格片长（街镇领导）联系电话"
-    }, {
-        fieldName: "wgpzxm",
-        label: "网格片长（街镇领导）姓名"
-    }, {
-        fieldName: "wgzdylxdh",
-        label: "网格指导员（楼栋长）联系电话"
-    }, {
-        fieldName: "wgzdyxm",
-        label: "网格指导员（楼栋长）姓名"
-    }, {
-        fieldName: "wgzlxdh",
-        label: "网格长（社区主任）联系电话"
-    }, {
-        fieldName: "wgzxm",
-        label: "网格长（社区主任）姓名"
-    }, {
-        fieldName: "问题描述",
-        label: "问题描述"
-    }
+    fieldName: "Name",
+    label: "名称"
+},
+{
+    fieldName: "数据来源",
+    label: "数据来源"
+}, {
+    fieldName: "jd",
+    label: "街镇"
+}, {
+    fieldName: "jwh",
+    label: "居委会、村委会名称"
+}, {
+    fieldName: "sq",
+    label: "社（小）区、自然村名称"
+}, {
+    fieldName: "wgpzlxdh",
+    label: "网格片长（街镇领导）联系电话"
+}, {
+    fieldName: "wgpzxm",
+    label: "网格片长（街镇领导）姓名"
+}, {
+    fieldName: "wgzdylxdh",
+    label: "网格指导员（楼栋长）联系电话"
+}, {
+    fieldName: "wgzdyxm",
+    label: "网格指导员（楼栋长）姓名"
+}, {
+    fieldName: "wgzlxdh",
+    label: "网格长（社区主任）联系电话"
+}, {
+    fieldName: "wgzxm",
+    label: "网格长（社区主任）姓名"
+}, {
+    fieldName: "问题描述",
+    label: "问题描述"
+}
 ]
 // 居家隔离
 const jjglHash = [{
@@ -174,35 +174,41 @@ const hbhwHash = [{
 }]
 
 const gldHash = [{
-        fieldName: "Name",
-        label: "集中隔离点名称"
-    },
-    {
-        fieldName: "Country",
-        label: "街道"
-    }, {
-        fieldName: "Address",
-        label: "地点"
-    },
-    {
-        fieldName: "Rooms",
-        label: "房间数"
-    }, {
-        fieldName: "UseNumber",
-        label: "使用人数"
-    }, {
-        fieldName: "Linkman",
-        label: "联络人"
-    }, {
-        fieldName: "Phone",
-        label: "联络电话"
-    }, {
-        fieldName: "RemainRooms",
-        label: "剩余可用房间数"
-    }, {
-        fieldName: "HBtoLCNumber",
-        label: "其中湖北回鹿人数"
-    },
+    fieldName: "Name",
+    label: "集中隔离点名称"
+},
+{
+    fieldName: "Country",
+    label: "街道"
+}, {
+    fieldName: "Address",
+    label: "地点"
+},
+{
+    fieldName: "Rooms",
+    label: "房间数"
+}, {
+    fieldName: "UseNumber",
+    label: "使用人数"
+}, {
+    fieldName: "Linkman",
+    label: "联络人"
+}, {
+    fieldName: "Phone",
+    label: "联络电话"
+}, {
+    fieldName: "RemainRooms",
+    label: "剩余可用房间数"
+}, {
+    fieldName: "HBtoLCNumber",
+    label: "其中湖北回鹿人数"
+}, {
+    fieldName: "TerminateIsolationNumber",
+    label: "解除隔离人数"
+}, {
+    fieldName: "TerminateIsolationNumber_HB ",
+    label: "解除隔离人数（湖北）"
+},
 ]
 // 留观
 const lgHash = [{
@@ -262,6 +268,30 @@ const mjHash = [{
     fieldName: "StartobserveTime",
     label: "开始观察日期"
 }, {
+    fieldName: "IDCard",
+    label: "身份证号"
+}, {
+    fieldName: "JZGL",
+    label: "集中隔离"
+}, {
+    fieldName: "Note",
+    label: "备注"
+}, {
+    fieldName: "SJZHQZ",
+    label: "是否转为确诊"
+}, {
+    fieldName: "SFJCGL",
+    label: "是否解除隔离"
+}, {
+    fieldName: "JCGLSJ",
+    label: "解除隔离时间"
+}, {
+    fieldName: "State",
+    label: "状态"
+}, {
+    fieldName: "LZMD ",
+    label: "流转目的"
+}, {
     fieldName: "Note",
     label: "备注"
 }]
@@ -275,17 +305,17 @@ const scHash = [{
 }]
 // 书房
 const sfHash = [{
-        fieldName: "Name",
-        label: "名称"
-    },
-    {
-        fieldName: "Address",
-        label: "地址"
-    },
-    {
-        fieldName: "Question",
-        label: "问题"
-    }
+    fieldName: "Name",
+    label: "名称"
+},
+{
+    fieldName: "Address",
+    label: "地址"
+},
+{
+    fieldName: "Question",
+    label: "问题"
+}
 ]
 // 健身房
 const jsHash = [{
@@ -354,67 +384,67 @@ const subwayHash = [{
 }]
 //  汽车
 const carHash = [{
-        fieldName: "name",
-        label: "名称"
-    },
-    {
-        fieldName: "address",
-        label: "地点"
-    },
-    {
-        fieldName: "type",
-        label: "类型"
-    }
+    fieldName: "name",
+    label: "名称"
+},
+{
+    fieldName: "address",
+    label: "地点"
+},
+{
+    fieldName: "type",
+    label: "类型"
+}
 ]
 //  市场
 const marketHash = [{
-        fieldName: "name",
-        label: "名称"
-    },
-    {
-        fieldName: "ssjd",
-        label: "街道"
-    }
+    fieldName: "name",
+    label: "名称"
+},
+{
+    fieldName: "ssjd",
+    label: "街道"
+}
 ]
 //  文化
 const cultureHash = [{
-        fieldName: "NAME",
-        label: "名称"
-    },
-    {
-        fieldName: "ADDRESS",
-        label: "地址"
-    },
-    {
-        fieldName: "Classify",
-        label: "教别"
-    },
-    {
-        fieldName: "ChargeMan",
-        label: "负责人"
-    },
-    {
-        fieldName: "ChargeManPhone",
-        label: "联系电话"
-    }
+    fieldName: "NAME",
+    label: "名称"
+},
+{
+    fieldName: "ADDRESS",
+    label: "地址"
+},
+{
+    fieldName: "Classify",
+    label: "教别"
+},
+{
+    fieldName: "ChargeMan",
+    label: "负责人"
+},
+{
+    fieldName: "ChargeManPhone",
+    label: "联系电话"
+}
 ]
 //  医院诊所
 const hospitalHash = [{
-        fieldName: "NAME",
-        label: "名称"
-    },
-    {
-        fieldName: "ADDRESS",
-        label: "地址"
-    },
-    {
-        fieldName: "TYPE",
-        label: "类型"
-    },
-    {
-        fieldName: "GRADE",
-        label: "等级"
-    }
+    fieldName: "NAME",
+    label: "名称"
+},
+{
+    fieldName: "ADDRESS",
+    label: "地址"
+},
+{
+    fieldName: "TYPE",
+    label: "类型"
+},
+{
+    fieldName: "GRADE",
+    label: "等级"
+}
 ]
 //  病例
 const illHash = [{
