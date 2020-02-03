@@ -22,7 +22,7 @@
         >{{++index}}.患者：{{item.attributes.Name?item.attributes.Name.slice(0,1):''}}**，{{item.attributes.Sex}}，{{item.attributes.Address}}，{{item.attributes.Age}}</span>
         <span
           v-if="item.id == 'mj' || item.id == 'mj2'"
-        >{{++index}}.患者：{{item.attributes.Name?item.attributes.Name.slice(0,1):''}}**，{{item.attributes.Sex}}，{{item.attributes.Address_Department}}</span>
+        >{{++index}}.{{item.attributes.NAME?item.attributes.NAME.slice(0,1):''}}**，{{item.attributes.Sex}}，{{item.attributes.Address_Department}}</span>
         <span
           v-if="item.label == '疫情分布' && item.id == 'gld'"
         >{{++index}}.{{item.attributes.Name}}，{{item.attributes.Address}}</span>
@@ -143,31 +143,31 @@ export default {
           });
         }
         // 密接关联
-        if (id == "qzbl") {
-          const mjList = await this.getMj(url);
-          const mjObject = {};
-          mjList.map(item => {
-            if (
-              item.attributes.RelatingCodes != "" &&
-              (item.attributes.RelatingCodes != null) &
-                !mjObject[item.attributes.RelatingCodes]
-            ) {
-              mjObject[item.attributes.RelatingCodes] = [];
-            }
-            if (
-              item.attributes.RelatingCodes != "" &&
-              item.attributes.RelatingCodes != null
-            ) {
-              mjObject[item.attributes.RelatingCodes].push(item);
-            }
-          });
-          list.map(item => {
-            mjObject[item.attributes.Bid] &&
-              (item.mjList = mjObject[item.attributes.Bid]);
-            return item;
-          });
-        }
-        console.log("list", list);
+        // if (id == "qzbl") {
+        //   const mjList = await this.getMj(url);
+        //   const mjObject = {};
+        //   mjList.map(item => {
+        //     if (
+        //       item.attributes.RelatingCodes != "" &&
+        //       (item.attributes.RelatingCodes != null) &
+        //         !mjObject[item.attributes.RelatingCodes]
+        //     ) {
+        //       mjObject[item.attributes.RelatingCodes] = [];
+        //     }
+        //     if (
+        //       item.attributes.RelatingCodes != "" &&
+        //       item.attributes.RelatingCodes != null
+        //     ) {
+        //       mjObject[item.attributes.RelatingCodes].push(item);
+        //     }
+        //   });
+        //   list.map(item => {
+        //     mjObject[item.attributes.Bid] &&
+        //       (item.mjList = mjObject[item.attributes.Bid]);
+        //     return item;
+        //   });
+        // }
+        // console.log("list", list);
         this.data = list;
         this.forceData = list.filter((item, index) => {
           return index < 20;

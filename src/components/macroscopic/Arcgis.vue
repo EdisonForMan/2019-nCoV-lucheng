@@ -151,6 +151,33 @@ export default {
       $("body").on("click", ".bottomBtn", function() {
         const val = $(this).attr("data-val");
         context.addQZLinkFeature(val);
+        context.mjChartUpdate(val);
+      });
+    },
+    mjChartUpdate(name) {
+      const nameFix = name.slice(0, 1) + "*" + name.slice(2);
+      loadModules(
+        ["esri/tasks/QueryTask", "esri/tasks/support/Query"],
+        OPTION
+      ).then(async ([QueryTask, Query]) => {
+        const queryTask = new QueryTask({
+          url: `http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/5`
+        });
+        const query = new Query();
+        query.outFields = ["*"];
+        query.returnGeometry = true;
+        query.where = `Patient like '%${name}%' or Patient like '%${nameFix}'`;
+        const { fields, features } = await queryTask.execute(query);
+        const fieldAliases = {};
+        fields.map(item => {
+          fieldAliases[item.name] = item.alias;
+        });
+        const list = features.map(item => {
+          item.fieldAliases = fieldAliases;
+          return item;
+        });
+        this.$parent.$refs.mjChart.list = [...list];
+        this.$parent.$refs.mjChart.title = [name];
       });
     },
     addQZLinkFeature(name) {
@@ -183,7 +210,6 @@ export default {
           </tbody></table>`
             };
           }
-          console.log(option.popupTemplate);
           option.definitionExpression = `Patient like '%${name}%' or Patient like '%${nameFix}'`;
           option.renderer = {
             type: "simple", // autocasts as new SimpleRenderer()

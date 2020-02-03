@@ -41,9 +41,6 @@
 <script>
 /* eslint-disable */
 import Vue from "vue";
-import echarts from "echarts";
-Vue.prototype.$echarts = echarts;
-
 import util from "../util";
 
 export default {

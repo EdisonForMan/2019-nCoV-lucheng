@@ -20,6 +20,7 @@
     <popOpen />
     <!-- //弹出框 -->
     <sbxq ref="sbxq" v-show="xqShow" />
+    <mjChart ref="mjChart" />
   </div>
 </template>
 
@@ -43,6 +44,7 @@ import sbxq from "./sbxq";
 import topDate from "./topDate";
 import xzDate from "./xzDate";
 import popOpen from "./popOpen";
+import mjChart from "./mjChart";
 import { leftOptions } from "./config/enums";
 
 export default {
@@ -64,7 +66,8 @@ export default {
     bottomBtn, //底部按钮
     topDate, //顶部数据
     xzDate, //详情须知
-    popOpen //弹出详情框
+    popOpen, //弹出详情框
+    mjChart //密接列表、图表
   },
   created() {},
   mounted() {},

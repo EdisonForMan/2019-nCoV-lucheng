@@ -13,7 +13,7 @@
         >{{++index}}.患者：{{item.attributes.Name.slice(0,1)}}**，{{item.attributes.Sex}}，{{item.attributes.Address}}，{{item.attributes.Age}}</span>
         <span
           v-if="item.id == 'mj' || item.id == 'mj2'"
-        >{{++index}}.患者：{{item.attributes.Name.slice(0,1)}}**，{{item.attributes.Sex}}，{{item.attributes.Address_Department}}</span>
+        >{{++index}}.{{item.attributes.NAME.slice(0,1)}}**，{{item.attributes.Sex}}，{{item.attributes.Address_Department}}</span>
         <span
           v-if="item.label == '疫情分布' && item.id == 'gld'"
         >{{++index}}.{{item.attributes.Name}}，{{item.attributes.Address}}</span>
@@ -214,12 +214,6 @@ export default {
 
 <style>
 #sbxqDateDiv {
-  /* width: 100%;
-  height: 32%;
-  background-color: rgba(5, 26, 79, 0.5);
-  border: 1px solid #035acd;
-  overflow-y: scroll;
-  position: relative; */
   position: absolute;
   width: 80%;
   height: 78%;

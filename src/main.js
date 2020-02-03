@@ -4,8 +4,10 @@ import util from "./components/common/util.js";
 import router from "./router";
 import "./components/common/_iconfont/iconfont.js";
 import "./components/common/_iconfont/iconfont.css";
+import echarts from "echarts";
 import { auth_token, auth_token_info } from "./api/beans/auth";
 // filter production infos
+Vue.prototype.$echarts = echarts;
 Vue.config.productionTip = false;
 Vue.prototype.$util = util;
 Vue.prototype.$ajax = $.ajax;
