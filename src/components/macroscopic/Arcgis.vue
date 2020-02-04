@@ -264,6 +264,7 @@ export default {
       geometry,
       fieldAliases,
       highWayList,
+      qzblList,
       mjList
     }) {
       const that = this;
@@ -314,33 +315,30 @@ export default {
               : ``
           }
           ${
-            // 密接额外添加
-            mjList
-              ? `<div><p>密切接触者</p><table class="esri-widget__table" summary="密接">
-              <thead>
-              <tr>
-              <th style="width: 20%">姓名</th>
-              <th style="width: 20%">关系</th>
-              <th style="width: 30%">电话</th>
-              <th style="width: 20%">街道</th>
-              </tr>
-              </thead>
-              <tbody>
-              ${mjList
-                .map(item => {
-                  return `<tr>
-                   <td style="width: 20%;text-align: left;">${item.attributes
-                     .Name || "无"}</th>
-                  <td style="width: 20%;text-align: left;">${item.attributes
-                    .Relation || "无"}</td>
-                    <td style="width: 30%;text-align: left;">${item.attributes
-                      .Phone || "无"}</th>
-                  <td style="width: 20%;text-align: left;">${item.attributes
-                    .Country || "无"}</td>
+            // 街镇病例额外添加
+            qzblList
+              ? qzblList
+                  .map(item => {
+                    return `<div><p>${
+                      item.attributes.Name
+                    }</p><table class="esri-widget__table" summary="值班表"><tbody>
+            ${Object.keys(item.attributes)
+              .filter(k => {
+                return ["Bid", "OBJECTID", "Name"].indexOf(k) < 0;
+              })
+              .map(k => {
+                return `<tr>
+                  <th class="esri-feature__field-header">${item.fieldAliases[
+                    k
+                  ] || k}</th>
+                  <td class="esri-feature__field-data">${item.attributes[k] ||
+                    "无"}</td>
                 </tr>`;
-                })
-                .join("")}
-              </tbody></table></div>`
+              })
+              .join("")}
+            </tbody></table></div>`;
+                  })
+                  .join("")
               : ``
           }
           ${

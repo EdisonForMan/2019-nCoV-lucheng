@@ -106,7 +106,7 @@ export const leftOptions = [{
         name: "街镇网格",
         id: "chanyePlate",
         sublayers: "0",
-        isImg: true,
+        // isImg: true,
         url: "http://172.20.89.7:6082/arcgis/rest/services/weijian/xzjd/MapServer",
         check: true
     }, {

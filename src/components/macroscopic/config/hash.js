@@ -34,8 +34,17 @@ export const tipHash = {
     jzgd: "jzgdHash",
     nj_zdqy: "njzdqyHash",
     nj_xm_1: "njxmHash",
-    nj_xm_2: "njxmHash"
+    nj_xm_2: "njxmHash",
+    chanyePlate: "chanyePlateHash"
 }
+
+const chanyePlateHash = [{
+    fieldName: "名称",
+    label: "名称"
+}, {
+    fieldName: "num",
+    label: "病例数"
+}]
 
 const ytygHash = [{
     fieldName: "姓名",
@@ -600,5 +609,6 @@ export const Hash = {
     mbpxHash,
     jzgdHash,
     njzdqyHash,
-    njxmHash
+    njxmHash,
+    chanyePlateHash
 }
