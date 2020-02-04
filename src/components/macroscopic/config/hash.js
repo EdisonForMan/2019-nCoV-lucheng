@@ -485,29 +485,32 @@ const illHash = [{
 
 // 民办培训机构
 const jzgdHash = [{
-    fieldName: "Name",
-    label: "名称"
+    fieldName: "项目名称",
+    label: "项目名称"
 }, {
-    fieldName: "Address",
-    label: "地址"
+    fieldName: "项目地址",
+    label: "项目地址"
 }, {
-    fieldName: "ConstructionCompany",
+    fieldName: "建设单位",
     label: "建设单位"
 }, {
-    fieldName: "ConstructionCompanyLinkMan",
+    fieldName: "建设单位联系人",
     label: "建设单位联系人"
 }, {
-    fieldName: "ConstructionCompanyLinkManPhone",
+    fieldName: "建设单位联系电话",
     label: "建设单位联系电话"
 }, {
-    fieldName: "ResponsibilityCompany",
+    fieldName: "责任单位",
     label: "责任单位"
 }, {
-    fieldName: "ResponsibilityCompanyLinkMan",
+    fieldName: "责任单位联系人",
     label: "责任单位联系人"
 }, {
-    fieldName: "ResponsibilityCompanyLinkManPho",
+    fieldName: "责任单位联系电话",
     label: "责任单位联系电话"
+}, {
+    fieldName: "问题",
+    label: "问题"
 }]
 
 // 南郊重点企业
