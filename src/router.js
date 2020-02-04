@@ -9,7 +9,7 @@ import Macroscopic from "./components/macroscopic/Macroscopic.vue";
 import Control from "./components/control/Control.vue";
 import Monitor from "./components/monitor/Monitor.vue";
 import Mobile from "./components/mobile/map.vue"
-
+import YQMobile from './components/mobilePage/index.vue';
 Vue.use(Router);
 
 export default new Router({
@@ -33,6 +33,11 @@ export default new Router({
         path: "/monitor",
         name: "monitor",
         component: Monitor
+      },
+      {
+        path: "/yqmobile",
+        name: "yqmobile",
+        component: YQMobile
       },
     ]
 });
