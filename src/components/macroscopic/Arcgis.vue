@@ -668,7 +668,6 @@ export default {
     },
     //  小区面详情字段
     xqDetail(isOption, obj) {
-      console.log(obj)
       const arr = [
         [
           "name@小区（大厦）名称",
