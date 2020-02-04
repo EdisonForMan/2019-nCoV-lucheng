@@ -21,7 +21,9 @@
                 </select>
             </div>
         </div>
-        <div class="ntn">18家/1273间</div>
+        <div class="ntn">
+            {{$window.nCov_luchengData.control.gld.horseNum}}家/{{$window.nCov_luchengData.control.gld.roomNum}}间
+        </div>
         <div id="gldChart"></div>
         <div class="tagld">
             <div class="control-view-inner" @scroll="scrollHandler">
@@ -38,7 +40,7 @@
                 </table>
                 <table class="control-view-table-body" cellspacing="5">
                     <tbody>
-                    <tr v-for="(value, index) of tableData" :key="index">
+                    <tr v-for="(value, index) of $window.nCov_luchengData.control.gld.gldtable" :key="index">
                         <td>{{ value.key }}</td>
                         <td v-for="(item, ind) of value.value" :key="ind">{{ item }}</td>
                     </tr>
@@ -59,86 +61,6 @@
     require('echarts/lib/chart/pie');
     export default {
         name: "gldwz",
-        data() {
-            return {
-                labelname: ['剩余房间', '已使用房间'],
-                numdata: [3137, 1300],
-                tableData: [
-                    {
-                        key: '大宅门宾馆',
-                        value: ['77', '0', '0', '77']
-                    },
-                    {
-                        key: '唯乐创意酒店',
-                        value: ['46', '46', '31', '2']
-                    },
-                    {
-                        key: '锦江之星',
-                        value: ['80', '30', '8', '50']
-                    },
-                    {
-                        key: '新国贸大酒店',
-                        value: ['140', '0', '0', '140']
-                    },
-                    {
-                        key: '金丝桥瑞都商旅酒店',
-                        value: ['61', '42', '32', '29']
-                    },
-                    {
-                        key: '聚商连锁酒店',
-                        value: ['27', '3', '0', '24']
-                    },
-                    {
-                        key: '锐思特（飞霞路店）',
-                        value: ['50', '0', '0', '50']
-                    },
-                    {
-                        key: '瑞都酒店',
-                        value: ['72', '70', '2', '7']
-                    },
-                    {
-                        key: '锐思特（飞霞路店）',
-                        value: ['80', '50', '49', '47']
-                    },
-                    {
-                        key: '威斯顿时尚酒店',
-                        value: ['50', '58', '33', '0']
-                    },
-                    {
-                        key: '众豪酒店',
-                        value: ['50', '10', '3', '23']
-                    },
-                    {
-                        key: '瑞都连锁酒店',
-                        value: ['63', '39', '5', '31']
-                    },
-                    {
-                        key: '普尔顿酒店',
-                        value: ['69', '0', '0', '69']
-                    },
-                    {
-                        key: '百思快捷宾馆',
-                        value: ['35', '30', '30', '21']
-                    },
-                    {
-                        key: '新生代员工宿舍',
-                        value: ['75', '0', '0', '75']
-                    },
-                    {
-                        key: '双屿欣悦宾馆',
-                        value: ['51', '9', '0', '42']
-                    },
-                    {
-                        key: '好万家公寓',
-                        value: ['70', '0', '0', '70']
-                    },
-                    {
-                        key: '龙城宾馆',
-                        value: ['37', '34', '9', '3']
-                    },
-                ]
-            }
-        },
         methods: {
             bqSelect: function (event) {
                 const that = this;
@@ -182,7 +104,6 @@
                         padding: 5,
                         itemGap: 10,
                         icon: 'rect',
-                        data: this.namedata,
                     },
                     series: [
                         // 主要展示层的
@@ -258,7 +179,7 @@
 
     .ntn {
         position: absolute;
-        top: 350px;
+        top: 40%;
         right: 470px;
         color: #FFF;
         font-size: 16px
@@ -300,10 +221,10 @@
 
     .tagld {
         position: absolute;
-        top: 65px;
+        top: 10%;
         right: 24px;
         width: 370px;
-        height: 350px;
+        height: 44%;
     }
 
     #gld #gldChart {
