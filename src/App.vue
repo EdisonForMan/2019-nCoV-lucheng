@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <header :class="`app_header `">
+    <header :class="`app_header `" v-if="showHeader">
       <div class="app_icon">鹿城区疫情防控指挥地图</div>
       <div class="app_toptab_position app_toptab_normal">
         <ul class="app_toptab">
@@ -38,7 +38,8 @@ export default {
         { label: "疫情监控", route: "monitor" }
       ],
       current: 1,
-      time: " "
+      time: " ",
+      showHeader: true // 显示头部
     };
   },
   mounted() {

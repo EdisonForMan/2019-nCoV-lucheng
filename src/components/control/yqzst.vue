@@ -5,9 +5,9 @@
             <div class="rightdiv">
                 <select @change="bqSelect($event)">
                     <option value="0">确诊病例</option>
-<!--                    <option value="1">疑似病例</option>
-                    <option value="2">医院发热待查</option>
-                    <option value="3">社区发热待查</option>-->
+                    <!--                    <option value="1">疑似病例</option>
+                                        <option value="2">医院发热待查</option>
+                                        <option value="3">社区发热待查</option>-->
                 </select>
             </div>
         </div>
@@ -28,14 +28,6 @@
             return {
                 labelname: [],
                 numdata: [],
-                namelist1: ['24日', '25日', '26日', '27日', '28日', '29日', '30日', '31日'],
-                datalist1: [, 5, 10, 17, 27, 29, 32, 34],
-                namelist2: [],
-                datalist2: [],
-                namelist3: [],
-                datalist3: [],
-                namelist4: [],
-                datalist4: [],
             }
         },
         methods: {
@@ -46,8 +38,8 @@
                 // eslint-disable-next-line no-console
                 console.log(event.target.value)
                 if (event.target.value == "0") {
-                    that.labelname = that.namelist1;
-                    that.numdata = that.datalist1;
+                    that.labelname = window.nCov_luchengData.control.lc.namelist1;
+                    that.numdata = window.nCov_luchengData.control.lc.datalist1;
                     this.draw();
                 }
                 if (event.target.value == "1") {
@@ -152,8 +144,8 @@
             }
         },
         mounted() {
-            this.labelname = this.namelist1;
-            this.numdata = this.datalist1;
+            this.labelname = window.nCov_luchengData.control.lc.namelist1;
+            this.numdata = window.nCov_luchengData.control.lc.datalist1;
             this.draw();
         },
     }

@@ -4,63 +4,63 @@
             <div class="ecimg1"></div>
             <div class="ecri">
                 <div class="dwtt">商场超市</div>
-                <div class="secnum">共计：24家</div>
+                <div class="secnum">共计：{{$window.nCov_luchengData.macroscopic.people_type_8}}家</div>
             </div>
         </div>
         <div class="secofbg">
             <div class="ecimg2"></div>
             <div class="ecri">
                 <div class="dwtt">农贸市场</div>
-                <div class="secnum">共计：41家</div>
+                <div class="secnum">共计：{{$window.nCov_luchengData.macroscopic.people_type_9}}家</div>
             </div>
         </div>
         <div class="secofbg">
             <div class="ecimg3"></div>
             <div class="ecri">
                 <div class="dwtt">文化场所</div>
-                <div class="secnum">共计：4家</div>
+                <div class="secnum">共计：{{$window.nCov_luchengData.macroscopic.people_type_11}}家</div>
             </div>
         </div>
         <div class="secofbg">
             <div class="ecimg4"></div>
             <div class="ecri">
                 <div class="dwtt">健身房</div>
-                <div class="secnum">共计：28家</div>
+                <div class="secnum">共计：{{$window.nCov_luchengData.macroscopic.people_type_7}}家</div>
             </div>
         </div>
         <div class="secofbg">
             <div class="ecimg5"></div>
             <div class="ecri">
                 <div class="dwtt">城市书房</div>
-                <div class="secnum">共计：93家</div>
+                <div class="secnum">共计：{{$window.nCov_luchengData.macroscopic.people_type_6}}家</div>
             </div>
         </div>
         <div class="secofbg">
             <div class="ecimg6"></div>
             <div class="ecri">
                 <div class="dwtt">博物馆</div>
-                <div class="secnum">共计：14家</div>
+                <div class="secnum">共计：{{$window.nCov_luchengData.macroscopic.people_type_14}}家</div>
             </div>
         </div>
         <div class="secofbg">
             <div class="ecimg8"></div>
             <div class="ecri">
                 <div class="dwtt">专业市场</div>
-                <div class="secnum">共计：10家</div>
+                <div class="secnum">共计：{{$window.nCov_luchengData.macroscopic.people_type_3}}家</div>
             </div>
         </div>
         <div class="secofbg">
             <div class="ecimg9"></div>
             <div class="ecri">
                 <div class="dwtt">天基宗教</div>
-                <div class="secnum">共计：91家</div>
+                <div class="secnum">共计：{{$window.nCov_luchengData.macroscopic.people_type_2}}家</div>
             </div>
         </div>
         <div class="secofbg">
             <div class="ecimg10"></div>
             <div class="ecri">
                 <div class="dwtt">佛道宗教</div>
-                <div class="secnum">共计：110家</div>
+                <div class="secnum">共计：{{$window.nCov_luchengData.macroscopic.people_type_1}}家</div>
             </div>
         </div>
     </div>

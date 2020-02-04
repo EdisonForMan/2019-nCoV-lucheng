@@ -6,12 +6,14 @@
                     <div class="control-view-bl-head-left" id="bg1"></div>
                     <div class="control-view-bl-head-right" style="color: #189bfe;">
                         确诊病例 <br>
-                        <span class="control-view-bl-head-right-span">{{ viewData.quezhen.value }}例</span>
+                        <span class="control-view-bl-head-right-span">{{$window.nCov_luchengData.macroscopic.lc.qzbl}}例</span>
                     </div>
                 </div>
                 <div class="control-view-bl-body">
-                    <div>今日新增 <span style="color: rgb(30, 255, 149);">{{ viewData.quezhen.add }}</span></div>
-                    <div>温州占比 <span style="color: purple;">{{ viewData.quezhen.percent }}</span></div>
+                    <div>今日新增 <span
+                            style="color: rgb(30, 255, 149);">{{$window.nCov_luchengData.control.lc.qzbl_add}}</span>
+                    </div>
+                    <div>温州占比 <span style="color: purple;">{{$window.nCov_luchengData.control.lc.qzbl_mix}}</span></div>
                 </div>
             </div>
             <div class="control-view-bl">
@@ -19,12 +21,14 @@
                     <div class="control-view-bl-head-left" id="bg2"></div>
                     <div class="control-view-bl-head-right" style="color: #ff9b27;">
                         疑似病例 <br>
-                        <span class="control-view-bl-head-right-span">{{ viewData.yisi.value }}例</span>
+                        <span class="control-view-bl-head-right-span">{{$window.nCov_luchengData.macroscopic.lc.zzbl}}例</span>
                     </div>
                 </div>
                 <div class="control-view-bl-body">
-                    <div>今日新增 <span style="color: rgb(30, 255, 149);">{{ viewData.yisi.add }}</span></div>
-                    <div>温州占比 <span style="color: purple;">{{ viewData.yisi.percent }}</span></div>
+                    <div>今日新增 <span
+                            style="color: rgb(30, 255, 149);">{{$window.nCov_luchengData.control.lc.zzbl_add}}</span>
+                    </div>
+                    <div>温州占比 <span style="color: purple;">{{$window.nCov_luchengData.control.lc.zzbl_mix}}</span></div>
                 </div>
             </div>
             <div class="control-view-bl">
@@ -32,12 +36,14 @@
                     <div class="control-view-bl-head-left" id="bg3"></div>
                     <div class="control-view-bl-head-right" style="color: #00b87a;">
                         治愈病例 <br>
-                        <span class="control-view-bl-head-right-span">{{ viewData.zhiyu.value }}例</span>
+                        <span class="control-view-bl-head-right-span">{{$window.nCov_luchengData.macroscopic.cure}}例</span>
                     </div>
                 </div>
                 <div class="control-view-bl-body">
-                    <div>今日新增 <span style="color: rgb(30, 255, 149);">{{ viewData.zhiyu.add }}</span></div>
-                    <div>温州占比 <span style="color: purple;">{{ viewData.zhiyu.percent }}</span></div>
+                    <div>今日新增 <span
+                            style="color: rgb(30, 255, 149);">{{$window.nCov_luchengData.control.lc.cure_add}}</span>
+                    </div>
+                    <div>温州占比 <span style="color: purple;">{{$window.nCov_luchengData.control.lc.cure_mix}}</span></div>
                 </div>
             </div>
             <div class="control-view-bl">
@@ -47,12 +53,15 @@
                     </div>
                     <div class="control-view-bl-head-right" style="color: #fa5350;">
                         死亡病例 <br>
-                        <span class="control-view-bl-head-right-span">{{ viewData.siwang.value }}例</span>
+                        <span class="control-view-bl-head-right-span">{{$window.nCov_luchengData.macroscopic.death}}例</span>
                     </div>
                 </div>
                 <div class="control-view-bl-body">
-                    <div>今日新增 <span style="color: rgb(30, 255, 149);">{{ viewData.siwang.add }}</span></div>
-                    <div>温州占比 <span style="color: purple;">{{ viewData.siwang.percent }}</span></div>
+                    <div>今日新增 <span
+                            style="color: rgb(30, 255, 149);">{{$window.nCov_luchengData.control.lc.death_add}}</span>
+                    </div>
+                    <div>温州占比 <span style="color: purple;">{{$window.nCov_luchengData.control.lc.death_mix}}</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -69,7 +78,7 @@
             </table>
             <table class="control-view-table-body" cellspacing="5">
                 <tbody>
-                <tr v-for="(value, index) of viewData.tableData" :key="index">
+                <tr v-for="(value, index) of $window.nCov_luchengData.control.lc.tableData" :key="index">
                     <td>{{ value.key }}</td>
                     <td v-for="(item, ind) of value.value" :key="ind">{{ item }}</td>
                 </tr>

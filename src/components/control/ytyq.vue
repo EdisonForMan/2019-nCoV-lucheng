@@ -28,14 +28,6 @@
             return {
                 labelname: [],
                 numdata: [],
-                list1: ['五马', '广化', '大南', '松台', '滨江', '蒲鞋市', '南汇', '双屿', '七都', '仰义', '丰门', '南郊', '藤桥镇', '山福镇'],
-                datalist1: [1, 0, 6, 1, 0, 1, 6, 1, 0, 0, 0, 2, 2, 0],
-                list2: ['疑似病例'],
-                datalist2: [5],
-                list3: ['银泰员工'],
-                datalist3: [575],
-                list4: ['密切接触者'],
-                datalist4: [150],
             }
         },
         methods: {
@@ -46,23 +38,23 @@
                 // eslint-disable-next-line no-console
                 console.log(event.target.value)
                 if (event.target.value == "0") {
-                    this.labelname = this.list1;
-                    that.numdata = that.datalist1;
+                    this.labelname = window.nCov_luchengData.control.yt.list1;
+                    that.numdata = window.nCov_luchengData.control.yt.datalist1;
                     this.draw();
                 }
                 if (event.target.value == "1") {
-                    this.labelname = this.list2;
-                    that.numdata = that.datalist2;
+                    this.labelname = window.nCov_luchengData.control.yt.list2;
+                    that.numdata = window.nCov_luchengData.macroscopic.lc_yt.zzbl;
                     this.draw();
                 }
                 if (event.target.value == "2") {
-                    this.labelname = this.list3;
-                    that.numdata = that.datalist3;
+                    this.labelname = window.nCov_luchengData.control.yt.list3;
+                    that.numdata = window.nCov_luchengData.macroscopic.lc_yt.ytyg;
                     this.draw();
                 }
                 if (event.target.value == "3") {
-                    this.labelname = this.list4;
-                    that.numdata = that.datalist4;
+                    this.labelname = window.nCov_luchengData.control.yt.list4;
+                    that.numdata = window.nCov_luchengData.macroscopic.lc_yt.mj;
                     this.draw();
                 }
             },
@@ -162,8 +154,8 @@
             }
         },
         mounted() {
-            this.labelname = this.list1;
-            this.numdata = this.datalist1;
+            this.labelname = window.nCov_luchengData.control.yt.list1;
+            this.numdata = window.nCov_luchengData.control.yt.datalist1;
             this.draw();
         },
     }

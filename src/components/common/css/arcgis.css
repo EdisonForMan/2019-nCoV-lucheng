@@ -1627,7 +1627,7 @@ html[dir="rtl"] .esri-ui-bottom-right {
 
 .esri-widget {
     box-sizing      : border-box;
-    color           : #323232;
+    /* color           : #323232; */
     font-size       : 14px;
     font-family     : "Avenir Next W00", "Helvetica Neue", Helvetica, Arial, sans-serif;
     line-height     : 1.3em;

@@ -55,6 +55,9 @@
         <span v-if="item.id == 'xqjck'">{{++index}}.{{item.attributes.NAME}}</span>
         <span v-if="item.id == 'wg'">{{++index}}.{{item.attributes.Name}}</span>
         <span
+          v-if="item.id == 'chanyePlate'"
+        >{{++index}}.{{item.attributes.名称}}（{{item.attributes.num}}例）</span>
+        <span
           v-if="item.label == -1"
         >{{++index}}.{{item.attributes.Name?item.attributes.Name:(item.attributes.ProjectName?item.attributes.ProjectName:(item.attributes.CompanyName?item.attributes.CompanyName:item.attributes.项目名称))}}</span>
       </li>
@@ -148,32 +151,22 @@ export default {
             return item;
           });
         }
-        // 密接关联
-        // if (id == "qzbl") {
-        //   const mjList = await this.getMj(url);
-        //   const mjObject = {};
-        //   mjList.map(item => {
-        //     if (
-        //       item.attributes.RelatingCodes != "" &&
-        //       (item.attributes.RelatingCodes != null) &
-        //         !mjObject[item.attributes.RelatingCodes]
-        //     ) {
-        //       mjObject[item.attributes.RelatingCodes] = [];
-        //     }
-        //     if (
-        //       item.attributes.RelatingCodes != "" &&
-        //       item.attributes.RelatingCodes != null
-        //     ) {
-        //       mjObject[item.attributes.RelatingCodes].push(item);
-        //     }
-        //   });
-        //   list.map(item => {
-        //     mjObject[item.attributes.Bid] &&
-        //       (item.mjList = mjObject[item.attributes.Bid]);
-        //     return item;
-        //   });
-        // }
-        // console.log("list", list);
+        //  街镇网格统计病例
+        if (id == "chanyePlate") {
+          const qzblList = await this.getQzbl();
+          const contryObject = {};
+          qzblList.map(item => {
+            if (!contryObject[item.attributes.Country]) {
+              contryObject[item.attributes.Country] = [];
+            }
+            contryObject[item.attributes.Country].push(item);
+          });
+          list.map(item => {
+            contryObject[item.attributes.名称] &&
+              (item.qzblList = contryObject[item.attributes.名称] || []);
+            return item;
+          });
+        }
         this.data = list;
         this.forceData = list.filter((item, index) => {
           return index < 20;
@@ -213,6 +206,31 @@ export default {
         ).then(async ([QueryTask, Query]) => {
           const queryTask = new QueryTask({
             url: `http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/4`
+          });
+          const query = new Query();
+          query.outFields = ["*"];
+          query.where = `1=1`;
+          const { fields, features } = await queryTask.execute(query);
+          const fieldAliases = {};
+          fields.map(item => {
+            fieldAliases[item.name] = item.alias;
+          });
+          const list = features.map(item => {
+            item.fieldAliases = fieldAliases;
+            return item;
+          });
+          resolve(list);
+        });
+      });
+    },
+    getQzbl(Country) {
+      return new Promise((resolve, reject) => {
+        loadModules(
+          ["esri/tasks/QueryTask", "esri/tasks/support/Query"],
+          OPTION
+        ).then(async ([QueryTask, Query]) => {
+          const queryTask = new QueryTask({
+            url: `http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/0`
           });
           const query = new Query();
           query.outFields = ["*"];

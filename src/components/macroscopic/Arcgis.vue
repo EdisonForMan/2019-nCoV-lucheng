@@ -266,6 +266,7 @@ export default {
       geometry,
       fieldAliases,
       highWayList,
+      qzblList,
       mjList
     }) {
       const that = this;
@@ -286,7 +287,10 @@ export default {
       });
       that.view.popup = {
         title: "",
-        content: `<table class="esri-widget__table" summary="属性和值列表"><tbody>
+        content: `${
+          id == "xq"
+            ? this.xqDetail(false, attributes)
+            : `<table class="esri-widget__table" summary="属性和值列表"><tbody>
             ${Object.keys(attributes)
               .filter(k => {
                 return (
@@ -309,40 +313,38 @@ export default {
                 </tr>`;
               })
               .join("")}
-          </tbody></table>
+          </tbody></table>`
+        }
           ${
             id == "qzbl"
               ? `<div class="bottomBtn" data-val="${attributes.Name}">密切接触者分布</div>`
               : ``
           }
           ${
-            // 密接额外添加
-            mjList
-              ? `<div><p>密切接触者</p><table class="esri-widget__table" summary="密接">
-              <thead>
-              <tr>
-              <th style="width: 20%">姓名</th>
-              <th style="width: 20%">关系</th>
-              <th style="width: 30%">电话</th>
-              <th style="width: 20%">街道</th>
-              </tr>
-              </thead>
-              <tbody>
-              ${mjList
-                .map(item => {
-                  return `<tr>
-                   <td style="width: 20%;text-align: left;">${item.attributes
-                     .Name || "无"}</th>
-                  <td style="width: 20%;text-align: left;">${item.attributes
-                    .Relation || "无"}</td>
-                    <td style="width: 30%;text-align: left;">${item.attributes
-                      .Phone || "无"}</th>
-                  <td style="width: 20%;text-align: left;">${item.attributes
-                    .Country || "无"}</td>
+            // 街镇病例额外添加
+            qzblList
+              ? qzblList
+                  .map(item => {
+                    return `<div><p>${
+                      item.attributes.Name
+                    }</p><table class="esri-widget__table" summary="值班表"><tbody>
+            ${Object.keys(item.attributes)
+              .filter(k => {
+                return ["Bid", "OBJECTID", "Name"].indexOf(k) < 0;
+              })
+              .map(k => {
+                return `<tr>
+                  <th class="esri-feature__field-header">${item.fieldAliases[
+                    k
+                  ] || k}</th>
+                  <td class="esri-feature__field-data">${item.attributes[k] ||
+                    "无"}</td>
                 </tr>`;
-                })
-                .join("")}
-              </tbody></table></div>`
+              })
+              .join("")}
+            </tbody></table></div>`;
+                  })
+                  .join("")
               : ``
           }
           ${
@@ -494,7 +496,10 @@ export default {
           if (tipHash[id] && Hash[tipHash[id]]) {
             const _hash_ = Hash[tipHash[id]];
             option.popupTemplate = {
-              content: `<table class="esri-widget__table" summary="属性和值列表"><tbody>
+              content: `${
+                id == "xq"
+                  ? this.xqDetail(true)
+                  : `<table class="esri-widget__table" summary="属性和值列表"><tbody>
             ${_hash_
               .map(k => {
                 return `<tr>
@@ -503,7 +508,8 @@ export default {
                   </tr>`;
               })
               .join("")}
-          </tbody></table>
+          </tbody></table>`
+              }
           ${
             id == "qzbl"
               ? `<div class="bottomBtn" data-val="{Name}">密切接触者分布</div>`
@@ -511,7 +517,6 @@ export default {
           }`
             };
           }
-
           const _layers_ = item.isImg ? MapImageLayer : FeatureLayer;
           if (item.sublayers) {
             if (item.isImg) {
@@ -848,6 +853,59 @@ export default {
           });
         });
       });
+    },
+    //  小区面详情字段
+    xqDetail(isOption, obj) {
+      const arr = [
+        [
+          "name@小区（大厦）名称",
+          "Country_1@所属街道",
+          "Community@所属社区",
+          "@小区地址",
+          "@小区范围",
+          "户数@总户数",
+          "@总栋数",
+          "@总人数"
+        ],
+        "物业信息",
+        [
+          "PropertyName@物业",
+          "@负责人",
+          "@联系电话",
+          "@保安队长",
+          "@保安队长联系电话"
+        ],
+        "房管中心信息",
+        [
+          "HousingAuthorityChargeMan@负责人",
+          "HousingAuthorityChargeManPhone@联系电话"
+        ],
+        "社区信息",
+        [
+          "MansionChargeMan@负责人",
+          "MansionChargeManPhone@联系电话",
+          "@分管领导",
+          "@分管领导联系电话"
+        ]
+      ];
+      const ra = arr
+        .map(item => {
+          return item instanceof Array
+            ? `<table class="esri-widget__table"><tbody>${item
+                .map(o => {
+                  const [val, label] = o.split("@");
+                  return `<tr>
+                  <th class="esri-feature__field-header">${label}</th>
+                  <td class="esri-feature__field-data">${
+                    val ? (isOption ? `{${val}}` : obj[val] || "") : ""
+                  }</td>
+                </tr>`;
+                })
+                .join("")}</tbody></table>`
+            : `<p>${item}</p>`;
+        })
+        .join("");
+      return ra;
     }
   }
 };
