@@ -4,104 +4,705 @@
  */
 const nCov_luchengChart = {
     "comment": "鹿城区病例统计",
+    /** 确诊病例*/
     "dataAge": [{
-        "value": 2,
-        "name": "滨江",
-        "itemStyle": {
-            "color": "#f41e1e"
+            "value": 2,
+            "name": "滨江",
+            "itemStyle": {
+                "color": "#f41e1e"
+            }
+        },
+        {
+            "value": 0,
+            "name": "山福",
+            "itemStyle": {
+                "color": "#4dc075"
+            }
+        },
+        {
+            "value": 5,
+            "name": "藤桥",
+            "itemStyle": {
+                "color": "#b8d94c"
+            }
+        },
+        {
+            "value": 0,
+            "name": "仰义",
+            "itemStyle": {
+                "color": "#ffb738"
+            }
+        },
+        {
+            "value": 5,
+            "name": "南郊",
+            "itemStyle": {
+                "color": "#ab64cc"
+            }
+        },
+        {
+            "value": 0,
+            "name": "丰门",
+            "itemStyle": {
+                "color": "#ffdd55"
+            }
+        },
+        {
+            "value": 11,
+            "name": "南汇",
+            "itemStyle": {
+                "color": "#fe4d69"
+            }
+        },
+        {
+            "value": 1,
+            "name": "双屿",
+            "itemStyle": {
+                "color": "#ffefa1"
+            }
+        },
+        {
+            "value": 4,
+            "name": "五马",
+            "itemStyle": {
+                "color": "#ff8e66"
+            }
+        },
+        {
+            "value": 3,
+            "name": "松台",
+            "itemStyle": {
+                "color": "#ff936a"
+            }
+        },
+        {
+            "value": 0,
+            "name": "七都",
+            "itemStyle": {
+                "color": "#aa63cb"
+            }
+        },
+        {
+            "value": 2,
+            "name": "蒲鞋市",
+            "itemStyle": {
+                "color": "#bace53"
+            }
+        },
+        {
+            "value": 1,
+            "name": "广化",
+            "itemStyle": {
+                "color": "#f41e1e"
+            }
+        },
+        {
+            "value": 7,
+            "name": "大南",
+            "itemStyle": {
+                "color": "#fef5cc"
+            }
         }
-    },
-    {
-        "value": 0,
-        "name": "山福",
-        "itemStyle": {
-            "color": "#4dc075"
+    ],
+    "comment": "疑似病例",
+    "ysblDate": [{
+            "value": 10,
+            "name": "滨江",
+            "itemStyle": {
+                "color": "#f41e1e"
+            }
+        },
+        {
+            "value": 2,
+            "name": "山福",
+            "itemStyle": {
+                "color": "#4dc075"
+            }
+        },
+        {
+            "value": 4,
+            "name": "藤桥",
+            "itemStyle": {
+                "color": "#b8d94c"
+            }
+        },
+        {
+            "value": 0,
+            "name": "仰义",
+            "itemStyle": {
+                "color": "#ffb738"
+            }
+        },
+        {
+            "value": 7,
+            "name": "南郊",
+            "itemStyle": {
+                "color": "#ab64cc"
+            }
+        },
+        {
+            "value": 3,
+            "name": "丰门",
+            "itemStyle": {
+                "color": "#ffdd55"
+            }
+        },
+        {
+            "value": 1,
+            "name": "南汇",
+            "itemStyle": {
+                "color": "#fe4d69"
+            }
+        },
+        {
+            "value": 1,
+            "name": "双屿",
+            "itemStyle": {
+                "color": "#ffefa1"
+            }
+        },
+        {
+            "value": 4,
+            "name": "五马",
+            "itemStyle": {
+                "color": "#ff8e66"
+            }
+        },
+        {
+            "value": 3,
+            "name": "松台",
+            "itemStyle": {
+                "color": "#ff936a"
+            }
+        },
+        {
+            "value": 0,
+            "name": "七都",
+            "itemStyle": {
+                "color": "#aa63cb"
+            }
+        },
+        {
+            "value": 2,
+            "name": "蒲鞋市",
+            "itemStyle": {
+                "color": "#bace53"
+            }
+        },
+        {
+            "value": 1,
+            "name": "广化",
+            "itemStyle": {
+                "color": "#f41e1e"
+            }
+        },
+        {
+            "value": 7,
+            "name": "大南",
+            "itemStyle": {
+                "color": "#fef5cc"
+            }
         }
-    },
-    {
-        "value": 5,
-        "name": "藤桥",
-        "itemStyle": {
-            "color": "#b8d94c"
+    ],
+    "comment": "集中隔离点",
+    "jzglDate": [{
+            "value": 9,
+            "name": "滨江",
+            "itemStyle": {
+                "color": "#f41e1e"
+            }
+        },
+        {
+            "value": 2,
+            "name": "山福",
+            "itemStyle": {
+                "color": "#4dc075"
+            }
+        },
+        {
+            "value": 4,
+            "name": "藤桥",
+            "itemStyle": {
+                "color": "#b8d94c"
+            }
+        },
+        {
+            "value": 0,
+            "name": "仰义",
+            "itemStyle": {
+                "color": "#ffb738"
+            }
+        },
+        {
+            "value": 7,
+            "name": "南郊",
+            "itemStyle": {
+                "color": "#ab64cc"
+            }
+        },
+        {
+            "value": 3,
+            "name": "丰门",
+            "itemStyle": {
+                "color": "#ffdd55"
+            }
+        },
+        {
+            "value": 1,
+            "name": "南汇",
+            "itemStyle": {
+                "color": "#fe4d69"
+            }
+        },
+        {
+            "value": 1,
+            "name": "双屿",
+            "itemStyle": {
+                "color": "#ffefa1"
+            }
+        },
+        {
+            "value": 4,
+            "name": "五马",
+            "itemStyle": {
+                "color": "#ff8e66"
+            }
+        },
+        {
+            "value": 3,
+            "name": "松台",
+            "itemStyle": {
+                "color": "#ff936a"
+            }
+        },
+        {
+            "value": 0,
+            "name": "七都",
+            "itemStyle": {
+                "color": "#aa63cb"
+            }
+        },
+        {
+            "value": 2,
+            "name": "蒲鞋市",
+            "itemStyle": {
+                "color": "#bace53"
+            }
+        },
+        {
+            "value": 1,
+            "name": "广化",
+            "itemStyle": {
+                "color": "#f41e1e"
+            }
+        },
+        {
+            "value": 7,
+            "name": "大南",
+            "itemStyle": {
+                "color": "#fef5cc"
+            }
         }
-    },
-    {
-        "value": 0,
-        "name": "仰义",
-        "itemStyle": {
-            "color": "#ffb738"
+    ],
+    "comment": "集中隔离点人员名单",
+    "glryDate": [{
+            "value": 8,
+            "name": "滨江",
+            "itemStyle": {
+                "color": "#f41e1e"
+            }
+        },
+        {
+            "value": 2,
+            "name": "山福",
+            "itemStyle": {
+                "color": "#4dc075"
+            }
+        },
+        {
+            "value": 4,
+            "name": "藤桥",
+            "itemStyle": {
+                "color": "#b8d94c"
+            }
+        },
+        {
+            "value": 0,
+            "name": "仰义",
+            "itemStyle": {
+                "color": "#ffb738"
+            }
+        },
+        {
+            "value": 7,
+            "name": "南郊",
+            "itemStyle": {
+                "color": "#ab64cc"
+            }
+        },
+        {
+            "value": 3,
+            "name": "丰门",
+            "itemStyle": {
+                "color": "#ffdd55"
+            }
+        },
+        {
+            "value": 1,
+            "name": "南汇",
+            "itemStyle": {
+                "color": "#fe4d69"
+            }
+        },
+        {
+            "value": 1,
+            "name": "双屿",
+            "itemStyle": {
+                "color": "#ffefa1"
+            }
+        },
+        {
+            "value": 4,
+            "name": "五马",
+            "itemStyle": {
+                "color": "#ff8e66"
+            }
+        },
+        {
+            "value": 3,
+            "name": "松台",
+            "itemStyle": {
+                "color": "#ff936a"
+            }
+        },
+        {
+            "value": 0,
+            "name": "七都",
+            "itemStyle": {
+                "color": "#aa63cb"
+            }
+        },
+        {
+            "value": 2,
+            "name": "蒲鞋市",
+            "itemStyle": {
+                "color": "#bace53"
+            }
+        },
+        {
+            "value": 1,
+            "name": "广化",
+            "itemStyle": {
+                "color": "#f41e1e"
+            }
+        },
+        {
+            "value": 7,
+            "name": "大南",
+            "itemStyle": {
+                "color": "#fef5cc"
+            }
         }
-    },
-    {
-        "value": 5,
-        "name": "南郊",
-        "itemStyle": {
-            "color": "#ab64cc"
+    ],
+    "comment": "密切接触者",
+    "mqzDate": [{
+            "value": 7,
+            "name": "滨江",
+            "itemStyle": {
+                "color": "#f41e1e"
+            }
+        },
+        {
+            "value": 2,
+            "name": "山福",
+            "itemStyle": {
+                "color": "#4dc075"
+            }
+        },
+        {
+            "value": 4,
+            "name": "藤桥",
+            "itemStyle": {
+                "color": "#b8d94c"
+            }
+        },
+        {
+            "value": 0,
+            "name": "仰义",
+            "itemStyle": {
+                "color": "#ffb738"
+            }
+        },
+        {
+            "value": 7,
+            "name": "南郊",
+            "itemStyle": {
+                "color": "#ab64cc"
+            }
+        },
+        {
+            "value": 3,
+            "name": "丰门",
+            "itemStyle": {
+                "color": "#ffdd55"
+            }
+        },
+        {
+            "value": 1,
+            "name": "南汇",
+            "itemStyle": {
+                "color": "#fe4d69"
+            }
+        },
+        {
+            "value": 1,
+            "name": "双屿",
+            "itemStyle": {
+                "color": "#ffefa1"
+            }
+        },
+        {
+            "value": 4,
+            "name": "五马",
+            "itemStyle": {
+                "color": "#ff8e66"
+            }
+        },
+        {
+            "value": 3,
+            "name": "松台",
+            "itemStyle": {
+                "color": "#ff936a"
+            }
+        },
+        {
+            "value": 0,
+            "name": "七都",
+            "itemStyle": {
+                "color": "#aa63cb"
+            }
+        },
+        {
+            "value": 2,
+            "name": "蒲鞋市",
+            "itemStyle": {
+                "color": "#bace53"
+            }
+        },
+        {
+            "value": 1,
+            "name": "广化",
+            "itemStyle": {
+                "color": "#f41e1e"
+            }
+        },
+        {
+            "value": 7,
+            "name": "大南",
+            "itemStyle": {
+                "color": "#fef5cc"
+            }
         }
-    },
-    {
-        "value": 0,
-        "name": "丰门",
-        "itemStyle": {
-            "color": "#ffdd55"
+    ],
+    "comment": "居家隔离人员",
+    "jjglDate": [{
+            "value": 6,
+            "name": "滨江",
+            "itemStyle": {
+                "color": "#f41e1e"
+            }
+        },
+        {
+            "value": 2,
+            "name": "山福",
+            "itemStyle": {
+                "color": "#4dc075"
+            }
+        },
+        {
+            "value": 4,
+            "name": "藤桥",
+            "itemStyle": {
+                "color": "#b8d94c"
+            }
+        },
+        {
+            "value": 0,
+            "name": "仰义",
+            "itemStyle": {
+                "color": "#ffb738"
+            }
+        },
+        {
+            "value": 7,
+            "name": "南郊",
+            "itemStyle": {
+                "color": "#ab64cc"
+            }
+        },
+        {
+            "value": 3,
+            "name": "丰门",
+            "itemStyle": {
+                "color": "#ffdd55"
+            }
+        },
+        {
+            "value": 1,
+            "name": "南汇",
+            "itemStyle": {
+                "color": "#fe4d69"
+            }
+        },
+        {
+            "value": 1,
+            "name": "双屿",
+            "itemStyle": {
+                "color": "#ffefa1"
+            }
+        },
+        {
+            "value": 4,
+            "name": "五马",
+            "itemStyle": {
+                "color": "#ff8e66"
+            }
+        },
+        {
+            "value": 3,
+            "name": "松台",
+            "itemStyle": {
+                "color": "#ff936a"
+            }
+        },
+        {
+            "value": 0,
+            "name": "七都",
+            "itemStyle": {
+                "color": "#aa63cb"
+            }
+        },
+        {
+            "value": 2,
+            "name": "蒲鞋市",
+            "itemStyle": {
+                "color": "#bace53"
+            }
+        },
+        {
+            "value": 1,
+            "name": "广化",
+            "itemStyle": {
+                "color": "#f41e1e"
+            }
+        },
+        {
+            "value": 7,
+            "name": "大南",
+            "itemStyle": {
+                "color": "#fef5cc"
+            }
         }
-    },
-    {
-        "value": 11,
-        "name": "南汇",
-        "itemStyle": {
-            "color": "#fe4d69"
+    ],
+    "comment": "湖北回鹿人员",
+    "hbhlDate": [{
+            "value": 5,
+            "name": "滨江",
+            "itemStyle": {
+                "color": "#f41e1e"
+            }
+        },
+        {
+            "value": 2,
+            "name": "山福",
+            "itemStyle": {
+                "color": "#4dc075"
+            }
+        },
+        {
+            "value": 4,
+            "name": "藤桥",
+            "itemStyle": {
+                "color": "#b8d94c"
+            }
+        },
+        {
+            "value": 0,
+            "name": "仰义",
+            "itemStyle": {
+                "color": "#ffb738"
+            }
+        },
+        {
+            "value": 7,
+            "name": "南郊",
+            "itemStyle": {
+                "color": "#ab64cc"
+            }
+        },
+        {
+            "value": 3,
+            "name": "丰门",
+            "itemStyle": {
+                "color": "#ffdd55"
+            }
+        },
+        {
+            "value": 1,
+            "name": "南汇",
+            "itemStyle": {
+                "color": "#fe4d69"
+            }
+        },
+        {
+            "value": 1,
+            "name": "双屿",
+            "itemStyle": {
+                "color": "#ffefa1"
+            }
+        },
+        {
+            "value": 4,
+            "name": "五马",
+            "itemStyle": {
+                "color": "#ff8e66"
+            }
+        },
+        {
+            "value": 3,
+            "name": "松台",
+            "itemStyle": {
+                "color": "#ff936a"
+            }
+        },
+        {
+            "value": 0,
+            "name": "七都",
+            "itemStyle": {
+                "color": "#aa63cb"
+            }
+        },
+        {
+            "value": 2,
+            "name": "蒲鞋市",
+            "itemStyle": {
+                "color": "#bace53"
+            }
+        },
+        {
+            "value": 1,
+            "name": "广化",
+            "itemStyle": {
+                "color": "#f41e1e"
+            }
+        },
+        {
+            "value": 7,
+            "name": "大南",
+            "itemStyle": {
+                "color": "#fef5cc"
+            }
         }
-    },
-    {
-        "value": 1,
-        "name": "双屿",
-        "itemStyle": {
-            "color": "#ffefa1"
-        }
-    },
-    {
-        "value": 4,
-        "name": "五马",
-        "itemStyle": {
-            "color": "#ff8e66"
-        }
-    },
-    {
-        "value": 3,
-        "name": "松台",
-        "itemStyle": {
-            "color": "#ff936a"
-        }
-    },
-    {
-        "value": 0,
-        "name": "七都",
-        "itemStyle": {
-            "color": "#aa63cb"
-        }
-    },
-    {
-        "value": 2,
-        "name": "蒲鞋市",
-        "itemStyle": {
-            "color": "#bace53"
-        }
-    },
-    {
-        "value": 1,
-        "name": "广化",
-        "itemStyle": {
-            "color": "#f41e1e"
-        }
-    },
-    {
-        "value": 7,
-        "name": "大南",
-        "itemStyle": {
-            "color": "#fef5cc"
-        }
-    }
     ],
     "comment": "增长趋势",
     "dataName": [
@@ -118,103 +719,103 @@ const nCov_luchengChart = {
     ],
     "comment": "银泰病例统计",
     "YTdataAge": [{
-        "value": 0,
-        "name": "滨江",
-        "itemStyle": {
-            "color": "#f41e1e"
+            "value": 0,
+            "name": "滨江",
+            "itemStyle": {
+                "color": "#f41e1e"
+            }
+        },
+        {
+            "value": 0,
+            "name": "山福",
+            "itemStyle": {
+                "color": "#4dc075"
+            }
+        },
+        {
+            "value": 2,
+            "name": "藤桥",
+            "itemStyle": {
+                "color": "#b8d94c"
+            }
+        },
+        {
+            "value": 0,
+            "name": "仰义",
+            "itemStyle": {
+                "color": "#ffb738"
+            }
+        },
+        {
+            "value": 2,
+            "name": "南郊",
+            "itemStyle": {
+                "color": "#ab64cc"
+            }
+        },
+        {
+            "value": 0,
+            "name": "丰门",
+            "itemStyle": {
+                "color": "#ffdd55"
+            }
+        },
+        {
+            "value": 6,
+            "name": "南汇",
+            "itemStyle": {
+                "color": "#fe4d69"
+            }
+        },
+        {
+            "value": 1,
+            "name": "双屿",
+            "itemStyle": {
+                "color": "#ffefa1"
+            }
+        },
+        {
+            "value": 1,
+            "name": "五马",
+            "itemStyle": {
+                "color": "#ff8e66"
+            }
+        },
+        {
+            "value": 1,
+            "name": "松台",
+            "itemStyle": {
+                "color": "#ff936a"
+            }
+        },
+        {
+            "value": 0,
+            "name": "七都",
+            "itemStyle": {
+                "color": "#aa63cb"
+            }
+        },
+        {
+            "value": 1,
+            "name": "蒲鞋市",
+            "itemStyle": {
+                "color": "#bace53"
+            }
+        },
+        {
+            "value": 0,
+            "name": "广化",
+            "itemStyle": {
+                "color": "#f41e1e"
+            }
+        },
+        {
+            "value": 6,
+            "name": "大南",
+            "itemStyle": {
+                "color": "#fef5cc"
+            }
         }
-    },
-    {
-        "value": 0,
-        "name": "山福",
-        "itemStyle": {
-            "color": "#4dc075"
-        }
-    },
-    {
-        "value": 2,
-        "name": "藤桥",
-        "itemStyle": {
-            "color": "#b8d94c"
-        }
-    },
-    {
-        "value": 0,
-        "name": "仰义",
-        "itemStyle": {
-            "color": "#ffb738"
-        }
-    },
-    {
-        "value": 2,
-        "name": "南郊",
-        "itemStyle": {
-            "color": "#ab64cc"
-        }
-    },
-    {
-        "value": 0,
-        "name": "丰门",
-        "itemStyle": {
-            "color": "#ffdd55"
-        }
-    },
-    {
-        "value": 6,
-        "name": "南汇",
-        "itemStyle": {
-            "color": "#fe4d69"
-        }
-    },
-    {
-        "value": 1,
-        "name": "双屿",
-        "itemStyle": {
-            "color": "#ffefa1"
-        }
-    },
-    {
-        "value": 1,
-        "name": "五马",
-        "itemStyle": {
-            "color": "#ff8e66"
-        }
-    },
-    {
-        "value": 1,
-        "name": "松台",
-        "itemStyle": {
-            "color": "#ff936a"
-        }
-    },
-    {
-        "value": 0,
-        "name": "七都",
-        "itemStyle": {
-            "color": "#aa63cb"
-        }
-    },
-    {
-        "value": 1,
-        "name": "蒲鞋市",
-        "itemStyle": {
-            "color": "#bace53"
-        }
-    },
-    {
-        "value": 0,
-        "name": "广化",
-        "itemStyle": {
-            "color": "#f41e1e"
-        }
-    },
-    {
-        "value": 6,
-        "name": "大南",
-        "itemStyle": {
-            "color": "#fef5cc"
-        }
-    }
     ],
     "comment": "温州市确诊人员增长趋势(例)",
     "dataQS": [

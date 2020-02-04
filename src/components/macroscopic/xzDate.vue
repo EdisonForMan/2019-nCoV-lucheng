@@ -67,6 +67,7 @@ export default {
   left: 360px;
   background-color: #1d449f;
   border: 1px solid #04f2ff;
+  box-sizing: border-box;
 }
 #xzDateDiv h3 {
   padding: 5px 0;

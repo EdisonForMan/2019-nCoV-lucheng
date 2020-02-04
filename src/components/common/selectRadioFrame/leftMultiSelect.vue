@@ -34,13 +34,6 @@
               :key="oindex"
               v-if="!((tabIndex==1 && oitem.ytname == -1) || (tabIndex!=1 && oitem.name == -1))"
             >
-              <p
-                @click="ShowResult(oitem,item),changeTree(oitem)"
-              >{{tabIndex==1?(oitem.ytname||oitem.name) : oitem.name}}</p>
-              <ToggleSwitch
-                v-if="oitem.id == 'jjgl' || oitem.id == 'hbhw'"
-                @change="change(oitem.id)"
-              />
               <input
                 type="checkbox"
                 v-if="!item.disabled"
@@ -48,6 +41,18 @@
                 @change="changeTree(oitem)"
                 @click="ShowResult(oitem,item)"
               />
+              <p
+                @click="ShowResult(oitem,item),changeTree(oitem)"
+              >{{tabIndex==1?(oitem.ytname||oitem.name) : oitem.name}}</p>
+              <ToggleSwitch
+                v-if="oitem.id == 'jjgl' || oitem.id == 'hbhw'"
+                @change="change(oitem.id)"
+              />
+              <span
+                id="xq"
+                v-if="oitem.id == 'qzbl' || oitem.id == 'zzbl'"
+                @click="ShowListxq(oitem,item)"
+              >详情</span>
             </li>
           </ul>
         </div>
@@ -121,6 +126,11 @@ export default {
       if (!this.$parent || !oitem.id || oitem.isImg) return;
       this.$parent.$refs.table.getItem(oitem, item.label);
       this.$parent.$refs.sbxq.getItem(oitem, item.label);
+      this.$parent.$refs.bqtj.getItem(oitem, item.label); //调用病例统计echart
+    },
+    ShowListxq(oitem, item) {
+      this.$parent.listShow = true;
+      this.$parent.$refs.listxq.getItem(oitem, item.label);
     },
     intercept() {
       const _tree = this.$util.clone(this.tree);
@@ -152,6 +162,8 @@ export default {
       this.$parent.leftOptions = this.tree;
       // 清除热力图
       this.$parent.$refs.macroArcgis.removeHeat();
+      // 清除空间查询
+      this.$parent.$refs.macroArcgis.cleanQuery();
     },
     change(id) {
       const that = this;
@@ -311,7 +323,7 @@ export default {
           padding-left: 22px;
           margin-bottom: 10px;
           display: flex;
-          justify-content: space-between;
+          // justify-content: space-between;
           p {
             font-size: 18px;
             cursor: pointer;
@@ -325,17 +337,41 @@ export default {
             }
             span {
               background: unset;
-              background-color: unset;
-              width: unset;
-              height: unset;
-              padding: unset;
               margin-bottom: unset;
               display: unset;
-              font-size: unset;
-              line-height: unset;
               box-shadow: none;
-              border: unset;
+              background-color: #162449 !important;
+              border: 1px solid #75c8f4 !important;
+              border-radius: 8px;
+              padding: 7px 9px !important;
+              color: #fff;
+              cursor: pointer;
+              width: 32px !important;
+              height: 20px !important;
+              font-size: 12px !important;
+              line-height: 23px !important;
+              position: absolute;
+              right: 8%;
+              margin-top: 5px;
             }
+          }
+          #xq {
+            background: unset;
+            margin-bottom: unset;
+            display: unset;
+            box-shadow: none;
+            background-color: #162449 !important;
+            border: 1px solid #75c8f4 !important;
+            border-radius: 8px;
+            padding: 7px 9px !important;
+            color: #fff;
+            cursor: pointer;
+            width: 36px !important;
+            height: 20px !important;
+            font-size: 12px !important;
+            line-height: 23px !important;
+            margin-left: 4px;
+            text-align: center;
           }
           input[type="checkbox"] {
             top: 12px;
@@ -376,6 +412,7 @@ export default {
     outline: none;
     cursor: pointer;
     top: 2px;
+    margin-right: 2px;
   }
 
   input[type="checkbox"]:after {

@@ -46,10 +46,26 @@ export default {
       popShow: false, //弹出框默认隐藏
       roomData: [],
       manData: [],
-      // keyData: [],
       keyData1: [],
       keyData2: [],
-      type: 1
+      type: 1,
+      countryHash: {
+        山福镇: 0,
+        藤桥镇: 1,
+        仰义街道: 2,
+        丰门街道: 3,
+        双屿街道: 4,
+        广化街道: 5,
+        五马街道: 6,
+        松台街道: 7,
+        大南街道: 8,
+        南郊街道: 9,
+        南汇街道: 10,
+        蒲鞋市街道: 11,
+        滨江街道: 12,
+        七都街道: 13,
+        区直设: 14
+      }
     };
   },
   methods: {
@@ -95,7 +111,12 @@ export default {
         });
 
         if (that.type == 1) {
-          that.manData = list;
+          that.manData = list.sort((a, b) => {
+            return (
+              that.countryHash[b.attributes.Country] -
+              that.countryHash[a.attributes.Country]
+            );
+          });
           that.keyData1 = Object.keys(list[0].fieldAliases).filter(k => {
             return (
               [
@@ -109,9 +130,13 @@ export default {
             );
           });
         } else if (that.type == 2) {
-          that.roomData = list;
+          that.roomData = list.sort((a, b) => {
+            return (
+              that.countryHash[b.attributes.Country] -
+              that.countryHash[a.attributes.Country]
+            );
+          });
           that.keyData2 = Object.keys(list[0].fieldAliases).filter(k => {
-            console.log(k);
             return (
               [
                 "序号",

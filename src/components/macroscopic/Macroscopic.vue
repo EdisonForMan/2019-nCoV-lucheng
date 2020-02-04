@@ -9,7 +9,7 @@
         <span @click="()=>{icon_show_left=!icon_show_left}" class="hidden_button"></span>
       </div>
       <div id="fy-rightDiv">
-        <bqtj />
+        <bqtj ref="bqtj" />
         <ylzy />
         <sbDate ref="table" />
       </div>
@@ -20,7 +20,9 @@
     <popOpen />
     <!-- //弹出框 -->
     <sbxq ref="sbxq" v-show="xqShow" />
+    <listxq ref="listxq" v-show="listShow" />
     <mjChart ref="mjChart" />
+    <queryForm ref="queryForm" />
   </div>
 </template>
 
@@ -43,8 +45,10 @@ import sbDate from "./rightDiv/sbDate";
 import sbxq from "./sbxq";
 import topDate from "./topDate";
 import xzDate from "./xzDate";
+import listxq from "./listxq";
 import popOpen from "./popOpen";
 import mjChart from "./mjChart";
+import queryForm from "./queryForm";
 import { leftOptions } from "./config/enums";
 
 export default {
@@ -53,7 +57,8 @@ export default {
     return {
       icon_show_left: false,
       leftOptions,
-      xqShow: false
+      xqShow: false,
+      listShow: false
     };
   },
   components: {
@@ -67,7 +72,9 @@ export default {
     topDate, //顶部数据
     xzDate, //详情须知
     popOpen, //弹出详情框
-    mjChart //密接列表、图表
+    mjChart, //密接列表、图表
+    listxq, //点击列表的详情框
+    queryForm //空间查询结果
   },
   created() {},
   mounted() {},

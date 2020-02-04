@@ -1,12 +1,55 @@
 <template>
-  <div id="sbxqDateDiv">
+  <div id="listxq">
     <div class="head">
       <span>{{ title }} 详情列表</span>
       <a v-on:click="sbclose">×</a>
     </div>
-
+    <div class="search">
+      <select @change="xqsearch($event)">
+        <option value="0">姓名</option>
+        <option value="1">街道</option>
+      </select>
+      <input
+        type="text"
+        v-model="text"
+        placeholder="请输入查询"
+        style="width: 15%;margin-top: 10px;margin-right: 5px;background-color: #162449;border: 1px solid #75c8f4;border-radius: 8px;padding: 8px 9px; color:#fff"
+      />
+      <button
+        style="background-color: #162449;border: 1px solid #75c8f4;border-radius: 8px;padding: 7px 9px; color:#fff;margin-right:4px"
+        @click="()=>{text && filteItem()}"
+      >查询</button>
+    </div>
     <div class="content">
-      <table border="0" cellpadding="0" cellspacing="0">
+      <table border="0" cellpadding="0" cellspacing="0" v-if="qzflag">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th v-for="(k,i) in keyData" :key="i">{{ forceData[0].fieldAliases[k] }}</th>
+            <th>关系图谱</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item,index) in forceData" :key="index">
+            <td>{{ ++index }}</td>
+            <td
+              v-for="(k,i) in keyData"
+              :key="i"
+              @click="goLocation(item)"
+              style="cursor: pointer;"
+            >{{ item.attributes[k] || "无" }}</td>
+            <td @click="showrelation(item)" style="cursor: pointer;">详情</td>
+          </tr>
+          <tr>
+            <td>小计：</td>
+            <td v-for="(citem,cindex) in sArr" :key="cindex">
+              {{citem.Country}}:{{citem.count}}例
+            </td>
+            <td>合计：{{sum}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <table border="0" cellpadding="0" cellspacing="0" v-else>
         <thead>
           <tr>
             <th>序号</th>
@@ -14,13 +57,19 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item,index) in forceData" :key="index">
+          <tr
+            v-for="(item,index) in forceData"
+            :key="index"
+            @click="goLocation(item)"
+            style="cursor: pointer;"
+          >
             <td>{{ ++index }}</td>
             <td v-for="(k,i) in keyData" :key="i">{{ item.attributes[k] || "无" }}</td>
           </tr>
         </tbody>
       </table>
     </div>
+    <relation ref="relation" v-show="relationShow" />
   </div>
 </template>
 
@@ -29,6 +78,7 @@
 import { loadModules } from "esri-loader";
 import { OPTION } from "@/components/common/Tmap";
 import { leftOptions } from "./config/enums";
+import relation from "./relation";
 
 export default {
   name: "sbDate",
@@ -39,51 +89,53 @@ export default {
       forceData: [],
       keyData: [],
       title: "",
-      countryHash: {
-        山福镇: 0,
-        藤桥镇: 1,
-        仰义街道: 2,
-        丰门街道: 3,
-        双屿街道: 4,
-        广化街道: 5,
-        五马街道: 6,
-        松台街道: 7,
-        大南街道: 8,
-        南郊街道: 9,
-        南汇街道: 10,
-        蒲鞋市街道: 11,
-        滨江街道: 12,
-        七都街道: 13
-      }
+      qzflag: false,
+      relationShow: false,
+      selectValue: 0,
+      sObj :{},
+      sArr:[],
+      sum:0
     };
   },
   created() {},
   mounted() {
     this.getItem(leftOptions[0].children[0], leftOptions[0].label);
   },
-  components: {},
+  components: { relation },
   methods: {
-    // filteItem() {
-    //   const data = this.data;
-    //   const forceData = [];
-    //   data.map(item => {
-    //     const { attributes } = item;
-    //     const tag =
-    //       attributes.name ||
-    //       attributes.Name ||
-    //       attributes.NAME ||
-    //       attributes.Address ||
-    //       attributes.short_name ||
-    //       attributes.姓名;
-    //     tag && ~tag.indexOf(this.text) && forceData.push(item);
-    //   });
-    //   this.forceData = forceData;
-    // },
+    filteItem() {
+      const data = this.data;
+      const forceData = [];
+      let tag;
+      data.map(item => {
+        const { attributes } = item;
+        if (this.selectValue == "1") {
+          tag = attributes.Country;
+        } else {
+          tag =
+            attributes.name ||
+            attributes.Name ||
+            attributes.NAME ||
+            attributes.Address ||
+            attributes.short_name ||
+            attributes.姓名;
+        }
+        tag && ~tag.indexOf(this.text) && forceData.push(item);
+      });
+      this.forceData = forceData;
+    },
+    xqsearch(event) {
+      this.selectValue = event.target.value;
+    },
     getItem({ url, sublayers, id, name, definitionExpression, ytd }, label) {
       const d = [];
+      this.sObj={};
+      this.sArr=[];
+      this.sum = 0;
       definitionExpression && d.push(definitionExpression);
       this.$parent.$refs.leftOptions.tabIndex == 1 && ytd && d.push(ytd);
       this.title = `${name}`.split(" ")[0];
+      this.title == "确诊病例" ? (this.qzflag = true) : (this.qzflag = false);
       loadModules(
         ["esri/tasks/QueryTask", "esri/tasks/support/Query"],
         OPTION
@@ -146,10 +198,24 @@ export default {
           });
         }
         this.data = list;
+        list.map(({ attributes }) => {
+          const { Country } = attributes;
+          if (!Country) return false;
+          if (!this.sObj[Country]) {
+            this.sObj[Country] = { Country, count: 0 };
+          }
+          this.sObj[Country].count++;
+        });
+        for (let k in this.sObj) {
+          this.sArr.push(this.sObj[k]);
+        }
+        this.sArr.map(item =>{
+          this.sum += parseInt(item.count);
+        })
         this.forceData = list.sort((a, b) => {
           return (
-            this.countryHash[b.attributes.Country] -
-            this.countryHash[a.attributes.Country]
+            this.sObj[b.attributes.Country].count - 
+            this.sObj[a.attributes.Country].count
           );
         });
         this.keyData = Object.keys(this.forceData[0].fieldAliases).filter(k => {
@@ -224,16 +290,23 @@ export default {
     },
     goLocation(item) {
       this.$parent.$refs.macroArcgis.goloaction(item);
+      this.$parent.listShow = false;
+    },
+    showrelation(item) {
+      this.relationShow = true;
+      this.$refs.relation.list = item.mjList;
+      this.$refs.relation.title = item.attributes.Name;
+      console.log(item);
     },
     sbclose() {
-      this.$parent.xqShow = false;
+      this.$parent.listShow = false;
     }
   }
 };
 </script>
 
 <style lang="less" scoped>
-#sbxqDateDiv {
+#listxq {
   position: absolute;
   width: 88%;
   height: 78%;
@@ -260,9 +333,21 @@ export default {
       cursor: pointer;
     }
   }
-
+  .search {
+    height: 60px;
+    select {
+      background-color: #0c7cd2;
+      border: none;
+      color: #fff;
+      padding: 7px 7px;
+      margin-right: 5px;
+    }
+  }
+  .content::-webkit-scrollbar {
+    display: none;
+  }
   .content {
-    height: 80%;
+    height: 88%;
     overflow: auto;
 
     table {

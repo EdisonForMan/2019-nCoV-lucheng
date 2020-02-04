@@ -47,6 +47,7 @@ export default {
         });
       });
     this.jQueryBind();
+    this.spaceQuery();
   },
   watch: {
     leftOptions: {
@@ -178,6 +179,7 @@ export default {
         });
         this.$parent.$refs.mjChart.list = [...list];
         this.$parent.$refs.mjChart.title = [name];
+        this.$parent.$refs.queryForm.list = [];
       });
     },
     addQZLinkFeature(name) {
@@ -660,6 +662,192 @@ export default {
       that.map &&
         that.map.findLayerById("heat9") &&
         that.map.remove(that.map.findLayerById("heat9"));
+    },
+    spaceQuery() {
+      const that = this;
+      loadModules(
+        [
+          "esri/Graphic",
+          "esri/widgets/Sketch/SketchViewModel",
+          "esri/layers/GraphicsLayer",
+          "esri/geometry/Circle",
+          "esri/geometry/Point"
+        ],
+        OPTION
+      ).then(([Graphic, SketchViewModel, GraphicsLayer, Circle, Point]) => {
+        let spaceGraphicsLayer = that.map.findLayerById("spaceLayer");
+        if (!spaceGraphicsLayer) {
+          spaceGraphicsLayer = new GraphicsLayer({
+            id: "spaceLayer"
+          });
+          that.map.add(spaceGraphicsLayer);
+        }
+        // 绘制多边形
+        that.sketchViewModel = new SketchViewModel({
+          updateOnGraphicClick: false,
+          view: that.view,
+          layer: spaceGraphicsLayer,
+          polylineSymbol: {
+            type: "simple-line",
+            color: "#0000ff",
+            width: "1",
+            style: "dash"
+          },
+          polygonSymbol: {
+            type: "simple-fill",
+            color: "rgba(0, 0, 255, 0.2)",
+            style: "solid",
+            outline: {
+              color: "white",
+              width: 1
+            }
+          }
+        });
+        that.sketchViewModel.on("create", function(event) {
+          if (
+            event.tool == "polyline" &&
+            event.graphic.geometry.paths[0].length == 3
+          ) {
+            event.graphic.geometry.paths[0].length = 2;
+            that.sketchViewModel.complete();
+            const p1 = event.graphic.geometry.paths[0][0];
+            const p2 = event.graphic.geometry.paths[0][1];
+            const circleCenter = new Point({
+              x: p1[0],
+              y: p1[1]
+            });
+            const circle = new Circle({
+              center: circleCenter,
+              radius:
+                Math.sqrt(
+                  Math.pow(p2[0] - p1[0], 2) + Math.pow(p2[1] - p1[1], 2)
+                ) * 111000
+            });
+            const circleGraphic = new Graphic({
+              geometry: circle,
+              symbol: {
+                type: "simple-fill",
+                color: [0, 0, 255, 0.2],
+                outline: {
+                  color: [255, 255, 255],
+                  width: 2
+                }
+              }
+            });
+            spaceGraphicsLayer.add(circleGraphic);
+            that.queryAll(spaceGraphicsLayer, circleGraphic);
+          }
+          if (event.tool == "polygon" && event.state === "complete") {
+            that.queryAll(spaceGraphicsLayer, event.graphic);
+          }
+        });
+      });
+    },
+    doSpaceQuery() {
+      this.cleanQuery();
+      this.$parent.$refs.queryForm.list = [];
+      this.sketchViewModel.create("polygon");
+    },
+    doCircleQuery() {
+      this.cleanQuery();
+      this.$parent.$refs.queryForm.list = [];
+      this.sketchViewModel.create("polyline");
+    },
+    cleanQuery() {
+      this.map.findLayerById("spaceLayer").removeAll();
+    },
+    queryAll(spaceGraphicsLayer, graphic) {
+      const that = this;
+      that.$parent.$refs.queryForm.list = [];
+      const queryHash = {
+        确诊病例: [
+          "确诊病例",
+          "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/0"
+        ],
+        疑似病例: [
+          "疑似病例",
+          "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/1"
+        ],
+        集中隔离点: [
+          "治愈",
+          "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer/2"
+        ],
+        集中隔离点人员名单: [
+          "治愈",
+          "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer/5"
+        ],
+        密切接触者: [
+          "密接",
+          "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/5"
+        ],
+        居家隔离人员: [
+          "死亡",
+          "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/7"
+        ],
+        湖北回鹿人员信令: [
+          "湖北回温",
+          "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/9"
+        ]
+      };
+
+      Object.entries(queryHash).map(item => {
+        console.log(item);
+        const type = item[0];
+        const icon = item[1][0];
+        const url = item[1][1];
+        that.querySingle(type, url, icon, spaceGraphicsLayer, graphic);
+      });
+    },
+    querySingle(type, url, icon, spaceGraphicsLayer, graphic) {
+      const that = this;
+      return new Promise((resolve, reject) => {
+        loadModules(
+          ["esri/tasks/QueryTask", "esri/tasks/support/Query", "esri/Graphic"],
+          OPTION
+        ).then(([QueryTask, Query, Graphic]) => {
+          const queryTask = new QueryTask({
+            url: url
+          });
+          const query = new Query();
+          query.outFields = ["*"];
+          query.where = "1=1";
+          query.extent = graphic.geometry.extent;
+          query.geometry = graphic.geometry;
+          query.returnGeometry = true;
+          queryTask.execute(query).then(response => {
+            console.log(response);
+            const fieldAliases = {};
+            response.fields.map(item => {
+              fieldAliases[item.name] = item.alias;
+            });
+            response.features.length &&
+              response.features.map(item => {
+                const pointGraphic = new Graphic({
+                  geometry: item.geometry,
+                  symbol: {
+                    type: "picture-marker",
+                    url: `${server}/icon/other/${icon}.png`,
+                    width: "30px",
+                    height: "32px",
+                    yoffset: 10
+                  }
+                });
+                spaceGraphicsLayer.add(pointGraphic);
+                item.fieldAliases = fieldAliases;
+                return item;
+              });
+
+            console.log(icon, response.features.length);
+
+            that.$parent.$refs.queryForm.list.push({
+              type: type,
+              value: [...response.features]
+            });
+
+            resolve(true);
+          });
+        });
+      });
     }
   }
 };

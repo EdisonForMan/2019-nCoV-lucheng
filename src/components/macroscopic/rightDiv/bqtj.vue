@@ -3,9 +3,14 @@
     <h3>
       - 鹿城区病例统计 -
       <select @change="bqSelect($event)">
-        <option value="0">确诊病例</option>
-        <option value="1">确诊人员增长趋势</option>
-        <!-- <option value>疑似病例</option> -->
+        <option value="qzbl">确诊病例</option>
+        <option value="zzbl">疑似病例</option>
+        <option value="gld">集中隔离点</option>
+        <option value="gld_list">集中隔离点人员名单</option>
+        <option value="mj">密切接触者</option>
+        <option value="jjgl">居家隔离人员</option>
+        <option value="hbhw">湖北回鹿人员信令</option>
+        <option value="zzqs">确诊人员增长趋势</option>
       </select>
     </h3>
     <div id="bqtjChart"></div>
@@ -15,6 +20,7 @@
 <script>
 /* eslint-disable */
 import util from "../util";
+import { leftOptions } from "../config/enums";
 export default {
   data() {
     return {
@@ -23,6 +29,41 @@ export default {
     };
   },
   methods: {
+    getItem(children) {
+      // console.log("children", children);
+      if (!children.check) {
+        if (children.id == "qzbl") {
+          //确诊病例
+          this.dataAge = this.$window.nCov_luchengChart.dataAge;
+        }
+        if (children.id == "zzbl") {
+          //疑似病例
+          this.dataAge = this.$window.nCov_luchengChart.ysblDate;
+        }
+        if (children.id == "gld") {
+          //集中隔离点
+          this.dataAge = this.$window.nCov_luchengChart.jzglDate;
+        }
+        if (children.id == "gld_list") {
+          //集中隔离点人员名单
+          this.dataAge = this.$window.nCov_luchengChart.glryDate;
+        }
+        if (children.id == "mj") {
+          //密切接触者
+          this.dataAge = this.$window.nCov_luchengChart.mqzDate;
+        }
+        if (children.id == "jjgl") {
+          //居家隔离人员 (2314例)
+          this.dataAge = this.$window.nCov_luchengChart.jjglDate;
+        }
+        if (children.id == "hbhw") {
+          //湖北回鹿人员信令 (1305例)
+          this.dataAge = this.$window.nCov_luchengChart.hbhlDate;
+        }
+        this.$echarts.init(document.getElementById("bqtjChart")).clear();
+        this.zqzb();
+      }
+    },
     //灾情占比
     zqzb() {
       const chart = this.$echarts.init(document.getElementById("bqtjChart"));
@@ -211,13 +252,40 @@ export default {
     },
     bqSelect: function(event) {
       // console.log(event.target.value);
-      if (event.target.value == "1") {
+      if (event.target.value == "qzbl") {
+        //确诊病例
+        this.dataAge = this.$window.nCov_luchengChart.dataAge;
+      }
+      if (event.target.value == "zzbl") {
+        //疑似病例
+        this.dataAge = this.$window.nCov_luchengChart.ysblDate;
+      }
+      if (event.target.value == "gld") {
+        //集中隔离点
+        this.dataAge = this.$window.nCov_luchengChart.jzglDate;
+      }
+      if (event.target.value == "gld_list") {
+        //集中隔离点人员名单
+        this.dataAge = this.$window.nCov_luchengChart.glryDate;
+      }
+      if (event.target.value == "mj") {
+        //密切接触者
+        this.dataAge = this.$window.nCov_luchengChart.mqzDate;
+      }
+      if (event.target.value == "jjgl") {
+        //居家隔离人员 (2314例)
+        this.dataAge = this.$window.nCov_luchengChart.jjglDate;
+      }
+      if (event.target.value == "hbhw") {
+        //湖北回鹿人员信令 (1305例)
+        this.dataAge = this.$window.nCov_luchengChart.hbhlDate;
+      }
+      this.$echarts.init(document.getElementById("bqtjChart")).clear();
+      this.zqzb();
+      // 确诊人员增长趋势
+      if (event.target.value == "zzqs") {
         this.$echarts.init(document.getElementById("bqtjChart")).clear();
         this.qzqs();
-      }
-      if (event.target.value == "0") {
-        this.$echarts.init(document.getElementById("bqtjChart")).clear();
-        this.zqzb();
       }
     }
   },
@@ -227,7 +295,8 @@ export default {
       YTdataAge,
       dataName,
       dataQS,
-      dataLC
+      dataLC,
+      ysblDate
     } = this.$window.nCov_luchengChart;
     this.dataAge = dataAge;
     this.YTdataAge = YTdataAge;
@@ -240,7 +309,7 @@ export default {
     //修改数值
     var that = this;
     util.$on("chartDataMod", function(newV) {
-      // console.log(newV);
+      console.log(newV);
       that.dataAge = this.$window.nCov_luchengChart.YTdataAge;
       if (newV == 1) {
         // console.log(that.dataAge);
