@@ -285,7 +285,10 @@ export default {
       });
       that.view.popup = {
         title: "",
-        content: `<table class="esri-widget__table" summary="属性和值列表"><tbody>
+        content: `${
+          id == "xq"
+            ? this.xqDetail(false, attributes)
+            : `<table class="esri-widget__table" summary="属性和值列表"><tbody>
             ${Object.keys(attributes)
               .filter(k => {
                 return (
@@ -308,7 +311,8 @@ export default {
                 </tr>`;
               })
               .join("")}
-          </tbody></table>
+          </tbody></table>`
+        }
           ${
             id == "qzbl"
               ? `<div class="bottomBtn" data-val="${attributes.Name}">密切接触者分布</div>`
@@ -490,7 +494,10 @@ export default {
           if (tipHash[id] && Hash[tipHash[id]]) {
             const _hash_ = Hash[tipHash[id]];
             option.popupTemplate = {
-              content: `<table class="esri-widget__table" summary="属性和值列表"><tbody>
+              content: `${
+                id == "xq"
+                  ? this.xqDetail(true)
+                  : `<table class="esri-widget__table" summary="属性和值列表"><tbody>
             ${_hash_
               .map(k => {
                 return `<tr>
@@ -499,7 +506,8 @@ export default {
                   </tr>`;
               })
               .join("")}
-          </tbody></table>
+          </tbody></table>`
+              }
           ${
             id == "qzbl"
               ? `<div class="bottomBtn" data-val="{Name}">密切接触者分布</div>`
@@ -507,7 +515,6 @@ export default {
           }`
             };
           }
-
           const _layers_ = item.isImg ? MapImageLayer : FeatureLayer;
           if (item.sublayers) {
             if (item.isImg) {
@@ -658,6 +665,60 @@ export default {
       that.map &&
         that.map.findLayerById("heat9") &&
         that.map.remove(that.map.findLayerById("heat9"));
+    },
+    //  小区面详情字段
+    xqDetail(isOption, obj) {
+      console.log(obj)
+      const arr = [
+        [
+          "name@小区（大厦）名称",
+          "Country_1@所属街道",
+          "Community@所属社区",
+          "@小区地址",
+          "@小区范围",
+          "户数@总户数",
+          "@总栋数",
+          "@总人数"
+        ],
+        "物业信息",
+        [
+          "PropertyName@物业",
+          "@负责人",
+          "@联系电话",
+          "@保安队长",
+          "@保安队长联系电话"
+        ],
+        "房管中心信息",
+        [
+          "HousingAuthorityChargeMan@负责人",
+          "HousingAuthorityChargeManPhone@联系电话"
+        ],
+        "社区信息",
+        [
+          "MansionChargeMan@负责人",
+          "MansionChargeManPhone@联系电话",
+          "@分管领导",
+          "@分管领导联系电话"
+        ]
+      ];
+      const ra = arr
+        .map(item => {
+          return item instanceof Array
+            ? `<table class="esri-widget__table"><tbody>${item
+                .map(o => {
+                  const [val, label] = o.split("@");
+                  return `<tr>
+                  <th class="esri-feature__field-header">${label}</th>
+                  <td class="esri-feature__field-data">${
+                    val ? (isOption ? `{${val}}` : obj[val] || "") : ""
+                  }</td>
+                </tr>`;
+                })
+                .join("")}</tbody></table>`
+            : `<p>${item}</p>`;
+        })
+        .join("");
+      return ra;
     }
   }
 };
