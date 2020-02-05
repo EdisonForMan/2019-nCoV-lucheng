@@ -1,42 +1,38 @@
 <template>
-<div class="relation" >
+<div class="relation">
   <head>
-    <span>{{title}}-密切接触者</span>
+    <span>{{title}} - 密切接触者</span>
     <span id="close" @click="close()">x</span>
   </head>
   <div>
     <div class="list">
-    <!-- <ul class="bt">
-        <li>序号</li>
-        <li>姓名</li>
-        <li>关系</li>
-        <li>性别</li>
-        <li>地址</li>
-        <li>健康</li>
-    </ul> -->
-      <ul>
-          <li>
-              <span>序号</span>
-              <span>姓名</span>
-              <span>关系</span>
-              <span>性别</span>
-              <span>地址</span>
-          </li>
-        <li v-for="(item,index) in list" :key="index" @click="goLocation(item)">
-          <span>{{++index}}.</span>
-          <span>{{item.attributes.NAME.slice(0,1)}}**</span>
-          <span>{{item.attributes.Relation}}</span>
-          <span>{{item.attributes.Sex}}</span>
-          <span>{{item.attributes.Address_Department}}</span>
-        </li>
-        <!-- <li v-if="!list.length">暂无</li> -->
-      </ul>
+      <table border="0" cellpadding="0" cellspacing="0">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>姓名</th>
+            <th>关系</th>
+            <th>性别</th>
+            <th>地址</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item,index) in list" :key="index">
+            <td>{{++index}}.</td>
+            <td>{{item.attributes.NAME.slice(0,1)}}**</td>
+            <td>{{item.attributes.Relation}}</td>
+            <td>{{item.attributes.Sex}}</td>
+            <td>{{item.attributes.Address_Department}}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
 </template>
 
 <script>
+/* eslint-disable */
 export default {
   name: "relation",
   data() {
@@ -49,11 +45,11 @@ export default {
   mounted() {},
   methods: {
     goLocation(item) {
-      console.log(item.geometry);
-      item.geometry && this.$parent.$refs.macroArcgis.goloaction(item);
+      // console.log(item.geometry);
+      // item.geometry && this.$parent.$refs.macroArcgis.goloaction(item);
     },
-    close(){
-        this.$parent.relationShow = false;
+    close() {
+      this.$parent.relationShow = false;
     },
     doChart(list) {
       this.chart = this.$echarts.init(document.getElementById("cframe"));
@@ -123,13 +119,6 @@ export default {
         ]
       });
     }
-  },
-  watch: {
-    // list(newV, oldV) {
-    //   this.$nextTick(() => {
-    //     newV.length ;
-    //   });
-    // }
   }
 };
 </script>
@@ -137,7 +126,7 @@ export default {
 <style lang="less" scoped>
 .relation {
   position: absolute;
-  width: 400px;
+  width: 600px;
   height: 300px;
   background: #24386a;
   border: 1px solid #04ecff;
@@ -157,34 +146,27 @@ export default {
   }
   #close {
     float: right;
-    padding: 5px;
-    font-size: 17px;
+    padding: 0px 5px;
+    font-size: 18px;
     cursor: pointer;
   }
   > div {
     flex: 1;
+
     .list {
       height: 258px;
       overflow: auto;
-      text-align: left;
-      > ul {
-        li {
-          padding: 10px 0;
-          background: #122960;
-          text-align: left;
-          padding-left: 15px;
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          cursor: pointer;
-          display: flex;
-          span{
-              width: 47px;
-             //flex: 1;
-          }
-        }
-        li:nth-child(even) {
-          background: #081942;
+      // text-align: left;
+
+      table {
+        border: 1px solid #ccc;
+        width: 96%;
+        margin: 0% 2%;
+
+        th,
+        td {
+          border-bottom: 1px solid #ccc;
+          padding: 10px 5px;
         }
       }
     }

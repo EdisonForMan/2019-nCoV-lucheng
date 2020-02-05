@@ -126,6 +126,9 @@ export default {
       if (!this.$parent || !oitem.id || oitem.isImg) return;
       this.$parent.$refs.table.getItem(oitem, item.label);
       this.$parent.$refs.sbxq.getItem(oitem, item.label);
+
+      console.log(oitem, item.label);
+
       this.$parent.$refs.bqtj.getItem(oitem, item.label); //调用病例统计echart
     },
     ShowListxq(oitem, item) {
@@ -368,9 +371,10 @@ export default {
             cursor: pointer;
             width: 36px !important;
             height: 20px !important;
-            font-size: 12px !important;
+            font-size: 14px !important;
             line-height: 23px !important;
             margin-left: 4px;
+            margin-top: 4px;
             text-align: center;
           }
           input[type="checkbox"] {

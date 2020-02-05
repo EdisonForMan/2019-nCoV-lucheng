@@ -262,7 +262,7 @@ export default {
   }
 
   .content {
-    height: 80%;
+    height: 88%;
     overflow: auto;
 
     table {

@@ -48,6 +48,7 @@ export default {
       });
     this.jQueryBind();
     this.spaceQuery();
+    this.polygonQuery();
   },
   watch: {
     leftOptions: {
@@ -108,43 +109,32 @@ export default {
             "esri/views/MapView",
             "esri/widgets/Legend",
             "esri/layers/VectorTileLayer",
-            "esri/layers/TileLayer",
-            "esri/layers/GraphicsLayer",
-            "esri/layers/FeatureLayer"
+            "esri/layers/TileLayer"
           ],
           OPTION
-        ).then(
-          ([
-            Map,
-            MapView,
-            Legend,
-            VectorTileLayer,
-            TileLayer,
-            GraphicsLayer
-          ]) => {
-            // map加载底图
-            that.map = new Map({
-              spatialReference
-            });
-            //设置地图容器
-            that.view = new MapView({
-              container: that.$props.id,
-              spatialReference,
-              map: that.map,
-              zoom: 13,
-              center: [120.67819448808013, 28.039695289562555]
-            });
-            const layer = new VectorTileLayer({
-              url: IMAGELAYER
-            });
-            that.map.add(layer);
-            that.legend = new Legend({
-              view: that.view
-            });
-            that.view.on("click", function(evt) {});
-            resolve(true);
-          }
-        );
+        ).then(([Map, MapView, Legend, VectorTileLayer]) => {
+          // map加载底图
+          that.map = new Map({
+            spatialReference
+          });
+          //设置地图容器
+          that.view = new MapView({
+            container: that.$props.id,
+            spatialReference,
+            map: that.map,
+            zoom: 13,
+            center: [120.67819448808013, 28.039695289562555]
+          });
+          const layer = new VectorTileLayer({
+            url: IMAGELAYER
+          });
+          that.map.add(layer);
+          that.legend = new Legend({
+            view: that.view
+          });
+          that.map.on("click", function(evt) {});
+          resolve(true);
+        });
       });
     },
     jQueryBind() {
@@ -552,6 +542,32 @@ export default {
         });
       });
     },
+
+    // 点击面查询
+    polygonQuery() {
+      const that = this;
+
+      that.view.on("click", function(evt) {
+        console.log(evt);
+        that.cleanQuery();
+        if (
+          (that.map.findLayerById("wg") &&
+            that.map.findLayerById("wg").visible) ||
+          (that.map.findLayerById("xq") && that.map.findLayerById("xq").visible)
+        ) {
+          that.view.hitTest(evt).then(function(response) {
+            console.log(response);
+
+            const spaceGraphicsLayer = that.map.findLayerById("spaceLayer");
+
+            const ds = response.results[0].graphic;
+
+            that.queryAll(spaceGraphicsLayer, ds);
+          });
+        }
+      });
+    },
+
     //  查询
     IdentifyTaskFun({ mapPoint }, fn) {
       const that = this;
@@ -573,7 +589,7 @@ export default {
           MapImageLayer
         ]) => {
           const url =
-            "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer";
+            "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/12";
           const identifyTask = new IdentifyTask(url);
           const params = new IdentifyParameters();
           params.tolerance = 10;
@@ -585,25 +601,25 @@ export default {
           identifyTask.execute(params).then(res => {
             console.log(res);
 
-            if (res.results.length > 0) {
-              const queryTask = new QueryTask({
-                url: `http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/4`
-              });
-              const query = new Query();
-              query.outFields = ["*"];
-              console.log(res.results[0].feature.attributes["唯一码"]);
-              query.where = `RelatingCodes like '%${res.results[0].feature.attributes["唯一码"]}%'`;
-              query.returnGeometry = true;
-              queryTask.execute(query).then(_res => {
-                console.log(_res);
-                const mbk = new MapImageLayer({
-                  url: QHMB,
-                  id: "mbk",
-                  sublayers: [{ id: 1 }]
-                });
-                that.map.add(mbk, 4);
-              });
-            }
+            // if (res.results.length > 0) {
+            //   const queryTask = new QueryTask({
+            //     url: `http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/4`
+            //   });
+            //   const query = new Query();
+            //   query.outFields = ["*"];
+            //   console.log(res.results[0].feature.attributes["唯一码"]);
+            //   query.where = `RelatingCodes like '%${res.results[0].feature.attributes["唯一码"]}%'`;
+            //   query.returnGeometry = true;
+            //   queryTask.execute(query).then(_res => {
+            //     console.log(_res);
+            //     const mbk = new MapImageLayer({
+            //       url: QHMB,
+            //       id: "mbk",
+            //       sublayers: [{ id: 1 }]
+            //     });
+            //     that.map.add(mbk, 4);
+            //   });
+            // }
           });
         }
       );
@@ -668,6 +684,7 @@ export default {
         that.map.findLayerById("heat9") &&
         that.map.remove(that.map.findLayerById("heat9"));
     },
+    // 空间查询
     spaceQuery() {
       const that = this;
       loadModules(
@@ -748,19 +765,23 @@ export default {
         });
       });
     },
+    // 多边形查询
     doSpaceQuery() {
       this.cleanQuery();
       this.$parent.$refs.queryForm.list = [];
       this.sketchViewModel.create("polygon");
     },
+    // 圆形查询
     doCircleQuery() {
       this.cleanQuery();
       this.$parent.$refs.queryForm.list = [];
       this.sketchViewModel.create("polyline");
     },
+    // 清除空间查询图层
     cleanQuery() {
       this.map.findLayerById("spaceLayer").removeAll();
     },
+    // 查询全部
     queryAll(spaceGraphicsLayer, graphic) {
       const that = this;
       that.$parent.$refs.queryForm.list = [];
@@ -796,13 +817,13 @@ export default {
       };
 
       Object.entries(queryHash).map(item => {
-        console.log(item);
         const type = item[0];
         const icon = item[1][0];
         const url = item[1][1];
         that.querySingle(type, url, icon, spaceGraphicsLayer, graphic);
       });
     },
+    // 单独查询
     querySingle(type, url, icon, spaceGraphicsLayer, graphic) {
       const that = this;
       return new Promise((resolve, reject) => {
@@ -819,14 +840,13 @@ export default {
           query.extent = graphic.geometry.extent;
           query.geometry = graphic.geometry;
           query.returnGeometry = true;
-          queryTask.execute(query).then(response => {
-            console.log(response);
+          queryTask.execute(query).then(res => {
             const fieldAliases = {};
-            response.fields.map(item => {
+            res.fields.map(item => {
               fieldAliases[item.name] = item.alias;
             });
-            response.features.length &&
-              response.features.map(item => {
+            res.features.length &&
+              res.features.map(item => {
                 const pointGraphic = new Graphic({
                   geometry: item.geometry,
                   symbol: {
@@ -842,12 +862,12 @@ export default {
                 return item;
               });
 
-            console.log(icon, response.features.length);
-
-            that.$parent.$refs.queryForm.list.push({
-              type: type,
-              value: [...response.features]
-            });
+            if (res.features.length) {
+              that.$parent.$refs.queryForm.list.push({
+                type: type,
+                value: [...res.features]
+              });
+            }
 
             resolve(true);
           });

@@ -2,7 +2,7 @@
   <div id="bltjDiv">
     <h3>
       - 鹿城区病例统计 -
-      <select @change="bqSelect($event)">
+      <select id="select" @change="bqSelect($event)">
         <option value="qzbl">确诊病例</option>
         <option value="zzbl">疑似病例</option>
         <option value="gld">集中隔离点</option>
@@ -20,46 +20,16 @@
 <script>
 /* eslint-disable */
 import util from "../util";
-import { leftOptions } from "../config/enums";
 export default {
   data() {
-    return {
-      charts: "",
-      titleData: "灾情统计"
-    };
+    return {};
   },
   methods: {
-    getItem(children) {
-      // console.log("children", children);
-      if (!children.check) {
-        if (children.id == "qzbl") {
-          //确诊病例
-          this.dataAge = this.$window.nCov_luchengChart.dataAge;
-        }
-        if (children.id == "zzbl") {
-          //疑似病例
-          this.dataAge = this.$window.nCov_luchengChart.ysblDate;
-        }
-        if (children.id == "gld") {
-          //集中隔离点
-          this.dataAge = this.$window.nCov_luchengChart.jzglDate;
-        }
-        if (children.id == "gld_list") {
-          //集中隔离点人员名单
-          this.dataAge = this.$window.nCov_luchengChart.glryDate;
-        }
-        if (children.id == "mj") {
-          //密切接触者
-          this.dataAge = this.$window.nCov_luchengChart.mqzDate;
-        }
-        if (children.id == "jjgl") {
-          //居家隔离人员 (2314例)
-          this.dataAge = this.$window.nCov_luchengChart.jjglDate;
-        }
-        if (children.id == "hbhw") {
-          //湖北回鹿人员信令 (1305例)
-          this.dataAge = this.$window.nCov_luchengChart.hbhlDate;
-        }
+    getItem(children, label) {
+      console.log("children", children);
+      if (label == "疫情分布" && children.id !== "ytyg") {
+        this.dataAge = this.dataHash[children.id];
+        document.getElementById("select").value = children.id;
         this.$echarts.init(document.getElementById("bqtjChart")).clear();
         this.zqzb();
       }
@@ -251,39 +221,11 @@ export default {
       });
     },
     bqSelect: function(event) {
-      // console.log(event.target.value);
-      if (event.target.value == "qzbl") {
-        //确诊病例
-        this.dataAge = this.$window.nCov_luchengChart.dataAge;
-      }
-      if (event.target.value == "zzbl") {
-        //疑似病例
-        this.dataAge = this.$window.nCov_luchengChart.ysblDate;
-      }
-      if (event.target.value == "gld") {
-        //集中隔离点
-        this.dataAge = this.$window.nCov_luchengChart.jzglDate;
-      }
-      if (event.target.value == "gld_list") {
-        //集中隔离点人员名单
-        this.dataAge = this.$window.nCov_luchengChart.glryDate;
-      }
-      if (event.target.value == "mj") {
-        //密切接触者
-        this.dataAge = this.$window.nCov_luchengChart.mqzDate;
-      }
-      if (event.target.value == "jjgl") {
-        //居家隔离人员 (2314例)
-        this.dataAge = this.$window.nCov_luchengChart.jjglDate;
-      }
-      if (event.target.value == "hbhw") {
-        //湖北回鹿人员信令 (1305例)
-        this.dataAge = this.$window.nCov_luchengChart.hbhlDate;
-      }
-      this.$echarts.init(document.getElementById("bqtjChart")).clear();
-      this.zqzb();
-      // 确诊人员增长趋势
-      if (event.target.value == "zzqs") {
+      if (event.target.value != "zzqs") {
+        this.dataAge = this.dataHash[event.target.value];
+        this.$echarts.init(document.getElementById("bqtjChart")).clear();
+        this.zqzb();
+      } else {
         this.$echarts.init(document.getElementById("bqtjChart")).clear();
         this.qzqs();
       }
@@ -296,27 +238,40 @@ export default {
       dataName,
       dataQS,
       dataLC,
-      ysblDate
+      ysblDate,
+      jzglDate,
+      glryDate,
+      mqzDate,
+      jjglDate,
+      hbhlDate
     } = this.$window.nCov_luchengChart;
     this.dataAge = dataAge;
     this.YTdataAge = YTdataAge;
     this.dataName = dataName;
     this.dataQS = dataQS;
     this.dataLC = dataLC;
+
+    this.dataHash = {
+      qzbl: dataAge,
+      zzbl: ysblDate,
+      gld: jzglDate,
+      gld_list: glryDate,
+      mj: mqzDate,
+      jjgl: jjglDate,
+      hbhw: hbhlDate
+    };
   },
   mounted() {
     this.zqzb();
     //修改数值
-    var that = this;
+    const that = this;
     util.$on("chartDataMod", function(newV) {
-      console.log(newV);
-      that.dataAge = this.$window.nCov_luchengChart.YTdataAge;
-      if (newV == 1) {
-        // console.log(that.dataAge);
-      } else {
-        that.dataAge = this.$window.nCov_luchengChart.dataAge;
-      }
-      this.$echarts.init(document.getElementById("bqtjChart")).clear();
+      newV == 1
+        ? (that.dataAge = that.YTdataAge)
+        : (that.dataAge = that.dataAge);
+
+      document.getElementById("select").value = "qzbl";
+      that.$echarts.init(document.getElementById("bqtjChart")).clear();
       that.zqzb();
     });
   }

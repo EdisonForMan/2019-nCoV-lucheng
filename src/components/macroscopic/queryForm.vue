@@ -38,7 +38,7 @@ export default {
   mounted() {},
   methods: {
     goLocation(item) {
-      console.log(item);
+      // console.log(item);
       item.geometry && this.$parent.$refs.macroArcgis.goloaction(item);
     }
   }

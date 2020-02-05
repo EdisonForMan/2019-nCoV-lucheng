@@ -9,16 +9,8 @@
         <option value="0">姓名</option>
         <option value="1">街道</option>
       </select>
-      <input
-        type="text"
-        v-model="text"
-        placeholder="请输入查询"
-        style="width: 15%;margin-top: 10px;margin-right: 5px;background-color: #162449;border: 1px solid #75c8f4;border-radius: 8px;padding: 8px 9px; color:#fff"
-      />
-      <button
-        style="background-color: #162449;border: 1px solid #75c8f4;border-radius: 8px;padding: 7px 9px; color:#fff;margin-right:4px"
-        @click="()=>{text && filteItem()}"
-      >查询</button>
+      <input type="text" v-model="text" placeholder="请输入查询" />
+      <button @click="()=>{text && filteItem()}">查询</button>
     </div>
     <div class="content">
       <table border="0" cellpadding="0" cellspacing="0" v-if="qzflag">
@@ -40,15 +32,14 @@
             >{{ item.attributes[k] || "无" }}</td>
             <td @click="showrelation(item)" style="cursor: pointer;">详情</td>
           </tr>
-          <tr>
+          <!-- <tr>
             <td>小计：</td>
-            <td v-for="(citem,cindex) in sArr" :key="cindex">
-              {{citem.Country}}:{{citem.count}}例
-            </td>
+            <td v-for="(citem,cindex) in sArr" :key="cindex">{{citem.Country}}:{{citem.count}}例</td>
             <td>合计：{{sum}}</td>
-          </tr>
+          </tr>-->
         </tbody>
       </table>
+
       <table border="0" cellpadding="0" cellspacing="0" v-else>
         <thead>
           <tr>
@@ -65,6 +56,21 @@
           >
             <td>{{ ++index }}</td>
             <td v-for="(k,i) in keyData" :key="i">{{ item.attributes[k] || "无" }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table border="0" cellpadding="0" cellspacing="0" v-if="qzflag">
+        <thead>
+          <tr>
+            <th>街道</th>
+            <th v-for="(citem,cindex) in sArr" :key="cindex">{{citem.Country}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>合计</td>
+            <td v-for="(citem,cindex) in sArr" :key="cindex">{{citem.count}}例</td>
           </tr>
         </tbody>
       </table>
@@ -92,9 +98,25 @@ export default {
       qzflag: false,
       relationShow: false,
       selectValue: 0,
-      sObj :{},
-      sArr:[],
-      sum:0
+      sObj: {},
+      sArr: [],
+      sum: 0,
+      countryHash: {
+        山福镇: 0,
+        藤桥镇: 1,
+        仰义街道: 2,
+        丰门街道: 3,
+        双屿街道: 4,
+        广化街道: 5,
+        五马街道: 6,
+        松台街道: 7,
+        大南街道: 8,
+        南郊街道: 9,
+        南汇街道: 10,
+        蒲鞋市街道: 11,
+        滨江街道: 12,
+        七都街道: 13
+      }
     };
   },
   created() {},
@@ -129,8 +151,8 @@ export default {
     },
     getItem({ url, sublayers, id, name, definitionExpression, ytd }, label) {
       const d = [];
-      this.sObj={};
-      this.sArr=[];
+      this.sObj = {};
+      this.sArr = [];
       this.sum = 0;
       definitionExpression && d.push(definitionExpression);
       this.$parent.$refs.leftOptions.tabIndex == 1 && ytd && d.push(ytd);
@@ -209,15 +231,27 @@ export default {
         for (let k in this.sObj) {
           this.sArr.push(this.sObj[k]);
         }
-        this.sArr.map(item =>{
+        this.sArr.map(item => {
           this.sum += parseInt(item.count);
-        })
-        this.forceData = list.sort((a, b) => {
-          return (
-            this.sObj[b.attributes.Country].count - 
-            this.sObj[a.attributes.Country].count
-          );
         });
+
+        console.log("obj", this.sObj);
+
+        this.forceData = list.sort((a, b) => {
+          const count1 = this.sObj[a.attributes.Country].count;
+          const count2 = this.sObj[b.attributes.Country].count;
+
+          if (count1 == count2) {
+            return (
+              this.countryHash[b.attributes.Country] -
+              this.countryHash[a.attributes.Country]
+            );
+          }
+
+          return count2 - count1;
+        });
+
+        console.log("data", this.forceData);
         this.keyData = Object.keys(this.forceData[0].fieldAliases).filter(k => {
           return (
             [
@@ -233,7 +267,9 @@ export default {
               "Note",
               "RelatingCodes",
               "Shape.STArea()",
-              "Shape.STLength()"
+              "Shape.STLength()",
+              "小区面名称",
+              "小区面唯一码"
             ].indexOf(k) < 0
           );
         });
@@ -342,12 +378,32 @@ export default {
       padding: 7px 7px;
       margin-right: 5px;
     }
+
+    input {
+      width: 15%;
+      margin-top: 10px;
+      margin-right: 5px;
+      background-color: #162449;
+      border: 1px solid #75c8f4;
+      border-radius: 8px;
+      padding: 8px 9px;
+      color: #fff;
+    }
+
+    button {
+      background-color: #162449;
+      border: 1px solid #75c8f4;
+      border-radius: 8px;
+      padding: 7px 9px;
+      color: #fff;
+      margin-right: 4px;
+    }
   }
-  .content::-webkit-scrollbar {
-    display: none;
-  }
+  // .content::-webkit-scrollbar {
+  //   display: none;
+  // }
   .content {
-    height: 88%;
+    height: 80%;
     overflow: auto;
 
     table {
