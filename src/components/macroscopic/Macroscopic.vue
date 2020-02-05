@@ -22,6 +22,7 @@
     <sbxq ref="sbxq" v-show="xqShow" />
     <listxq ref="listxq" v-show="listShow" />
     <mjChart ref="mjChart" />
+    <streetFrame ref="cpFrame" />
     <queryForm ref="queryForm" />
   </div>
 </template>
@@ -47,7 +48,8 @@ import topDate from "./topDate";
 import xzDate from "./xzDate";
 import listxq from "./listxq";
 import popOpen from "./popOpen";
-import mjChart from "./mjChart";
+import mjChart from "./frame/mjChart";
+import streetFrame from "./frame/streetFrame";
 import queryForm from "./queryForm";
 import { leftOptions } from "./config/enums";
 
@@ -73,6 +75,7 @@ export default {
     xzDate, //详情须知
     popOpen, //弹出详情框
     mjChart, //密接列表、图表
+    streetFrame, //街道疫情
     listxq, //点击列表的详情框
     queryForm //空间查询结果
   },

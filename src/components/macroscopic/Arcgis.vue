@@ -6,6 +6,9 @@
 
 <script>
 /* eslint-disable */
+import { addQZLinkFeature, mjChartUpdate } from "./frame/mjArcgis";
+import { linkCPFeatures } from "./frame/streetArcgis";
+import { linkXQFeatures } from "./frame/xqArcgis";
 import { loadModules } from "esri-loader";
 import {
   OPTION,
@@ -19,8 +22,8 @@ import {
   TDTDSJ
 } from "@/components/common/Tmap";
 import { tipHash, Hash } from "./config/hash.js";
-
 const server = "http://172.20.89.68:5001/s";
+
 export default {
   name: "MacroscopicArcgis",
   data() {
@@ -94,6 +97,20 @@ export default {
             this.map.findLayerById("mj_link") &&
             this.map.remove(this.map.findLayerById("mj_link"));
         }
+        if (item.id == "chanyePlate") {
+          ["cp_qzbl", "cp_zzbl", "cp_mj"].map(_id_ => {
+            this.map &&
+              this.map.findLayerById(_id_) &&
+              this.map.remove(this.map.findLayerById(_id_));
+          });
+        }
+        if (item.id == "xq") {
+          ["xq_qzbl", "xq_zzbl", "xq_mj"].map(_id_ => {
+            this.map &&
+              this.map.findLayerById(_id_) &&
+              this.map.remove(this.map.findLayerById(_id_));
+          });
+        }
       }
     },
     /**
@@ -139,83 +156,19 @@ export default {
     },
     jQueryBind() {
       const context = this;
-      $("body").on("click", ".bottomBtn", function() {
+      $("body").on("click", ".mj_btn", function() {
         const val = $(this).attr("data-val");
-        context.addQZLinkFeature(val);
-        context.mjChartUpdate(val);
+        addQZLinkFeature(context, val);
+        mjChartUpdate(context, val);
       });
-    },
-    mjChartUpdate(name) {
-      const nameFix = name.slice(0, 1) + "*" + name.slice(2);
-      loadModules(
-        ["esri/tasks/QueryTask", "esri/tasks/support/Query"],
-        OPTION
-      ).then(async ([QueryTask, Query]) => {
-        const queryTask = new QueryTask({
-          url: `http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/5`
-        });
-        const query = new Query();
-        query.outFields = ["*"];
-        query.returnGeometry = true;
-        query.where = `Patient like '%${name}%' or Patient like '%${nameFix}'`;
-        const { fields, features } = await queryTask.execute(query);
-        const fieldAliases = {};
-        fields.map(item => {
-          fieldAliases[item.name] = item.alias;
-        });
-        const list = features.map(item => {
-          item.fieldAliases = fieldAliases;
-          return item;
-        });
-        this.$parent.$refs.mjChart.list = [...list];
-        this.$parent.$refs.mjChart.title = [name];
-        this.$parent.$refs.queryForm.list = [];
+      $("body").on("click", ".cp_btn", function() {
+        const val = $(this).attr("data-val");
+        linkCPFeatures(context, val);
       });
-    },
-    addQZLinkFeature(name) {
-      this.map &&
-        this.map.findLayerById("mj_link") &&
-        this.map.remove(this.map.findLayerById("mj_link"));
-      const nameFix = name.slice(0, 1) + "*" + name.slice(2);
-      const that = this;
-      loadModules(["esri/layers/FeatureLayer"], OPTION).then(
-        ([FeatureLayer]) => {
-          const id = "mj_link";
-          const option = {
-            url:
-              "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/5",
-            id: "mj_link",
-            outFields: "*"
-          };
-          if (tipHash["mj"] && Hash[tipHash["mj"]]) {
-            const _hash_ = Hash[tipHash["mj"]];
-            option.popupTemplate = {
-              content: `<table class="esri-widget__table" summary="属性和值列表"><tbody>
-            ${_hash_
-              .map(k => {
-                return `<tr>
-                    <th class="esri-feature__field-header">${k.label}</th>
-                    <td class="esri-feature__field-data">{${k.fieldName}}</td>
-                  </tr>`;
-              })
-              .join("")}
-          </tbody></table>`
-            };
-          }
-          option.definitionExpression = `Patient like '%${name}%' or Patient like '%${nameFix}'`;
-          option.renderer = {
-            type: "simple", // autocasts as new SimpleRenderer()
-            symbol: {
-              type: "picture-marker",
-              url: `${server}/icon/other/密接.png`,
-              width: "30px",
-              height: "32px"
-            }
-          };
-          const feature = new FeatureLayer(option);
-          that.map.add(feature);
-        }
-      );
+      $("body").on("click", ".xq_btn", function() {
+        const val = $(this).attr("data-val");
+        linkXQFeatures(context, val);
+      });
     },
     //  添加区划图
     addQh() {
@@ -307,7 +260,17 @@ export default {
         }
           ${
             id == "qzbl"
-              ? `<div class="bottomBtn" data-val="${attributes.Name}">密切接触者分布</div>`
+              ? `<div class="bottomBtn mj_btn" data-val="${attributes.Name}">密切接触者分布</div>`
+              : ``
+          }
+          ${
+            id == "chanyePlate"
+              ? `<div class="bottomBtn cp_btn" data-val="${attributes.名称}">疫情信息分布</div>`
+              : ``
+          }
+          ${
+            id == "xq"
+              ? `<div class="bottomBtn xq_btn" data-val="${attributes.name}">疫情信息分布</div>`
               : ``
           }
           ${
@@ -502,7 +465,17 @@ export default {
               }
           ${
             id == "qzbl"
-              ? `<div class="bottomBtn" data-val="{Name}">密切接触者分布</div>`
+              ? `<div class="bottomBtn mj_btn" data-val="{Name}">密切接触者分布</div>`
+              : ``
+          }
+          ${
+            id == "chanyePlate"
+              ? `<div class="bottomBtn cp_btn" data-val="{名称}">相关信息分布</div>`
+              : ``
+          }
+          ${
+            id == "xq"
+              ? `<div class="bottomBtn xq_btn" data-val="{name}">相关信息分布</div>`
               : ``
           }`
             };
