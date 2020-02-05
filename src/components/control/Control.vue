@@ -76,19 +76,18 @@
 <style scoped lang="less">
     .com-content {
         position: fixed;
-        top: 80px;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        height: 100%;
+        width: 100%;
         z-index: 100;
-        //background: url('./img/bgimg.jpg') center center no-repeat;
-        //background-size: 100% 100%;
+        background: url("./img/bgimg.jpg") center center no-repeat;
+        background-size: 100% 100%;
     }
 
     .com-container {
         width: 100%;
-        height: 100%;
+        height: 92%;
         position: relative;
+        top: 8%;
     }
 
     .control-header {
@@ -104,8 +103,6 @@
         position: absolute;
         bottom: 0px;
         top: 50px;
-        background: url("./img/bgimg.jpg") center center no-repeat;
-        background-size: 100% 100%;
     }
 
     .com-container_inner {
@@ -128,8 +125,7 @@
         display: flex;
         flex-direction: column;
         padding: 10px 15px;
-        background-color: rgba(5, 26, 79, 0.5);
-        border: 1px solid #035acd;
+        background-color: rgb(5, 29, 83);
         box-sizing: border-box;
     }
 
