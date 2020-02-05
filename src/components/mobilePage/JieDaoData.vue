@@ -99,16 +99,16 @@ export default {
     background: #FCF9FC;
   }
   .control-view-table-body tr td:nth-child(2) {
-    color: #1E9DFF;
+    color: #fa5350;
   }
   .control-view-table-body tr td:nth-child(3) {
-    color: #FF9E21;
+    color: #fa5350;
   }
   .control-view-table-body tr td:nth-child(4) {
     color: #00B87E;
   }
   .control-view-table-body tr td:nth-child(5) {
-    color: #FF5050;
+    color: #7E7E7E;
   }
   .control-view-inner::-webkit-scrollbar {
     width: 5px;

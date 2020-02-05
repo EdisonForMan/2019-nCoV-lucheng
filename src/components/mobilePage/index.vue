@@ -12,7 +12,7 @@
 	                    <div class="control-view-bl-head-left" id="bg1"></div>
 	                    <div class="control-view-bl-head-right">
 	                        确诊病例 <br>
-	                        <span class="control-view-bl-head-right-span" style="color: #189bfe;">{{ viewData.quezhen.value }}</span>例
+	                        <span class="control-view-bl-head-right-span" style="color: #fa5350;">{{ viewData.quezhen.value }}</span>例
 	                    </div>
 	                </div>
 	                <div class="control-view-bl-body">
@@ -25,7 +25,7 @@
 	                    <div class="control-view-bl-head-left" id="bg2"></div>
 	                    <div class="control-view-bl-head-right">
 	                        疑似病例 <br>
-	                        <span class="control-view-bl-head-right-span" style="color: #ff9b27;">{{ viewData.yisi.value }}</span>例
+	                        <span class="control-view-bl-head-right-span" style="color: #fa5350;">{{ viewData.yisi.value }}</span>例
 	                    </div>
 	                </div>
 	                <div class="control-view-bl-body">
@@ -53,7 +53,7 @@
 	                    </div>
 	                    <div class="control-view-bl-head-right">
 	                        死亡病例 <br>
-	                        <span class="control-view-bl-head-right-span" style="color: #fa5350;">{{ viewData.siwang.value }}</span>例
+	                        <span class="control-view-bl-head-right-span" style="color: #7E7E7E;">{{ viewData.siwang.value }}</span>例
 	                    </div>
 	                </div>
 	                <div class="control-view-bl-body">
@@ -75,8 +75,7 @@
 			<div class="yq-tab-content">
 				<mt-tab-container v-model="tabActive" :swipeable="true">
 				  <mt-tab-container-item id="tab-1">
-				  	<div style="height: 100px;">
-				  	</div>
+				  	<YQMap :yqMapData="yqMapData"></YQMap>
 				  </mt-tab-container-item>
 				  <mt-tab-container-item id="tab-2">
 				  	<JieDaoData :tableData="jieDaoTable" :tableHead="['街道名称', '确诊病例', '疑似病例', '治愈病例', '死亡病例']"></JieDaoData>
@@ -96,16 +95,18 @@
 import JieDaoData from './JieDaoData.vue';
 import FangKong from './FangKong.vue';
 import ZiYuan from './ZiYuan.vue';
+import YQMap from './YQMap.vue';
 export default {
 	name: 'yq-mobile',
 	components: {
 		JieDaoData,
 		FangKong,
-		ZiYuan
+		ZiYuan,
+		YQMap
 	},
 	data () {
 		return {
-			tabActive: 'tab-2',
+			tabActive: 'tab-1',
 			tabHead: [
 				{
 					key: '疫情地图',
@@ -307,7 +308,7 @@ export default {
                     },
                 ]
 		    },
-		    fangKongData: [
+		    fangKongData: [  // 防控数据
                 {name: '商场超市', num: 24, img: require('./img/商场.png')},
                 {name: '农贸市场', num: 41, img: require('./img/农贸市场.png')},
                 {name: '培训机构', num: 4, img: require('./img/培训机构.png')},
@@ -317,8 +318,33 @@ export default {
                 {name: '学校', num: 26, img: require('./img/学校.png')},
                 {name: '专业市场', num: 10, img: require('./img/市场.png')},
                 {name: '天基宗教', num: 91, img: require('./img/教堂.png')},
-                {name: '佛道宗教', num: 110, img: require('./img/佛.png')}  // 防控数据
-            ]
+                {name: '佛道宗教', num: 110, img: require('./img/佛.png')} 
+            ],
+            yqMapData: { // 疫情地图数据
+            	dates: ['1.21', '1.22', '1.23', '1.24', '1.25', '1.26', '1.27', '1.28', '1.29', '1.30'],
+                lineData: {
+                    qz: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                    ys: [2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+                    zy: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+                    sw: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+                },
+                mapData: [
+	                {name: '山福镇', value: 1},
+	                {name: '南郊', value: 1},
+	                {name: '南汇', value: 2},
+	                {name: '蒲鞋市', value: 3},
+	                {name: '大南', value: 4},
+	                {name: '广化', value: 1},
+	                {name: '滨江', value: 1},
+	                {name: '五马', value: 2},
+	                {name: '松台', value: 3},
+	                {name: '双屿', value: 1},
+	                {name: '丰门', value: 0},
+	                {name: '仰义', value: 1},
+	                {name: '藤桥镇', value: 3},
+	                {name: '七都', value: 2}
+	            ]
+            }
 		}
 	},
 	methods: {
@@ -363,7 +389,7 @@ export default {
 		padding: 0 toX(17);
 		box-sizing: border-box;
 		background: url(./img/mobile_bg.png) 0 0 no-repeat;
-		background-size: cover;
+		background-size: 100% 100%;
 		text-align: left;
 	}
 	.yq-mobile-bg-title {
@@ -404,7 +430,6 @@ export default {
 		background: #4B4BD8;
 		display: inline-block;
 		margin-right: 7px;
-		vertical-align: middle;
 	}
 	.jz-time {
 		margin-left: 11px;
@@ -437,22 +462,22 @@ export default {
     }
 
     #bg1 {
-        background: url('../control/img/1.png') center center no-repeat;
+        background: url('./img/4.png') center center no-repeat;
         background-size: 100% 100%;
     }
 
     #bg2 {
-        background: url('../control/img/2.png') center center no-repeat;
+        background: url('./img/4.png') center center no-repeat;
         background-size: 100% 100%;
     }
 
     #bg3 {
-        background: url('../control/img/3.png') center center no-repeat;
+        background: url('./img/3.png') center center no-repeat;
         background-size: 100% 100%;
     }
 
     #bg4 {
-        background: url('../control/img/4.png') center center no-repeat;
+        background: url('./img/5.png') center center no-repeat;
         background-size: 100% 100%;
     }
 
