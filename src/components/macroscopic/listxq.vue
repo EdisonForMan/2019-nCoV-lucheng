@@ -5,15 +5,19 @@
       <a v-on:click="sbclose">×</a>
     </div>
     <div class="search">
-      <select @change="xqsearch($event)">
-        <option value="0">姓名</option>
-        <option value="1">街道</option>
+      <select id="select" @change="xqsearch($event)">
+        <option value="0">全部</option>
+        <option
+          v-for="(citem,cindex) in sArr"
+          :key="cindex"
+          :value="citem.Country"
+        >{{ citem.Country }}</option>
       </select>
       <input type="text" v-model="text" placeholder="请输入查询" />
       <button @click="()=>{text && filteItem()}">查询</button>
     </div>
     <div class="content">
-      <table border="0" cellpadding="0" cellspacing="0" v-if="qzflag">
+      <table border="0" cellpadding="0" cellspacing="0" v-if="qzflag && forceData.length">
         <thead>
           <tr>
             <th>序号</th>
@@ -40,7 +44,7 @@
         </tbody>
       </table>
 
-      <table border="0" cellpadding="0" cellspacing="0" v-else>
+      <table border="0" cellpadding="0" cellspacing="0" v-if="!qzflag && forceData.length">
         <thead>
           <tr>
             <th>序号</th>
@@ -60,7 +64,7 @@
         </tbody>
       </table>
 
-      <table border="0" cellpadding="0" cellspacing="0" v-if="qzflag">
+      <table border="0" cellpadding="0" cellspacing="0">
         <thead>
           <tr>
             <th>街道</th>
@@ -102,21 +106,38 @@ export default {
       sArr: [],
       sum: 0,
       countryHash: {
-        山福镇: 0,
-        藤桥镇: 1,
-        仰义街道: 2,
-        丰门街道: 3,
-        双屿街道: 4,
-        广化街道: 5,
-        五马街道: 6,
-        松台街道: 7,
-        大南街道: 8,
-        南郊街道: 9,
-        南汇街道: 10,
-        蒲鞋市街道: 11,
-        滨江街道: 12,
-        七都街道: 13
+        山福: 1,
+        藤桥: 2,
+        仰义: 3,
+        丰门: 4,
+        双屿: 5,
+        广化: 6,
+        五马: 7,
+        松台: 8,
+        大南: 9,
+        南郊: 10,
+        南汇: 11,
+        蒲鞋市: 12,
+        滨江: 13,
+        七都: 14,
+        区直设: 15
       }
+      // countryHash: {
+      //   山福镇: 1,
+      //   藤桥镇: 2,
+      //   仰义街道: 3,
+      //   丰门街道: 4,
+      //   双屿街道: 5,
+      //   广化街道: 6,
+      //   五马街道: 7,
+      //   松台街道: 8,
+      //   大南街道: 9,
+      //   南郊街道: 10,
+      //   南汇街道: 11,
+      //   蒲鞋市街道: 12,
+      //   滨江街道: 13,
+      //   七都街道: 14
+      // }
     };
   },
   created() {},
@@ -128,26 +149,41 @@ export default {
     filteItem() {
       const data = this.data;
       const forceData = [];
-      let tag;
       data.map(item => {
         const { attributes } = item;
-        if (this.selectValue == "1") {
-          tag = attributes.Country;
-        } else {
-          tag =
-            attributes.name ||
-            attributes.Name ||
-            attributes.NAME ||
-            attributes.Address ||
-            attributes.short_name ||
-            attributes.姓名;
-        }
-        tag && ~tag.indexOf(this.text) && forceData.push(item);
+
+        const cTag = attributes.Country;
+
+        const cv = this.selectValue != 0 ? this.selectValue : "";
+
+        const ntag =
+          attributes.name ||
+          attributes.Name ||
+          attributes.NAME ||
+          attributes.Address ||
+          attributes.short_name ||
+          attributes.姓名;
+
+        ntag &&
+          ~ntag.indexOf(this.text) &&
+          cTag &&
+          ~cTag.indexOf(cv) &&
+          forceData.push(item);
       });
       this.forceData = forceData;
     },
     xqsearch(event) {
       this.selectValue = event.target.value;
+      const data = this.data;
+      const forceData = [];
+      data.map(item => {
+        const { attributes } = item;
+
+        const cTag = attributes.Country;
+        const cv = this.selectValue != 0 ? this.selectValue : "";
+        cTag && ~cTag.indexOf(cv) && forceData.push(item);
+      });
+      this.forceData = forceData;
     },
     getItem({ url, sublayers, id, name, definitionExpression, ytd }, label) {
       const d = [];
@@ -222,29 +258,66 @@ export default {
         this.data = list;
         list.map(({ attributes }) => {
           const { Country } = attributes;
-          if (!Country) return false;
-          if (!this.sObj[Country]) {
-            this.sObj[Country] = { Country, count: 0 };
+
+          let newCountry = (Country ? Country.trim() : "无")
+            .replace("街道", "")
+            .replace("镇", "");
+
+          newCountry == "蒲鞋" ? (newCountry = "蒲鞋市") : newCountry;
+
+          if (this.countryHash[newCountry]) {
+            if (!newCountry) return false;
+            if (!this.sObj[newCountry]) {
+              this.sObj[newCountry] = { Country: newCountry, count: 0 };
+            }
+            this.sObj[newCountry].count++;
           }
-          this.sObj[Country].count++;
         });
         for (let k in this.sObj) {
           this.sArr.push(this.sObj[k]);
         }
-        this.sArr.map(item => {
-          this.sum += parseInt(item.count);
-        });
+        // this.sArr.map(item => {
+        //   this.sum += parseInt(item.count);
+        // });
 
-        // console.log("obj", this.sObj);
-
-        this.forceData = list.sort((a, b) => {
-          const count1 = this.sObj[a.attributes.Country].count;
-          const count2 = this.sObj[b.attributes.Country].count;
+        this.sArr.sort((a, b) => {
+          const count1 = a.count;
+          const count2 = b.count;
 
           if (count1 == count2) {
             return (
-              this.countryHash[b.attributes.Country] -
-              this.countryHash[a.attributes.Country]
+              this.countryHash[b.Country.trim()] -
+              this.countryHash[a.Country.trim()]
+            );
+          }
+
+          return count2 - count1;
+        });
+
+        this.forceData = list.sort((a, b) => {
+          let country1 = (a.attributes.Country
+            ? a.attributes.Country.trim()
+            : "无"
+          )
+            .replace("街道", "")
+            .replace("镇", "");
+          let country2 = (b.attributes.Country
+            ? b.attributes.Country.trim()
+            : "无"
+          )
+            .replace("街道", "")
+            .replace("镇", "");
+
+          country1 == "蒲鞋" ? (country1 = "蒲鞋市") : country1;
+          country2 == "蒲鞋" ? (country2 = "蒲鞋市") : country2;
+
+          const count1 = this.sObj[country1] ? this.sObj[country1].count : 0;
+          const count2 = this.sObj[country2] ? this.sObj[country2].count : 0;
+
+          if (count1 == count2) {
+            return (
+              this.countryHash[country2 ? country2.trim() : "无"] -
+              this.countryHash[country1 ? country1.trim() : "无"]
             );
           }
 

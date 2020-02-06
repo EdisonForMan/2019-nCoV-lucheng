@@ -533,7 +533,7 @@ export default {
       const that = this;
 
       that.view.on("click", function(evt) {
-        console.log(evt);
+        // console.log(evt);
         that.cleanQuery();
         if (
           (that.map.findLayerById("wg") &&
@@ -541,7 +541,7 @@ export default {
           (that.map.findLayerById("xq") && that.map.findLayerById("xq").visible)
         ) {
           that.view.hitTest(evt).then(function(response) {
-            console.log(response);
+            // console.log(response);
 
             const spaceGraphicsLayer = that.map.findLayerById("spaceLayer");
 
@@ -584,7 +584,7 @@ export default {
           params.geometry = mapPoint;
           params.mapExtent = that.view.extent;
           identifyTask.execute(params).then(res => {
-            console.log(res);
+            // console.log(res);
 
             // if (res.results.length > 0) {
             //   const queryTask = new QueryTask({
