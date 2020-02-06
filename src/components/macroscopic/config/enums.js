@@ -117,7 +117,7 @@ export const leftOptions = [{
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
         check: false
     }, {
-        name: "小区、大厦、物业",
+        name: "小区、大厦",
         id: "xq",
         sublayers: "14",
         // isImg: true,

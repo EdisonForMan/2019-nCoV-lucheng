@@ -213,7 +213,7 @@ export const xqDetail = (isOption, obj) => {
                   <th class="esri-feature__field-header">${label}</th>
                   <td class="esri-feature__field-data">${
                             val ? (isOption ? `{${val}}` : obj[val] || "") : ""
-                            }${btn ? `<span class="frameBtn xq_enter_btn" data-val="${obj.name}">详情</button>` : ``}</td>
+                            }${btn ? `<span class="frameBtn xq_enter_btn" data-val="${isOption ? `{name}` : obj.name}">详情</button>` : ``}</td>
                 </tr>`;
                     })
                     .join("")}</tbody></table>`
