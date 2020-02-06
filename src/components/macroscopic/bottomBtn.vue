@@ -48,11 +48,11 @@ export default {
       this.$parent.$refs.queryForm.list = [];
     },
     doCircleQuery() {
-      console.log("圆形查询");
+      // console.log("圆形查询");
       this.$parent.$refs.macroArcgis.doCircleQuery();
     },
     doSpaceQuery() {
-      console.log("多边形查询");
+      // console.log("多边形查询");
       this.$parent.$refs.macroArcgis.doSpaceQuery();
     }
   }

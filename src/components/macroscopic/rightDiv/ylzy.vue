@@ -45,22 +45,7 @@ import util from "../util";
 
 export default {
   data() {
-    return {
-      charts: "",
-      phname: [
-        "南汇街道-锦江之星",
-        "五马街道-锐思特（飞霞路店）",
-        "大南街道-瑞都酒店",
-        "蒲鞋市街道-金丝桥瑞都商旅酒店",
-        "双屿街道-瑞都连锁酒店",
-        "仰义街道-双屿欣悦宾馆",
-        "松台街道-威斯顿时尚酒店",
-        "广化街道-众豪酒店",
-        "滨江街道-唯乐创意酒店"
-      ],
-      sumData: [80, 80, 72, 70, 63, 51, 50, 50, 46],
-      usedData: [0, 65, 58, 16, 29, 6, 50, 0, 43]
-    };
+    return {};
   },
   methods: {
     mapPh() {
@@ -162,11 +147,17 @@ export default {
     },
     popShowFun(type) {
       //执行
-      util.$emit("popshow",type);
+      util.$emit("popshow", type);
     }
   },
   mounted() {
     this.mapPh(); //调用地图边上的柱状图
+  },
+  created() {
+    const { phname, sumData, usedData } = this.$window.nCov_luchengChart;
+    this.phname = phname;
+    this.sumData = sumData;
+    this.usedData = usedData;
   }
 };
 </script>

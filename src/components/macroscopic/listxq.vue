@@ -235,7 +235,7 @@ export default {
           this.sum += parseInt(item.count);
         });
 
-        console.log("obj", this.sObj);
+        // console.log("obj", this.sObj);
 
         this.forceData = list.sort((a, b) => {
           const count1 = this.sObj[a.attributes.Country].count;
@@ -251,7 +251,7 @@ export default {
           return count2 - count1;
         });
 
-        console.log("data", this.forceData);
+        // console.log("data", this.forceData);
         this.keyData = Object.keys(this.forceData[0].fieldAliases).filter(k => {
           return (
             [
@@ -332,7 +332,7 @@ export default {
       this.relationShow = true;
       this.$refs.relation.list = item.mjList;
       this.$refs.relation.title = item.attributes.Name;
-      console.log(item);
+      // console.log(item);
     },
     sbclose() {
       this.$parent.listShow = false;

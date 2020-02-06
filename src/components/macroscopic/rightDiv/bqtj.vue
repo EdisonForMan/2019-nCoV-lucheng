@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     getItem(children, label) {
-      console.log("children", children);
+      // console.log("children", children);
       if (label == "疫情分布" && children.id !== "ytyg") {
         this.dataAge = this.dataHash[children.id];
         document.getElementById("select").value = children.id;
