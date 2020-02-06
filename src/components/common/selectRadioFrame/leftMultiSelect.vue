@@ -48,11 +48,7 @@
                 v-if="oitem.id == 'jjgl' || oitem.id == 'hbhw'"
                 @change="change(oitem.id)"
               />
-              <span
-                id="xq"
-                v-if="oitem.id == 'qzbl' || oitem.id == 'zzbl'"
-                @click="ShowListxq(oitem,item)"
-              >详情</span>
+              <span id="xq" v-if="item.label=='疫情分布'" @click="ShowListxq(oitem,item)">详情</span>
             </li>
           </ul>
         </div>
@@ -127,7 +123,7 @@ export default {
       this.$parent.$refs.table.getItem(oitem, item.label);
       this.$parent.$refs.sbxq.getItem(oitem, item.label);
 
-      console.log(oitem, item.label);
+      // console.log(oitem, item.label);
 
       this.$parent.$refs.bqtj.getItem(oitem, item.label); //调用病例统计echart
     },
@@ -197,7 +193,7 @@ export default {
       this.tree = newV;
     },
     tabIndex(newV, oldV) {
-      console.log(newV);
+      // console.log(newV);
       util.$emit("chartDataMod", newV);
       this.clean();
     }
@@ -325,12 +321,17 @@ export default {
           padding: 4px;
           padding-left: 22px;
           margin-bottom: 10px;
-          display: flex;
+          display: inline-block;
+          width: 90%;
           // justify-content: space-between;
           p {
             font-size: 18px;
             cursor: pointer;
-            line-height: 44px;
+            line-height: 18px;
+            display: inline-block;
+            width: 158px;
+            position: relative;
+            top: 5px;
             img {
               width: 24px;
               height: 24px;
@@ -343,19 +344,6 @@ export default {
               margin-bottom: unset;
               display: unset;
               box-shadow: none;
-              background-color: #162449 !important;
-              border: 1px solid #75c8f4 !important;
-              border-radius: 8px;
-              padding: 7px 9px !important;
-              color: #fff;
-              cursor: pointer;
-              width: 32px !important;
-              height: 20px !important;
-              font-size: 12px !important;
-              line-height: 23px !important;
-              position: absolute;
-              right: 8%;
-              margin-top: 5px;
             }
           }
           #xq {
@@ -376,9 +364,11 @@ export default {
             margin-left: 4px;
             margin-top: 4px;
             text-align: center;
+            float: right;
           }
           input[type="checkbox"] {
-            top: 12px;
+            top: 7px;
+            left: -8px;
           }
         }
       }

@@ -10,13 +10,13 @@
         <div class="type">{{item.type}}</div>
         <ul v-if="item.type != '集中隔离点'">
           <li v-for="(_item,_index) in item.value" :key="_index" @click="goLocation(_item)">
-            <span>{{++_index}}. {{_item.attributes.Name?_item.attributes.Name.slice(0,1):(_item.attributes.NAME?_item.attributes.NAME.slice(0,1):null)}}**, {{_item.attributes.Country}}</span>
+            <span>{{++_index}}. {{_item.attributes.Name?_item.attributes.Name.slice(0,1):(_item.attributes.NAME?_item.attributes.NAME.slice(0,1):null)}}**, {{_item.attributes.Country}}, {{_item.attributes.Address}}</span>
           </li>
         </ul>
 
         <ul v-else>
           <li v-for="(_item,_index) in item.value" :key="_index" @click="goLocation(_item)">
-            <span>{{++_index}}. {{_item.attributes.Name}}, {{_item.attributes.Country}}</span>
+            <span>{{++_index}}. {{_item.attributes.Name}}, {{_item.attributes.Address}}, {{_item.attributes.Address}}</span>
           </li>
         </ul>
       </div>

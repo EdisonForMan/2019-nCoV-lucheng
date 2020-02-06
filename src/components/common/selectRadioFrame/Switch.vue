@@ -5,7 +5,7 @@
       <div
         class="switch-button"
         :style="{transition: `transform ${speed}ms`,
-           transform: toggled ? null: `translate3d(20px, 0px, 0px)`}"
+           transform: toggled ? null: `translate3d(0px, 0px, 0px)`}"
       ></div>
     </div>
     <span class="switch-label label-right" v-if="toggled"></span>
@@ -38,11 +38,12 @@ export default {
 .switch {
   display: inline-block;
   position: relative;
-  overflow: hidden;
+  // overflow: hidden;
   vertical-align: middle;
   user-select: none;
   font-size: 10px;
   cursor: pointer;
+  top: -18px;
 
   .switch-input {
     display: none;
@@ -95,7 +96,7 @@ export default {
       left: 0;
       z-index: 3;
       border-radius: 50%;
-      transform: translate3d(0, 0, 0);
+      transform: translate3d(20px, 0, 0);
       background-color: #ecf0f5;
     }
   }

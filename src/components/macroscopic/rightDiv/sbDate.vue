@@ -28,7 +28,7 @@
         >{{++index}}.{{item.attributes.Name}},{{item.attributes.Address}}</span>
         <span
           v-if="~['gld_list'].indexOf(item.id)"
-        >{{++index}}.{{item.attributes.姓名?item.attributes.姓名.slice(0,1):''}}**,{{item.attributes.家庭住址}}</span>
+        >{{++index}}.{{item.attributes.Name?item.attributes.Name.slice(0,1):''}}**,{{item.attributes.Address}}</span>
         <span
           v-if="item.id == 'ytyg'"
         >{{++index}}.{{item.attributes.姓名?item.attributes.姓名.slice(0,1):''}}**,{{item.attributes.通讯地址}}</span>
