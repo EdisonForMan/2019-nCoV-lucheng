@@ -6,22 +6,30 @@ const xqUrl = "http://172.20.89.7:6082/arcgis/rest/services/lucheng/crowded/MapS
 const qzblUrl = "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/0";
 const zzblUrl = "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/1";
 const mjUrl = "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/5";
+const enterUrl = "http://172.20.89.7:6082/arcgis/rest/services/lucheng/crowded/MapServer/0"
 
-export const linkXQFeatures = async (context, Country) => {
-    const geometry = await getGeometry(Country);
+export const linkXQFeatures = async (context, xqName) => {
+    const geometry = await getGeometry(xqName);
     const qzbl = await addLinkFeature(context, geometry, "qzbl", "确诊病例", qzblUrl);
     const zzbl = await addLinkFeature(context, geometry, "zzbl", "疑似病例", zzblUrl)
     const mj = await addLinkFeature(context, geometry, "mj", "密接", mjUrl)
     const frameData = { qzbl, zzbl, mj };
     context.$parent.$refs.cpFrame.obj = frameData;
-    context.$parent.$refs.cpFrame.title = Country;
+    context.$parent.$refs.cpFrame.title = xqName;
+}
+
+export const linkXQ_ENTERFeatures = async (context, xqName) => {
+    console.log(xqName)
+    const geometry = await getGeometry(xqName);
+    const xqEnter = await addLinkEnterFeature(context, geometry, "进出口");
+    console.log(xqEnter)
 }
 
 /**
  * 获取面
- * @param {*} Country 
+ * @param {*} xqName 
  */
-const getGeometry = (Country) => {
+const getGeometry = (xqName) => {
     return new Promise((resolve, reject) => {
         loadModules(
             ["esri/tasks/QueryTask", "esri/tasks/support/Query"],
@@ -31,9 +39,52 @@ const getGeometry = (Country) => {
             const query = new Query();
             query.outFields = ["*"];
             query.returnGeometry = true;
-            query.where = `name like '%${Country}%'`;
+            query.where = `name like '%${xqName}%'`;
             const { features } = await queryTask.execute(query);
             resolve(features.length ? features[0].geometry : false);
+        });
+    });
+}
+
+const addLinkEnterFeature = (context, geometry, icon) => {
+    return new Promise((resolve, reject) => {
+        const _id = "xq_xqjck";
+        context.map &&
+            context.map.findLayerById(_id) &&
+            context.map.remove(context.map.findLayerById(_id));
+        loadModules(
+            ["esri/tasks/QueryTask", "esri/tasks/support/Query", "esri/layers/GraphicsLayer", "esri/Graphic"],
+            OPTION
+        ).then(async ([QueryTask, Query, GraphicsLayer, Graphic]) => {
+            const feature = new GraphicsLayer({
+                id: _id
+            });
+            const queryTask = new QueryTask({ url: enterUrl });
+            const query = new Query();
+            query.outFields = ["*"];
+            query.returnGeometry = true;
+            query.geometry = geometry;
+            const { fields, features } = await queryTask.execute(query);
+            const fieldAliases = {};
+            fields.map(item => {
+                fieldAliases[item.name] = item.alias;
+            });
+            const list = features.map(item => {
+                item.fieldAliases = fieldAliases;
+                var graphic = new Graphic({
+                    geometry: item.geometry,
+                    symbol: {
+                        type: "picture-marker",
+                        url: `${server}/icon/other/${icon}.png`,
+                        width: "30px",
+                        height: "32px"
+                    }
+                });
+                feature.graphics.add(graphic);
+                return item;
+            });
+            context.map.add(feature);
+            resolve(list);
         });
     });
 }
@@ -47,9 +98,8 @@ const getGeometry = (Country) => {
  * @param {*} url 
  */
 const addLinkFeature = (context, geometry, id, icon, url) => {
-    console.log(geometry)
     return new Promise((resolve, reject) => {
-        const _id = "cp_" + id;
+        const _id = "xq_" + id;
         context.map &&
             context.map.findLayerById(_id) &&
             context.map.remove(context.map.findLayerById(_id));
@@ -89,3 +139,86 @@ const addLinkFeature = (context, geometry, id, icon, url) => {
         });
     });
 };
+
+/**
+ * 小区详情面
+ * @param {*} isOption 
+ * @param {*} obj 
+ */
+export const xqDetail = (isOption, obj) => {
+    const arr = [
+        [
+            "name@社区名称",
+            "所属街道@所属街道",
+            "地址范围@地址范围",
+            "联系电话@联系电话",
+            "社区负责人@社区负责人",
+            "小区数量@小区数量",
+            "总户数@总户数",
+            "总人数@总人数",
+        ],
+        "社区值班信息",
+        [
+            "name@社区名称",
+            "日期@日期",
+            "时间段@时间段",
+            "值班领导@值班领导",
+            "领导职务@领导职务",
+            "值班人员@值班人员",
+            "人员职务@人员职务"
+        ],
+        "小区基本信息",
+        [
+            "小区名称@小区名称",
+            "所属社区@所属社区",
+            "小区地址@小区地址",
+            "小区范围@小区范围",
+            "小区总户数@小区总户数",
+            "小区总栋数@小区总栋数",
+            "小区总人数@小区总人数",
+            "物业服务企业名称@物业服务企业名称",
+            "小区管理处负责人@小区管理处负责人",
+            "小区管理处联系方式@小区管理处联系方式",
+            "房管中心联系人@房管中心联系人",
+            "房管中心联系电话@房管中心联系电话",
+        ],
+        "小区物业信息",
+        [
+            "小区名称@小区名称",
+            "小区物业服务企业名称@小区物业服务企业名称",
+            "保安值班情况@保安值班情况",
+            "保安联系方式@保安联系方式",
+            "物业管理人员值班情况@物业管理人员值班情况",
+            "物业管理人员联系方式@物业管理人员联系方式",
+            "保安队长@保安队长",
+            "保安队长联系方式@保安队长联系方式",
+        ],
+        "小区卡口信息",
+        [
+            "小区名称@小区名称",
+            "卡口位置@卡口位置@xq_enter_btn",
+            "体温计是否到位@体温计是否到位",
+            "口罩是否到位@口罩是否到位",
+            "雨棚是否到位@雨棚是否到位",
+            "进出口证是否制作@进出口证是否制作",
+        ]
+    ];
+    const ra = arr
+        .map(item => {
+            return item instanceof Array
+                ? `<table class="esri-widget__table"><tbody>${item
+                    .map(o => {
+                        const [val, label, btn] = o.split("@");
+                        return `<tr>
+                  <th class="esri-feature__field-header">${label}</th>
+                  <td class="esri-feature__field-data">${
+                            val ? (isOption ? `{${val}}` : obj[val] || "") : ""
+                            }${btn ? `<span class="frameBtn xq_enter_btn" data-val="${obj.name}">详情</button>` : ``}</td>
+                </tr>`;
+                    })
+                    .join("")}</tbody></table>`
+                : `<p>${item}</p>`;
+        })
+        .join("");
+    return ra;
+}

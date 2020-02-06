@@ -5,6 +5,7 @@ export const tipHash = {
     sqdc: "illHash",
     jjgl: "jjglHash",
     gld: "gldHash",
+    gld_list: "gldListHash",
     lg: "lgHash",
     mj: "mjHash",
     ytyg: "ytygHash",
@@ -37,6 +38,50 @@ export const tipHash = {
     nj_xm_2: "njxmHash",
     chanyePlate: "chanyePlateHash"
 }
+
+const gldListHash = [{
+    fieldName: "Country",
+    label: "街道"
+}, {
+    fieldName: "Name",
+    label: "姓名"
+}, {
+    fieldName: "Sex",
+    label: "性别"
+}, {
+    fieldName: "Phone",
+    label: "联系电话"
+}, {
+    fieldName: "Code",
+    label: "身份证号"
+}, {
+    fieldName: "Address",
+    label: "家庭住址"
+}, {
+    fieldName: "IsHBToWZ",
+    label: "是否为湖北返温"
+}, {
+    fieldName: "IsolationPlace",
+    label: "隔离点"
+}, {
+    fieldName: "RelatingCodes",
+    label: "隔离点编码"
+}, {
+    fieldName: "Room",
+    label: "房间号"
+}, {
+    fieldName: "IsolationPlaceAddress",
+    label: "隔离点地址"
+}, {
+    fieldName: "LinkMan",
+    label: "联络人"
+}, {
+    fieldName: "LinkManPhone",
+    label: "联络人电话"
+}, {
+    fieldName: "IsIsolated",
+    label: "是否解除隔离"
+}]
 
 const chanyePlateHash = [{
     fieldName: "名称",
@@ -610,5 +655,6 @@ export const Hash = {
     jzgdHash,
     njzdqyHash,
     njxmHash,
-    chanyePlateHash
+    chanyePlateHash,
+    gldListHash
 }
