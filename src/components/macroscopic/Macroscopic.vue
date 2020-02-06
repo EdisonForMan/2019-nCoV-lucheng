@@ -10,8 +10,9 @@
       </div>
       <div id="fy-rightDiv">
         <bqtj ref="bqtj" />
-        <ylzy />
-        <sbDate ref="table" />
+        <qstu></qstu>
+        <ylzy v-if="false"/>
+        <sbDate ref="table"v-if="false"/>
       </div>
     </div>
     <xzDate />
@@ -42,6 +43,7 @@ import bottomBtn from "./bottomBtn";
 //  chartTable
 import bqtj from "./rightDiv/bqtj";
 import ylzy from "./rightDiv/ylzy";
+import qstu from "./rightDiv/qstu";
 import sbDate from "./rightDiv/sbDate";
 import sbxq from "./sbxq";
 import topDate from "./topDate";
@@ -69,6 +71,7 @@ export default {
     bqtj, //病例统计
     sbDate, //上报动态数据
     sbxq, //上报详情
+    qstu, // 趋势图统计
     ylzy, //医疗资源状况
     bottomBtn, //底部按钮
     topDate, //顶部数据
