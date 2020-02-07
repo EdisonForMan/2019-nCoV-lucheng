@@ -240,7 +240,7 @@ export const leftOptions = [{
         id: "m_mj",
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
         sublayers: "1",
-        m_url: "",
+        m_url: "http://172.20.89.7:6082/arcgis/rest/services/wz_yiqing/zxjd_mqjcz/MapServer",
         icon: "密接",
         check: false
     }, {
@@ -248,7 +248,7 @@ export const leftOptions = [{
         id: "m_gld_list",
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer",
         sublayers: "2",
-        m_url: "",
+        m_url: "http://172.20.89.7:6082/arcgis/rest/services/wz_yiqing/xzjd_jzgl/MapServer",
         icon: "治愈",
         check: false
     }, {
@@ -256,7 +256,7 @@ export const leftOptions = [{
         id: "m_gld",
         url: "http://172.20.89.7:6082/arcgis/rest/services/wz_yiqing/fangkong_wz/MapServer",
         sublayers: "1",
-        m_url: "",
+        m_url: "http://172.20.89.7:6082/arcgis/rest/services/wz_yiqing/xzjd/MapServer",
         icon: "死亡",
         check: false
     }

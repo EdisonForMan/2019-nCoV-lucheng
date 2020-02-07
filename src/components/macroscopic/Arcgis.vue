@@ -45,7 +45,7 @@ export default {
     await this.createMap();
     // await this.addQh();
     /*    await this.addmbk();*/
-    await this.addChanyePlate();
+    // await this.addChanyePlate();
     // await this.addHeat();
     this.$props.leftOptions &&
       this.$props.leftOptions.map(_item => {
@@ -84,21 +84,26 @@ export default {
       // const shallYT = this.$parent.$refs.leftOptions.shallYT;
       // const _id_ = (shallYT ? "yt_" : "") + item.id;
       const shallYT = this.$parent.$refs.leftOptions.tabIndex == 1;
-      const _id_ = (shallYT ? "yt_" : "") + item.id;
+      const _id_ = item.id;
       if (item.check) {
-        this.map && this.map.findLayerById(_id_)
-          ? (this.map.findLayerById(_id_).visible = true)
-          : this.addFeatures(item, _id_);
+        this.map && this.map.findLayerById(item.id)
+          ? (this.map.findLayerById(item.id).visible = true)
+          : this.addFeatures(item, item.id);
+        this.map && this.map.findLayerById(item.id + "_img")
+          ? (this.map.findLayerById(item.id + "_img").visible = true)
+          : null;
         this.map && this.map.findLayerById("fangkong")
           ? (this.map.findLayerById("fangkong").visible = false)
           : null;
       } else {
-        // console.log(item.id, "yt_" + item.id);
         this.map && this.map.findLayerById(item.id)
           ? (this.map.findLayerById(item.id).visible = false)
           : null;
         this.map && this.map.findLayerById("yt_" + item.id)
           ? (this.map.findLayerById("yt_" + item.id).visible = false)
+          : null;
+        this.map && this.map.findLayerById(item.id + "_img")
+          ? (this.map.findLayerById(item.id + "_img").visible = false)
           : null;
         if (item.id == "qzbl") {
           this.map &&
@@ -118,6 +123,11 @@ export default {
               this.map.findLayerById(_id_) &&
               this.map.remove(this.map.findLayerById(_id_));
           });
+        }
+        if (~["m_qzbl", "m_mj", "m_gld_list", "m_gld"].indexOf(_id_)) {
+          this.map &&
+            this.map.findLayerById(_id_) &&
+            this.map.remove(this.map.findLayerById(_id_));
         }
       }
     },
@@ -514,7 +524,19 @@ export default {
                 height: "32px"
               }
             });
+          if (item.m_url) {
+            const _IMG = new MapImageLayer({
+              url: item.m_url,
+              id: _id_ + "_img",
+              opacity: 0.7
+            });
+            //  优先级置顶
+            that.map.add(_IMG, 2);
+          }
           const feature = new _layers_(option);
+          if (~["m_qzbl", "m_mj", "m_gld_list", "m_gld"].indexOf(_id_)) {
+            feature.visible = that.view.zoom >= 12 ? true : false;
+          }
           that.map.add(feature);
           resolve(true);
         });
