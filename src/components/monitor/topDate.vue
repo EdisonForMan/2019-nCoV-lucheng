@@ -1,93 +1,58 @@
 <template>
-  <div id="topDateDiv">
-    <ul style="display: flex;">
+  <div class="topDateDiv">
+    <ul>
       <li>
-        <div class="topDateDiv-img-1"></div>
-        <div class="topDateDiv-right-content">
-          <div class="topDateDiv-text" style="color: rgb(255, 40, 58);">确诊{{ SHI_QU_DATA.QZ }}</div>
-          <div class="topDateDiv-xz">今日{{ SHI_QU_DATA.QZXZ }}</div>
-        </div>
+        <h3 style="color:#ff283a">{{SHI_QU_DATA.QZ}}人</h3>
+        <i>今日{{ SHI_QU_DATA.QZXZ }}</i>
+        <p>确诊病例</p>
       </li>
       <li>
-        <div class="topDateDiv-img-2"></div>
-        <div class="topDateDiv-right-content">
-          <div class="topDateDiv-text" style="color: #cd77ff;">重症{{ SHI_QU_DATA.ZZ }}</div>
-          <div class="topDateDiv-xz">今日{{ SHI_QU_DATA.ZZXZ }}</div>
-        </div>
+        <h3 style="color:#fcc659">{{SHI_QU_DATA.ZZ}}人</h3>
+        <i>今日{{ SHI_QU_DATA.ZZXZ }}</i>
+        <p>重症病例</p>
       </li>
       <li>
-        <div class="topDateDiv-img-3"></div>
-        <div class="topDateDiv-right-content">
-          <div class="topDateDiv-text" style="color: rgb(30, 255, 149);">出院{{ SHI_QU_DATA.CY }}</div>
-          <div class="topDateDiv-xz">今日{{ SHI_QU_DATA.CYXZ }}</div>
-        </div>
+        <h3 style="color:#f6e31b">{{SHI_QU_DATA.CY}}人</h3>
+        <i>今日{{ SHI_QU_DATA.CYXZ }}</i>
+        <p>出院</p>
       </li>
       <li>
-        <div class="topDateDiv-img-4"></div>
-        <div class="topDateDiv-right-content">
-          <div class="topDateDiv-text" style="color: rgb(126, 126, 126);">死亡{{ SHI_QU_DATA.SW }}</div>
-          <div class="topDateDiv-xz">今日{{ SHI_QU_DATA.SWXZ }}</div>
-        </div>
+        <h3 style="color:#1eff95">{{SHI_QU_DATA.SW}}人</h3>
+        <i>今日{{ SHI_QU_DATA.SWXZ }}</i>
+        <p>死亡</p>
       </li>
     </ul>
   </div>
 </template>
+
 <script>
-import {SHI_QU_DATA} from '../common/shiquData.js';
+import { SHI_QU_DATA } from "@/components/common/shiquData.js";
 export default {
-  name: 'topDateDiv',
-  data () {
-    return {
-      SHI_QU_DATA
-    }
+  data() {
+    return { SHI_QU_DATA };
   }
 };
 </script>
 
-<style>
-#topDateDiv {
+<style lang="less" scoped>
+.topDateDiv {
   position: absolute;
   top: 95px;
-  left: 50%;
-  transform: translateX(-50%);
+  width: 100%;
 }
-#topDateDiv ul li {
-  display: flex;
-  align-items: center;
-  margin: 0 60px;
-}
-.topDateDiv-right-content {
+.topDateDiv ul li {
+  width: 5%;
+  margin: auto;
+  display: inline-block;
+  background-color: #1b45a7;
+  border: 1px solid #07e2e8;
   margin-left: 10px;
-  text-align: left;
-}
-.topDateDiv-text {
-  font-weight: bolder;
-}
-.topDateDiv-xz {
-  font-size: 12px;
-}
-.topDateDiv-img-1 {
-  width: 40px;
-  height: 40px;
-  background: url(./img/4.png) 0 0 no-repeat;
-  background-size: 100% 100%;
-}
-.topDateDiv-img-2 {
-  width: 40px;
-  height: 40px;
-  background: url(./img/1.png) 0 0 no-repeat;
-  background-size: 100% 100%;
-}
-.topDateDiv-img-3 {
-  width: 40px;
-  height: 40px;
-  background: url(./img/3.png) 0 0 no-repeat;
-  background-size: 100% 100%;
-}
-.topDateDiv-img-4 {
-  width: 40px;
-  height: 40px;
-  background: url(./img/5.png) 0 0 no-repeat;
-  background-size: 100% 100%;
+  padding: 5px 9px;
+  color: #07e2e8;
+  i {
+    font-style: normal;
+    font-size: 12px;
+    color: #fff;
+  }
 }
 </style>

@@ -13,8 +13,8 @@ export const leftOptions = [{
     children: [{
         name: `确诊病例 (${lc.qzbl}例)`,
         id: "qzbl",
-        url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
-        sublayers: "1",
+        url: "http://172.20.89.7:6082/arcgis/rest/services/wz_yiqing/fangkong_wz/MapServer",
+        sublayers: "0",
         icon: "确诊病例",
         check: false
     }, {

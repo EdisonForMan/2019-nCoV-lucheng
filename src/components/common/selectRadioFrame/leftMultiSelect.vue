@@ -2,7 +2,7 @@
   <div class="leftMultiSelect">
     <div class="topic">
       <header>
-        <span :class="{active:tabIndex == 1}" @click="()=>{tabIndex = 1}">全区疫情</span>
+        <span :class="{active:tabIndex == 1}" @click="()=>{tabIndex = 1}">全市疫情</span>
         <i>/</i>
         <span :class="{active:tabIndex == 2}" @click="()=>{tabIndex = 2}">疫情统计</span>
       </header>
