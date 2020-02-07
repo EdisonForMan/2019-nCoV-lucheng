@@ -148,13 +148,25 @@ export default {
           : null;
         _tree[i].check = false;
       }
+      if (this.tabIndex == 1) {
+        _tree[0].children[0].check = true;
+      } else if (this.tabIndex == 2) {
+        _tree[4].children[0].check = true;
+      }
       this.tree = _tree;
       this.$parent.leftOptions = this.tree;
       // 清除热力图
       this.$parent.$refs.macroArcgis.removeHeat();
       // 清除空间查询
       this.$parent.$refs.macroArcgis.cleanQuery();
-      this.$parent.$refs.macroArcgis.zoomFix(this.$parent.$refs.macroArcgis);
+      //  是否展示底图
+      const context = this.$parent.$refs.macroArcgis;
+      const shallPlate = context.view.zoom >= 12 ? true : false;
+      context.map.findLayerById("vectorLayer")
+        ? this.tabIndex == 2
+          ? (context.map.findLayerById("vectorLayer").visible = shallPlate)
+          : (context.map.findLayerById("vectorLayer").visible = true)
+        : undefined;
     },
     change(id) {
       const that = this;

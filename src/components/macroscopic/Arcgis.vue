@@ -44,7 +44,7 @@ export default {
     /**init map**/
     await this.createMap();
     // await this.addQh();
-    /*    await this.addmbk();*/
+    /* await this.addmbk();*/
     // await this.addChanyePlate();
     // await this.addHeat();
     this.$props.leftOptions &&
@@ -58,7 +58,7 @@ export default {
     this.polygonQuery();
     //  判断是否隐藏
     setTimeout(() => {
-      this.zoomFix(this);
+      this.vectorFix(this);
     }, 0);
   },
   watch: {
@@ -71,6 +71,7 @@ export default {
             item.id && that.doFun(item);
           });
         });
+        this.zoomFix(this);
       },
       deep: true
     }
@@ -124,11 +125,6 @@ export default {
               this.map.remove(this.map.findLayerById(_id_));
           });
         }
-        if (~["m_qzbl", "m_mj", "m_gld_list", "m_gld"].indexOf(_id_)) {
-          this.map &&
-            this.map.findLayerById(_id_) &&
-            this.map.remove(this.map.findLayerById(_id_));
-        }
       }
     },
     /**
@@ -180,20 +176,30 @@ export default {
       const zoom = parseInt(
         context.view.zoom + (evt ? (evt.deltaY > 0 ? -1 : 1) : 0)
       );
-      const shallPlate = zoom >= 12 ? true : false;
       const shallPoint = zoom >= 14 ? true : false;
+      ["m_qzbl", "m_mj", "m_gld_list", "m_gld"].map(item => {
+        const tree = context.$util.clone(context.$parent.leftOptions);
+        if (
+          tree.reverse()[0].children.filter(k => {
+            return k.id == item && k.check;
+          }).length
+        ) {
+          console.log(item, shallPoint);
+          context.map.findLayerById(item)
+            ? context.$parent.$refs.leftOptions.tabIndex == 2
+              ? (context.map.findLayerById(item).visible = shallPoint)
+              : (context.map.findLayerById(item).visible = true)
+            : undefined;
+        }
+      });
+    },
+    vectorFix(context) {
+      const shallPlate = context.view.zoom >= 12 ? true : false;
       context.map.findLayerById("vectorLayer")
         ? context.$parent.$refs.leftOptions.tabIndex == 2
           ? (context.map.findLayerById("vectorLayer").visible = shallPlate)
           : (context.map.findLayerById("vectorLayer").visible = true)
         : undefined;
-      ["m_qzbl", "m_mj", "m_gld_list", "m_gld"].map(item => {
-        context.map.findLayerById(item)
-          ? context.$parent.$refs.leftOptions.tabIndex == 2
-            ? (context.map.findLayerById(item).visible = shallPoint)
-            : (context.map.findLayerById(item).visible = true)
-          : undefined;
-      });
     },
     jQueryBind() {
       const context = this;

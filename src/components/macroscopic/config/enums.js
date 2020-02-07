@@ -256,7 +256,7 @@ export const leftOptions = [{
         id: "m_gld",
         url: "http://172.20.89.7:6082/arcgis/rest/services/wz_yiqing/fangkong_wz/MapServer",
         sublayers: "1",
-        m_url: "http://172.20.89.7:6082/arcgis/rest/services/wz_yiqing/xzjd/MapServer",
+        m_url: "http://172.20.89.7:6082/arcgis/rest/services/wz_yiqing/xzjd_yd/MapServer",
         icon: "死亡",
         check: false
     }
