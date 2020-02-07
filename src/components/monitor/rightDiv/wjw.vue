@@ -3,15 +3,14 @@
     <h3>
       - 温州市疫情防控管控力指数 -
       <select id="select" @change="bqSelect($event)">
-        <option value="fbl">二代及以上病例 图一</option>
-        <option value="mzbls">二代及以上病例 图二</option>
-        <option value="fxl">主动发现病例</option>
-        <option value="qzbls">聚集性疫情管控 图一</option>
-        <option value="jubls">聚集性疫情管控 图二</option>
+        <option value="fbl">二代及以上病例</option>
+        <option value="mzbls">主动发现病例</option>
+        <option value="fxl">聚集性疫情</option>
+        <option value="qzbls">密切接触者</option>
       </select>
     </h3>
     <div id="wjwChart"></div>
-    <div class="wjwDesc">{{ desc }}</div>
+    <div class="wjwDesc">指标说明：{{ desc }}</div>
   </div>
 </template>
 
@@ -43,8 +42,8 @@ export default {
               show: false
           },
           grid: {
-            left: '15%',
-            right: '10%',
+            left: '22%',
+            right: '5%',
             bottom: '8%',
             top: '2%'
           },
@@ -57,7 +56,6 @@ export default {
                       fontSize: 12,
                       color: '#fff',
                   },
-                  interval: 0
               },
               axisLine: {
                   show: false
@@ -116,10 +114,6 @@ export default {
         case 'qzbls':
           this.changewjwzs(SHI_QU_DATA.zhishuData.qzbls, SHI_QU_DATA.zhishuData.qzblsTitle);
           this.desc = SHI_QU_DATA.zhishuData.qzblsDesc;
-          break;
-        case 'jubls':
-          this.changewjwzs(SHI_QU_DATA.zhishuData.jubls, SHI_QU_DATA.zhishuData.jublsTitle);
-          this.desc = SHI_QU_DATA.zhishuData.jublsDesc;
           break;
       }
     },

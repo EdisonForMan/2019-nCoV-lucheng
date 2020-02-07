@@ -5,15 +5,6 @@
       <li @click="yxt">影像图</li>
       <li @click="slt">矢量图</li>
       <li @click="ygt">夜光图</li>
-      <li class="hover">
-        空间查询
-        <div>
-          <ul class="subList">
-            <li @click="doCircleQuery">圆形查询</li>
-            <li @click="doSpaceQuery">多边形查询</li>
-          </ul>
-        </div>
-      </li>
       <li @click="clean">清除</li>
     </ul>
   </div>
@@ -47,14 +38,6 @@ export default {
       this.$parent.$refs.macroArcgis.view.popup.visible = false;
       this.$parent.$refs.queryForm.list = [];
     },
-    doCircleQuery() {
-      // console.log("圆形查询");
-      this.$parent.$refs.macroArcgis.doCircleQuery();
-    },
-    doSpaceQuery() {
-      // console.log("多边形查询");
-      this.$parent.$refs.macroArcgis.doSpaceQuery();
-    }
   }
 };
 </script>
