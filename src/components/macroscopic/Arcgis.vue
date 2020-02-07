@@ -181,6 +181,7 @@ export default {
         context.view.zoom + (evt ? (evt.deltaY > 0 ? -1 : 1) : 0)
       );
       const shallPlate = zoom >= 12 ? true : false;
+      const shallPoint = zoom >= 14 ? true : false;
       context.map.findLayerById("vectorLayer")
         ? context.$parent.$refs.leftOptions.tabIndex == 2
           ? (context.map.findLayerById("vectorLayer").visible = shallPlate)
@@ -189,7 +190,7 @@ export default {
       ["m_qzbl", "m_mj", "m_gld_list", "m_gld"].map(item => {
         context.map.findLayerById(item)
           ? context.$parent.$refs.leftOptions.tabIndex == 2
-            ? (context.map.findLayerById(item).visible = shallPlate)
+            ? (context.map.findLayerById(item).visible = shallPoint)
             : (context.map.findLayerById(item).visible = true)
           : undefined;
       });
@@ -535,7 +536,7 @@ export default {
           }
           const feature = new _layers_(option);
           if (~["m_qzbl", "m_mj", "m_gld_list", "m_gld"].indexOf(_id_)) {
-            feature.visible = that.view.zoom >= 12 ? true : false;
+            feature.visible = that.view.zoom >= 14 ? true : false;
           }
           that.map.add(feature);
           resolve(true);
