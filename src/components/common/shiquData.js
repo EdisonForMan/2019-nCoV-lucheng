@@ -2,7 +2,8 @@
 export const SHI_QU_DATA = {
 	updateTime: '2020年02月06日24时', // 截止日期
 	zhishuData: {
-		fblTitle: '单位(%)',
+		// fblTitle: '单位(%)',
+		fblTitle: '',
 		fblDesc: '近15日确诊病例/常住人口 (截至2020年2月06日)',
 		fbl: [ // 二代及以上病例 近15日确诊病例/常住人口
 			{
@@ -62,7 +63,8 @@ export const SHI_QU_DATA = {
 				key: '瓯江口'
 			}		
 		],
-		mzblsTitle: '单位(%)',
+		// mzblsTitle: '单位(%)',
+		mzblsTitle: '',
 		mzblsDesc: '近15日全市非本地产生的二代以上病例占比 (截至2020年2月06日)',
 		mzbls: [ // 二代及以上病例 近15日全市非本地产生的二代以上病例占比
 			{value: 8.4, key: "鹿城"},
@@ -80,7 +82,8 @@ export const SHI_QU_DATA = {
 			{value: 10, key: "浙南集聚区"},
 			{value: 6.28, key: "瓯江口"}
 		],
-		fxlTitle: '单位(%)',
+		// fxlTitle: '单位(%)',
+		fxlTitle: '',
 		fxlDesc: '近15日新增非自行前往发热门诊病例/近15日地区新增确定病例数 (截至2020年2月06日)',
 		fxl: [ // 主动发现病例 近15日新增非自行前往发热门诊病例/近15日地区新增确定病例数
 			{value: 9.6, key: "鹿城"},
@@ -98,7 +101,8 @@ export const SHI_QU_DATA = {
 			{value: 0, key: "浙南集聚区"},
 			{value: 40, key: "瓯江口"}
 		],
-		qzblsTitle: '单位(起)',
+		// qzblsTitle: '单位(起)',
+		qzblsTitle: '',
 		qzblsDesc: '近15日新增聚集性疫情发生起数 (截至2020年2月06日)',
 		qzbls: [ // 聚集性疫情 近15日新增聚集性疫情发生起数
 			{value: 4, key: "鹿城"},
@@ -116,7 +120,8 @@ export const SHI_QU_DATA = {
 			{value: 10, key: "浙南集聚区"},
 			{value: 10, key: "瓯江口"}	
 		],
-		jublsTitle: '单位(例)',
+		// jublsTitle: '单位(例)',
+		jublsTitle: '',
 		jublsDesc: '近15日新增聚集性疫情发生病例数 (截至2020年2月06日)',
 		jubls: [ // 聚集性疫情 近15日新增聚集性疫情发生病例数
 			{value: 4, key: "鹿城"},
