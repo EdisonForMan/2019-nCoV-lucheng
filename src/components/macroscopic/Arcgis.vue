@@ -9,8 +9,8 @@
 import { addQZLinkFeature, mjChartUpdate } from "./frame/mjArcgis";
 import { linkCPFeatures } from "./frame/streetArcgis";
 import {
-  linkXQFeatures,
-  linkXQ_ENTERFeatures,
+  // linkXQFeatures,
+  // linkXQ_ENTERFeatures,
   xqDetail
 } from "./frame/xqArcgis";
 import { loadModules } from "esri-loader";
@@ -43,8 +43,8 @@ export default {
     const that = this;
     /**init map**/
     await this.createMap();
-    await this.addQh();
-/*    await this.addmbk();*/
+    // await this.addQh();
+    /*    await this.addmbk();*/
     await this.addChanyePlate();
     // await this.addHeat();
     this.$props.leftOptions &&
@@ -56,6 +56,10 @@ export default {
     this.jQueryBind();
     this.spaceQuery();
     this.polygonQuery();
+    //  判断是否隐藏
+    setTimeout(() => {
+      this.zoomFix(this);
+    }, 0);
   },
   watch: {
     leftOptions: {
@@ -143,10 +147,11 @@ export default {
             container: that.$props.id,
             spatialReference,
             map: that.map,
-            zoom: 13,
+            zoom: 10,
             center: [120.67819448808013, 28.039695289562555]
           });
           const layer = new VectorTileLayer({
+            id: "vectorLayer",
             url: IMAGELAYER
           });
           that.map.add(layer);
@@ -154,8 +159,29 @@ export default {
             view: that.view
           });
           that.map.on("click", function(evt) {});
+          that.view.on("mouse-wheel", evt => {
+            that.zoomFix(that, evt);
+          });
           resolve(true);
         });
+      });
+    },
+    zoomFix(context, evt) {
+      const zoom = parseInt(
+        context.view.zoom + (evt ? (evt.deltaY > 0 ? -1 : 1) : 0)
+      );
+      const shallPlate = zoom >= 12 ? true : false;
+      context.map.findLayerById("vectorLayer")
+        ? context.$parent.$refs.leftOptions.tabIndex == 2
+          ? (context.map.findLayerById("vectorLayer").visible = shallPlate)
+          : (context.map.findLayerById("vectorLayer").visible = true)
+        : undefined;
+      ["m_qzbl", "m_mj", "m_gld_list", "m_gld"].map(item => {
+        context.map.findLayerById(item)
+          ? context.$parent.$refs.leftOptions.tabIndex == 2
+            ? (context.map.findLayerById(item).visible = shallPlate)
+            : (context.map.findLayerById(item).visible = true)
+          : undefined;
       });
     },
     jQueryBind() {
@@ -167,37 +193,20 @@ export default {
         mjChartUpdate(context, val);
       });
       //  街道疫情分布
-      $("body").on("click", ".cp_btn", function() {
-        const val = $(this).attr("data-val");
-        linkCPFeatures(context, val);
-      });
+      // $("body").on("click", ".cp_btn", function() {
+      //   const val = $(this).attr("data-val");
+      //   linkCPFeatures(context, val);
+      // });
       //  小区疫情分布
-      $("body").on("click", ".xq_btn", function() {
-        const val = $(this).attr("data-val");
-        linkXQFeatures(context, val);
-      });
+      // $("body").on("click", ".xq_btn", function() {
+      //   const val = $(this).attr("data-val");
+      //   linkXQFeatures(context, val);
+      // });
       //  小区卡口分布
-      $("body").on("click", ".xq_enter_btn", function() {
-        const val = $(this).attr("data-val");
-        linkXQ_ENTERFeatures(context, val);
-      });
-    },
-    //  添加区划图
-    addQh() {
-      const that = this;
-      return new Promise((resolve, reject) => {
-        loadModules(["esri/layers/MapImageLayer"], OPTION).then(
-          ([MapImageLayer]) => {
-            const qh = new MapImageLayer({
-              url: QHMB,
-              id: "lcjjdt",
-              sublayers: [{ id: 3 }, { id: 0 }]
-            });
-            that.map.add(qh, 4);
-            resolve(true);
-          }
-        );
-      });
+      // $("body").on("click", ".xq_enter_btn", function() {
+      //   const val = $(this).attr("data-val");
+      //   linkXQ_ENTERFeatures(context, val);
+      // });
     },
     ybclick() {
       const that = this;
@@ -344,22 +353,6 @@ export default {
       };
       that.view.popup.visible = true;
     },
-    addmbk() {
-      const that = this;
-      return new Promise((resolve, reject) => {
-        loadModules(["esri/layers/MapImageLayer"], OPTION).then(
-          ([MapImageLayer]) => {
-            const mbk = new MapImageLayer({
-              url: QHMB,
-              id: "mbk",
-              sublayers: [{ id: 1 }]
-            });
-            that.map.add(mbk, 4);
-            resolve(true);
-          }
-        );
-      });
-    },
     //产业板块
     addChanyePlate() {
       const that = this;
@@ -369,7 +362,7 @@ export default {
             const chanyePlate = new MapImageLayer({
               url: XZJD,
               id: "chanyePlate",
-              opacity: 1
+              opacity: 0.7
             });
             //  优先级置顶
             that.map.add(chanyePlate, 2);
@@ -381,7 +374,7 @@ export default {
         );
       });
     },
-    romoveLayer() {
+    removeLayer() {
       this.map.findLayerById("chanyePlate").visible = !this.map.findLayerById(
         "chanyePlate"
       ).visible;
@@ -448,7 +441,7 @@ export default {
     },
     addFeatures(item, _id_) {
       // console.log(item);
-      const id = _id_.replace(/yt_/g, "");
+      const id = _id_.replace(/yt_/g, "").replace(/m_/g, "");
       const that = this;
       const { url } = item;
       const shallYT = this.$parent.$refs.leftOptions.tabIndex == 1;
@@ -585,7 +578,6 @@ export default {
           params.mapExtent = that.view.extent;
           identifyTask.execute(params).then(res => {
             // console.log(res);
-
             // if (res.results.length > 0) {
             //   const queryTask = new QueryTask({
             //     url: `http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/4`

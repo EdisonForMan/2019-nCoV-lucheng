@@ -27,7 +27,6 @@ export default new Router({
         path: "/control",
         name: "control",
         component: Control
-        
       },
       {
         path: "/monitor",
