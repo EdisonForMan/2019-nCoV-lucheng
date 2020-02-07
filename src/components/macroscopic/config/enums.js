@@ -22,7 +22,7 @@ export const leftOptions = [{
         ytd: "IdentityType like '%银泰%'",
         id: "mj",
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
-        sublayers: "1",
+        sublayers: "5",
         icon: "密接",
         check: false
     }, {

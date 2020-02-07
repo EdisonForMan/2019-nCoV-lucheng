@@ -183,41 +183,20 @@ const hbhwHash = [{
 }]
 
 const gldHash = [{
-    fieldName: "Name",
-    label: "集中隔离点名称"
+    fieldName: "XZQMC",
+    label: "行政区名称"
 },
 {
-    fieldName: "Country",
-    label: "街道"
+    fieldName: "xq",
+    label: "县区"
 }, {
-    fieldName: "Address",
-    label: "地点"
+    fieldName: "xzjd",
+    label: "行政街道"
 },
 {
-    fieldName: "Rooms",
-    label: "房间数"
-}, {
-    fieldName: "UseNumber",
-    label: "使用人数"
-}, {
-    fieldName: "Linkman",
-    label: "联络人"
-}, {
-    fieldName: "Phone",
-    label: "联络电话"
-}, {
-    fieldName: "RemainRooms",
-    label: "剩余可用房间数"
-}, {
-    fieldName: "HBtoLCNumber",
-    label: "其中湖北回鹿人数"
-}, {
-    fieldName: "TerminateIsolationNumber",
-    label: "解除隔离人数"
-}, {
-    fieldName: "TerminateIsolationNumber_HB ",
-    label: "解除隔离人数（湖北）"
-},
+    fieldName: "cm",
+    label: "村"
+}
 ]
 // 留观
 const lgHash = [{

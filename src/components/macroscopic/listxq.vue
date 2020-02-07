@@ -64,7 +64,7 @@
         <thead>
           <tr>
             <th>街道</th>
-            <th v-for="(citem,cindex) in sArr" :key="cindex">{{citem.Country}}</th>
+            <th v-for="(citem,cindex) in sArr" :key="cindex">{{citem.XZJD}}</th>
           </tr>
         </thead>
         <tbody>
@@ -132,7 +132,7 @@ export default {
       data.map(item => {
         const { attributes } = item;
         if (this.selectValue == "1") {
-          tag = attributes.Country;
+          tag = attributes.XZJD;
         } else {
           tag =
             attributes.name ||
@@ -168,7 +168,7 @@ export default {
         query.where = d.length ? d.join(" and ") : "1=1";
         query.returnGeometry = true;
         query.start = 0;
-        query.num = 20;
+        // query.num = 20;
         const { fields, features } = await queryTask.execute(query);
         const fieldAliases = {};
         fields.map(item => {
@@ -220,14 +220,17 @@ export default {
           });
         }
         this.data = list;
+        console.log(list);
         list.map(({ attributes }) => {
-          const { Country } = attributes;
-          if (!Country) return false;
-          if (!this.sObj[Country]) {
-            this.sObj[Country] = { Country, count: 0 };
+          const { XZJD } = attributes;
+          // console.log(Country);
+          if (!XZJD) return false;
+          if (!this.sObj[XZJD]) {
+            this.sObj[XZJD] = { XZJD, count: 0 };
           }
-          this.sObj[Country].count++;
+          this.sObj[XZJD].count++;
         });
+        console.log(this.sObj);
         for (let k in this.sObj) {
           this.sArr.push(this.sObj[k]);
         }
@@ -237,19 +240,20 @@ export default {
 
         // console.log("obj", this.sObj);
 
-        this.forceData = list.sort((a, b) => {
-          const count1 = this.sObj[a.attributes.Country].count;
-          const count2 = this.sObj[b.attributes.Country].count;
+        this.forceData = list;
+        // this.forceData = list.sort((a, b) => {
+        //   const count1 = this.sObj[a.attributes.XZJD].count;
+        //   const count2 = this.sObj[b.attributes.XZJD].count;
 
-          if (count1 == count2) {
-            return (
-              this.countryHash[b.attributes.Country] -
-              this.countryHash[a.attributes.Country]
-            );
-          }
+        //   if (count1 == count2) {
+        //     return (
+        //       this.countryHash[b.attributes.XZJD] -
+        //       this.countryHash[a.attributes.XZJD]
+        //     );
+        //   }
 
-          return count2 - count1;
-        });
+        //   return count2 - count1;
+        // });
 
         // console.log("data", this.forceData);
         this.keyData = Object.keys(this.forceData[0].fieldAliases).filter(k => {
@@ -415,6 +419,7 @@ export default {
       td {
         border-bottom: 1px solid #ccc;
         padding: 10px 5px;
+        min-width: 100px;
       }
     }
   }

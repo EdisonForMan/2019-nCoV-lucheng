@@ -113,6 +113,7 @@ export default {
       this.$parent.$refs.bqtj.getItem(oitem, item.label); //调用病例统计echart
     },
     ShowListxq(oitem, item) {
+      console.log(oitem);
       this.$parent.listShow = true;
       this.$parent.$refs.listxq.getItem(oitem, item.label);
     },
