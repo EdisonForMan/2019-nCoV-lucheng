@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <header :class="`app_header `" v-if="showHeader">
-      <div class="app_icon" style="width: 100%;text-align: center;">温州市疫情防控指挥地图</div>
-      <div class="app_toptab_position app_toptab_normal" style="padding-top: 60px;">
-        <ul class="app_toptab" v-if="false">
+      <div class="app_icon" style>温州市新冠肺炎防控阻击战作战地图</div>
+      <div class="app_toptab_position app_toptab_normal">
+        <ul class="app_toptab">
           <li
             v-for="(item,index) in toptab"
             :key="index"

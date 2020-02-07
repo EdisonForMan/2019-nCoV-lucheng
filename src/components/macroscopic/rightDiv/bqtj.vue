@@ -1,7 +1,7 @@
 <template>
   <div id="bltjDiv">
     <h3>
-      - 鹿城区病例统计 -
+      - 全市-各县市统计值 -
       <select id="select" @change="bqSelect($event)">
         <option value="qzbl">确诊病例</option>
         <option value="zzbl">疑似病例</option>
