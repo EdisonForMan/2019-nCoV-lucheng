@@ -11,14 +11,14 @@ const nCov_luchengData = {
         cure: 1,                //  治愈
         /** leftOptions  */
         lc: {
-            qzbl: 46,           //  确诊病例
+            qzbl: 396,           //  确诊病例
             zzbl: 17,           //  疑似病例 
             // yydc: 26,
             // sqdc: 7,
-            gld: 44,            //  隔离点
-            gld_list: 1350,     //  隔离点人员
+            gld: 95,            //  疫点
+            gld_list: 5274,     //  隔离点人员
             jjgl: 2314,         //  居家隔离人员
-            mj: 966,            //  密切接触者
+            mj: 7047,            //  密切接触者
             hbhw: 1305          //  湖北回鹿人员信令
         },
         lc_yt: {

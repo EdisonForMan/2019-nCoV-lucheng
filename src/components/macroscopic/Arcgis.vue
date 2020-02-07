@@ -8,7 +8,11 @@
 /* eslint-disable */
 import { addQZLinkFeature, mjChartUpdate } from "./frame/mjArcgis";
 import { linkCPFeatures } from "./frame/streetArcgis";
-import { linkXQFeatures } from "./frame/xqArcgis";
+import {
+  linkXQFeatures,
+  linkXQ_ENTERFeatures,
+  xqDetail
+} from "./frame/xqArcgis";
 import { loadModules } from "esri-loader";
 import {
   OPTION,
@@ -40,7 +44,7 @@ export default {
     /**init map**/
     await this.createMap();
     await this.addQh();
-    await this.addmbk();
+/*    await this.addmbk();*/
     await this.addChanyePlate();
     // await this.addHeat();
     this.$props.leftOptions &&
@@ -156,18 +160,26 @@ export default {
     },
     jQueryBind() {
       const context = this;
+      //  密切接触者详情
       $("body").on("click", ".mj_btn", function() {
         const val = $(this).attr("data-val");
         addQZLinkFeature(context, val);
         mjChartUpdate(context, val);
       });
+      //  街道疫情分布
       $("body").on("click", ".cp_btn", function() {
         const val = $(this).attr("data-val");
         linkCPFeatures(context, val);
       });
+      //  小区疫情分布
       $("body").on("click", ".xq_btn", function() {
         const val = $(this).attr("data-val");
         linkXQFeatures(context, val);
+      });
+      //  小区卡口分布
+      $("body").on("click", ".xq_enter_btn", function() {
+        const val = $(this).attr("data-val");
+        linkXQ_ENTERFeatures(context, val);
       });
     },
     //  添加区划图
@@ -232,7 +244,7 @@ export default {
         title: "",
         content: `${
           id == "xq"
-            ? this.xqDetail(false, attributes)
+            ? xqDetail(false, attributes)
             : `<table class="esri-widget__table" summary="属性和值列表"><tbody>
             ${Object.keys(attributes)
               .filter(k => {
@@ -451,7 +463,7 @@ export default {
             option.popupTemplate = {
               content: `${
                 id == "xq"
-                  ? this.xqDetail(true)
+                  ? xqDetail(true)
                   : `<table class="esri-widget__table" summary="属性和值列表"><tbody>
             ${_hash_
               .map(k => {
@@ -521,7 +533,7 @@ export default {
       const that = this;
 
       that.view.on("click", function(evt) {
-        console.log(evt);
+        // console.log(evt);
         that.cleanQuery();
         if (
           (that.map.findLayerById("wg") &&
@@ -529,7 +541,7 @@ export default {
           (that.map.findLayerById("xq") && that.map.findLayerById("xq").visible)
         ) {
           that.view.hitTest(evt).then(function(response) {
-            console.log(response);
+            // console.log(response);
 
             const spaceGraphicsLayer = that.map.findLayerById("spaceLayer");
 
@@ -572,7 +584,7 @@ export default {
           params.geometry = mapPoint;
           params.mapExtent = that.view.extent;
           identifyTask.execute(params).then(res => {
-            console.log(res);
+            // console.log(res);
 
             // if (res.results.length > 0) {
             //   const queryTask = new QueryTask({
@@ -846,84 +858,6 @@ export default {
           });
         });
       });
-    },
-    //  小区面详情字段
-    xqDetail(isOption, obj) {
-      const arr = [
-        [
-          "name@社区名称",
-          "所属街道@所属街道",
-          "地址范围@地址范围",
-          "联系电话@联系电话",
-          "社区负责人@社区负责人",
-          "小区数量@小区数量",
-          "总户数@总户数",
-          "总人数@总人数",
-        ],
-        "社区值班信息",
-        [
-          "name@社区名称",
-          "日期@日期",
-          "时间段@时间段",
-          "值班领导@值班领导",
-          "领导职务@领导职务",
-          "值班人员@值班人员",
-          "人员职务@人员职务"
-        ],
-        "小区基本信息",
-        [
-          "小区名称@小区名称",
-          "所属社区@所属社区",
-          "小区地址@小区地址",
-          "小区范围@小区范围",
-          "小区总户数@小区总户数",
-          "小区总栋数@小区总栋数",
-          "小区总人数@小区总人数",
-          "物业服务企业名称@物业服务企业名称",
-          "小区管理处负责人@小区管理处负责人",
-          "小区管理处联系方式@小区管理处联系方式",
-          "房管中心联系人@房管中心联系人",
-          "房管中心联系电话@房管中心联系电话",
-        ],
-        "小区物业信息",
-        [
-          "小区名称@小区名称",
-          "小区物业服务企业名称@小区物业服务企业名称",
-          "保安值班情况@保安值班情况",
-          "保安联系方式@保安联系方式",
-          "物业管理人员值班情况@物业管理人员值班情况",
-          "物业管理人员联系方式@物业管理人员联系方式",
-          "保安队长@保安队长",
-          "保安队长联系方式@保安队长联系方式",
-        ],
-        "小区卡口信息",
-        [
-          "小区名称@小区名称",
-          "卡口位置@卡口位置",
-          "体温计是否到位@体温计是否到位",
-          "口罩是否到位@口罩是否到位",
-          "雨棚是否到位@雨棚是否到位",
-          "进出口证是否制作@进出口证是否制作",
-        ]
-      ];
-      const ra = arr
-        .map(item => {
-          return item instanceof Array
-            ? `<table class="esri-widget__table"><tbody>${item
-                .map(o => {
-                  const [val, label] = o.split("@");
-                  return `<tr>
-                  <th class="esri-feature__field-header">${label}</th>
-                  <td class="esri-feature__field-data">${
-                    val ? (isOption ? `{${val}}` : obj[val] || "") : ""
-                  }</td>
-                </tr>`;
-                })
-                .join("")}</tbody></table>`
-            : `<p>${item}</p>`;
-        })
-        .join("");
-      return ra;
     }
   }
 };
