@@ -3,115 +3,109 @@
  * created by eds 2020/2/3
  */
 const nCov_luchengChart = {
-    "comment": "鹿城区病例统计",
+    "comment": "温州市病例统计",
     /** 确诊病例*/
-    "dataAge": [{
-            "value": 2,
-            "name": "滨江",
+    "dataAge": [
+        {
+            "value": 7,
+            "name": "鹿城",
             "itemStyle": {
                 "color": "#f41e1e"
             }
         },
         {
-            "value": 0,
-            "name": "山福",
+            "value": 2,
+            "name": "龙湾",
             "itemStyle": {
                 "color": "#4dc075"
             }
         },
         {
-            "value": 5,
-            "name": "藤桥",
+            "value": 4,
+            "name": "瓯海",
             "itemStyle": {
                 "color": "#b8d94c"
             }
         },
         {
             "value": 0,
-            "name": "仰义",
+            "name": "洞头",
             "itemStyle": {
                 "color": "#ffb738"
             }
         },
         {
-            "value": 5,
-            "name": "南郊",
+            "value": 7,
+            "name": "乐清",
             "itemStyle": {
                 "color": "#ab64cc"
             }
         },
         {
-            "value": 0,
-            "name": "丰门",
+            "value": 3,
+            "name": "瑞安",
             "itemStyle": {
                 "color": "#ffdd55"
             }
         },
         {
-            "value": 11,
-            "name": "南汇",
+            "value": 1,
+            "name": "永嘉",
             "itemStyle": {
                 "color": "#fe4d69"
             }
         },
         {
             "value": 1,
-            "name": "双屿",
+            "name": "文成",
             "itemStyle": {
                 "color": "#ffefa1"
             }
         },
         {
             "value": 4,
-            "name": "五马",
+            "name": "平阳",
             "itemStyle": {
                 "color": "#ff8e66"
             }
         },
         {
             "value": 3,
-            "name": "松台",
+            "name": "泰顺",
             "itemStyle": {
                 "color": "#ff936a"
             }
         },
         {
             "value": 0,
-            "name": "七都",
+            "name": "苍南",
             "itemStyle": {
                 "color": "#aa63cb"
             }
         },
         {
             "value": 2,
-            "name": "蒲鞋市",
+            "name": "龙港",
             "itemStyle": {
                 "color": "#bace53"
             }
         },
         {
             "value": 1,
-            "name": "广化",
+            "name": "浙南产业集聚区",
             "itemStyle": {
                 "color": "#f41e1e"
-            }
-        },
-        {
-            "value": 7,
-            "name": "大南",
-            "itemStyle": {
-                "color": "#fef5cc"
             }
         }
     ],
     "comment": "疑似病例",
     "ysblDate": [{
-            "value": 10,
-            "name": "滨江",
-            "itemStyle": {
-                "color": "#f41e1e"
-            }
-        },
+        "value": 10,
+        "name": "滨江",
+        "itemStyle": {
+            "color": "#f41e1e"
+        }
+    },
         {
             "value": 2,
             "name": "山福",
@@ -205,313 +199,293 @@ const nCov_luchengChart = {
         }
     ],
     "comment": "集中隔离点",
-    "jzglDate": [{
-            "value": 9,
-            "name": "滨江",
+    "jzglDate": [
+        {
+            "value": 7,
+            "name": "鹿城",
             "itemStyle": {
                 "color": "#f41e1e"
             }
         },
         {
             "value": 2,
-            "name": "山福",
+            "name": "龙湾",
             "itemStyle": {
                 "color": "#4dc075"
             }
         },
         {
             "value": 4,
-            "name": "藤桥",
+            "name": "瓯海",
             "itemStyle": {
                 "color": "#b8d94c"
             }
         },
         {
             "value": 0,
-            "name": "仰义",
+            "name": "洞头",
             "itemStyle": {
                 "color": "#ffb738"
             }
         },
         {
             "value": 7,
-            "name": "南郊",
+            "name": "乐清",
             "itemStyle": {
                 "color": "#ab64cc"
             }
         },
         {
             "value": 3,
-            "name": "丰门",
+            "name": "瑞安",
             "itemStyle": {
                 "color": "#ffdd55"
             }
         },
         {
             "value": 1,
-            "name": "南汇",
+            "name": "永嘉",
             "itemStyle": {
                 "color": "#fe4d69"
             }
         },
         {
             "value": 1,
-            "name": "双屿",
+            "name": "文成",
             "itemStyle": {
                 "color": "#ffefa1"
             }
         },
         {
             "value": 4,
-            "name": "五马",
+            "name": "平阳",
             "itemStyle": {
                 "color": "#ff8e66"
             }
         },
         {
             "value": 3,
-            "name": "松台",
+            "name": "泰顺",
             "itemStyle": {
                 "color": "#ff936a"
             }
         },
         {
             "value": 0,
-            "name": "七都",
+            "name": "苍南",
             "itemStyle": {
                 "color": "#aa63cb"
             }
         },
         {
             "value": 2,
-            "name": "蒲鞋市",
+            "name": "龙港",
             "itemStyle": {
                 "color": "#bace53"
             }
         },
         {
             "value": 1,
-            "name": "广化",
+            "name": "浙南产业集聚区",
             "itemStyle": {
                 "color": "#f41e1e"
-            }
-        },
-        {
-            "value": 7,
-            "name": "大南",
-            "itemStyle": {
-                "color": "#fef5cc"
             }
         }
     ],
     "comment": "集中隔离点人员名单",
     "glryDate": [{
-            "value": 8,
-            "name": "滨江",
-            "itemStyle": {
-                "color": "#f41e1e"
-            }
-        },
+        "value": 7,
+        "name": "鹿城",
+        "itemStyle": {
+            "color": "#f41e1e"
+        }
+    },
         {
             "value": 2,
-            "name": "山福",
+            "name": "龙湾",
             "itemStyle": {
                 "color": "#4dc075"
             }
         },
         {
             "value": 4,
-            "name": "藤桥",
+            "name": "瓯海",
             "itemStyle": {
                 "color": "#b8d94c"
             }
         },
         {
             "value": 0,
-            "name": "仰义",
+            "name": "洞头",
             "itemStyle": {
                 "color": "#ffb738"
             }
         },
         {
             "value": 7,
-            "name": "南郊",
+            "name": "乐清",
             "itemStyle": {
                 "color": "#ab64cc"
             }
         },
         {
             "value": 3,
-            "name": "丰门",
+            "name": "瑞安",
             "itemStyle": {
                 "color": "#ffdd55"
             }
         },
         {
             "value": 1,
-            "name": "南汇",
+            "name": "永嘉",
             "itemStyle": {
                 "color": "#fe4d69"
             }
         },
         {
             "value": 1,
-            "name": "双屿",
+            "name": "文成",
             "itemStyle": {
                 "color": "#ffefa1"
             }
         },
         {
             "value": 4,
-            "name": "五马",
+            "name": "平阳",
             "itemStyle": {
                 "color": "#ff8e66"
             }
         },
         {
             "value": 3,
-            "name": "松台",
+            "name": "泰顺",
             "itemStyle": {
                 "color": "#ff936a"
             }
         },
         {
             "value": 0,
-            "name": "七都",
+            "name": "苍南",
             "itemStyle": {
                 "color": "#aa63cb"
             }
         },
         {
             "value": 2,
-            "name": "蒲鞋市",
+            "name": "龙港",
             "itemStyle": {
                 "color": "#bace53"
             }
         },
         {
             "value": 1,
-            "name": "广化",
+            "name": "浙南产业集聚区",
             "itemStyle": {
                 "color": "#f41e1e"
-            }
-        },
-        {
-            "value": 7,
-            "name": "大南",
-            "itemStyle": {
-                "color": "#fef5cc"
             }
         }
     ],
     "comment": "密切接触者",
     "mqzDate": [{
-            "value": 7,
-            "name": "滨江",
-            "itemStyle": {
-                "color": "#f41e1e"
-            }
-        },
+        "value": 7,
+        "name": "鹿城",
+        "itemStyle": {
+            "color": "#f41e1e"
+        }
+    },
         {
             "value": 2,
-            "name": "山福",
+            "name": "龙湾",
             "itemStyle": {
                 "color": "#4dc075"
             }
         },
         {
             "value": 4,
-            "name": "藤桥",
+            "name": "瓯海",
             "itemStyle": {
                 "color": "#b8d94c"
             }
         },
         {
             "value": 0,
-            "name": "仰义",
+            "name": "洞头",
             "itemStyle": {
                 "color": "#ffb738"
             }
         },
         {
             "value": 7,
-            "name": "南郊",
+            "name": "乐清",
             "itemStyle": {
                 "color": "#ab64cc"
             }
         },
         {
             "value": 3,
-            "name": "丰门",
+            "name": "瑞安",
             "itemStyle": {
                 "color": "#ffdd55"
             }
         },
         {
             "value": 1,
-            "name": "南汇",
+            "name": "永嘉",
             "itemStyle": {
                 "color": "#fe4d69"
             }
         },
         {
             "value": 1,
-            "name": "双屿",
+            "name": "文成",
             "itemStyle": {
                 "color": "#ffefa1"
             }
         },
         {
             "value": 4,
-            "name": "五马",
+            "name": "平阳",
             "itemStyle": {
                 "color": "#ff8e66"
             }
         },
         {
             "value": 3,
-            "name": "松台",
+            "name": "泰顺",
             "itemStyle": {
                 "color": "#ff936a"
             }
         },
         {
             "value": 0,
-            "name": "七都",
+            "name": "苍南",
             "itemStyle": {
                 "color": "#aa63cb"
             }
         },
         {
             "value": 2,
-            "name": "蒲鞋市",
+            "name": "龙港",
             "itemStyle": {
                 "color": "#bace53"
             }
         },
         {
             "value": 1,
-            "name": "广化",
+            "name": "浙南产业集聚区",
             "itemStyle": {
                 "color": "#f41e1e"
-            }
-        },
-        {
-            "value": 7,
-            "name": "大南",
-            "itemStyle": {
-                "color": "#fef5cc"
             }
         }
     ],
     "comment": "居家隔离人员",
     "jjglDate": [{
-            "value": 6,
-            "name": "滨江",
-            "itemStyle": {
-                "color": "#f41e1e"
-            }
-        },
+        "value": 6,
+        "name": "滨江",
+        "itemStyle": {
+            "color": "#f41e1e"
+        }
+    },
         {
             "value": 2,
             "name": "山福",
@@ -606,12 +580,12 @@ const nCov_luchengChart = {
     ],
     "comment": "湖北回鹿人员",
     "hbhlDate": [{
-            "value": 5,
-            "name": "滨江",
-            "itemStyle": {
-                "color": "#f41e1e"
-            }
-        },
+        "value": 5,
+        "name": "滨江",
+        "itemStyle": {
+            "color": "#f41e1e"
+        }
+    },
         {
             "value": 2,
             "name": "山福",
@@ -719,12 +693,12 @@ const nCov_luchengChart = {
     ],
     "comment": "银泰病例统计",
     "YTdataAge": [{
-            "value": 0,
-            "name": "滨江",
-            "itemStyle": {
-                "color": "#f41e1e"
-            }
-        },
+        "value": 0,
+        "name": "滨江",
+        "itemStyle": {
+            "color": "#f41e1e"
+        }
+    },
         {
             "value": 0,
             "name": "山福",
