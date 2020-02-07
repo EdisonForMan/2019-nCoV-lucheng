@@ -177,6 +177,7 @@ export default {
         context.view.zoom + (evt ? (evt.deltaY > 0 ? -1 : 1) : 0)
       );
       const shallPoint = zoom >= 14 ? true : false;
+      let shallVector = true;
       ["m_qzbl", "m_mj", "m_gld_list", "m_gld"].map(item => {
         const tree = context.$util.clone(context.$parent.leftOptions);
         if (
@@ -184,7 +185,7 @@ export default {
             return k.id == item && k.check;
           }).length
         ) {
-          console.log(item, shallPoint);
+          shallVector = false;
           context.map.findLayerById(item)
             ? context.$parent.$refs.leftOptions.tabIndex == 2
               ? (context.map.findLayerById(item).visible = shallPoint)
@@ -192,6 +193,8 @@ export default {
             : undefined;
         }
       });
+      console.log(shallVector);
+      context.map.findLayerById("vectorLayer").visible = shallVector;
     },
     vectorFix(context) {
       const shallPlate = context.view.zoom >= 12 ? true : false;

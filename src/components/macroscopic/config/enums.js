@@ -19,7 +19,7 @@ export const leftOptions = [{
         check: false
     }, {
         name: `密切接触者 (${lc.mj}例)`,
-        ytd: "IdentityType like '%银泰%'",
+        // ytd: "IdentityType like '%银泰%'",
         id: "mj",
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
         sublayers: "5",
@@ -29,7 +29,7 @@ export const leftOptions = [{
         name: `集中隔离者 (${lc.gld_list}个)`,
         id: "gld_list",
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer",
-        sublayers: "2",
+        sublayers: "5",
         icon: "治愈",
         check: false
     }, {
@@ -37,7 +37,7 @@ export const leftOptions = [{
         id: "gld",
         url: "http://172.20.89.7:6082/arcgis/rest/services/wz_yiqing/fangkong_wz/MapServer",
         sublayers: "1",
-        icon: "治愈",
+        icon: "死亡",
         check: false
     }
     ]
@@ -240,14 +240,14 @@ export const leftOptions = [{
         id: "m_mj",
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
         sublayers: "1",
-        m_url: "http://172.20.89.7:6082/arcgis/rest/services/wz_yiqing/zxjd_mqjcz/MapServer",
+        m_url: "http://172.20.89.7:6082/arcgis/rest/services/wz_yiqing/xzjd_mqjcz/MapServer",
         icon: "密接",
         check: false
     }, {
         name: `集中隔离者 (${lc.gld_list}个)`,
         id: "m_gld_list",
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer",
-        sublayers: "2",
+        sublayers: "5",
         m_url: "http://172.20.89.7:6082/arcgis/rest/services/wz_yiqing/xzjd_jzgl/MapServer",
         icon: "治愈",
         check: false

@@ -1,10 +1,11 @@
 export const tipHash = {
-    qzbl: "illHash",
+    qzbl: "gzblHash",
     zzbl: "illHash",
     yydc: "illHash",
     sqdc: "illHash",
     jjgl: "jjglHash",
     gld: "gldHash",
+    gld_list: "gldListHash",
     lg: "lgHash",
     mj: "mjHash",
     ytyg: "ytygHash",
@@ -37,6 +38,94 @@ export const tipHash = {
     nj_xm_2: "njxmHash",
     chanyePlate: "chanyePlateHash"
 }
+
+const gldListHash = [{
+    fieldName: "Name",
+    label: "姓名"
+}, {
+    fieldName: "Country",
+    label: "街道"
+}, {
+    fieldName: "Sex",
+    label: "性别"
+}, {
+    fieldName: "Phone",
+    label: "联系电话"
+}, {
+    fieldName: "Code",
+    label: "身份证号"
+}, {
+    fieldName: "Address",
+    label: "家庭住址"
+}, {
+    fieldName: "IsolationPlace ",
+    label: "隔离点"
+}, {
+    fieldName: "RelatingCodes ",
+    label: "隔离点编码"
+}, {
+    fieldName: "Room",
+    label: "房间号"
+}, {
+    fieldName: "IsolationPlaceAddress ",
+    label: "隔离点地址"
+}, {
+    fieldName: "LinkMan",
+    label: "联络人"
+}, {
+    fieldName: "LinkManPhone",
+    label: "联络人电话"
+}, {
+    fieldName: "IsIsolated",
+    label: "是否解除隔离"
+}, {
+    fieldName: "IsolationTime",
+    label: "隔离时间"
+}]
+
+const gzblHash = [{
+    fieldName: "Name",
+    label: "患者姓名"
+}, {
+    fieldName: "Name",
+    label: "患者姓名"
+}, {
+    fieldName: "HEJZXM",
+    label: "患儿家长姓名"
+}, {
+    fieldName: "Code",
+    label: "有效证件号"
+}, {
+    fieldName: "Sex",
+    label: "性别"
+}, {
+    fieldName: "CSRQ",
+    label: "出生日期"
+}, {
+    fieldName: "Age",
+    label: "年龄"
+}, {
+    fieldName: "HZGZDW",
+    label: "患者工作单位"
+}, {
+    fieldName: "LXDH",
+    label: "联系电话"
+}, {
+    fieldName: "BRSY",
+    label: "病人属于"
+}, {
+    fieldName: "Address",
+    label: "现住详细地址"
+}, {
+    fieldName: "XZJD",
+    label: "乡镇街道"
+}, {
+    fieldName: "FBRQ",
+    label: "发病日期"
+}, {
+    fieldName: "ZDSJ",
+    label: "诊断时间"
+}]
 
 const chanyePlateHash = [{
     fieldName: "名称",
@@ -183,21 +272,30 @@ const hbhwHash = [{
 }]
 
 const gldHash = [{
-    fieldName: "XZQMC",
-    label: "行政区名称"
-},
-{
-    fieldName: "xq",
-    label: "县区"
+    fieldName: "BSM",
+    label: "BSM"
 }, {
-    fieldName: "xzjd",
-    label: "行政街道"
-},
-{
-    fieldName: "cm",
-    label: "村"
-}
-]
+    fieldName: "JSMJ",
+    label: "JSMJ"
+}, {
+    fieldName: "JSMJ",
+    label: "JSMJ"
+}, {
+    fieldName: "KZMJ",
+    label: "KZMJ"
+}, {
+    fieldName: "MSSM",
+    label: "MSSM"
+}, {
+    fieldName: "XZQDM",
+    label: "XZQDM"
+}, {
+    fieldName: "XZQMC",
+    label: "XZQMC"
+}, {
+    fieldName: "YSDM",
+    label: "YSDM"
+}]
 // 留观
 const lgHash = [{
     fieldName: "Name",
@@ -567,6 +665,7 @@ const njxmHash = [{
 
 export const Hash = {
     hospitalHash,
+    gzblHash,
     illHash,
     cultureHash,
     marketHash,
@@ -580,6 +679,7 @@ export const Hash = {
     jjglHash,
     hbhwHash,
     gldHash,
+    gldListHash,
     lgHash,
     mjHash,
     wgHash,
