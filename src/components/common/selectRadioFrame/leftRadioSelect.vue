@@ -1,54 +1,45 @@
 <template>
-  <div class="leftMultiSelect">
+  <div class="leftRadioSelect">
     <div class="topic">
-      <header>
-        <span :class="{active:tabIndex == 1}" @click="()=>{tabIndex = 1}">全区疫情</span>
-        <i>/</i>
-        <span :class="{active:tabIndex == 2}" @click="()=>{tabIndex = 2}">疫情统计</span>
-      </header>
       <div class="selectFrame no_select">
         <div v-for="(item,index) in this.tree" :key="index">
-          <span @click="toggleTree(item.label,index)" v-if="item.tabIndex == tabIndex">
-            {{item.label}}
-            <input
-              v-if="!item.disabled"
-              type="checkbox"
-              v-model="item.check"
-              @change="changeBox(item.check,index)"
-              @click="stop($event)"
-            />
-            <i :class="`iconfont ${item.show?`icon-angle-double-up`:`icon-angle-double-down`}`"></i>
+          <span
+            @click="toggleTree(item.label,index)"
+            v-if="!((tabIndex==2&&item.sflabel==-1)||(tabIndex!=2&&item.label==-1))"
+          >
+            {{tabIndex==2?item.sflabel:item.label}}
+            <i
+              :class="`iconfont ${item.show?`icon-angle-double-up`:`icon-angle-double-down`}`"
+            ></i>
           </span>
-          <ul v-show="item.show" v-if="item.tabIndex == tabIndex">
-            <li v-for="(oitem,oindex) in item.children" :key="oindex">
+          <ul
+            v-show="item.show"
+            v-if="!((tabIndex==2&&item.sflabel==-1)||(tabIndex!=2&&item.label==-1))"
+          >
+            <li
+              v-for="(oitem,oindex) in item.children"
+              :key="oindex"
+              v-if="!((tabIndex==1 && oitem.ytname == -1) || (tabIndex!=1 && oitem.name == -1))"
+            >
               <input
                 type="checkbox"
+                v-if="!item.disabled"
                 v-model="oitem.check"
                 @change="changeTree(oitem)"
                 @click="ShowResult(oitem,item)"
               />
               <p
-                @click="ShowResult(oitem,item),changeTree(oitem)"
+                @click="ShowResult(oitem,item)"
               >{{tabIndex==1?(oitem.ytname||oitem.name) : oitem.name}}</p>
               <ToggleSwitch
                 v-if="oitem.id == 'jjgl' || oitem.id == 'hbhw'"
                 @change="change(oitem.id)"
               />
-              <span
-                id="xq"
-                v-if="item.label=='疫情分布' || item.label == '疫情统计'"
-                @click="ShowListxq(oitem,item)"
-              >详情</span>
+              <span id="xq" v-if="item.label=='疫情分布'" @click="ShowListxq(oitem,item)">详情</span>
             </li>
           </ul>
         </div>
       </div>
-    </div>
-    <div class="blueBorder">
-      <p></p>
-      <p></p>
-      <p></p>
-      <p></p>
     </div>
     <div class="mapOption"></div>
   </div>
@@ -61,14 +52,14 @@ import { WRT_config } from "@/components/common/Tmap";
 import util from "../../macroscopic/util";
 const { server } = WRT_config;
 export default {
-  name: "leftMultiSelect",
+  name: "leftRadioSelect",
   data() {
     return {
       icon_show: true,
       tree: [],
       items: {},
       server,
-      tabIndex: 2,
+      tabIndex: 0,
       URL: null,
       check1: false,
       check2: false
@@ -107,7 +98,7 @@ export default {
     },
     ShowResult(oitem, item) {
       if (!this.$parent || !oitem.id || oitem.isImg) return;
-      // this.$parent.$refs.table.getItem(oitem, item.label);
+      this.$parent.$refs.table.getItem(oitem, item.label);
       this.$parent.$refs.sbxq.getItem(oitem, item.label);
       // console.log(oitem, item.label);
       this.$parent.$refs.bqtj.getItem(oitem, item.label); //调用病例统计echart
@@ -118,23 +109,14 @@ export default {
     },
     intercept({ id, check }) {
       const _tree = this.$util.clone(this.tree);
-      for (let i = 0; i < _tree.length; i++) {
-        let shall = true;
-        _tree[i].children.length
-          ? _tree[i].children.map(item => {
-              if (!item.check) {
-                shall = false;
-              }
-            })
-          : (shall = false);
-        _tree[i].check = shall;
-        if (_tree[i].disabled) {
-          for (let j = 0; j < _tree[i].children.length; j++) {
-            check &&
-              (_tree[i].children[j].check = _tree[i].children[j].id == id);
-          }
+      if (check) {
+        console.log(_tree[0].children)
+        for (let i = 0; i < _tree[0].children.length; i++) {
+          console.log(_tree[0].children[i])
+          _tree[0].children[i].check = _tree[0].children[i].id == id;
         }
       }
+      console.log(_tree);
       this.tree = _tree;
       this.$parent.leftOptions = this.tree;
     },
@@ -154,7 +136,6 @@ export default {
       this.$parent.$refs.macroArcgis.removeHeat();
       // 清除空间查询
       this.$parent.$refs.macroArcgis.cleanQuery();
-      this.$parent.$refs.macroArcgis.zoomFix(this.$parent.$refs.macroArcgis);
     },
     change(id) {
       const that = this;
@@ -194,7 +175,7 @@ export default {
 </script>
 <style lang="less">
 // @import url("../css/style.less");
-.leftMultiSelect {
+.leftRadioSelect {
   height: 100%;
   border-right: 1px solid;
   background: linear-gradient(
