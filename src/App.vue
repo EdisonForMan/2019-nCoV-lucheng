@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <header :class="`app_header `" v-if="showHeader">
-      <div class="app_icon" style="width: 100%;text-align: center;">温州市新冠肺炎防控阻击战作战地图</div>
+      <div class="app_icon" style="width: 100%;text-align: center;">温州市疫情防控指挥地图</div>
       <div class="app_toptab_position app_toptab_normal" style="padding-top: 60px;">
         <ul class="app_toptab" v-if="false">
           <li
@@ -11,7 +11,7 @@
             @click="$goRoute(item.route),selected(index)"
           >{{item.label}}</li>
         </ul>
-        <p>截至日期：{{$window.nCov_luchengData.macroscopic.updateTime}}</p>
+        <p style="color: #23c9f3;font-size: 18px;font-weight: bolder;">截至{{SHI_QU_DATA.updateTime}}</p>
         <p style="position: absolute;right: 15px;top: 15px;font-size: 13px;text-align: right;">
             温州市大数据发展管理局 <br>
             温州市卫生健康委员会 <br>
@@ -32,10 +32,12 @@
 import router from "@/router";
 import { OPTION, GET_ARCGIS_TOKEN, WRT_config } from "./components/common/Tmap";
 import { fixMenuList } from "./components/common/user/menuHash";
+import {SHI_QU_DATA} from './components/common/shiquData.js';
 export default {
   name: "app",
   data() {
     return {
+      SHI_QU_DATA,
       toptab: [
         { label: "宏观管控", route: "control" },
         { label: "防疫布控", route: "macroscopic" },
