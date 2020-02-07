@@ -275,26 +275,17 @@ const gldHash = [{
     fieldName: "BSM",
     label: "BSM"
 }, {
-    fieldName: "JSMJ",
-    label: "JSMJ"
+    fieldName: "xq",
+    label: "县区"
 }, {
-    fieldName: "JSMJ",
-    label: "JSMJ"
+    fieldName: "xzjd",
+    label: "行政街道"
 }, {
-    fieldName: "KZMJ",
-    label: "KZMJ"
+    fieldName: "cm",
+    label: "村"
 }, {
-    fieldName: "MSSM",
-    label: "MSSM"
-}, {
-    fieldName: "XZQDM",
-    label: "XZQDM"
-}, {
-    fieldName: "XZQMC",
-    label: "XZQMC"
-}, {
-    fieldName: "YSDM",
-    label: "YSDM"
+    fieldName: "Freq",
+    label: "发生确诊数"
 }]
 // 留观
 const lgHash = [{
