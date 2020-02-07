@@ -2,11 +2,13 @@
   <div class="leftMultiSelect">
     <div class="topic">
       <header>
-        <span :class="{active:tabIndex == 0}" @click="()=>{tabIndex = 0}">全区疫情</span>
+        <span :class="{active:tabIndex == 0}" @click="()=>{tabIndex = 0}">全区</span>
         <i>/</i>
-        <span :class="{active:tabIndex == 1}" @click="()=>{tabIndex = 1}">银泰疫情</span>
+        <span :class="{active:tabIndex == 1}" @click="()=>{tabIndex = 1}">银泰</span>
         <i>/</i>
-        <span :class="{active:tabIndex == 2}" @click="()=>{tabIndex = 2}">三返专题</span>
+        <span :class="{active:tabIndex == 2}" @click="()=>{tabIndex = 2}">三返</span>
+        <i>/</i>
+        <span :class="{active:tabIndex == 3}" @click="()=>{tabIndex = 3}">国际大酒店</span>
         <!-- <span class="stateTipHeaderBar"></span> -->
       </header>
       <div class="selectFrame no_select">
@@ -48,7 +50,11 @@
                 v-if="oitem.id == 'jjgl' || oitem.id == 'hbhw'"
                 @change="change(oitem.id)"
               />
-              <span id="xq" v-if="item.label=='疫情分布'" @click="ShowListxq(oitem,item)">详情</span>
+              <span
+                id="xq"
+                v-if="item.label=='疫情分布' || oitem.id == 'xq'"
+                @click="ShowListxq(oitem,item)"
+              >详情</span>
             </li>
           </ul>
         </div>
@@ -163,6 +169,8 @@ export default {
       this.$parent.$refs.macroArcgis.removeHeat();
       // 清除空间查询
       this.$parent.$refs.macroArcgis.cleanQuery();
+      // 关闭密接面板
+      this.$parent.$refs.mjChart.list = [];
     },
     change(id) {
       const that = this;

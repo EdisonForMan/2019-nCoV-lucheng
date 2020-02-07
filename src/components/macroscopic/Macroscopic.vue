@@ -4,26 +4,29 @@
       <commonArcgis id="macroArcgis" ref="macroArcgis" :leftOptions="leftOptions" />
     </div>
     <div class="Com_container" style="z-index: 10;">
-      <div :class="`leftside animated ${icon_show_left?`slideOutLeft`:`slideInLeft`}  `">
+      <div :class="`leftside animated ${icon_show_left?`slideOutLeft`:`slideInLeft`}`">
         <leftMultiSelect :leftOptions="leftOptions" ref="leftOptions" />
-        <span @click="()=>{icon_show_left=!icon_show_left}" class="hidden_button"></span>
+        <span @click="toggle" class="hidden_button"></span>
       </div>
-      <div id="fy-rightDiv">
-        <bqtj ref="bqtj" />
-        <ylzy />
-        <sbDate ref="table" />
+      <div :class="`rightside animated ${icon_show_right?`slideOutRight`:`slideInRight`}`">
+        <div id="rightFrame">
+          <bqtj ref="bqtj" />
+          <ylzy />
+          <sbDate ref="table" />
+        </div>
+        <span @click="()=>{icon_show_right=!icon_show_right}" class="hidden_right_button"></span>
       </div>
     </div>
-    <xzDate />
+    <xzDate :style="{left:moveLeft + 'px'}" />
     <bottomBtn />
     <topDate />
     <popOpen />
     <!-- //弹出框 -->
     <sbxq ref="sbxq" v-show="xqShow" />
     <listxq ref="listxq" v-show="listShow" />
-    <mjChart ref="mjChart" />
-    <streetFrame ref="cpFrame" />
-    <queryForm ref="queryForm" />
+    <mjChart ref="mjChart" :style="{left:moveLeft + 'px'}" />
+    <streetFrame ref="cpFrame" :style="{left:moveLeft + 'px'}" />
+    <queryForm ref="queryForm" :style="{left:moveLeft + 'px'}" />
   </div>
 </template>
 
@@ -58,9 +61,11 @@ export default {
   data() {
     return {
       icon_show_left: false,
+      icon_show_right: false,
       leftOptions,
       xqShow: false,
-      listShow: false
+      listShow: false,
+      moveLeft: "360"
     };
   },
   components: {
@@ -81,7 +86,16 @@ export default {
   },
   created() {},
   mounted() {},
-  methods: {}
+  methods: {
+    toggle() {
+      this.icon_show_left = !this.icon_show_left;
+      this.moveLeft = !this.icon_show_left ? "360" : "20";
+    },
+    leftHidden() {
+      this.icon_show_left = true;
+      this.moveLeft = "20";
+    }
+  }
 };
 </script>
  <style scoped lang="less">

@@ -1,7 +1,7 @@
 <template>
   <div id="sbxqDateDiv">
     <div class="head">
-      <span>{{ title }} 详情列表</span>
+      <span>[ {{ title!=-1?title:"银泰员工" }} ] - 详情列表</span>
       <a v-on:click="sbclose">×</a>
     </div>
 
@@ -167,7 +167,10 @@ export default {
               "Note",
               "RelatingCodes",
               "Shape.STArea()",
-              "Shape.STLength()"
+              "Shape.STLength()",
+              "pd",
+              "小区面名称",
+              "小区面唯一码"
             ].indexOf(k) < 0
           );
         });

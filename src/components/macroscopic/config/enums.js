@@ -55,7 +55,7 @@ export const leftOptions = [{
     //     check: false
     // }, 
     {
-        name: `集中隔离点 (${lc.gld}个)`,
+        name: `集中医学观察点 (${lc.gld}个)`,
         id: "gld",
         ytname: `集中隔离点 (${lc_yt.gld}个)`,
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer",
@@ -63,7 +63,7 @@ export const leftOptions = [{
         icon: "治愈",
         check: false
     }, {
-        name: `集中隔离点人员名单 (${lc.gld_list}个)`,
+        name: `集中医学观察点人员名单 (${lc.gld_list}个)`,
         id: "gld_list",
         ytname: `集中隔离点人员名单 (${lc_yt.gld_list}个)`,
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer",
@@ -80,7 +80,8 @@ export const leftOptions = [{
         icon: "密接",
         check: false
     }, {
-        name: `居家隔离人员 (${lc.jjgl}例)`,
+        // name: `居家隔离人员 (${lc.jjgl}例)`,
+        name: `居家隔离人员 ( 0 例)`,
         id: "jjgl",
         ytname: -1,
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",

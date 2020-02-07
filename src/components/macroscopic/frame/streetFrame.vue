@@ -1,7 +1,7 @@
 <template>
 <div class="cpFrame" v-if="obj && obj.qzbl">
   <head>
-    <span>{{title}}-疫情信息</span>
+    <span>[ {{ title }} ] - 疫情信息</span>
     <span id="close" @click="()=>{obj = undefined}">x</span>
   </head>
   <div>
@@ -36,6 +36,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 export default {
   name: "cpFrame",
   data() {
@@ -47,11 +48,11 @@ export default {
   mounted() {},
   methods: {
     goLocation(item) {
-      console.log(item.geometry);
+      // console.log(item.geometry);
       item.geometry && this.$parent.$refs.macroArcgis.goloaction(item);
     },
     doChart({ qzbl, zzbl, mj }) {
-      console.log({ qzbl, zzbl, mj });
+      // console.log({ qzbl, zzbl, mj });
     }
   },
   watch: {
@@ -68,28 +69,36 @@ export default {
 .cpFrame {
   position: absolute;
   width: 400px;
-  height: 640px;
+  height: 720px;
   background: #24386a;
   border: 1px solid #04ecff;
+  border-radius: 6px;
   z-index: 20;
+  top: 18%;
   margin: auto;
-  left: 360px;
-  bottom: 280px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  transition: all 1s;
+
   head {
     display: block;
     box-sizing: border-box;
     padding: 5px;
-    height: 40px;
+    height: 45px;
+    font-size: 20px;
+
+    .title {
+      margin-left: 17px;
+    }
   }
   #close {
     float: right;
-    padding: 5px;
+    padding: 0px 5px;
     font-size: 17px;
     cursor: pointer;
   }
+
   > div {
     flex: 1;
     .list {

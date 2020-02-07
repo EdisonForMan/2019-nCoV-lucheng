@@ -31,7 +31,7 @@
         >{{++index}}.{{item.attributes.Name?item.attributes.Name.slice(0,1):''}}**,{{item.attributes.Address}}</span>
         <span
           v-if="item.id == 'ytyg'"
-        >{{++index}}.{{item.attributes.姓名?item.attributes.姓名.slice(0,1):''}}**,{{item.attributes.通讯地址}}</span>
+        >{{++index}}.{{item.attributes.Name?item.attributes.Name.slice(0,1):''}}**,{{item.attributes.Address}}</span>
         <span
           v-if="item.id == 'hbhw'"
         >{{++index}}.{{item.attributes.Name?item.attributes.Name.slice(0,1):''}}**,{{item.attributes.Address}}</span>
@@ -258,46 +258,52 @@ export default {
 };
 </script>
 
-<style>
-#fy-rightDiv #sbDateDiv {
+<style lang="less" scoped>
+#sbDateDiv {
   width: 100%;
   height: 32%;
   background-color: rgba(5, 26, 79, 0.5);
   border: 1px solid #035acd;
   overflow-y: scroll;
   position: relative;
+
+  input::-webkit-input-placeholder {
+    color: #fff;
+  }
+
+  h3 {
+    color: #23c9f3;
+    margin-top: 10px;
+  }
+
+  ul {
+    list-style: none;
+    width: 96%;
+    margin-left: 2%;
+    margin-top: 3%;
+
+    li {
+      padding: 10px 0;
+      background: #122960;
+      text-align: left;
+      padding-left: 15px;
+      overflow: hidden; /*超出部分隐藏*/
+      white-space: nowrap; /*不换行*/
+      text-overflow: ellipsis; /*超出部分文字以...显示*/
+    }
+
+    li:nth-child(even) {
+      background: #081942;
+    }
+
+    li:hover {
+      cursor: pointer;
+      background-color: #0b5cc7;
+    }
+  }
 }
-#fy-rightDiv #sbDateDiv::-webkit-scrollbar {
+
+#sbDateDiv::-webkit-scrollbar {
   display: none;
-}
-#fy-rightDiv #sbDateDiv h3 {
-  color: #23c9f3;
-  margin-top: 10px;
-}
-#fy-rightDiv #sbDateDiv ul {
-  list-style: none;
-  width: 96%;
-  margin-left: 2%;
-  margin-top: 3%;
-}
-#fy-rightDiv #sbDateDiv ul li {
-  padding: 10px 0;
-  background: #122960;
-  text-align: left;
-  padding-left: 15px;
-  overflow: hidden; /*超出部分隐藏*/
-  white-space: nowrap; /*不换行*/
-  text-overflow: ellipsis; /*超出部分文字以...显示*/
-}
-#fy-rightDiv #sbDateDiv ul li:nth-child(even) {
-  background: #081942;
-}
-#fy-rightDiv #sbDateDiv ul li:hover {
-  cursor: pointer;
-  background-color: #0b5cc7;
-}
-input::-webkit-input-placeholder {
-  /* placeholder颜色  */
-  color: #fff;
 }
 </style>

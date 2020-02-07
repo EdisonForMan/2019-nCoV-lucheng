@@ -5,8 +5,8 @@
       <select id="select" @change="bqSelect($event)">
         <option value="qzbl">确诊病例</option>
         <option value="zzbl">疑似病例</option>
-        <option value="gld">集中隔离点</option>
-        <option value="gld_list">集中隔离点人员名单</option>
+        <option value="gld">集中医学观察点</option>
+        <option value="gld_list">集中医学观察点人员名单</option>
         <option value="mj">密切接触者</option>
         <option value="jjgl">居家隔离人员</option>
         <option value="hbhw">湖北回鹿人员信令</option>
@@ -278,31 +278,29 @@ export default {
 };
 </script>
 
-<style>
-#fy-rightDiv #bltjDiv {
+<style lang="less" scoped>
+#bltjDiv {
   width: 100%;
   height: 34%;
   background-color: rgba(5, 26, 79, 0.5);
   border: 1px solid #035acd;
-  margin-bottom: 2%;
-}
-#fy-rightDiv #bltjDiv h3 {
-  color: #23c9f3;
-  margin-top: 10px;
-}
-#fy-rightDiv #bltjDiv #ylzyChart {
-  width: 100%;
-  height: 60%;
-}
-#fy-rightDiv #bltjDiv h3 select {
-  background-color: #0c7cd2;
-  border: none;
-  color: #fff;
-  padding: 7px 7px;
-  margin-left: 5px;
-}
-#fy-rightDiv #bltjDiv #bqtjChart {
-  width: 100%;
-  height: 85%;
+
+  h3 {
+    color: #23c9f3;
+    margin-top: 10px;
+
+    select {
+      background-color: #0c7cd2;
+      border: none;
+      color: #fff;
+      padding: 7px 7px;
+      margin-left: 5px;
+    }
+  }
+
+  #bqtjChart {
+    width: 100%;
+    height: 85%;
+  }
 }
 </style>

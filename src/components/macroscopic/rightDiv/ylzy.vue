@@ -1,17 +1,11 @@
 <template>
   <div id="ylzyDiv">
     <h3>
-      <a
-        v-on:click="popShowFun(1)"
-        style="font-size: 14px;color: #fff;cursor: pointer;position: absolute;left: 10px;"
-      >隔离人员详情</a>
-      - 各街镇集中隔离点空闲房间数 -
-      <a
-        v-on:click="popShowFun(2)"
-        style="font-size: 14px;color: #fff;cursor: pointer;position: absolute;right: 10px;"
-      >隔离点详情</a>
+      <a v-on:click="popShowFun(1)" style="left: 10px;">观察人员详情</a>
+      各街镇集中医学观察点空闲房间数
+      <a v-on:click="popShowFun(2)" style="right: 10px;">观察点详情</a>
     </h3>
-    <div class="ylzySelect" style="display:none">
+    <div class="ylzySelect">
       <select name id>
         <option value>鹿城区</option>
         <option value>龙湾区</option>
@@ -25,7 +19,7 @@
         <option value>平阳县</option>
       </select>
       <select name id>
-        <option value>集中隔离点</option>
+        <option value>集中医学观察点</option>
         <option value>发热门诊机构</option>
       </select>
       <select name id>
@@ -162,32 +156,43 @@ export default {
 };
 </script>
 
-<style>
-#fy-rightDiv #ylzyDiv {
+<style lang="less" scoped>
+#ylzyDiv {
   width: 100%;
   height: 30%;
   background-color: rgba(5, 26, 79, 0.5);
   border: 1px solid #035acd;
-  margin-bottom: 2%;
-}
-#fy-rightDiv #ylzyDiv h3 {
-  color: #23c9f3;
-  margin-top: 10px;
-}
-#fy-rightDiv #ylzyDiv #ylzyChart {
-  width: 100%;
-  height: 83%;
-}
-#fy-rightDiv .ylzySelect {
-  width: 100%;
-  height: 35px;
-  margin-top: 15px;
-}
-#fy-rightDiv .ylzySelect select {
-  background-color: #0c7cd2;
-  border: none;
-  color: #fff;
-  padding: 7px 7px;
-  margin-left: 5px;
+
+  h3 {
+    color: #23c9f3;
+    margin-top: 10px;
+
+    a {
+      font-size: 14px;
+      color: #fff;
+      cursor: pointer;
+      position: absolute;
+    }
+  }
+
+  .ylzySelect {
+    width: 100%;
+    height: 35px;
+    margin-top: 15px;
+    display: none;
+
+    select {
+      background-color: #0c7cd2;
+      border: none;
+      color: #fff;
+      padding: 7px 7px;
+      margin-left: 5px;
+    }
+  }
+
+  #ylzyChart {
+    width: 100%;
+    height: 83%;
+  }
 }
 </style>

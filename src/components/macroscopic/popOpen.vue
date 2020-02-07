@@ -1,7 +1,7 @@
 <template>
   <div id="popDiv" v-show="popShow">
     <div class="head">
-      <span>{{ type==1 ? "隔离人员" : "隔离点" }} 详情列表</span>
+      <span>[ {{ type==1 ? "集中医学观察点人员" : "集中医学观察点" }} ] - 详情列表</span>
       <a v-on:click="popClose">×</a>
     </div>
 

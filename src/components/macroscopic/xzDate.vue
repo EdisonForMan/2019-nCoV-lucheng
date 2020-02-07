@@ -1,17 +1,10 @@
 <template>
-  <div>
-    <div
-      style="position: absolute;bottom: 2%;left: 360px;background-color: #1d449f;border: 1px solid #04f2ff;padding: 5px 12px;cursor: pointer;"
-      v-show="btnShow"
-      v-on:click="btnclose"
-    >疫情须知</div>
-    <div id="xzDateDiv" v-show="isShow">
+  <div id="xzDateDiv">
+    <div id="xzDateTag" v-show="btnShow" v-on:click="btnclose">疫情须知</div>
+    <div id="xzDateMain" v-show="isShow">
       <h3>
         - 疫情须知 -
-        <a
-          style="float: right;font-size: 40px;padding: -3px;margin-top: -7px;margin-right: 5px;cursor: pointer;"
-          v-on:click="closeDiv"
-        >×</a>
+        <a v-on:click="closeDiv">×</a>
       </h3>
       <ul>
         <li>
@@ -58,32 +51,55 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less" scoped>
 #xzDateDiv {
-  width: 400px;
-  height: 200px;
   position: absolute;
   bottom: 2%;
-  left: 360px;
-  background-color: #1d449f;
-  border: 1px solid #04f2ff;
-  box-sizing: border-box;
-}
-#xzDateDiv h3 {
-  padding: 5px 0;
-  border-bottom: 1px solid #0375f9;
-  color: #00dfdb;
-}
-#xzDateDiv li {
-  text-align: left;
-  width: 95%;
-  margin: auto;
-  margin-left: 22px;
-  margin-bottom: 3px;
-  color: #44b9ff;
-}
-#xzDateDiv li span {
-  color: #03fff4;
-  font-weight: bold;
+  transition: all 1s;
+  z-index: 50;
+
+  #xzDateTag {
+    background-color: #1d449f;
+    border: 1px solid #04f2ff;
+    padding: 5px 12px;
+    cursor: pointer;
+  }
+
+  #xzDateMain {
+    width: 400px;
+    height: 200px;
+    background-color: #1d449f;
+    border: 1px solid #04f2ff;
+    box-sizing: border-box;
+
+    h3 {
+      padding: 5px 0;
+      border-bottom: 1px solid #0375f9;
+      color: #00dfdb;
+
+      a {
+        float: right;
+        font-size: 40px;
+        padding: -3px;
+        margin-top: -7px;
+        margin-right: 5px;
+        cursor: pointer;
+      }
+    }
+
+    li {
+      text-align: left;
+      width: 95%;
+      margin: auto;
+      margin-left: 22px;
+      margin-bottom: 3px;
+      color: #44b9ff;
+
+      span {
+        color: #03fff4;
+        font-weight: bold;
+      }
+    }
+  }
 }
 </style>

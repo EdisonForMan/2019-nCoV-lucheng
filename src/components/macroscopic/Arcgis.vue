@@ -153,7 +153,7 @@ export default {
           that.legend = new Legend({
             view: that.view
           });
-          that.map.on("click", function(evt) {});
+          that.view.on("click", function(evt) {});
           resolve(true);
         });
       });
@@ -165,21 +165,26 @@ export default {
         const val = $(this).attr("data-val");
         addQZLinkFeature(context, val);
         mjChartUpdate(context, val);
+        context.$parent.leftHidden();
       });
       //  街道疫情分布
       $("body").on("click", ".cp_btn", function() {
         const val = $(this).attr("data-val");
         linkCPFeatures(context, val);
+        context.$parent.leftHidden();
       });
       //  小区疫情分布
       $("body").on("click", ".xq_btn", function() {
         const val = $(this).attr("data-val");
         linkXQFeatures(context, val);
+        context.$parent.leftHidden();
+        context.$parent.$refs.queryForm.list = [];
       });
       //  小区卡口分布
       $("body").on("click", ".xq_enter_btn", function() {
         const val = $(this).attr("data-val");
         linkXQ_ENTERFeatures(context, val);
+        context.$parent.leftHidden();
       });
     },
     //  添加区划图
@@ -251,6 +256,7 @@ export default {
                 return (
                   [
                     "OBJECTID",
+                    "OBJECTID_1",
                     "FEATUREGUID",
                     "Bid",
                     "Question",
@@ -386,6 +392,7 @@ export default {
         "chanyePlate"
       ).visible;
     },
+    // 影像图
     yxt() {
       const that = this;
       if (this.map.findLayerById("dsj")) {
@@ -411,6 +418,7 @@ export default {
         });
       }
     },
+    // 矢量图
     slt() {
       if (this.map.findLayerById("dsj")) {
         this.map.findLayerById("dsj").visible = false;
@@ -419,6 +427,7 @@ export default {
         this.map.findLayerById("img").visible = false;
       }
     },
+    // 夜光图
     ygt() {
       const that = this;
       if (this.map.findLayerById("img")) {
@@ -484,14 +493,15 @@ export default {
             id == "chanyePlate"
               ? `<div class="bottomBtn cp_btn" data-val="{名称}">相关信息分布</div>`
               : ``
-          }
-          ${
-            id == "xq"
-              ? `<div class="bottomBtn xq_btn" data-val="{name}">相关信息分布</div>`
-              : ``
           }`
             };
           }
+
+          // ${
+          //   id == "xq"
+          //     ? `<div class="bottomBtn xq_btn" data-val="{name}">相关信息分布</div>`
+          //     : ``
+          // }
           const _layers_ = item.isImg ? MapImageLayer : FeatureLayer;
           if (item.sublayers) {
             if (item.isImg) {
@@ -585,7 +595,6 @@ export default {
           params.mapExtent = that.view.extent;
           identifyTask.execute(params).then(res => {
             // console.log(res);
-
             // if (res.results.length > 0) {
             //   const queryTask = new QueryTask({
             //     url: `http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/4`
@@ -779,11 +788,11 @@ export default {
           "疑似病例",
           "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/1"
         ],
-        集中隔离点: [
+        集中医学观察点: [
           "治愈",
           "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer/2"
         ],
-        集中隔离点人员名单: [
+        集中医学观察点人员名单: [
           "治愈",
           "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer/5"
         ],
@@ -807,6 +816,8 @@ export default {
         const url = item[1][1];
         that.querySingle(type, url, icon, spaceGraphicsLayer, graphic);
       });
+
+      that.$parent.leftHidden();
     },
     // 单独查询
     querySingle(type, url, icon, spaceGraphicsLayer, graphic) {

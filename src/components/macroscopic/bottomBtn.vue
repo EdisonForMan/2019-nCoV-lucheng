@@ -1,7 +1,7 @@
 <template>
   <div id="btnDiv">
     <ul>
-      <li @click="xzqh">行政区划</li>
+      <!-- <li @click="xzqh">行政区划</li> -->
       <li @click="yxt">影像图</li>
       <li @click="slt">矢量图</li>
       <li @click="ygt">夜光图</li>

@@ -39,7 +39,7 @@ const CONFIG_DEV = {
 };
 //  生产环境配置
 const CONFIG_PROVIDE = {
-  ARCGIS_API_URL: "http://172.20.89.68:5001/lc/libs/arcgis_js_v412_api/arcgis_js_api/library/4.12/dojo/dojo.js",
+  ARCGIS_API_URL: "http://172.20.89.88:5001/lc/libs/arcgis_js_v412_api/arcgis_js_api/library/4.12/dojo/dojo.js",
   LOCAL_DOMAIN: "https://server.lcmap.com",
   LOCAL_HOST: "http://172.20.89.59/server/rest/services",
   FORWARD_HOST: "http://172.20.89.59/server/rest/services",

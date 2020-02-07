@@ -1,6 +1,13 @@
-import { tipHash, Hash } from "../config/hash.js";
-import { loadModules } from "esri-loader";
-import { OPTION } from "@/components/common/Tmap";
+import {
+    tipHash,
+    Hash
+} from "../config/hash.js";
+import {
+    loadModules
+} from "esri-loader";
+import {
+    OPTION
+} from "@/components/common/Tmap";
 const server = "http://172.20.89.68:5001/s";
 
 export const mjChartUpdate = (context, name) => {
@@ -16,7 +23,10 @@ export const mjChartUpdate = (context, name) => {
         query.outFields = ["*"];
         query.returnGeometry = true;
         query.where = `Patient like '%${name}%' or Patient like '%${nameFix}'`;
-        const { fields, features } = await queryTask.execute(query);
+        const {
+            fields,
+            features
+        } = await queryTask.execute(query);
         const fieldAliases = {};
         fields.map(item => {
             fieldAliases[item.name] = item.alias;
@@ -26,7 +36,7 @@ export const mjChartUpdate = (context, name) => {
             return item;
         });
         context.$parent.$refs.mjChart.list = [...list];
-        context.$parent.$refs.mjChart.title = [name];
+        context.$parent.$refs.mjChart.title = name;
         context.$parent.$refs.queryForm.list = [];
     });
 };
@@ -40,8 +50,7 @@ export const addQZLinkFeature = (context, name) => {
         ([FeatureLayer]) => {
             const id = "mj_link";
             const option = {
-                url:
-                    "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/5",
+                url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/5",
                 id: "mj_link",
                 outFields: "*"
             };

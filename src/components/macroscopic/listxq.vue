@@ -1,7 +1,7 @@
 <template>
   <div id="listxq">
     <div class="head">
-      <span>{{ title }} 详情列表</span>
+      <span>[ {{title}} ] - 详情列表</span>
       <a v-on:click="sbclose">×</a>
     </div>
     <div class="search">
@@ -342,7 +342,11 @@ export default {
               "Shape.STArea()",
               "Shape.STLength()",
               "小区面名称",
-              "小区面唯一码"
+              "小区面唯一码",
+              "MansionName",
+              "TF",
+              "Shape_Length_1",
+              "Shape_Area_1"
             ].indexOf(k) < 0
           );
         });

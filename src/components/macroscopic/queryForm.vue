@@ -8,7 +8,7 @@
     <div class="list">
       <div v-for="(item,index) in list" :key="index" v-if="item.value && item.value.length">
         <div class="type">{{item.type}}</div>
-        <ul v-if="item.type != '集中隔离点'">
+        <ul v-if="item.type != '集中医学观察点'">
           <li v-for="(_item,_index) in item.value" :key="_index" @click="goLocation(_item)">
             <span>{{++_index}}. {{_item.attributes.Name?_item.attributes.Name.slice(0,1):(_item.attributes.NAME?_item.attributes.NAME.slice(0,1):null)}}**, {{_item.attributes.Country}}, {{_item.attributes.Address}}</span>
           </li>
@@ -49,23 +49,23 @@ export default {
 .form {
   position: absolute;
   width: 400px;
-  height: 580px;
+  height: 720px;
   background: #24386a;
   border: 1px solid #04ecff;
+  border-radius: 6px;
   z-index: 20;
-  top: 0;
+  top: 18%;
   margin: auto;
-  left: 360px;
-  bottom: 50px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  transition: all 1s;
 
   head {
     display: block;
     box-sizing: border-box;
     padding: 5px;
-    height: 40px;
+    height: 45px;
     font-size: 20px;
 
     .title {
@@ -82,7 +82,7 @@ export default {
   > div {
     flex: 1;
     .list {
-      height: 530px;
+      height: 660px;
       overflow: auto;
       text-align: left;
 
