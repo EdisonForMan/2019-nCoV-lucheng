@@ -12,8 +12,12 @@
           >{{item.label}}</li>
         </ul>
         <p>截至日期：{{$window.nCov_luchengData.macroscopic.updateTime}}</p>
-        <p style="position: absolute;right: 15px;top: 15px;">温州设计集团勘测院</p>
-        <p style="position: absolute;right: 15px;top: 40px;">{{time}}</p>
+        <p style="position: absolute;right: 15px;top: 15px;font-size: 13px;text-align: right;">
+            温州市大数据发展管理局 <br>
+            温州市卫生健康委员会 <br>
+            温州设计集团勘测院
+        </p>
+        <p style="position: absolute;right: 15px;top: 67px;font-size: 13px;">{{time}}</p>
       </div>
     </header>
     <div class="app_container">

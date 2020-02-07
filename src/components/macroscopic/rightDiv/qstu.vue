@@ -127,7 +127,7 @@ export default {
 #fy-rightDiv #qstuDiv {
   width: 100%;
   /*height: 34%;*/
-  height: 49%;
+  height: 30%;
   background-color: rgba(5, 26, 79, 0.5);
   border: 1px solid #035acd;
   margin-bottom: 2%;

@@ -10,6 +10,7 @@
       </div>
       <div id="fy-rightDiv">
         <bqtj ref="bqtj" />
+        <wjw></wjw>
         <qstu></qstu>
         <ylzy v-if="false"/>
         <sbDate ref="table"v-if="false"/>
@@ -42,6 +43,7 @@ import bottomBtn from "./bottomBtn";
 
 //  chartTable
 import bqtj from "./rightDiv/bqtj";
+import wjw from "./rightDiv/wjw";
 import ylzy from "./rightDiv/ylzy";
 import qstu from "./rightDiv/qstu";
 import sbDate from "./rightDiv/sbDate";
@@ -68,7 +70,8 @@ export default {
   components: {
     commonArcgis,
     leftMultiSelect,
-    bqtj, //病例统计
+    bqtj, // 病例统计
+    wjw, // 卫健委
     sbDate, //上报动态数据
     sbxq, //上报详情
     qstu, // 趋势图统计

@@ -1,36 +1,28 @@
 <template>
   <div id="bltjDiv">
     <h3>
-      - 温州市疫情防控管控力指数 -
+      - 鹿城区病例统计 -
       <select id="select" @change="bqSelect($event)">
-<!--         <option value="qzbl">确诊病例</option>
+        <option value="qzbl">确诊病例</option>
         <option value="zzbl">疑似病例</option>
         <option value="gld">集中隔离点</option>
         <option value="gld_list">集中隔离点人员名单</option>
         <option value="mj">密切接触者</option>
         <option value="jjgl">居家隔离人员</option>
         <option value="hbhw">湖北回鹿人员信令</option>
-        <option value="zzqs">确诊人员增长趋势</option> -->
-        <option value="fbl">二代及以上病例</option>
-        <option value="mzbls">主动发现病例</option>
-        <option value="fxl">聚集性疫情</option>
-        <option value="qzbls">密切接触者</option>
+        <option value="zzqs">确诊人员增长趋势</option>
       </select>
     </h3>
     <div id="bqtjChart"></div>
-    <div class="bqtjDesc">指标说明：{{ desc }}</div>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
 import util from "../util";
-import { SHI_QU_DATA } from '../../common/shiquData.js';
 export default {
   data() {
-    return {
-      desc: ''
-    };
+    return {};
   },
   methods: {
     getItem(children, label) {
@@ -228,148 +220,60 @@ export default {
         ]
       });
     },
-    // 卫健委指数
-    wjwzs (titlename, data, titleText) {
-      const chart = this.$echarts.init(document.getElementById("bqtjChart"));
-      console.log(titleText);
-      chart.setOption({
-          title: {
-            text: titleText.length > 6 ? titleText.substr(0, 6) + '\n' + titleText.substr(6) : titleText,
-            right: '1%',
-            top: '5%',
-            textStyle: {
-              fontSize: 15,
-              width: 20,
-              color: 'rgb(246, 227, 27)'
-            }
-          },
-          xAxis: {
-              show: false
-          },
-          grid: {
-            left: '22%',
-            right: '5%',
-            bottom: '2%',
-            top: '2%'
-          },
-          yAxis: [{
-              show: true,
-              data: titlename,
-              inverse: true,
-              axisLabel: {
-                  textStyle: {
-                      fontSize: 12,
-                      color: '#fff',
-                  },
-              },
-              axisLine: {
-                  show: false
-              },
-              splitLine: {
-                  show: false
-              },
-              axisTick: {
-                  show: false
-              }
-          }],
-          series: [{
-              name: '条',
-              type: 'bar',
-              yAxisIndex: 0,
-              data: data,
-              itemStyle: {
-                  normal: {
-                      color: '#1089E7'
-                  }
-              },
-              label: {
-                  normal: {
-                      show: true,
-                      color: '#fff',
-                      position: 'right'
-                  }
-              },
-          } ]
-      });
-    },
-    changewjwzs (marks, titleNanme) {
-      // let data = marks.sort((a,b) => a.value - b.value);
-      let title = [];
-      let result = [];
-      marks.map((item) => {
-        title.push(item.key);
-        result.push(item.value);
-      });
-      this.wjwzs(title, result, titleNanme);
-    },
-    changebqSelect (value) {
-      switch (value) {
-        case 'fbl': 
-          this.changewjwzs(SHI_QU_DATA.zhishuData.fbl, SHI_QU_DATA.zhishuData.fblTitle);
-          this.desc = SHI_QU_DATA.zhishuData.fblDesc;
-          break;
-        case 'mzbls':
-          this.changewjwzs(SHI_QU_DATA.zhishuData.mzbls, SHI_QU_DATA.zhishuData.mzblsTitle);
-          this.desc = SHI_QU_DATA.zhishuData.mzblsDesc;
-          break;
-        case 'fxl':
-          this.changewjwzs(SHI_QU_DATA.zhishuData.fxl, SHI_QU_DATA.zhishuData.fxlTitle);
-          this.desc = SHI_QU_DATA.zhishuData.fxlDesc;
-          break;
-        case 'qzbls':
-          this.changewjwzs(SHI_QU_DATA.zhishuData.qzbls, SHI_QU_DATA.zhishuData.qzblsTitle);
-          this.desc = SHI_QU_DATA.zhishuData.qzblsDesc;
-          break;
-      }
-    },
     bqSelect: function(event) {
-      this.$echarts.init(document.getElementById("bqtjChart")).clear();
-      this.changebqSelect(event.target.value);
+      if (event.target.value != "zzqs") {
+        this.dataAge = this.dataHash[event.target.value];
+        this.$echarts.init(document.getElementById("bqtjChart")).clear();
+        this.zqzb();
+      } else {
+        this.$echarts.init(document.getElementById("bqtjChart")).clear();
+        this.qzqs();
+      }
     }
   },
   created() {
-    // const {
-    //   dataAge,
-    //   YTdataAge,
-    //   dataName,
-    //   dataQS,
-    //   dataLC,
-    //   ysblDate,
-    //   jzglDate,
-    //   glryDate,
-    //   mqzDate,
-    //   jjglDate,
-    //   hbhlDate
-    // } = this.$window.nCov_luchengChart;
-    // this.dataAge = dataAge;
-    // this.YTdataAge = YTdataAge;
-    // this.dataName = dataName;
-    // this.dataQS = dataQS;
-    // this.dataLC = dataLC;
+    const {
+      dataAge,
+      YTdataAge,
+      dataName,
+      dataQS,
+      dataLC,
+      ysblDate,
+      jzglDate,
+      glryDate,
+      mqzDate,
+      jjglDate,
+      hbhlDate
+    } = this.$window.nCov_luchengChart;
+    this.dataAge = dataAge;
+    this.YTdataAge = YTdataAge;
+    this.dataName = dataName;
+    this.dataQS = dataQS;
+    this.dataLC = dataLC;
 
-    // this.dataHash = {
-    //   qzbl: dataAge,
-    //   zzbl: ysblDate,
-    //   gld: jzglDate,
-    //   gld_list: glryDate,
-    //   mj: mqzDate,
-    //   jjgl: jjglDate,
-    //   hbhw: hbhlDate
-    // };
+    this.dataHash = {
+      qzbl: dataAge,
+      zzbl: ysblDate,
+      gld: jzglDate,
+      gld_list: glryDate,
+      mj: mqzDate,
+      jjgl: jjglDate,
+      hbhw: hbhlDate
+    };
   },
   mounted() {
-    this.changebqSelect('fbl');
+    this.zqzb();
     //修改数值
-    // const that = this;
-    // util.$on("chartDataMod", function(newV) {
-    //   newV == 1
-    //     ? (that.dataAge = that.YTdataAge)
-    //     : (that.dataAge = that.dataAge);
+    const that = this;
+    util.$on("chartDataMod", function(newV) {
+      newV == 1
+        ? (that.dataAge = that.YTdataAge)
+        : (that.dataAge = that.dataAge);
 
-    //   document.getElementById("select").value = "qzbl";
-    //   that.$echarts.init(document.getElementById("bqtjChart")).clear();
-    //   that.zqzb();
-    // });
+      document.getElementById("select").value = "qzbl";
+      that.$echarts.init(document.getElementById("bqtjChart")).clear();
+      that.zqzb();
+    });
   }
 };
 </script>
@@ -377,18 +281,14 @@ export default {
 <style>
 #fy-rightDiv #bltjDiv {
   width: 100%;
-  /*height: 34%;*/
-  height: 49%;
+  height: 34%;
   background-color: rgba(5, 26, 79, 0.5);
   border: 1px solid #035acd;
   margin-bottom: 2%;
-  position: relative;
 }
 #fy-rightDiv #bltjDiv h3 {
   color: #23c9f3;
   margin-top: 10px;
-  padding-left: 2%;
-  text-align: left;
 }
 #fy-rightDiv #bltjDiv #ylzyChart {
   width: 100%;
@@ -404,13 +304,5 @@ export default {
 #fy-rightDiv #bltjDiv #bqtjChart {
   width: 100%;
   height: 85%;
-}
-#bltjDiv .bqtjDesc {
-  position: absolute;
-  z-index: 10;
-  bottom: 1%;
-  left: 2%;
-  font-size: 12px;
-  color: #ccc;
 }
 </style>
