@@ -26,10 +26,9 @@
 </template>
 
 <script>
-import { SHI_QU_DATA } from "../../../public/data/shiquData.js";
 export default {
   data() {
-    return { SHI_QU_DATA };
+    return { SHI_QU_DATA: window.SHI_QU_DATA };
   }
 };
 </script>

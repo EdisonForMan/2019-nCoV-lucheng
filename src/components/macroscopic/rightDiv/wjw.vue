@@ -17,7 +17,6 @@
 
 <script>
 /* eslint-disable */
-import { SHI_QU_DATA } from '../../../../public/data/shiquData.js';
 export default {
   data() {
     return {
@@ -102,24 +101,24 @@ export default {
     changebqSelect (value) {
       switch (value) {
         case 'fbl': 
-          this.changewjwzs(SHI_QU_DATA.zhishuData.fbl, SHI_QU_DATA.zhishuData.fblTitle);
-          this.desc = SHI_QU_DATA.zhishuData.fblDesc;
+          this.changewjwzs(window.SHI_QU_DATA.zhishuData.fbl, window.SHI_QU_DATA.zhishuData.fblTitle);
+          this.desc = window.SHI_QU_DATA.zhishuData.fblDesc;
           break;
         case 'mzbls':
-          this.changewjwzs(SHI_QU_DATA.zhishuData.mzbls, SHI_QU_DATA.zhishuData.mzblsTitle);
-          this.desc = SHI_QU_DATA.zhishuData.mzblsDesc;
+          this.changewjwzs(window.SHI_QU_DATA.zhishuData.mzbls, window.SHI_QU_DATA.zhishuData.mzblsTitle);
+          this.desc = window.SHI_QU_DATA.zhishuData.mzblsDesc;
           break;
         case 'fxl':
-          this.changewjwzs(SHI_QU_DATA.zhishuData.fxl, SHI_QU_DATA.zhishuData.fxlTitle);
-          this.desc = SHI_QU_DATA.zhishuData.fxlDesc;
+          this.changewjwzs(window.SHI_QU_DATA.zhishuData.fxl, window.SHI_QU_DATA.zhishuData.fxlTitle);
+          this.desc = window.SHI_QU_DATA.zhishuData.fxlDesc;
           break;
         case 'qzbls':
-          this.changewjwzs(SHI_QU_DATA.zhishuData.qzbls, SHI_QU_DATA.zhishuData.qzblsTitle);
-          this.desc = SHI_QU_DATA.zhishuData.qzblsDesc;
+          this.changewjwzs(window.SHI_QU_DATA.zhishuData.qzbls, window.SHI_QU_DATA.zhishuData.qzblsTitle);
+          this.desc = window.SHI_QU_DATA.zhishuData.qzblsDesc;
           break;
         case 'jubls':
-          this.changewjwzs(SHI_QU_DATA.zhishuData.jubls, SHI_QU_DATA.zhishuData.jublsTitle);
-          this.desc = SHI_QU_DATA.zhishuData.jublsDesc;
+          this.changewjwzs(window.SHI_QU_DATA.zhishuData.jubls, window.SHI_QU_DATA.zhishuData.jublsTitle);
+          this.desc = window.SHI_QU_DATA.zhishuData.jublsDesc;
           break;
       }
     },

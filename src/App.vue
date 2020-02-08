@@ -32,12 +32,11 @@
 import router from "@/router";
 import { OPTION, GET_ARCGIS_TOKEN, WRT_config } from "./components/common/Tmap";
 import { fixMenuList } from "./components/common/user/menuHash";
-import {SHI_QU_DATA} from '../public/data/shiquData.js';
 export default {
   name: "app",
   data() {
     return {
-      SHI_QU_DATA,
+      SHI_QU_DATA: window.SHI_QU_DATA,
       toptab: [
         { label: "宏观管控", route: "control" },
         { label: "防疫布控", route: "macroscopic" },

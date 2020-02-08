@@ -1,5 +1,5 @@
 // 市区的数据
-export const SHI_QU_DATA = {
+window.SHI_QU_DATA = {
 	updateTime: '2020年02月06日24时', // 截止日期
 	zhishuData: {
 		// fblTitle: '单位(%)',

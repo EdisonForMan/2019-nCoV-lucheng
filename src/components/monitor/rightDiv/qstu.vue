@@ -6,7 +6,6 @@
 
 <script>
 /* eslint-disable */
-import { SHI_QU_DATA } from '../../../../public/data/shiquData.js';
 export default {
   data() {
     return {};
@@ -65,7 +64,7 @@ export default {
                   margin: 10,
                   color: '#fff'
               },
-              data: SHI_QU_DATA.qushiData.xz.date
+              data: window.SHI_QU_DATA.qushiData.xz.date
           }],
           yAxis: [{
               type: 'value',
@@ -102,7 +101,7 @@ export default {
                       opacity: 0.8
                   },
                   color: '#00DAFF',
-                  data: SHI_QU_DATA.qushiData.lj.value
+                  data: window.SHI_QU_DATA.qushiData.lj.value
               },
               {
                   name: '新增趋势(例)',
@@ -111,7 +110,7 @@ export default {
                       opacity: 0.8
                   },
                   color: '#EE3B36',
-                  data: SHI_QU_DATA.qushiData.xz.value
+                  data: window.SHI_QU_DATA.qushiData.xz.value
               }
           ]
       });
