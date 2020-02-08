@@ -176,7 +176,7 @@ export default {
       const zoom = parseInt(
         context.view.zoom + (evt ? (evt.deltaY > 0 ? -1 : 1) : 0)
       );
-      const shallPoint = zoom >= 14 ? true : false;
+      const shallPoint = zoom >= 16 ? true : false;
       const shallPlate = context.view.zoom >= 12 ? true : false;
       let shallVector = true;
       ["m_qzbl", "m_mj", "m_gld_list", "m_gld"].map(item => {
@@ -395,8 +395,8 @@ export default {
       });
     },
     removeLayer() {
-      this.map.findLayerById("chanyePlate").visible = !this.map.findLayerById(
-        "chanyePlate"
+      this.map.findLayerById("m_qzbl_img").visible = !this.map.findLayerById(
+        "m_qzbl_img"
       ).visible;
     },
     yxt() {
@@ -415,10 +415,7 @@ export default {
               id: "img"
             });
             //  优先级置顶
-            that.map.add(imgLayer, 2);
-            that.legend.layerInfos.push({
-              layer: imgLayer
-            });
+            that.map.add(imgLayer, 1);
             resolve(true);
           });
         });
@@ -449,10 +446,7 @@ export default {
                 id: "dsj"
               });
               //  优先级置顶
-              that.map.add(vecLayer, 2);
-              that.legend.layerInfos.push({
-                layer: vecLayer
-              });
+              that.map.add(vecLayer, 1);
               resolve(true);
             }
           );
@@ -541,13 +535,13 @@ export default {
               opacity: 0.7
             });
             //  优先级置顶
-            that.map.add(_IMG, 2);
+            that.map.add(_IMG, 3);
           }
           const feature = new _layers_(option);
           if (~["m_qzbl", "m_mj", "m_gld_list", "m_gld"].indexOf(_id_)) {
-            feature.visible = that.view.zoom >= 14 ? true : false;
+            feature.visible = that.view.zoom >= 16 ? true : false;
           }
-          that.map.add(feature);
+          that.map.add(feature, 4);
           resolve(true);
         });
       });
