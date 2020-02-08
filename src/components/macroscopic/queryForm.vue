@@ -6,6 +6,14 @@
   </head>
   <div>
     <div class="list">
+      <div class="imgDiv" v-if="imgHash[title]">
+        <span>卡点照片</span>
+        <img
+          v-for="index of imgHash[title]"
+          :key="index"
+          :src="`${server}/icon/卡点照片/${title}/${index}.jpg`"
+        />
+      </div>
       <div v-for="(item,index) in list" :key="index" v-if="item.value && item.value.length">
         <div class="type">{{item.type}}</div>
         <ul v-if="item.type != '集中医学观察点'">
@@ -27,10 +35,14 @@
 
 <script>
 /* eslint-disable */
+const server = "http://172.20.89.68:5001/s";
+import { imgHash } from "./config/hash.js";
 export default {
   name: "queryForm",
   data() {
     return {
+      server,
+      imgHash,
       title: "",
       list: []
     };
@@ -77,6 +89,19 @@ export default {
     padding: 0px 5px;
     font-size: 17px;
     cursor: pointer;
+  }
+
+  .imgDiv {
+    text-align: center;
+
+    span {
+      line-height: 40px;
+      font-size: 17px;
+      font-weight: bolder;
+    }
+    img {
+      width: 100%;
+    }
   }
 
   > div {

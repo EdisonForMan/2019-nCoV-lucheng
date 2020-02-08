@@ -2,13 +2,13 @@
   <div class="leftMultiSelect">
     <div class="topic">
       <header>
-        <span :class="{active:tabIndex == 0}" @click="()=>{tabIndex = 0}">全区</span>
+        <span :class="{active:tabIndex == 0}" @click="()=>{tabIndex = 0,filterItem(0)}">全区</span>
         <i>/</i>
-        <span :class="{active:tabIndex == 1}" @click="()=>{tabIndex = 1}">银泰</span>
+        <span :class="{active:tabIndex == 1}" @click="()=>{tabIndex = 1,filterItem(0)}">银泰</span>
         <i>/</i>
-        <span :class="{active:tabIndex == 2}" @click="()=>{tabIndex = 2}">三返</span>
+        <span :class="{active:tabIndex == 2}" @click="()=>{tabIndex = 2,filterItem(0)}">三返</span>
         <i>/</i>
-        <span :class="{active:tabIndex == 3}" @click="()=>{tabIndex = 3}">国际大酒店</span>
+        <span :class="{active:tabIndex == 3}" @click="()=>{tabIndex = 3,filterItem(0)}">国际大酒店</span>
         <!-- <span class="stateTipHeaderBar"></span> -->
       </header>
       <div class="selectFrame no_select">
@@ -98,7 +98,7 @@ export default {
   },
   methods: {
     filterItem(index) {
-      console.log("i", index);
+      this.$parent.$refs.bqtj.filterItem(0);
     },
     hidden() {
       this.icon_show = !this.icon_show;
