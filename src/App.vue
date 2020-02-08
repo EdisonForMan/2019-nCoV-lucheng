@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <header :class="`app_header `" v-if="showHeader">
-      <div class="app_icon" style>温州市新冠肺炎防控阻击战作战地图</div>
+      <div class="app_icon" style>温州市新冠肺炎防控作战地图</div>
       <div class="app_toptab_position app_toptab_normal">
         <ul class="app_toptab">
           <li
