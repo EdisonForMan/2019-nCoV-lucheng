@@ -177,7 +177,7 @@ export default {
         context.view.zoom + (evt ? (evt.deltaY > 0 ? -1 : 1) : 0)
       );
       const shallPoint = zoom >= 16 ? true : false;
-      const shallPlate = context.view.zoom >= 12 ? true : false;
+      const shallPlate = zoom >= 12 ? true : false;
       let shallVector = true;
       ["m_qzbl", "m_mj", "m_gld_list", "m_gld"].map(item => {
         const tree = context.$util.clone(context.$parent.leftOptions);
@@ -532,7 +532,6 @@ export default {
             const _IMG = new MapImageLayer({
               url: item.m_url,
               id: _id_ + "_img",
-              opacity: 0.7
             });
             //  优先级置顶
             that.map.add(_IMG, 3);
