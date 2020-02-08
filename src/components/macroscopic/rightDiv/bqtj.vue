@@ -99,6 +99,9 @@ export default {
           right: "5%",
           top: "14%"
         },
+        tooltip: {
+          trigger: "axis"
+        },
         xAxis: {
           type: "category",
           boundaryGap: true,
@@ -139,19 +142,37 @@ export default {
         },
         series: [
           {
+            name: "历史确诊",
             type: "bar",
+            barWidth: "20px",
+            stack: "sum",
             label: {
               normal: {
                 show: true,
-                position: "top",
+                position: "inside",
                 textStyle: {
                   color: "#FFF"
                 }
               }
             },
-            barWidth: "45%",
-            yAxisIndex: 0,
             data: this.dataAge
+          },
+          {
+            name: "新增确诊",
+            type: "bar",
+            stack: "sum",
+            barWidth: "20px",
+            label: {
+              normal: {
+                show: true,
+                position: "inside",
+                textStyle: {
+                  color: "#FFF"
+                }
+              }
+            },
+            color: "#f9c401",
+            data: this.dataAge.map(item => item.xzdate)
           }
         ]
       });
@@ -168,15 +189,15 @@ export default {
             }
           }
         },
-        legend: {
-          show: true,
-          icon: "roundRect",
-          bottom: "2%",
-          textStyle: {
-            color: "#fff",
-            fontSize: 12
-          }
-        },
+        // legend: {
+        //   show: true,
+        //   icon: "roundRect",
+        //   bottom: "2%",
+        //   textStyle: {
+        //     color: "#fff",
+        //     fontSize: 12
+        //   }
+        // },
         color: ["#0080ff", "#4cd5ce"],
         grid: {
           left: "3%",
@@ -188,7 +209,7 @@ export default {
         xAxis: {
           type: "category",
           boundaryGap: false,
-          data: this.dataName,
+          data: this.dataTime,
           axisLabel: {
             show: true,
             textStyle: {
@@ -249,7 +270,7 @@ export default {
             areaStyle: {
               normal: {}
             },
-            data: this.dataQS
+            data: this.ChartDataWZ
           },
           {
             name: "鹿城确诊人员增长趋势(例)",
@@ -271,7 +292,7 @@ export default {
             areaStyle: {
               normal: {}
             },
-            data: this.dataLC
+            data: this.ChartDataLC
           }
         ]
       });
@@ -294,6 +315,7 @@ export default {
   created() {
     const {
       dataAge,
+      XZAge,
       YTdataAge,
       dataName,
       dataQS,
@@ -306,6 +328,7 @@ export default {
       hbhlDate
     } = this.$window.nCov_luchengChart;
     this.dataAge = dataAge;
+    this.XZAge = XZAge;
     this.YTdataAge = YTdataAge;
     this.dataName = dataName;
     this.dataQS = dataQS;
