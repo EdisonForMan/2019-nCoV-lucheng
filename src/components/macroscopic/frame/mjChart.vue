@@ -161,17 +161,27 @@ export default {
                   fontSize: 15
                 }
               },
-              ...this.list.map(item => {
-                return { name: item.attributes.NAME };
-              })
+              ...this.list
+                .filter((item, index) => {
+                  return index < 90;
+                })
+                .map(item => {
+                  return { name: item.attributes.NAME };
+                })
             ],
-            links: list.map(item => {
-              return {
-                source: this.title,
-                target: item.attributes.NAME,
-                value: item.attributes.Relation ? item.attributes.Relation : ""
-              };
-            })
+            links: this.list
+              .filter((item, index) => {
+                return index < 90;
+              })
+              .map(item => {
+                return {
+                  source: this.title,
+                  target: item.attributes.NAME,
+                  value: item.attributes.Relation
+                    ? item.attributes.Relation
+                    : ""
+                };
+              })
           }
         ]
       });

@@ -1,7 +1,7 @@
 <template>
 <div class="form" v-if="list.length">
   <head>
-    <span class="title">空间查询结果</span>
+    <span class="title">{{ title != "" ? `[ ${title} ] - 防疫空间分析` : "空间查询结果" }}</span>
     <span id="close" @click="()=>{list = []}">x</span>
   </head>
   <div>

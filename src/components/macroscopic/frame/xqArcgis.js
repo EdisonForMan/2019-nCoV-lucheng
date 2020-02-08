@@ -279,7 +279,7 @@ export const xqDetail = (isOption, obj) => {
         "小区卡口信息",
         [
             "VillageName@小区名称",
-            "KKWZ@卡口位置@xq_enter_btn",
+            // "KKWZ@卡口位置@xq_enter_btn",
             "TWJSFDW@体温计是否到位",
             "KZSFDW@口罩是否到位",
             "YPSFDW@雨棚是否到位",

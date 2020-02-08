@@ -97,6 +97,9 @@ export default {
     this.items = this.leftformdata;
   },
   methods: {
+    filterItem(index) {
+      console.log("i", index);
+    },
     hidden() {
       this.icon_show = !this.icon_show;
     },

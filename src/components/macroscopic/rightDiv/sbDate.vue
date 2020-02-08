@@ -52,7 +52,7 @@
           v-if="item.id == 'people_type_8' || item.id == 'people_type_9'"
         >{{++index}}.{{item.attributes.Name}}</span>
         <span v-if="item.id == 'xq'">{{++index}}.{{item.attributes.name}}</span>
-        <span v-if="item.id == 'xqjck'">{{++index}}.{{item.attributes.NAME}}</span>
+        <span v-if="item.id == 'xqjck'">{{++index}}. {{item.attributes.社区名称}}. {{item.attributes.小区名称}}</span>
         <span v-if="item.id == 'wg'">{{++index}}.{{item.attributes.Name}}</span>
         <span
           v-if="item.id == 'chanyePlate'"
@@ -181,19 +181,29 @@ export default {
           ["esri/tasks/QueryTask", "esri/tasks/support/Query"],
           OPTION
         ).then(async ([QueryTask, Query]) => {
-          const queryTask = new QueryTask({ url: `${url}/1` });
+          const queryTask = new QueryTask({ url: `${url}/6` });
           const query = new Query();
           query.outFields = ["*"];
           query.where = `1=1`;
           const { fields, features } = await queryTask.execute(query);
           const fieldAliases = {};
           fields.map(item => {
-            fieldAliases[item.name] = item.alias;
+            fieldAliases[item.name] =
+              item.alias == "DepartmentName"
+                ? "医疗机构"
+                : item.alias == "DoctorName"
+                ? "姓名"
+                : item.alias == "Phone"
+                ? "电话"
+                : item.alias;
           });
           const list = features.map(item => {
             item.fieldAliases = fieldAliases;
             return item;
           });
+
+          // console.log("高速值班", list);
+
           resolve(list);
         });
       });

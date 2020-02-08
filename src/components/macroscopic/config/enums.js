@@ -134,7 +134,7 @@ export const leftOptions = [{
     children: [{
         name: `高速卡口 (${macroscopic.highway_type_1}个)`,
         id: "highway_type_1",
-        url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/zhiban/MapServer",
+        url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer",
         sublayers: "0",
         icon: "高速",
         check: false
@@ -171,9 +171,9 @@ export const leftOptions = [{
     }, {
         name: "小区进出口点",
         id: "xqjck",
-        sublayers: "0",
-        icon: "进出口",
-        url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/crowded/MapServer",
+        sublayers: "17",
+        // icon: "进出口",
+        url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
         check: false
     }
     ]

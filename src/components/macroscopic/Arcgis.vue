@@ -25,7 +25,7 @@ import {
   TDTIMAGE2017,
   TDTDSJ
 } from "@/components/common/Tmap";
-import { tipHash, Hash } from "./config/hash.js";
+import { tipHash, Hash, imgHash } from "./config/hash.js";
 const server = "http://172.20.89.68:5001/s";
 
 export default {
@@ -482,6 +482,26 @@ export default {
                   </tr>`;
               })
               .join("")}
+              ${
+                id == "wg"
+                  ? `<tr><th class="esri-feature__field-header" colspan=2 style="text-align: center;">
+                卡口照片
+                </th></tr>
+                ${
+                  imgHash[`{name}`]
+                    ? `
+                <tr><th class="esri-feature__field-header" colspan=2 style="text-align: center;">
+                <img src="${server}/icon/卡点照片/{name}/1.jpg" />
+                </th></tr>
+                `
+                    : ``
+                }
+                <tr><th class="esri-feature__field-header" colspan=2 style="text-align: center;">
+                <img src="${server}/icon/卡点照片/{name}/1.jpg" />
+                </th></tr>
+                `
+                  : ``
+              }
           </tbody></table>`
               }
           ${
@@ -551,11 +571,12 @@ export default {
           (that.map.findLayerById("xq") && that.map.findLayerById("xq").visible)
         ) {
           that.view.hitTest(evt).then(function(response) {
-            // console.log(response);
-
             const spaceGraphicsLayer = that.map.findLayerById("spaceLayer");
 
             const ds = response.results[0].graphic;
+
+            that.$parent.$refs.queryForm.title =
+              ds.attributes.name || ds.attributes.jwh;
 
             that.queryAll(spaceGraphicsLayer, ds);
           });

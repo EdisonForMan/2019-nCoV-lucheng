@@ -449,8 +449,20 @@ const nmscHash = [{
 
 // 小区出入口
 const xqjckHash = [{
-    fieldName: "NAME",
-    label: "名称"
+    fieldName: "社区名称",
+    label: "社区名称"
+}, {
+    fieldName: "所属街道",
+    label: "所属街道"
+}, {
+    fieldName: "小区名称",
+    label: "小区名称"
+}, {
+    fieldName: "出入口情况",
+    label: "出入口情况"
+}, {
+    fieldName: "问题备注",
+    label: "问题备注"
 }]
 
 // 小区
@@ -716,4 +728,19 @@ export const Hash = {
     gldListHash,
     sccsHash,
     nmscHash
+}
+
+
+export const imgHash = {
+    矮凳桥: 2,
+    安澜: 2,
+    八仙楼: 2,
+    百里坊: 2,
+    城西街: 3,
+    府前: 2,
+    黎明西路: 2,
+    路湾: 2,
+    墨池: 2,
+    十八家: 2,
+    谢池: 2
 }
