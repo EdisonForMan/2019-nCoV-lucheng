@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { SHI_QU_DATA } from "@/components/common/shiquData.js";
+import { SHI_QU_DATA } from "../../../public/data/shiquData.js";
 export default {
   data() {
     return { SHI_QU_DATA };

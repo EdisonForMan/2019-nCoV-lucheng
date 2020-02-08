@@ -32,7 +32,7 @@
 import router from "@/router";
 import { OPTION, GET_ARCGIS_TOKEN, WRT_config } from "./components/common/Tmap";
 import { fixMenuList } from "./components/common/user/menuHash";
-import {SHI_QU_DATA} from './components/common/shiquData.js';
+import {SHI_QU_DATA} from '../public/data/shiquData.js';
 export default {
   name: "app",
   data() {

@@ -16,7 +16,7 @@
 
 <script>
 /* eslint-disable */
-import { SHI_QU_DATA } from '../../common/shiquData.js';
+import { SHI_QU_DATA } from '../../../../public/data/shiquData.js';
 export default {
   data() {
     return {
