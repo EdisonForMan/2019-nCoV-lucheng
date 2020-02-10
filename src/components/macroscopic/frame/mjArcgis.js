@@ -1,6 +1,13 @@
-import { tipHash, Hash } from "../config/hash.js";
-import { loadModules } from "esri-loader";
-import { OPTION } from "@/components/common/Tmap";
+import {
+  tipHash,
+  Hash
+} from "../config/hash.js";
+import {
+  loadModules
+} from "esri-loader";
+import {
+  OPTION
+} from "@/components/common/Tmap";
 const server = "http://172.20.89.68:5001/s";
 
 export const mjChartUpdate = (context, name) => {
@@ -16,7 +23,10 @@ export const mjChartUpdate = (context, name) => {
     query.outFields = ["*"];
     query.returnGeometry = true;
     query.where = `Patient like '%${name}%' or Patient like '%${nameFix}'`;
-    const { fields, features } = await queryTask.execute(query);
+    const {
+      fields,
+      features
+    } = await queryTask.execute(query);
     const fieldAliases = {};
     fields.map(item => {
       fieldAliases[item.name] = item.alias;
@@ -39,8 +49,7 @@ export const addQZLinkFeature = (context, name) => {
   loadModules(["esri/layers/FeatureLayer"], OPTION).then(([FeatureLayer]) => {
     const id = "mj_link";
     const option = {
-      url:
-        "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/5",
+      url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/5",
       id: "mj_link",
       outFields: "*"
     };
@@ -89,23 +98,16 @@ export const qzTableUpdate = name => {
     query.where = "Name = '" + name + "'";
     const results = await queryTask.execute(query);
     var qzDtata = results.features[0].attributes;
-    var  htmllet = "";
-    htmllet +=
-      "<p>" +
-      qzDtata.TownLinkMan +
-      "</p>" +
-      "<p>" +
-      qzDtata.TownChargeMan +
-      "</p>" +
-      "<p>" +
-      qzDtata.ResponsiblePolice  +
-      "</p>" +
-      "<p>" +
-      qzDtata.CommunityChargeMan  +
-      "</p>" +
-      "<p>" +
-      qzDtata.WeijianChargeMan  +
-      "</p>";
+    var htmllet = "";
+    htmllet += "<table border='0' cellspacing='0' cellpadding='0'>" +
+      "<tbody>" +
+      "<tr><th>街道联系人</th><td>" + qzDtata.TownLinkMan + "</td></tr>" +
+      "<tr><th>街镇责任人</th><td>" + qzDtata.TownChargeMan + "</td></tr>" +
+      "<tr><th>责任民警</th><td>" + qzDtata.ResponsiblePolice + "</td></tr>" +
+      "<tr><th>社区责任人</th><td>" + qzDtata.CommunityChargeMan + "</td></tr>" +
+      "<tr><th>卫健责任人</th><td>" + qzDtata.WeijianChargeMan + "</td></tr>" +
+      "</tbody>" +
+      "</table>";
     document.getElementById("qztableCentent").innerHTML = htmllet;
   });
 };

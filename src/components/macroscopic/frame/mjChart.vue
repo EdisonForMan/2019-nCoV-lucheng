@@ -9,7 +9,7 @@
     >圈主信息</p>
   </head>
   <div>
-    <div class="list">
+    <div class="list" style="background-color:#709437">
       <!-- <ul>
         <li v-for="(item,index) in list" :key="index" @click="goLocation(item)">
           <span>{{++index}}.{{item.attributes.NAME.slice(0,1)}}**,{{item.attributes.Sex}},{{item.attributes.Address_Department}},{{item.attributes.Age}}</span>
@@ -132,11 +132,19 @@ export default {
 
       // console.log("op1", [
       //   {
-      //     name: this.title
+      //     name: this.title,
+      //     label: {
+      //       color: "#0fd",
+      //       fontSize: 15
+      //     }
       //   },
-      //   ...this.list.map(item => {
-      //     return item.attributes.NAME;
-      //   })
+      //   ...this.list
+      //     .filter((item, index) => {
+      //       return index < 90;
+      //     })
+      //     .map(item => {
+      //       return { name: item.attributes.NAME };
+      //     })
       // ]);
 
       this.chart2 = this.$echarts.init(document.getElementById("mjframe"));

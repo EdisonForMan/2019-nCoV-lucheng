@@ -93,6 +93,9 @@ export default {
     // 确诊病例
     zqzb() {
       const chart = this.$echarts.init(document.getElementById("bqtjChart"));
+      for (let i = 0; i < this.dataAge.length; i++) {
+        this.dataAge[i].value = this.dataAge[i].value-this.dataAge[i].xzdate 
+      };
       chart.setOption({
         grid: {
           left: "8%",
@@ -142,7 +145,7 @@ export default {
         },
         series: [
           {
-            name: "历史确诊",
+            name: "合计确诊",
             type: "bar",
             barWidth: "20px",
             stack: "sum",
