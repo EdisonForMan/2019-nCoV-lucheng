@@ -3,6 +3,10 @@
   <head>
     <span>[ {{ title }} ] - 密切接触者</span>
     <span id="close" @click="()=>{list = []}">x</span>
+    <p
+      style="background-color: #0c7cd2;padding: 7px 7px;cursor: pointer;position: relative;z-index: 10;width: 100px;margin: auto;margin-top: 10px;"
+      @click="goqzTable()"
+    >圈主信息</p>
   </head>
   <div>
     <div class="list">
@@ -23,6 +27,8 @@
 
 <script>
 /* eslint-disable */
+
+import { qzTableUpdate } from "./mjArcgis";
 export default {
   name: "mjChart",
   data() {
@@ -38,6 +44,12 @@ export default {
     goLocation(item) {
       // console.log(item.geometry);
       item.geometry && this.$parent.$refs.macroArcgis.goloaction(item);
+    },
+    goqzTable() {
+      var name = this.title;
+      console.log(name);
+      this.$parent.$refs.qzTable.qzTableFun();
+      qzTableUpdate(name);
     },
     doChart(list) {
       this.chart = this.$echarts.init(document.getElementById("cframe"));

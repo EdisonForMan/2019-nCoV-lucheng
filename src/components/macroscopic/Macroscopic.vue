@@ -25,6 +25,8 @@
     <sbxq ref="sbxq" v-show="xqShow" />
     <listxq ref="listxq" v-show="listShow" />
     <mjChart ref="mjChart" :style="{left:moveLeft + 'px'}" />
+    <!-- 圈主信息 -->
+    <qzTable ref="qzTable" :style="{left:(Number(moveLeft) + Number(520)) + 'px'}" />
     <streetFrame ref="cpFrame" :style="{left:moveLeft + 'px'}" />
     <queryForm ref="queryForm" :style="{left:moveLeft + 'px'}" />
   </div>
@@ -54,6 +56,9 @@ import popOpen from "./popOpen";
 import mjChart from "./frame/mjChart";
 import streetFrame from "./frame/streetFrame";
 import queryForm from "./queryForm";
+
+import qzTable from "./frame/qzTable"; //圈主信息
+
 import { leftOptions } from "./config/enums";
 
 export default {
@@ -82,7 +87,8 @@ export default {
     mjChart, //密接列表、图表
     streetFrame, //街道疫情
     listxq, //点击列表的详情框
-    queryForm //空间查询结果
+    queryForm, //空间查询结果
+    qzTable //圈主信息
   },
   created() {},
   mounted() {},
