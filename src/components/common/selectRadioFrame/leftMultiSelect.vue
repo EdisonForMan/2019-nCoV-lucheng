@@ -1,7 +1,7 @@
 <template>
   <div class="leftMultiSelect">
-    <div class="topic" style="text-align: center;">
-      <header style="text-align: center;">
+    <div class="topic">
+      <header>
         <span :class="{active:tabIndex == 0}" @click="()=>{tabIndex = 0,filterItem(0)}">全区</span>
         <i>/</i>
         <span :class="{active:tabIndex == 1}" @click="()=>{tabIndex = 1,filterItem(0)}">地区专题</span>
@@ -13,11 +13,15 @@
       </header>
       <div class="selectFrame no_select">
         <div v-for="(item,index) in this.tree" :key="index">
+          <!-- <span
+            @click="toggleTree(item.label,index)"
+            v-if="!((tabIndex==2&&item.sflabel==-1) || (tabIndex!=2&&item.label==-1))"
+          >-->
           <span
             @click="toggleTree(item.label,index)"
-            v-if="!((tabIndex==2&&item.sflabel==-1)||(tabIndex!=2&&item.label==-1))"
+            v-if="!((tabIndex==2&&item.sflabel==-1) || (tabIndex==1&&item.dqlabel==-1)|| (tabIndex==0&&item.label==-1))"
           >
-            {{tabIndex==2?item.sflabel:item.label}}
+            {{tabIndex==2?item.sflabel:tabIndex==1?item.dqlabel:item.label}}
             <input
               v-if="!item.disabled"
               type="checkbox"
@@ -29,7 +33,7 @@
           </span>
           <ul
             v-show="item.show"
-            v-if="!((tabIndex==2&&item.sflabel==-1)||(tabIndex!=2&&item.label==-1))"
+            v-if="!((tabIndex==2&&item.sflabel==-1) || (tabIndex==1&&item.dqlabel==-1)|| (tabIndex==0&&item.label==-1))"
           >
             <li
               v-for="(oitem,oindex) in item.children"
@@ -52,7 +56,7 @@
               />
               <span
                 id="xq"
-                v-if="item.label=='疫情分布' || oitem.id == 'xq'||oitem.id=='glmd'"
+                v-if="item.label=='疫情分布' || oitem.id=='glmd'"
                 @click="ShowListxq(oitem,item)"
               >详情</span>
             </li>
@@ -131,9 +135,6 @@ export default {
       if (!this.$parent || !oitem.id || oitem.isImg) return;
       this.$parent.$refs.table.getItem(oitem, item.label);
       this.$parent.$refs.sbxq.getItem(oitem, item.label);
-
-      // console.log(oitem, item.label);
-
       this.$parent.$refs.bqtj.getItem(oitem, item.label); //调用病例统计echart
     },
     ShowListxq(oitem, item) {
@@ -251,11 +252,11 @@ export default {
     header {
       height: 40px;
       line-height: 50px;
-      text-align: left;
+      text-align: center;
       font-size: 20px;
       color: #4cd7ec;
       text-shadow: 0px 0px 4px rgba(76, 215, 236, 0.3);
-      padding-left: 20px;
+      // padding-left: 20px;
       cursor: pointer;
       .active {
         font-weight: 700;

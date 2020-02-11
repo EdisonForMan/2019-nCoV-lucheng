@@ -5,7 +5,7 @@
       <a v-on:click="sbclose">×</a>
     </div>
     <div class="search">
-      <select id="select" @change="xqsearch($event)">
+      <select id="select" @change="xqsearch($event)" v-if="sArr.length && sArr[0].Country">
         <option value="0">全部</option>
         <option
           v-for="(citem,cindex) in sArr"
@@ -14,7 +14,7 @@
         >{{ citem.Country }}</option>
       </select>
       <input type="text" v-model="text" placeholder="请输入查询" />
-      <button @click="()=>{text && filteItem()}">查询</button>
+      <button @click="()=>{filteItem()}">查询</button>
     </div>
     <div class="content">
       <table border="0" cellpadding="0" cellspacing="0" v-if="qzflag && forceData.length">
@@ -36,11 +36,6 @@
             >{{ item.attributes[k] || "无" }}</td>
             <td @click="showrelation(item)" style="cursor: pointer;">详情</td>
           </tr>
-          <!-- <tr>
-            <td>小计：</td>
-            <td v-for="(citem,cindex) in sArr" :key="cindex">{{citem.Country}}:{{citem.count}}例</td>
-            <td>合计：{{sum}}</td>
-          </tr>-->
         </tbody>
       </table>
 
@@ -64,7 +59,7 @@
         </tbody>
       </table>
 
-      <table border="0" cellpadding="0" cellspacing="0">
+      <table border="0" cellpadding="0" cellspacing="0" v-if="sArr.length && sArr[0].Country">
         <thead>
           <tr>
             <th>街道</th>
@@ -122,22 +117,6 @@ export default {
         七都: 14,
         区直设: 15
       }
-      // countryHash: {
-      //   山福镇: 1,
-      //   藤桥镇: 2,
-      //   仰义街道: 3,
-      //   丰门街道: 4,
-      //   双屿街道: 5,
-      //   广化街道: 6,
-      //   五马街道: 7,
-      //   松台街道: 8,
-      //   大南街道: 9,
-      //   南郊街道: 10,
-      //   南汇街道: 11,
-      //   蒲鞋市街道: 12,
-      //   滨江街道: 13,
-      //   七都街道: 14
-      // }
     };
   },
   created() {},
@@ -152,7 +131,7 @@ export default {
       data.map(item => {
         const { attributes } = item;
 
-        const cTag = attributes.Country;
+        const cTag = attributes.Country || attributes.Community;
 
         const cv = this.selectValue != 0 ? this.selectValue : "";
 
@@ -185,14 +164,19 @@ export default {
       });
       this.forceData = forceData;
     },
-    getItem({ url, sublayers, id, name, definitionExpression, ytd }, label) {
+    getItem(
+      { url, sublayers, id, name, definitionExpression, ytname, ytd },
+      label
+    ) {
+      this.relationShow = false;
       const d = [];
       this.sObj = {};
       this.sArr = [];
       this.sum = 0;
       definitionExpression && d.push(definitionExpression);
       this.$parent.$refs.leftOptions.tabIndex == 1 && ytd && d.push(ytd);
-      this.title = `${name}`.split(" ")[0];
+      this.title =
+        name != "-1" ? `${name}`.split(" ")[0] : `${ytname}`.split(" ")[0];
       this.title == "确诊病例" ? (this.qzflag = true) : (this.qzflag = false);
       loadModules(
         ["esri/tasks/QueryTask", "esri/tasks/support/Query"],
@@ -206,10 +190,20 @@ export default {
         query.start = 0;
         query.num = 20;
         const { fields, features } = await queryTask.execute(query);
-        const fieldAliases = {};
-        fields.map(item => {
-          fieldAliases[item.name] = item.alias;
-        });
+        let fieldAliases = {};
+        if (id == "ytyg") {
+          fieldAliases = {
+            Name: "姓名",
+            Phone: "电话",
+            Country: "街道",
+            Address: "地址"
+          };
+        } else {
+          fields.map(item => {
+            fieldAliases[item.name] = item.alias;
+          });
+        }
+
         const list = features.map(item => {
           item.fieldAliases = fieldAliases;
           return item;
@@ -324,8 +318,7 @@ export default {
           return count2 - count1;
         });
 
-        // console.log("data", this.forceData);
-        this.keyData = Object.keys(this.forceData[0].fieldAliases).filter(k => {
+        /* this.keyData = Object.keys(this.forceData[0].fieldAliases).filter(k => {
           return (
             [
               "序号",
@@ -350,7 +343,111 @@ export default {
               "Id"
             ].indexOf(k) < 0
           );
-        });
+        }); */
+
+        if (id == "qzbl" || id == "zzbl") {
+          this.keyData =
+            this.forceData[0] &&
+            Object.keys(this.forceData[0].fieldAliases).filter(k => {
+              return ~[
+                "Name",
+                "Sex",
+                "Age",
+                "Profession",
+                "Country",
+                "DiseaseTime",
+                "Hospital"
+              ].indexOf(k);
+            });
+        } else if (id == "ytyg") {
+          this.keyData =
+            this.forceData[0] &&
+            Object.keys(this.forceData[0].fieldAliases).filter(k => {
+              return ~["Name", "Phone", "Country", "Address"].indexOf(k);
+            });
+        } else if (id == "gld") {
+          this.keyData =
+            this.forceData[0] &&
+            Object.keys(this.forceData[0].fieldAliases).filter(k => {
+              return ~[
+                "Name",
+                "Address",
+                "Country",
+                "Linkman",
+                "Phone",
+                "IsUsing"
+              ].indexOf(k);
+            });
+        } else if (id == "gld_list") {
+          this.keyData =
+            this.forceData[0] &&
+            Object.keys(this.forceData[0].fieldAliases).filter(k => {
+              return ~[
+                "Name",
+                "Sex",
+                "Phone",
+                "IsolatePlace",
+                "Room",
+                "StartIsolationTime",
+                "IsTerminateIsolate"
+              ].indexOf(k);
+            });
+        } else if (id == "mj") {
+          this.keyData =
+            this.forceData[0] &&
+            Object.keys(this.forceData[0].fieldAliases).filter(k => {
+              return ~[
+                "NAME",
+                "Sex",
+                "Phone",
+                "Country",
+                "Supervision",
+                "DividePlace",
+                "Patient",
+                "IdentityType"
+              ].indexOf(k);
+            });
+        } else if (id == "jjgl") {
+          this.keyData =
+            this.forceData[0] &&
+            Object.keys(this.forceData[0].fieldAliases).filter(k => {
+              return ~[
+                "Name",
+                "Sex",
+                "Phone",
+                "Address",
+                "Country",
+                "StartDivideTime",
+                "IsDivide"
+              ].indexOf(k);
+            });
+        } else if (id == "hbhw") {
+          this.keyData =
+            this.forceData[0] &&
+            Object.keys(this.forceData[0].fieldAliases).filter(k => {
+              return ~[
+                "Name",
+                "Sex",
+                "Age",
+                "Country",
+                "ChargeManPhone"
+              ].indexOf(k);
+            });
+        } else if (id == "glmd") {
+          this.keyData =
+            this.forceData[0] &&
+            Object.keys(this.forceData[0].fieldAliases).filter(k => {
+              return ~[
+                "Name",
+                "Sex",
+                "Phone",
+                "Address",
+                "Community",
+                "KSGCSJ"
+              ].indexOf(k);
+            });
+        }
+
         this.text = undefined;
       });
     },

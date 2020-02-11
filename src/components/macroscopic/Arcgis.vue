@@ -277,7 +277,8 @@ export default {
                     "Bid",
                     "Question",
                     "question",
-                    "yy"
+                    "yy",
+                    "Id"
                   ].indexOf(k) < 0
                 );
               })

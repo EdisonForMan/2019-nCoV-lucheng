@@ -8,6 +8,7 @@ const {
 export const leftOptions = [{
         label: "疫情分布",
         tabIndex: 0,
+        dqlabel: "疫情分布",
         sflabel: -1,
         check: false,
         show: true,
@@ -58,7 +59,7 @@ export const leftOptions = [{
             {
                 name: `集中医学观察点 (${lc.gld}个)`,
                 id: "gld",
-                ytname: `集中隔离点 (${lc_yt.gld}个)`,
+                ytname: `集中医学观察点 (${lc_yt.gld}个)`,
                 url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer",
                 sublayers: "2",
                 icon: "治愈",
@@ -66,7 +67,7 @@ export const leftOptions = [{
             }, {
                 name: `集中医学观察点人员名单 (${lc.gld_list}个)`,
                 id: "gld_list",
-                ytname: `集中隔离点人员名单 (${lc_yt.gld_list}个)`,
+                ytname: `集中医学观察点人员名单 (${lc_yt.gld_list}个)`,
                 url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer",
                 sublayers: "5",
                 icon: "治愈",
@@ -103,6 +104,7 @@ export const leftOptions = [{
     {
         label: "网格管理",
         tabIndex: 0,
+        dqlabel: "网格管理",
         sflabel: -1,
         check: false,
         show: true,
@@ -131,6 +133,7 @@ export const leftOptions = [{
     {
         label: "卡口值班",
         tabIndex: 0,
+        dqlabel: "卡口值班",
         sflabel: -1,
         check: false,
         show: true,
@@ -185,6 +188,7 @@ export const leftOptions = [{
     {
         label: "人员密集场所",
         tabIndex: 0,
+        dqlabel: "人员密集场所",
         sflabel: -1,
         check: false,
         show: true,
@@ -259,6 +263,7 @@ export const leftOptions = [{
     {
         label: "医疗资源",
         tabIndex: 0,
+        dqlabel: "医疗资源",
         sflabel: -1,
         check: false,
         show: true,
@@ -322,13 +327,15 @@ export const leftOptions = [{
         ]
     },
     {
-        label: "国际大酒店专题",
-        tabIndex: 0,
+        label: -1,
+        tabIndex: 1,
+        dqlabel: "国际大酒店专题",
         sflabel: -1,
         check: false,
         show: true,
         children: [{
-            name: `隔离名单 (${macroscopic.glmd}人)`,
+            name: "-1",
+            ytname: `隔离名单 (${macroscopic.glmd}人)`,
             id: "glmd",
             url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
             sublayers: "16",
@@ -338,8 +345,9 @@ export const leftOptions = [{
     },
     {
         label: -1,
+        dqlabel: -1,
         sflabel: "三返专题",
-        tabIndex: 1,
+        tabIndex: 2,
         check: false,
         show: true,
         children: [{
