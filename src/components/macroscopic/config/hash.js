@@ -445,6 +445,15 @@ const nmscHash = [{
 }, {
     fieldName: "Country",
     label: "街道"
+}, {
+    fieldName: "lcwj_DBO_农贸市场_Area",
+    label: "面积"
+}, {
+    fieldName: "IsOpening",
+    label: "是否开放"
+}, {
+    fieldName: "OpenTime",
+    label: "开放时间"
 }]
 
 // 小区出入口

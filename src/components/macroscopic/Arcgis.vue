@@ -7,6 +7,7 @@
 <script>
 /* eslint-disable */
 import { addQZLinkFeature, mjChartUpdate } from "./frame/mjArcgis";
+import { gldChartUpdate } from "./frame/gldArcgis";
 import { linkCPFeatures } from "./frame/streetArcgis";
 import {
   linkXQFeatures,
@@ -115,6 +116,14 @@ export default {
               this.map.remove(this.map.findLayerById(_id_));
           });
         }
+        // 农贸市场
+        if (item.id == "people_type_9") {
+          ["people_type_9", "people_type_9_2"].map(_id_ => {
+            this.map &&
+              this.map.findLayerById(_id_) &&
+              this.map.remove(this.map.findLayerById(_id_));
+          });
+        }
       }
     },
     /**
@@ -184,6 +193,13 @@ export default {
       $("body").on("click", ".xq_enter_btn", function() {
         const val = $(this).attr("data-val");
         linkXQ_ENTERFeatures(context, val);
+        context.$parent.leftHidden();
+      });
+      //  隔离点人员详情
+      $("body").on("click", ".gld_btn", function() {
+        const val = $(this).attr("data-val");
+        // console.log(val);
+        gldChartUpdate(context, val);
         context.$parent.leftHidden();
       });
     },
@@ -289,6 +305,11 @@ export default {
           ${
             id == "xq"
               ? `<div class="bottomBtn xq_btn" data-val="${attributes.name}">疫情信息分布</div>`
+              : ``
+          }
+          ${
+            id == "gld"
+              ? `<div class="bottomBtn gld_btn" data-val="${attributes.Name}">观察点人员详情</div>`
               : ``
           }
           ${
@@ -493,6 +514,11 @@ export default {
             id == "chanyePlate"
               ? `<div class="bottomBtn cp_btn" data-val="{名称}">相关信息分布</div>`
               : ``
+          }
+          ${
+            id == "gld"
+              ? `<div class="bottomBtn gld_btn" data-val="{Name}">观察点人员详情</div>`
+              : ``
           }`
             };
           }
@@ -502,6 +528,7 @@ export default {
           //     ? `<div class="bottomBtn xq_btn" data-val="{name}">相关信息分布</div>`
           //     : ``
           // }
+
           const _layers_ = item.isImg ? MapImageLayer : FeatureLayer;
           if (item.sublayers) {
             if (item.isImg) {
@@ -521,18 +548,68 @@ export default {
               d.length && (option.definitionExpression = d.join(" and "));
             }
           }
-          item.icon &&
-            (option.renderer = {
-              type: "simple", // autocasts as new SimpleRenderer()
-              symbol: {
-                type: "picture-marker",
-                url: `${server}/icon/other/${item.icon}.png`,
-                width: "30px",
-                height: "32px"
+
+          if (id == "people_type_9") {
+            option.definitionExpression = `IsOpening = '是'`;
+
+            item.icon &&
+              (option.renderer = {
+                type: "simple", // autocasts as new SimpleRenderer()
+                symbol: {
+                  type: "picture-marker",
+                  url: `${server}/icon/other/${item.icon}.png`,
+                  width: "30px",
+                  height: "32px"
+                }
+              });
+
+            const feature = new _layers_(option);
+            that.map.add(feature);
+
+            option.id = "people_type_9_2";
+
+            option.definitionExpression = `IsOpening = '否'`;
+
+            item.icon2 &&
+              (option.renderer = {
+                type: "simple", // autocasts as new SimpleRenderer()
+                symbol: {
+                  type: "picture-marker",
+                  url: `${server}/icon/other/${item.icon2}.png`,
+                  width: "30px",
+                  height: "32px"
+                }
+              });
+
+            const feature2 = new _layers_(option);
+            that.map.add(feature2);
+          } else {
+            if (item.definitionExpression || shallYT) {
+              const d = [];
+              item.definitionExpression && d.push(item.definitionExpression);
+              shallYT && item.ytd && d.push(item.ytd);
+              if (item.isImg) {
+                d.length &&
+                  (option.sublayers[0].definitionExpression = d.join(" and "));
+              } else {
+                d.length && (option.definitionExpression = d.join(" and "));
               }
-            });
-          const feature = new _layers_(option);
-          that.map.add(feature);
+            }
+
+            item.icon &&
+              (option.renderer = {
+                type: "simple", // autocasts as new SimpleRenderer()
+                symbol: {
+                  type: "picture-marker",
+                  url: `${server}/icon/other/${item.icon}.png`,
+                  width: "30px",
+                  height: "32px"
+                }
+              });
+
+            const feature = new _layers_(option);
+            that.map.add(feature);
+          }
           resolve(true);
         });
       });

@@ -29,6 +29,7 @@
     <qzTable ref="qzTable" :style="{left:(Number(moveLeft) + Number(520)) + 'px'}" />
     <streetFrame ref="cpFrame" :style="{left:moveLeft + 'px'}" />
     <queryForm ref="queryForm" :style="{left:moveLeft + 'px'}" />
+    <gldxq ref="gldxq" :style="{left:moveLeft + 'px'}" />
   </div>
 </template>
 
@@ -56,6 +57,7 @@ import popOpen from "./popOpen";
 import mjChart from "./frame/mjChart";
 import streetFrame from "./frame/streetFrame";
 import queryForm from "./queryForm";
+import gldxq from "./gldxq";
 
 import qzTable from "./frame/qzTable"; //圈主信息
 
@@ -88,7 +90,8 @@ export default {
     streetFrame, //街道疫情
     listxq, //点击列表的详情框
     queryForm, //空间查询结果
-    qzTable //圈主信息
+    qzTable, //圈主信息
+    gldxq //隔离点详情
   },
   created() {},
   mounted() {},

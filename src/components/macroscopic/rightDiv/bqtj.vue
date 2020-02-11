@@ -34,7 +34,8 @@ export default {
       tabIndex: 0,
       ChartDataWZ: " ",
       ChartDataLC: " ",
-      dataTime: " "
+      dataTime: " ",
+      children: " "
     };
   },
   methods: {
@@ -82,20 +83,29 @@ export default {
       }
     },
     getItem(children, label) {
-      // console.log("children", children);
+      //console.log("children", children);
       if (label == "疫情分布" && children.id !== "ytyg") {
         this.dataAge = this.dataHash[children.id];
         document.getElementById("select").value = children.id;
         this.$echarts.init(document.getElementById("bqtjChart")).clear();
+        this.children = children;
         this.zqzb();
       }
     },
     // 确诊病例
     zqzb() {
       const chart = this.$echarts.init(document.getElementById("bqtjChart"));
-      for (let i = 0; i < this.dataAge.length; i++) {
-        this.dataAge[i].value = this.dataAge[i].value-this.dataAge[i].xzdate 
-      };
+      // if (this.children.id == "qzbl") {
+      //   for (let i = 0; i < this.dataAge.length; i++) {
+      //     if (this.dataAge[i].value - this.dataAge[i].xzdate < 0) {
+      //       this.dataAge[i].value =
+      //         this.dataAge[i].value + this.dataAge[i].xzdate;
+      //     } else {
+      //       this.dataAge[i].value =
+      //         this.dataAge[i].value - this.dataAge[i].xzdate;
+      //     }
+      //   }
+      // }
       chart.setOption({
         grid: {
           left: "8%",
@@ -149,15 +159,6 @@ export default {
             type: "bar",
             barWidth: "20px",
             stack: "sum",
-            label: {
-              normal: {
-                show: true,
-                position: "inside",
-                textStyle: {
-                  color: "#FFF"
-                }
-              }
-            },
             data: this.dataAge
           },
           {
@@ -165,19 +166,22 @@ export default {
             type: "bar",
             stack: "sum",
             barWidth: "20px",
-            label: {
-              normal: {
-                show: true,
-                position: "inside",
-                textStyle: {
-                  color: "#FFF"
-                }
-              }
-            },
             color: "#f9c401",
             data: this.dataAge.map(item => item.xzdate)
           }
-        ]
+        ],
+        label: {
+          normal: {
+            show: true,
+            position: "inside",
+            textStyle: {
+              color: "#FFF"
+            },
+            formatter: function(params) {
+              return params.value + this.dataAge[params.dataIndex];
+            }
+          }
+        }
       });
     },
     // 确诊趋势

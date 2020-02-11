@@ -170,7 +170,8 @@ export default {
               "Shape.STLength()",
               "pd",
               "小区面名称",
-              "小区面唯一码"
+              "小区面唯一码",
+              "Id"
             ].indexOf(k) < 0
           );
         });

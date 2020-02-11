@@ -18,7 +18,7 @@
     <ul>
       <li v-for="(item,index) in forceData" :key="index" @click="goLocation(item)">
         <span
-          v-if="item.label == '疫情分布' && ['gld','gld_list','mj','mj2','hbhw','ytyg'].indexOf(item.id) < 0"
+          v-if="item.label == '疫情分布' && ['gld','gld_list','mj','mj2','hbhw','ytyg','glmd'].indexOf(item.id) < 0"
         >{{++index}}.患者：{{item.attributes.Name?item.attributes.Name.slice(0,1):''}}**,{{item.attributes.Sex}},{{item.attributes.Address}},{{item.attributes.Age}}</span>
         <span
           v-if="~['mj','mj2'].indexOf(item.id)"
@@ -31,6 +31,9 @@
         >{{++index}}.{{item.attributes.Name?item.attributes.Name.slice(0,1):''}}**,{{item.attributes.Address}}</span>
         <span
           v-if="item.id == 'ytyg'"
+        >{{++index}}.{{item.attributes.Name?item.attributes.Name.slice(0,1):''}}**,{{item.attributes.Address}}</span>
+        <span
+          v-if="item.id == 'glmd'"
         >{{++index}}.{{item.attributes.Name?item.attributes.Name.slice(0,1):''}}**,{{item.attributes.Address}}</span>
         <span
           v-if="item.id == 'hbhw'"
@@ -52,7 +55,9 @@
           v-if="item.id == 'people_type_8' || item.id == 'people_type_9'"
         >{{++index}}.{{item.attributes.Name}}</span>
         <span v-if="item.id == 'xq'">{{++index}}.{{item.attributes.name}}</span>
-        <span v-if="item.id == 'xqjck'">{{++index}}. {{item.attributes.社区名称}}. {{item.attributes.小区名称}}</span>
+        <span
+          v-if="item.id == 'xqjck'"
+        >{{++index}}. {{item.attributes.社区名称}}. {{item.attributes.小区名称}}</span>
         <span v-if="item.id == 'wg'">{{++index}}.{{item.attributes.Name}}</span>
         <span
           v-if="item.id == 'chanyePlate'"
@@ -108,6 +113,7 @@ export default {
       this.isLoading = false;
     },
     getItem({ url, sublayers, id, name, definitionExpression, ytd }, label) {
+      console.log(url);
       this.isLoading = true;
       const d = [];
       definitionExpression && d.push(definitionExpression);

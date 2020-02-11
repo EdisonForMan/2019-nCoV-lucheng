@@ -346,7 +346,8 @@ export default {
               "MansionName",
               "TF",
               "Shape_Length_1",
-              "Shape_Area_1"
+              "Shape_Area_1",
+              "Id"
             ].indexOf(k) < 0
           );
         });

@@ -1,14 +1,14 @@
 <template>
   <div class="leftMultiSelect">
-    <div class="topic">
-      <header>
+    <div class="topic" style="text-align: center;">
+      <header style="text-align: center;">
         <span :class="{active:tabIndex == 0}" @click="()=>{tabIndex = 0,filterItem(0)}">全区</span>
         <i>/</i>
-        <span :class="{active:tabIndex == 1}" @click="()=>{tabIndex = 1,filterItem(0)}">银泰</span>
+        <span :class="{active:tabIndex == 1}" @click="()=>{tabIndex = 1,filterItem(0)}">地区专题</span>
         <i>/</i>
         <span :class="{active:tabIndex == 2}" @click="()=>{tabIndex = 2,filterItem(0)}">三返</span>
-        <i>/</i>
-        <span :class="{active:tabIndex == 3}" @click="()=>{tabIndex = 3,filterItem(0)}">国际大酒店</span>
+        <!-- <i>/</i>
+        <span :class="{active:tabIndex == 3}" @click="()=>{tabIndex = 3,filterItem(0)}">国际大酒店</span>-->
         <!-- <span class="stateTipHeaderBar"></span> -->
       </header>
       <div class="selectFrame no_select">
@@ -52,7 +52,7 @@
               />
               <span
                 id="xq"
-                v-if="item.label=='疫情分布' || oitem.id == 'xq'"
+                v-if="item.label=='疫情分布' || oitem.id == 'xq'||oitem.id=='glmd'"
                 @click="ShowListxq(oitem,item)"
               >详情</span>
             </li>
@@ -174,6 +174,8 @@ export default {
       this.$parent.$refs.macroArcgis.cleanQuery();
       // 关闭密接面板
       this.$parent.$refs.mjChart.list = [];
+      // 关闭隔离点面板
+      this.$parent.$refs.gldxq.list = [];
     },
     change(id) {
       const that = this;
