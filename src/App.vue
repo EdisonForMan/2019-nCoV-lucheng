@@ -4,11 +4,17 @@
       <div class="app_icon">鹿城区新冠肺炎防控指挥地图</div>
       <div class="app_toptab_position app_toptab_normal">
         <ul class="app_toptab">
-          <li
+          <!-- <li
             v-for="(item,index) in toptab"
             :key="index"
             :class="{top_active:index==current}"
             @click="$goRoute(item.route),selected(index)"
+          >{{item.label}}</li>-->
+          <!-- 2020/2/12 固定第二个页面 -->
+          <li
+            v-for="(item,index) in toptab"
+            :class="{top_active:index==1}"
+            :key="index"
           >{{item.label}}</li>
         </ul>
         <p>截至日期：{{$window.nCov_luchengData.macroscopic.updateTime}}</p>
@@ -43,7 +49,9 @@ export default {
     };
   },
   mounted() {
-    setInterval(()=>{this.getTime()},1000)
+    setInterval(() => {
+      this.getTime();
+    }, 1000);
   },
   methods: {
     shallLogin() {

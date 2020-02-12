@@ -117,18 +117,20 @@ export default {
               that.countryHash[a.attributes.Country]
             );
           });
-          that.keyData1 = Object.keys(list[0].fieldAliases).filter(k => {
-            return (
-              [
-                "序号",
-                "隔离点编码",
-                "OBJECTID",
-                "Bid",
-                "Question",
-                "question"
-              ].indexOf(k) < 0
-            );
-          });
+          that.keyData1 =
+            list[0] &&
+            Object.keys(list[0].fieldAliases).filter(k => {
+              return (
+                [
+                  "序号",
+                  "隔离点编码",
+                  "OBJECTID",
+                  "Bid",
+                  "Question",
+                  "question"
+                ].indexOf(k) < 0
+              );
+            });
         } else if (that.type == 2) {
           that.roomData = list.sort((a, b) => {
             return (
@@ -136,19 +138,23 @@ export default {
               that.countryHash[a.attributes.Country]
             );
           });
-          that.keyData2 = Object.keys(list[0].fieldAliases).filter(k => {
-            return (
-              [
-                "序号",
-                "隔离点编码",
-                "OBJECTID",
-                "Bid",
-                "Question",
-                "question",
-                "yy"
-              ].indexOf(k) < 0
-            );
-          });
+          that.keyData2 =
+            list[0] &&
+            Object.keys(list[0].fieldAliases).filter(k => {
+              return (
+                [
+                  "序号",
+                  "隔离点编码",
+                  "OBJECTID",
+                  "Bid",
+                  "Question",
+                  "question",
+                  "yy",
+                  "X",
+                  "Y"
+                ].indexOf(k) < 0
+              );
+            });
         }
       });
     }

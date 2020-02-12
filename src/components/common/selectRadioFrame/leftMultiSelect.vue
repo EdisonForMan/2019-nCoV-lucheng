@@ -4,7 +4,7 @@
       <header>
         <span :class="{active:tabIndex == 0}" @click="()=>{tabIndex = 0,filterItem(0)}">全区</span>
         <i>/</i>
-        <span :class="{active:tabIndex == 1}" @click="()=>{tabIndex = 1,filterItem(0)}">地区专题</span>
+        <span :class="{active:tabIndex == 1}" @click="()=>{tabIndex = 1,filterItem(0)}">专题</span>
         <i>/</i>
         <span :class="{active:tabIndex == 2}" @click="()=>{tabIndex = 2,filterItem(0)}">三返</span>
         <!-- <i>/</i>

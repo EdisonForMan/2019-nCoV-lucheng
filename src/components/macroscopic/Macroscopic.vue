@@ -24,6 +24,7 @@
     <!-- //弹出框 -->
     <sbxq ref="sbxq" v-show="xqShow" />
     <listxq ref="listxq" v-show="listShow" />
+    <xqjck ref="xqjck" v-show="xqjckShow" />
     <mjChart ref="mjChart" :style="{left:moveLeft + 'px'}" />
     <!-- 圈主信息 -->
     <qzTable ref="qzTable" :style="{left:(Number(moveLeft) + Number(520)) + 'px'}" />
@@ -58,6 +59,7 @@ import mjChart from "./frame/mjChart";
 import streetFrame from "./frame/streetFrame";
 import queryForm from "./queryForm";
 import gldxq from "./gldxq";
+import xqjck from "./xqjck";
 
 import qzTable from "./frame/qzTable"; //圈主信息
 
@@ -72,6 +74,7 @@ export default {
       leftOptions,
       xqShow: false,
       listShow: false,
+      xqjckShow: false,
       moveLeft: "360"
     };
   },
@@ -91,7 +94,8 @@ export default {
     listxq, //点击列表的详情框
     queryForm, //空间查询结果
     qzTable, //圈主信息
-    gldxq //隔离点详情
+    gldxq, //隔离点详情
+    xqjck //小区进出口人员
   },
   created() {},
   mounted() {},

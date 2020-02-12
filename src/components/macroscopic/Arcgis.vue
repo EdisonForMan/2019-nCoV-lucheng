@@ -8,6 +8,7 @@
 /* eslint-disable */
 import { addQZLinkFeature, mjChartUpdate } from "./frame/mjArcgis";
 import { gldChartUpdate } from "./frame/gldArcgis";
+import { xqjckFormUpdate } from "./frame/xqjckArcgis";
 import { linkCPFeatures } from "./frame/streetArcgis";
 import {
   linkXQFeatures,
@@ -182,12 +183,14 @@ export default {
         linkCPFeatures(context, val);
         context.$parent.leftHidden();
       });
-      //  小区疫情分布
+      //  小区进出口人员
       $("body").on("click", ".xq_btn", function() {
         const val = $(this).attr("data-val");
-        linkXQFeatures(context, val);
+
+        console.log(val);
+        xqjckFormUpdate(context, val);
         context.$parent.leftHidden();
-        context.$parent.$refs.queryForm.list = [];
+        // context.$parent.xqjckShow = true;
       });
       //  小区卡口分布
       $("body").on("click", ".xq_enter_btn", function() {
@@ -197,9 +200,9 @@ export default {
       });
       //  隔离点人员详情
       $("body").on("click", ".gld_btn", function() {
-        const val = $(this).attr("data-val");
-        // console.log(val);
-        gldChartUpdate(context, val);
+        const name = $(this).attr("data-val");
+        const bid = $(this).attr("data-val2");
+        gldChartUpdate(context, name, bid);
         context.$parent.leftHidden();
       });
     },
@@ -278,7 +281,11 @@ export default {
                     "Question",
                     "question",
                     "yy",
-                    "Id"
+                    "Id",
+                    "小区面名称",
+                    "小区面唯一码",
+                    "X",
+                    "Y"
                   ].indexOf(k) < 0
                 );
               })
@@ -304,14 +311,15 @@ export default {
               : ``
           }
           ${
-            id == "xq"
-              ? `<div class="bottomBtn xq_btn" data-val="${attributes.name}">疫情信息分布</div>`
+            id == "gld"
+              ? `<div class="bottomBtn gld_btn" data-val="${attributes.Name}" data-val2="${attributes.Bid}">观察点人员详情</div>`
               : ``
           }
           ${
-            id == "gld"
-              ? `<div class="bottomBtn gld_btn" data-val="${attributes.Name}">观察点人员详情</div>`
-              : ``
+            // id == "xq"
+            //   ? `<div class="bottomBtn xq_btn" data-val="${attributes.name}">进出人员统计</div>`
+            //   : ``··
+            ``
           }
           ${
             // 街镇病例额外添加
@@ -518,8 +526,14 @@ export default {
           }
           ${
             id == "gld"
-              ? `<div class="bottomBtn gld_btn" data-val="{Name}">观察点人员详情</div>`
+              ? `<div class="bottomBtn gld_btn" data-val="{Name}" data-val2="{Bid}">观察点人员详情</div>`
               : ``
+          }
+          ${
+            // id == "xq"
+            //   ? `<div class="bottomBtn xq_btn" data-val="{name}">进出人员统计</div>`
+            //   : ``
+            ``
           }`
             };
           }

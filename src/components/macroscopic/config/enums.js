@@ -8,7 +8,7 @@ const {
 export const leftOptions = [{
         label: "疫情分布",
         tabIndex: 0,
-        dqlabel: "疫情分布",
+        dqlabel: "银泰专题",
         sflabel: -1,
         check: false,
         show: true,
@@ -59,7 +59,7 @@ export const leftOptions = [{
             {
                 name: `集中医学观察点 (${lc.gld}个)`,
                 id: "gld",
-                ytname: `集中医学观察点 (${lc_yt.gld}个)`,
+                ytname: -1,
                 url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer",
                 sublayers: "2",
                 icon: "治愈",
@@ -67,18 +67,27 @@ export const leftOptions = [{
             }, {
                 name: `集中医学观察点人员名单 (${lc.gld_list}个)`,
                 id: "gld_list",
-                ytname: `集中医学观察点人员名单 (${lc_yt.gld_list}个)`,
+                ytname: -1,
                 url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer",
                 sublayers: "5",
                 icon: "治愈",
                 check: false
             }, {
                 name: `密切接触者 (${lc.mj}例)`,
-                ytname: `密切接触者 (${lc_yt.mj}例)`,
-                ytd: "IdentityType like '%银泰%'",
+                ytname: -1,
+                // ytd: "IdentityType like '%银泰%'",
                 id: "mj",
                 url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
                 sublayers: "5",
+                icon: "密接",
+                check: false
+            }, {
+                name: -1,
+                ytname: `密切接触者 (${lc_yt.mj}例)`,
+                // ytd: "IdentityType like '%银泰%'",
+                id: "mj",
+                url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
+                sublayers: "6",
                 icon: "密接",
                 check: false
             }, {
@@ -104,7 +113,7 @@ export const leftOptions = [{
     {
         label: "网格管理",
         tabIndex: 0,
-        dqlabel: "网格管理",
+        dqlabel: -1,
         sflabel: -1,
         check: false,
         show: true,
@@ -133,7 +142,7 @@ export const leftOptions = [{
     {
         label: "卡口值班",
         tabIndex: 0,
-        dqlabel: "卡口值班",
+        dqlabel: -1,
         sflabel: -1,
         check: false,
         show: true,
@@ -188,7 +197,7 @@ export const leftOptions = [{
     {
         label: "人员密集场所",
         tabIndex: 0,
-        dqlabel: "人员密集场所",
+        dqlabel: -1,
         sflabel: -1,
         check: false,
         show: true,
@@ -263,7 +272,7 @@ export const leftOptions = [{
     {
         label: "医疗资源",
         tabIndex: 0,
-        dqlabel: "医疗资源",
+        dqlabel: -1,
         sflabel: -1,
         check: false,
         show: true,
@@ -329,7 +338,7 @@ export const leftOptions = [{
     {
         label: -1,
         tabIndex: 1,
-        dqlabel: "国际大酒店专题",
+        dqlabel: "国际专题",
         sflabel: -1,
         check: false,
         show: true,

@@ -10,7 +10,7 @@ import {
 } from "@/components/common/Tmap";
 const server = "http://172.20.89.68:5001/s";
 
-export const gldChartUpdate = (context, name) => {
+export const gldChartUpdate = (context, name, bid) => {
   loadModules(
     ["esri/tasks/QueryTask", "esri/tasks/support/Query"],
     OPTION
@@ -21,7 +21,7 @@ export const gldChartUpdate = (context, name) => {
     const query = new Query();
     query.outFields = ["*"];
     query.returnGeometry = true;
-    query.where = `IsolatePlace = '${name}'`;
+    query.where = `Bid = '${bid}'`;
     const {
       fields,
       features

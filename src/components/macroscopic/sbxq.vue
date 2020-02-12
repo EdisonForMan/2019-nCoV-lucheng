@@ -1,22 +1,50 @@
 <template>
   <div id="sbxqDateDiv">
     <div class="head">
-      <span>[ {{ title!=-1?title:"银泰员工" }} ] - 详情列表</span>
+      <span>[ {{ title }} ] - 详情列表</span>
       <a v-on:click="sbclose">×</a>
     </div>
 
     <div class="content">
-      <table border="0" cellpadding="0" cellspacing="0">
+      <table border="0" cellpadding="0" cellspacing="0" v-if="forceData && forceData.length">
         <thead>
           <tr>
             <th>序号</th>
             <th v-for="(k,i) in keyData" :key="i">{{ forceData[0].fieldAliases[k] }}</th>
           </tr>
         </thead>
-        <tbody>
-          <tr v-for="(item,index) in forceData" :key="index">
+        <tbody
+          v-if="~['确诊病例','疑似病例','集中医学观察点人员名单','密切接触者','居家隔离人员','湖北回鹿人员信令','银泰员工','隔离名单'].indexOf(title)"
+        >
+          <tr
+            v-for="(item,index) in forceData"
+            :key="index"
+            @click="goLocation(item)"
+            style="cursor: pointer;"
+          >
+            <td>{{ ++index }}</td>
+            <td
+              v-for="(k,i) in keyData"
+              :key="i"
+            >{{ item.attributes[k]?(~["Name","NAME"].indexOf(k)?`${item.attributes[k].trim().substr(0,1)}*${item.attributes[k].trim().substr(-1,1)}`:item.attributes[k]):"无" }}</td>
+          </tr>
+        </tbody>
+        <tbody v-else>
+          <tr
+            v-for="(item,index) in forceData"
+            :key="index"
+            @click="goLocation(item)"
+            style="cursor: pointer;"
+          >
             <td>{{ ++index }}</td>
             <td v-for="(k,i) in keyData" :key="i">{{ item.attributes[k] || "无" }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <table border="0" cellpadding="0" cellspacing="0" v-if="!forceData.length">
+        <tbody>
+          <tr>
+            <td>暂无数据</td>
           </tr>
         </tbody>
       </table>
@@ -79,11 +107,15 @@ export default {
     //   });
     //   this.forceData = forceData;
     // },
-    getItem({ url, sublayers, id, name, definitionExpression, ytd }, label) {
+    getItem(
+      { url, sublayers, id, name, ytname, definitionExpression, ytd },
+      label
+    ) {
       const d = [];
       definitionExpression && d.push(definitionExpression);
       this.$parent.$refs.leftOptions.tabIndex == 1 && ytd && d.push(ytd);
-      this.title = `${name}`.split(" ")[0];
+      this.title =
+        name != "-1" ? `${name}`.split(" ")[0] : `${ytname}`.split(" ")[0];
       loadModules(
         ["esri/tasks/QueryTask", "esri/tasks/support/Query"],
         OPTION
@@ -152,29 +184,33 @@ export default {
             this.countryHash[a.attributes.Country]
           );
         });
-        this.keyData = Object.keys(this.forceData[0].fieldAliases).filter(k => {
-          return (
-            [
-              "序号",
-              "隔离点编码",
-              "OBJECTID",
-              "OBJECTID_1",
-              "Bid",
-              "bid",
-              "Question",
-              "question",
-              "yy",
-              "Note",
-              "RelatingCodes",
-              "Shape.STArea()",
-              "Shape.STLength()",
-              "pd",
-              "小区面名称",
-              "小区面唯一码",
-              "Id"
-            ].indexOf(k) < 0
-          );
-        });
+        this.keyData =
+          this.forceData[0] &&
+          Object.keys(this.forceData[0].fieldAliases).filter(k => {
+            return (
+              [
+                "序号",
+                "隔离点编码",
+                "OBJECTID",
+                "OBJECTID_1",
+                "Bid",
+                "bid",
+                "Question",
+                "question",
+                "yy",
+                "Note",
+                "RelatingCodes",
+                "Shape.STArea()",
+                "Shape.STLength()",
+                "pd",
+                "小区面名称",
+                "小区面唯一码",
+                "Id",
+                "X",
+                "Y"
+              ].indexOf(k) < 0
+            );
+          });
         this.text = undefined;
       });
     },
@@ -228,6 +264,7 @@ export default {
     },
     goLocation(item) {
       this.$parent.$refs.macroArcgis.goloaction(item);
+      this.$parent.xqShow = false;
     },
     sbclose() {
       this.$parent.xqShow = false;

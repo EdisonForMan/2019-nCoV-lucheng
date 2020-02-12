@@ -1,102 +1,64 @@
 <template>
-  <div id="listxq">
+  <div id="xqjck">
     <div class="head">
-      <span>[ {{title}} ] - 详情列表</span>
+      <span>[ {{title}} ] - 进出人员统计</span>
       <a v-on:click="sbclose">×</a>
     </div>
-    <div class="search" v-if="sArr.length && sArr[0].Country">
-      <select id="select" @change="xqsearch($event)" v-if="sArr.length && sArr[0].Country">
-        <option value="0">全部</option>
-        <option
-          v-for="(citem,cindex) in sArr"
-          :key="cindex"
-          :value="citem.Country"
-        >{{ citem.Country }}</option>
-      </select>
-      <input type="text" v-model="text" placeholder="请输入查询" />
-      <button @click="()=>{filteItem()}">查询</button>
-    </div>
-    <div class="content">
-      <table border="0" cellpadding="0" cellspacing="0" v-if="qzflag && forceData.length">
+    <div class="statistics">
+      <table border="0" cellpadding="0" cellspacing="0">
         <thead>
           <tr>
-            <th>序号</th>
-            <th v-for="(k,i) in keyData" :key="i">{{ forceData[0].fieldAliases[k] }}</th>
-            <th>关系图谱</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(item,index) in forceData" :key="index">
-            <td>{{ ++index }}</td>
-            <td
-              v-for="(k,i) in keyData"
-              :key="i"
-              @click="goLocation(item)"
-              style="cursor: pointer;"
-            >{{ item.attributes[k]?(~["Name"].indexOf(k)?`${item.attributes[k].trim().substr(0,1)}*${item.attributes[k].trim().substr(-1,1)}`:item.attributes[k]):"无" }}</td>
-            <td @click="showrelation(item)" style="cursor: pointer;">详情</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table border="0" cellpadding="0" cellspacing="0" v-if="!qzflag && forceData.length">
-        <thead>
-          <tr>
-            <th>序号</th>
-            <th v-for="(k,i) in keyData" :key="i">{{ forceData[0].fieldAliases[k] }}</th>
-          </tr>
-        </thead>
-        <tbody v-if="title == '集中医学观察点'">
-          <tr
-            v-for="(item,index) in forceData"
-            :key="index"
-            @click="goLocation(item)"
-            style="cursor: pointer;"
-          >
-            <td>{{ ++index }}</td>
-            <td v-for="(k,i) in keyData" :key="i">{{ item.attributes[k] || "无" }}</td>
-          </tr>
-        </tbody>
-        <tbody v-else>
-          <tr
-            v-for="(item,index) in forceData"
-            :key="index"
-            @click="goLocation(item)"
-            style="cursor: pointer;"
-          >
-            <td>{{ ++index }}</td>
-            <td
-              v-for="(k,i) in keyData"
-              :key="i"
-            >{{ item.attributes[k]?(~["Name","NAME"].indexOf(k)?`${item.attributes[k].trim().substr(0,1)}*${item.attributes[k].trim().substr(-1,1)}`:item.attributes[k]):"无" }}</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table border="0" cellpadding="0" cellspacing="0" v-if="sArr.length && sArr[0].Country">
-        <thead>
-          <tr>
-            <th>街道</th>
-            <th v-for="(citem,cindex) in sArr" :key="cindex">{{citem.Country}}</th>
+            <th>小区内人数</th>
+            <th>小区外人数</th>
+            <th>该时段进入人数</th>
+            <th>该时段外出人数</th>
+            <th>进出超标人数</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>合计</td>
-            <td v-for="(citem,cindex) in sArr" :key="cindex">{{citem.count}}例</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table border="0" cellpadding="0" cellspacing="0" v-if="!sArr.length && !forceData.length">
-        <tbody>
-          <tr>
-            <td>暂无数据</td>
+            <td>200</td>
+            <td>200</td>
+            <td>100</td>
+            <td>100</td>
+            <td>30</td>
           </tr>
         </tbody>
       </table>
     </div>
-    <relation ref="relation" v-show="relationShow" />
+    <div class="content">
+      <div class="inner-title">
+        <span>进出超标人员详情</span>
+      </div>
+      <table border="0" cellpadding="0" cellspacing="0">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>姓名</th>
+            <th>电话号码</th>
+            <th>身份证号</th>
+            <th>所属小区</th>
+            <th>门牌号</th>
+            <th>出门时间</th>
+            <th>返回时间</th>
+            <th>备注</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>**</td>
+            <td>12345678</td>
+            <td>12345678</td>
+            <td>金海嘉苑</td>
+            <td>9-0303</td>
+            <td>2020/2/11 16:43</td>
+            <td>2020/2/11 18:43</td>
+            <td>普通人员出门登记</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -105,7 +67,7 @@
 import { loadModules } from "esri-loader";
 import { OPTION } from "@/components/common/Tmap";
 import { leftOptions } from "./config/enums";
-import relation from "./relation";
+// import relation from "./relation";
 
 export default {
   name: "sbDate",
@@ -143,9 +105,9 @@ export default {
   },
   created() {},
   mounted() {
-    this.getItem(leftOptions[0].children[0], leftOptions[0].label);
+    // this.getItem(leftOptions[0].children[0], leftOptions[0].label);
   },
-  components: { relation },
+  components: {},
   methods: {
     filteItem() {
       const data = this.data;
@@ -424,10 +386,10 @@ export default {
                 "Sex",
                 "Phone",
                 "Country",
-                // "Supervision",
-                // "DividePlace",
+                "Supervision",
+                "DividePlace",
                 "Patient",
-                "Relation"
+                "IdentityType"
               ].indexOf(k);
             });
         } else if (id == "jjgl") {
@@ -533,20 +495,20 @@ export default {
       // console.log(item);
     },
     sbclose() {
-      this.$parent.listShow = false;
+      this.$parent.xqjckShow = false;
     }
   }
 };
 </script>
 
 <style lang="less" scoped>
-#listxq {
+#xqjck {
   position: absolute;
   width: 88%;
   height: 78%;
   background: #24386a;
   border: 1px solid #04ecff;
-  z-index: 20;
+  z-index: 25;
   top: 0;
   margin: auto;
   left: 6%;
@@ -600,9 +562,32 @@ export default {
   // .content::-webkit-scrollbar {
   //   display: none;
   // }
+
+  .statistics {
+    height: 20%;
+
+    table {
+      border: 1px solid #ccc;
+      width: 96%;
+      margin: 0% 2%;
+
+      th,
+      td {
+        border-bottom: 1px solid #ccc;
+        padding: 10px 5px;
+      }
+    }
+  }
   .content {
-    height: 80%;
+    height: 60%;
     overflow: auto;
+
+    .inner-title {
+      line-height: 40px;
+      span {
+        font-size: 20px;
+      }
+    }
 
     table {
       border: 1px solid #ccc;

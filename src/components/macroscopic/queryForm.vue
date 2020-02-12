@@ -18,7 +18,7 @@
         <div class="type">{{item.type}}</div>
         <ul v-if="item.type != '集中医学观察点'">
           <li v-for="(_item,_index) in item.value" :key="_index" @click="goLocation(_item)">
-            <span>{{++_index}}. {{_item.attributes.Name?_item.attributes.Name.slice(0,1):(_item.attributes.NAME?_item.attributes.NAME.slice(0,1):null)}}**, {{_item.attributes.Country}}, {{_item.attributes.Address}}</span>
+            <span>{{++_index}}. {{_item.attributes.Name?`${_item.attributes.Name.substr(0,1)}*${_item.attributes.Name.substr(-1,1)}`:(_item.attributes.NAME?`${_item.attributes.NAME.substr(0,1)}*${_item.attributes.NAME.substr(-1,1)}`:"**")}}, {{_item.attributes.Country}}, {{_item.attributes.Address}}</span>
           </li>
         </ul>
 

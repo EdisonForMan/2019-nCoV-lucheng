@@ -19,52 +19,43 @@
       <li v-for="(item,index) in forceData" :key="index" @click="goLocation(item)">
         <span
           v-if="item.label == '疫情分布' && ['gld','gld_list','mj','mj2','hbhw','ytyg','glmd'].indexOf(item.id) < 0"
-        >{{++index}}.患者：{{item.attributes.Name?item.attributes.Name.slice(0,1):''}}**,{{item.attributes.Sex}},{{item.attributes.Address}},{{item.attributes.Age}}</span>
+        >{{++index}}. 患者：{{item.attributes.Name?`${item.attributes.Name.trim().substr(0,1)}*${item.attributes.Name.trim().substr(-1,1)}`:'**'}}, {{item.attributes.Sex}}, {{item.attributes.Address}}, {{item.attributes.Age}}</span>
         <span
           v-if="~['mj','mj2'].indexOf(item.id)"
-        >{{++index}}.{{item.attributes.NAME?item.attributes.NAME.slice(0,1):''}}**,{{item.attributes.Sex}},{{item.attributes.Address_Department}}</span>
+        >{{++index}}. {{item.attributes.NAME?`${item.attributes.NAME.trim().substr(0,1)}*${item.attributes.NAME.trim().substr(-1,1)}`:'**'}}, {{item.attributes.Sex}}, {{item.attributes.Address_Department}}</span>
         <span
           v-if="~['gld'].indexOf(item.id)"
-        >{{++index}}.{{item.attributes.Name}},{{item.attributes.Address}}</span>
+        >{{++index}}. {{item.attributes.Name}}, {{item.attributes.Address}}</span>
         <span
-          v-if="~['gld_list'].indexOf(item.id)"
-        >{{++index}}.{{item.attributes.Name?item.attributes.Name.slice(0,1):''}}**,{{item.attributes.Address}}</span>
-        <span
-          v-if="item.id == 'ytyg'"
-        >{{++index}}.{{item.attributes.Name?item.attributes.Name.slice(0,1):''}}**,{{item.attributes.Address}}</span>
-        <span
-          v-if="item.id == 'glmd'"
-        >{{++index}}.{{item.attributes.Name?item.attributes.Name.slice(0,1):''}}**,{{item.attributes.Address}}</span>
-        <span
-          v-if="item.id == 'hbhw'"
-        >{{++index}}.{{item.attributes.Name?item.attributes.Name.slice(0,1):''}}**,{{item.attributes.Address}}</span>
+          v-if="~['gld_list','ytyg','glmd','hbhw'].indexOf(item.id)"
+        >{{++index}}. {{item.attributes.Name?`${item.attributes.Name.trim().substr(0,1)}*${item.attributes.Name.trim().substr(-1,1)}`:'**'}}, {{item.attributes.Address}}</span>
         <span v-if="item.label == '医疗资源'">{{++index}}.{{item.attributes.NAME}}</span>
-        <span v-if="item.id == 'highway_type_1'">{{++index}}.{{item.attributes.Name}}</span>
-        <span v-if="item.id == 'highway_type_2'">{{++index}}.{{item.attributes.Name}}</span>
-        <span v-if="item.id == 'highway_type_3'">{{++index}}.{{item.attributes.name}}</span>
+        <span
+          v-if="~['highway_type_1','highway_type_2','highway_type_3'].indexOf(item.id)"
+        >{{++index}}. {{item.attributes.Name}}</span>
         <span
           v-if="item.label == '人员密集场所' && item.id == 'people_type_3'"
-        >{{++index}}.{{item.attributes.name}}</span>
+        >{{++index}}. {{item.attributes.name}}</span>
         <span
           v-if="item.label == '人员密集场所' && (item.id == 'people_type_7')"
-        >{{++index}}.{{item.attributes.Address}}</span>
+        >{{++index}}. {{item.attributes.Address}}</span>
         <span
           v-if="item.label == '人员密集场所' && item.id != 'people_type_3' && item.id != 'people_type_7'"
-        >{{++index}}.{{item.attributes.Name}}</span>
+        >{{++index}}. {{item.attributes.Name}}</span>
         <span
           v-if="item.id == 'people_type_8' || item.id == 'people_type_9'"
-        >{{++index}}.{{item.attributes.Name}}</span>
-        <span v-if="item.id == 'xq'">{{++index}}.{{item.attributes.name}}</span>
+        >{{++index}}. {{item.attributes.Name}}</span>
+        <span v-if="item.id == 'xq'">{{++index}}. {{item.attributes.name}}</span>
         <span
           v-if="item.id == 'xqjck'"
-        >{{++index}}. {{item.attributes.社区名称}}. {{item.attributes.小区名称}}</span>
-        <span v-if="item.id == 'wg'">{{++index}}.{{item.attributes.Name}}</span>
+        >{{++index}}. {{item.attributes.社区名称}}, {{item.attributes.小区名称}}</span>
+        <span v-if="item.id == 'wg'">{{++index}}. {{item.attributes.Name}}</span>
         <span
           v-if="item.id == 'chanyePlate'"
-        >{{++index}}.{{item.attributes.名称}}（{{item.attributes.num}}例）</span>
+        >{{++index}}. {{item.attributes.名称}}（{{item.attributes.num}}例）</span>
         <span
-          v-if="item.label == -1"
-        >{{++index}}.{{item.attributes.Name?item.attributes.Name:(item.attributes.ProjectName?item.attributes.ProjectName:(item.attributes.CompanyName?item.attributes.CompanyName:item.attributes.项目名称))}}</span>
+          v-if="~['jzgd','nj_zdqy','nj_xm_1','nj_xm_2'].indexOf(item.id)"
+        >{{++index}}. {{item.attributes.Name?item.attributes.Name:(item.attributes.ProjectName?item.attributes.ProjectName:(item.attributes.CompanyName?item.attributes.CompanyName:item.attributes.项目名称))}}</span>
       </li>
     </ul>
     <Loading v-if="isLoading" />
@@ -113,7 +104,7 @@ export default {
       this.isLoading = false;
     },
     getItem({ url, sublayers, id, name, definitionExpression, ytd }, label) {
-      console.log(url);
+      // console.log(url);
       this.isLoading = true;
       const d = [];
       definitionExpression && d.push(definitionExpression);
