@@ -14,7 +14,7 @@
           <ylzy />
           <sbDate ref="table" />
         </div>
-        <span @click="()=>{icon_show_right=!icon_show_right}" class="hidden_right_button"></span>
+        <span @click="toggle2" class="hidden_right_button"></span>
       </div>
     </div>
     <xzDate :style="{left:moveLeft + 'px'}" />
@@ -31,6 +31,8 @@
     <streetFrame ref="cpFrame" :style="{left:moveLeft + 'px'}" />
     <queryForm ref="queryForm" :style="{left:moveLeft + 'px'}" />
     <gldxq ref="gldxq" :style="{left:moveLeft + 'px'}" />
+    <ssryForm ref="ssryForm" :style="{left:moveLeft + 'px'}" />
+    <lsryForm ref="lsryForm" :style="{right:moveRight + 'px'}" />
   </div>
 </template>
 
@@ -60,10 +62,14 @@ import streetFrame from "./frame/streetFrame";
 import queryForm from "./queryForm";
 import gldxq from "./gldxq";
 import xqjck from "./xqjck";
+import ssryForm from "./ssryForm";
+import lsryForm from "./ssryForm";
 
 import qzTable from "./frame/qzTable"; //圈主信息
 
 import { leftOptions } from "./config/enums";
+
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "macroscopic",
@@ -75,7 +81,8 @@ export default {
       xqShow: false,
       listShow: false,
       xqjckShow: false,
-      moveLeft: "360"
+      moveLeft: "360",
+      moveRight: "500"
     };
   },
   components: {
@@ -95,18 +102,38 @@ export default {
     queryForm, //空间查询结果
     qzTable, //圈主信息
     gldxq, //隔离点详情
-    xqjck //小区进出口人员
+    xqjck, //小区进出口人员
+    ssryForm, //实时人员
+    lsryForm //历史人员
   },
   created() {},
-  mounted() {},
+  mounted() {
+    !this.crjlList.length && this.fetchcrjlList();
+    !this.ryxxList.length && this.fetchryxxList();
+  },
+  computed: {
+    ...mapState({
+      crjlList: state => state.crjlList,
+      ryxxList: state => state.ryxxList
+    })
+  },
   methods: {
+    ...mapActions(["fetchcrjlList", "fetchryxxList"]),
     toggle() {
       this.icon_show_left = !this.icon_show_left;
       this.moveLeft = !this.icon_show_left ? "360" : "20";
     },
+    toggle2() {
+      this.icon_show_right = !this.icon_show_right;
+      this.moveRight = !this.icon_show_right ? "500" : "20";
+    },
     leftHidden() {
       this.icon_show_left = true;
       this.moveLeft = "20";
+    },
+    rightHidden() {
+      this.icon_show_right = true;
+      this.moveRight = "20";
     }
   }
 };

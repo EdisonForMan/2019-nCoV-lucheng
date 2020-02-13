@@ -1,35 +1,10 @@
 <template>
   <div id="xqjck">
     <div class="head">
-      <span>[ {{title}} ] - 进出人员统计</span>
+      <span>[ {{ title }} ] - 进出人员统计</span>
       <a v-on:click="sbclose">×</a>
     </div>
-    <div class="statistics">
-      <table border="0" cellpadding="0" cellspacing="0">
-        <thead>
-          <tr>
-            <th>小区内人数</th>
-            <th>小区外人数</th>
-            <th>该时段进入人数</th>
-            <th>该时段外出人数</th>
-            <th>进出超标人数</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>200</td>
-            <td>200</td>
-            <td>100</td>
-            <td>100</td>
-            <td>30</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="content">
-      <div class="inner-title">
-        <span>进出超标人员详情</span>
-      </div>
+    <!-- <div class="statistics">
       <table border="0" cellpadding="0" cellspacing="0">
         <thead>
           <tr>
@@ -58,6 +33,50 @@
           </tr>
         </tbody>
       </table>
+    </div>-->
+    <div class="content">
+      <div class="inner-title">
+        <span>进出人员详情</span>
+      </div>
+      <table border="0" cellpadding="0" cellspacing="0">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>姓名</th>
+            <th>电话号码</th>
+            <th>身份证号</th>
+            <th>所属小区</th>
+            <th>门牌号</th>
+            <th>出门时间</th>
+            <th>返回时间</th>
+            <th>备注</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in forceData" :key="index">
+            <td>{{ ++index }}</td>
+            <td>{{ item.xm }}</td>
+            <td>{{ item.dh }}</td>
+            <td>{{ item.sfzh }}</td>
+            <td>{{ item.ssxq }}</td>
+            <td>{{ item.mph }}</td>
+            <td>{{ item.cmsj }}</td>
+            <td>{{ item.fhsj }}</td>
+            <td>{{ item.bz }}</td>
+          </tr>
+          <!-- <tr>
+            <td>1</td>
+            <td>**</td>
+            <td>12345678</td>
+            <td>12345678</td>
+            <td>金海嘉苑</td>
+            <td>9-0303</td>
+            <td>2020/2/11 16:43</td>
+            <td>2020/2/11 18:43</td>
+            <td>普通人员出门登记</td>
+          </tr>-->
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
@@ -68,6 +87,8 @@ import { loadModules } from "esri-loader";
 import { OPTION } from "@/components/common/Tmap";
 import { leftOptions } from "./config/enums";
 // import relation from "./relation";
+
+import { mapState } from "vuex";
 
 export default {
   name: "sbDate",
@@ -108,8 +129,34 @@ export default {
     // this.getItem(leftOptions[0].children[0], leftOptions[0].label);
   },
   components: {},
+  watch: {
+    crjlList() {
+      this.crjlDataFix();
+    },
+    ryxxList() {
+      this.ryxxDataFix();
+    }
+  },
+  computed: {
+    ...mapState({
+      crjlList: state => state.crjlList,
+      ryxxList: state => state.ryxxList
+    })
+  },
   methods: {
-    filteItem() {
+    crjlDataFix() {
+      if (!this.crjlList.length) return;
+      console.log("crjl", this.crjlList);
+    },
+    ryxxDataFix() {
+      if (!this.ryxxList.length) return;
+      console.log("ryxx", this.ryxxList);
+    },
+    filterItem(name) {
+      this.title = name;
+      this.forceData = this.crjlList.filter(item => item.ssxq == name);
+    },
+    /* filteItem() {
       const data = this.data;
       const forceData = [];
       data.map(item => {
@@ -134,7 +181,7 @@ export default {
           forceData.push(item);
       });
       this.forceData = forceData;
-    },
+    }, */
     xqsearch(event) {
       this.selectValue = event.target.value;
       const data = this.data;

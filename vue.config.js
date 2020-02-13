@@ -6,16 +6,16 @@ module.exports = {
   //  打包静态文件访问相对路径设置
   publicPath: "./",
   assetsDir: "libs",
-  // devServer: {
-  //   proxy: {
-  //     //配置跨域
-  //     "/api": {
-  //       target: "http://192.168.0.200:9003/api",
-  //       changOrigin: true,
-  //       pathRewrite: {
-  //         "^/api": ""
-  //       }
-  //     }
-  //   }
-  // }
+  devServer: {
+    proxy: {
+      //配置跨域
+      "/api": {
+        target: "http://lysb.lucheng.gov.cn/api",
+        changOrigin: true,
+        pathRewrite: {
+          "^/api": ""
+        }
+      }
+    }
+  }
 };

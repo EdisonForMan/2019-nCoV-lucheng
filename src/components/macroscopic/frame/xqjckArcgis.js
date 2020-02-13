@@ -36,7 +36,7 @@ export const xqjckFormUpdate = (context, name) => {
     // });
     context.$parent.xqjckShow = true;
 
-    console.log(context.$parent.xqjckShow)
+    // console.log(context.$parent.xqjckShow)
 
 
     context.$parent.$refs.xqjck.title = name;

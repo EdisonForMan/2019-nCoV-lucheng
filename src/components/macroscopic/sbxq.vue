@@ -207,7 +207,8 @@ export default {
                 "小区面唯一码",
                 "Id",
                 "X",
-                "Y"
+                "Y",
+                "problem"
               ].indexOf(k) < 0
             );
           });

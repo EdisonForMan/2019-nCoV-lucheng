@@ -57,6 +57,10 @@ export default {
 </script>
 
 <style>
+#qzTable {
+  transition: all 1s;
+}
+
 #qztableCentent {
   width: 94%;
   margin-top: 2%;

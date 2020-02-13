@@ -469,6 +469,19 @@ export default {
                 "KSGCSJ"
               ].indexOf(k);
             });
+        } else if (id == "gjmj") {
+          this.keyData =
+            this.forceData[0] &&
+            Object.keys(this.forceData[0].fieldAliases).filter(k => {
+              return ~[
+                "NAME",
+                "Sex",
+                "Phone",
+                "Relation ",
+                "DividePlace",
+                "Country"
+              ].indexOf(k);
+            });
         }
 
         this.text = undefined;

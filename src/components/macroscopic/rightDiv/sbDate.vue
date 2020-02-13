@@ -21,7 +21,7 @@
           v-if="item.label == '疫情分布' && ['gld','gld_list','mj','mj2','hbhw','ytyg','glmd'].indexOf(item.id) < 0"
         >{{++index}}. 患者：{{item.attributes.Name?`${item.attributes.Name.trim().substr(0,1)}*${item.attributes.Name.trim().substr(-1,1)}`:'**'}}, {{item.attributes.Sex}}, {{item.attributes.Address}}, {{item.attributes.Age}}</span>
         <span
-          v-if="~['mj','mj2'].indexOf(item.id)"
+          v-if="~['mj','mj2','gjmj'].indexOf(item.id)"
         >{{++index}}. {{item.attributes.NAME?`${item.attributes.NAME.trim().substr(0,1)}*${item.attributes.NAME.trim().substr(-1,1)}`:'**'}}, {{item.attributes.Sex}}, {{item.attributes.Address_Department}}</span>
         <span
           v-if="~['gld'].indexOf(item.id)"

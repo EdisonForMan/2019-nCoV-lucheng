@@ -1,6 +1,13 @@
-import { getDefaultAxios } from "../index.js";
-import { WRT_config } from "@/components/common/Tmap";
-const { serverCompatible, login } = WRT_config;
+import {
+  getDefaultAxios
+} from "../index.js";
+import {
+  WRT_config
+} from "@/components/common/Tmap";
+const {
+  serverCompatible,
+  login
+} = WRT_config;
 /**
  * 自主登录接口
  * 使用低权限账号保证对外界面可以访问2.0后台数据接口
@@ -9,7 +16,9 @@ const { serverCompatible, login } = WRT_config;
  */
 export async function auth_token(username = "admin", axios) {
   axios = axios || getDefaultAxios();
-  const { data } = await axios.post("/au/token", {
+  const {
+    data
+  } = await axios.post("/au/token", {
     username,
     password: "123",
     noToken: true
@@ -24,7 +33,10 @@ export async function auth_token(username = "admin", axios) {
  */
 export async function auth_token_info(params, axios) {
   axios = axios || getDefaultAxios();
-  let data = [{ au_username: null, group: [] }];
+  let data = [{
+    au_username: null,
+    group: []
+  }];
   try {
     const response = await axios.get("/au/token/info?res=testsql_all", {
       noToken: false
@@ -46,7 +58,9 @@ export async function auth_token_info(params, axios) {
 export async function auth_verify(username, password) {
   const axios = getDefaultAxios();
   try {
-    const { data } = await axios.post("/au/token", {
+    const {
+      data
+    } = await axios.post("/au/token", {
       username,
       password,
       noToken: true
@@ -64,7 +78,9 @@ export async function auth_verify(username, password) {
  */
 export async function passport_update(password, au_userid) {
   const axios = getDefaultAxios();
-  const { data } = await axios.put(`/au/users/${au_userid}/psd/change`, {
+  const {
+    data
+  } = await axios.put(`/au/users/${au_userid}/psd/change`, {
     new_psd: password,
     noToken: false
   });

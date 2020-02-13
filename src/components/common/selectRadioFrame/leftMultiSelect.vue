@@ -56,9 +56,10 @@
               />
               <span
                 id="xq"
-                v-if="item.label=='疫情分布' || oitem.id=='glmd'"
+                v-if="item.label=='疫情分布' || oitem.id=='glmd' || oitem.id=='gjmj'"
                 @click="ShowListxq(oitem,item)"
               >详情</span>
+              <span id="ssry" v-if="oitem.id=='xq'" @click="ShowListssry(oitem,item)">实时人员</span>
             </li>
           </ul>
         </div>
@@ -140,6 +141,13 @@ export default {
     ShowListxq(oitem, item) {
       this.$parent.listShow = true;
       this.$parent.$refs.listxq.getItem(oitem, item.label);
+    },
+    ShowListssry(oitem, item) {
+      // this.$parent.listShow = true;
+      this.$parent.leftHidden();
+      this.$parent.rightHidden();
+      this.$parent.$refs.ssryForm.getItem(oitem, item.label, 1);
+      this.$parent.$refs.lsryForm.getItem(oitem, item.label, 2);
     },
     intercept() {
       const _tree = this.$util.clone(this.tree);
@@ -326,7 +334,7 @@ export default {
           top: 4px;
         }
         li {
-          // height: 44px;
+          height: 44px;
           line-height: 28px;
           list-style: none;
           background: rgba(120, 171, 246, 0.2);
@@ -335,9 +343,13 @@ export default {
           padding: 4px;
           padding-left: 22px;
           margin-bottom: 10px;
-          display: inline-block;
+          // display: inline-block;
           width: 90%;
           // justify-content: space-between;
+
+          display: flex;
+          align-items: center;
+
           p {
             font-size: 18px;
             cursor: pointer;
@@ -345,7 +357,7 @@ export default {
             display: inline-block;
             width: 158px;
             position: relative;
-            top: 5px;
+            // top: 5px;
             img {
               width: 24px;
               height: 24px;
@@ -375,13 +387,36 @@ export default {
             height: 20px !important;
             font-size: 14px !important;
             line-height: 23px !important;
-            margin-left: 4px;
-            margin-top: 4px;
+            margin-left: auto;
+            // margin-top: 4px;
             text-align: center;
-            float: right;
+            // float: right;
+          }
+          #ssry {
+            background: unset;
+            margin-bottom: unset;
+            display: unset;
+            box-shadow: none;
+            background-color: #162449 !important;
+            border: 1px solid #75c8f4 !important;
+            border-radius: 8px;
+            padding: 7px 9px !important;
+            color: #fff;
+            cursor: pointer;
+            width: 56px !important;
+            height: 20px !important;
+            font-size: 14px !important;
+            line-height: 23px !important;
+            margin-left: auto;
+            // margin-top: 4px;
+            text-align: center;
+            // float: right;
+          }
+          .switch {
+            top: -10px;
           }
           input[type="checkbox"] {
-            top: 7px;
+            top: 0px;
             left: -8px;
           }
         }

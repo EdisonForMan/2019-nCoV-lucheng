@@ -343,14 +343,26 @@ export const leftOptions = [{
         check: false,
         show: true,
         children: [{
-            name: "-1",
-            ytname: `隔离名单 (${macroscopic.glmd}人)`,
-            id: "glmd",
-            url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
-            sublayers: "16",
-            icon: "隔离名单",
-            check: false
-        }]
+                name: "-1",
+                ytname: `确诊病例 (${macroscopic.glmd}例)`,
+                ytd: "ContactHistory like '%国际%'",
+                id: "glmd",
+                url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
+                sublayers: "0",
+                icon: "确诊病例",
+                check: false
+            },
+            {
+                name: -1,
+                ytname: `密切接触者 (${macroscopic.glmd}例)`,
+                // ytd: "IdentityType like '%银泰%'",
+                id: "gjmj",
+                url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
+                sublayers: "16",
+                icon: "密接",
+                check: false
+            }
+        ]
     },
     {
         label: -1,

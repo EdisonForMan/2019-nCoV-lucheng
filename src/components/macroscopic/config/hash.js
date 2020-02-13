@@ -38,7 +38,8 @@ export const tipHash = {
     nj_zdqy: "njzdqyHash",
     nj_xm_1: "njxmHash",
     nj_xm_2: "njxmHash",
-    chanyePlate: "chanyePlateHash"
+    glmd: "illHash",
+    gjmj: "mjHash"
 }
 
 const gldListHash = [{
@@ -85,13 +86,6 @@ const gldListHash = [{
     label: "是否解除隔离"
 }]
 
-const chanyePlateHash = [{
-    fieldName: "名称",
-    label: "名称"
-}, {
-    fieldName: "num",
-    label: "病例数"
-}]
 
 const ytygHash = [{
     fieldName: "Name",
@@ -733,7 +727,6 @@ export const Hash = {
     jzgdHash,
     njzdqyHash,
     njxmHash,
-    chanyePlateHash,
     gldListHash,
     sccsHash,
     nmscHash

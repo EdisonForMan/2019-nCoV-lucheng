@@ -12,8 +12,8 @@ import Vue from "vue";
  */
 window.env =
   location.host.includes("localhost") || location.host.includes("192.168.0.200") ?
-    "prod" :
-    "prod";
+  "prod" :
+  "prod";
 Vue.prototype.$env = window.env;
 /**
  * 是否需要登录
@@ -39,7 +39,7 @@ const CONFIG_DEV = {
 };
 //  生产环境配置
 const CONFIG_PROVIDE = {
-  ARCGIS_API_URL: "http://172.20.89.88:5001/lc/libs/arcgis_js_v412_api/arcgis_js_api/library/4.12/dojo/dojo.js",
+  ARCGIS_API_URL: "http://172.20.89.68:5001/lc/libs/arcgis_js_v412_api/arcgis_js_api/library/4.12/dojo/dojo.js",
   LOCAL_DOMAIN: "https://server.lcmap.com",
   LOCAL_HOST: "http://172.20.89.59/server/rest/services",
   FORWARD_HOST: "http://172.20.89.59/server/rest/services",
@@ -50,8 +50,8 @@ const CONFIG_PROVIDE = {
 };
 const TO_CONFIG =
   Vue.prototype.$env == "dev" ?
-    CONFIG_DEV :
-    CONFIG_PROVIDE;
+  CONFIG_DEV :
+  CONFIG_PROVIDE;
 //  环境变量 配置信息获取
 const {
   ARCGIS_API_URL,
@@ -77,13 +77,13 @@ export const OPTION = {
   dojoConfig: {
     parseOnLoad: true,
     packages: [{
-      location: `${SERVER_HOST}/libs/plugin`,
-      name: "plugin"
-    },
-    {
-      name: "src",
-      location: location.pathname.replace(/\/[^/]+$/, "") + "../src"
-    }
+        location: `${SERVER_HOST}/libs/plugin`,
+        name: "plugin"
+      },
+      {
+        name: "src",
+        location: location.pathname.replace(/\/[^/]+$/, "") + "../src"
+      }
     ]
   }
 };
@@ -126,12 +126,12 @@ export const XZJD = `http://172.20.89.7:6082/arcgis/rest/services/weijian/xzjd/M
 //     : `${LOCAL_HOST}/Hosted/kfq_WGS84/VectorTileServer`;
 export const IMAGELAYER =
   window.env == "outside" ?
-    `${OTHER_HOST}/Hosted/JYB/VectorTileServer` :
-    `${LOCAL_HOST}/Hosted/TDT_SLDT/VectorTileServer`;
+  `${OTHER_HOST}/Hosted/JYB/VectorTileServer` :
+  `${LOCAL_HOST}/Hosted/TDT_SLDT/VectorTileServer`;
 export const IMAGELAYERDSJ =
   window.env == "outside" ?
-    `${OTHER_HOST}/Hosted/DSJ/VectorTileServer` :
-    `${LOCAL_HOST}/Hosted/kfq_WGS84/VectorTileServer`;
+  `${OTHER_HOST}/Hosted/DSJ/VectorTileServer` :
+  `${LOCAL_HOST}/Hosted/kfq_WGS84/VectorTileServer`;
 
 // mapbox底图
 export const MAPBOXLAYER = `${FORWARD_HOST}/${
@@ -152,8 +152,8 @@ export const BUILD_TDT = `http://services.wzmap.gov.cn/server/rest/services/Host
 //  天地图-大数据
 export const TDTDSJ =
   window.env == "outside" ?
-    `${OTHER_HOST}/Hosted/DSJ/VectorTileServer` :
-    `${LOCAL_HOST}/Hosted/kfq_WGS84/VectorTileServer`;
+  `${OTHER_HOST}/Hosted/DSJ/VectorTileServer` :
+  `${LOCAL_HOST}/Hosted/kfq_WGS84/VectorTileServer`;
 //  天地图-行政区划
 export const TDTXZQH = `${OTHER_HOST}/Hosted/XZQH/VectorTileServer`;
 //  天地图-绿化园林
@@ -187,8 +187,8 @@ export const TDTIMAGE60 =
 //  天地图-招商-简约地图
 export const TDTJY =
   window.env == "outside" ?
-    `${OTHER_HOST}/Hosted/JYB/VectorTileServer` :
-    `${FORWARD_HOST}/Hosted/TDT_SLDT/VectorTileServer`;
+  `${OTHER_HOST}/Hosted/JYB/VectorTileServer` :
+  `${FORWARD_HOST}/Hosted/TDT_SLDT/VectorTileServer`;
 
 //  天地图-25维
 export const TDT25D =

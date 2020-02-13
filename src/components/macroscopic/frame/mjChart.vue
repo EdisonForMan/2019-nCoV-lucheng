@@ -147,13 +147,36 @@ export default {
       //     })
       // ]);
 
+      // console.log(
+      //   "op2",
+      //   this.list
+      //     .filter((item, index) => {
+      //       return index < 90;
+      //     })
+      //     .map(item => {
+      //       return {
+      //         source: this.title,
+      //         target: item.attributes.NAME,
+      //         value: item.attributes.Relation ? item.attributes.Relation : ""
+      //       };
+      //     })
+      // );
+
       this.chart2 = this.$echarts.init(document.getElementById("mjframe"));
       this.chart2.setOption({
+        legend: {
+          orient: "vertical",
+          left: "10",
+          bottom: "20",
+          textStyle: {
+            color: "#fff"
+          }
+        },
         series: [
           {
             type: "graph",
             layout: "force",
-            // symbolSize: 60,
+            symbolSize: 1,
             roam: true,
             label: {
               normal: {
@@ -173,6 +196,47 @@ export default {
                 color: "#fff"
               }
             },
+            categories: [
+              {
+                name: "非鹿城",
+                itemStyle: {
+                  normal: {
+                    color: "#00f"
+                  }
+                },
+                label: {
+                  normal: {
+                    color: "#00f"
+                  }
+                }
+              },
+              {
+                name: "鹿城内已解除隔离",
+                itemStyle: {
+                  normal: {
+                    color: "#0f0"
+                  }
+                },
+                label: {
+                  normal: {
+                    color: "#0f0"
+                  }
+                }
+              },
+              {
+                name: "鹿城内未解除隔离",
+                itemStyle: {
+                  normal: {
+                    color: "#f00"
+                  }
+                },
+                label: {
+                  normal: {
+                    color: "#f00"
+                  }
+                }
+              }
+            ],
             data: [
               {
                 name: this.title,
@@ -186,7 +250,15 @@ export default {
                   return index < 90;
                 })
                 .map(item => {
-                  return { name: item.attributes.NAME };
+                  return {
+                    name: item.attributes.NAME,
+                    category:
+                      item.attributes.ZTLB && Number(item.attributes.ZTLB),
+                    label: {
+                      fontSize: 14,
+                      fontWeight: "bolder"
+                    }
+                  };
                 })
             ],
             links: this.list

@@ -24,7 +24,7 @@ function getAxiosInstance() {
   const instance = axios.create();
   // instance.defaults.baseURL =
   //   window.env == "dev" ? "/api" : `${WRT_config.serverCompatible}/api`;
-  instance.defaults.baseURL = `${WRT_config.serverCompatible}/api`;
+  instance.defaults.baseURL = `/api`;
   instance.defaults.headers.post["Content-Type"] = "multipart/form-data";
   instance.interceptors.request.use(
     config => {

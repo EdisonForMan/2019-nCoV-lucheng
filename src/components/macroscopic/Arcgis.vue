@@ -6,7 +6,12 @@
 
 <script>
 /* eslint-disable */
-import { addQZLinkFeature, mjChartUpdate } from "./frame/mjArcgis";
+import {
+  addQZLinkFeature,
+  mjChartUpdate,
+  addQZLinkFeature_gj,
+  mjChartUpdate_gj
+} from "./frame/mjArcgis";
 import { gldChartUpdate } from "./frame/gldArcgis";
 import { xqjckFormUpdate } from "./frame/xqjckArcgis";
 import { linkCPFeatures } from "./frame/streetArcgis";
@@ -30,6 +35,10 @@ import {
 import { tipHash, Hash } from "./config/hash.js";
 const server = "http://172.20.89.68:5001/s";
 
+// import testApi from "@/api/beans/u_test";
+
+// import { mapState } from "vuex";
+
 export default {
   name: "MacroscopicArcgis",
   data() {
@@ -40,6 +49,7 @@ export default {
     id: String,
     leftOptions: Array
   },
+
   created() {},
   async mounted() {
     const that = this;
@@ -71,9 +81,30 @@ export default {
         });
       },
       deep: true
-    }
+    },
+    // crjlList() {
+    //   this.crjlDataFix();
+    // },
+    // ryxxList() {
+    //   this.ryxxDataFix();
+    // }
+  },
+  computed: {
+    // ...mapState({
+    //   crjlList: state => state.crjlList,
+    //   ryxxList: state => state.ryxxList
+    // })
   },
   methods: {
+    // crjlDataFix() {
+    //   if (!this.crjlList.length) return;
+    //   console.log("crjl", this.crjlList);
+    // },
+    // ryxxDataFix() {
+    //   if (!this.ryxxList.length) return;
+    //   console.log("ryxx", this.ryxxList);
+    // },
+
     /**
      * 数、组勾选触发图层寻找
      * @param {Object} item 单个元素
@@ -184,12 +215,19 @@ export default {
         context.$parent.leftHidden();
       });
       //  小区进出口人员
-      $("body").on("click", ".xq_btn", function() {
+      $("body").on("click", ".gjmj_btn", function() {
         const val = $(this).attr("data-val");
 
         console.log(val);
-        xqjckFormUpdate(context, val);
+
+        addQZLinkFeature_gj(context, val);
+        mjChartUpdate_gj(context, val);
         context.$parent.leftHidden();
+
+        // context.getApi();
+        // console.log("cr", this.CRList);
+        // xqjckFormUpdate(context, val);
+        // context.$parent.leftHidden();
         // context.$parent.xqjckShow = true;
       });
       //  小区卡口分布
@@ -285,7 +323,9 @@ export default {
                     "小区面名称",
                     "小区面唯一码",
                     "X",
-                    "Y"
+                    "Y",
+                    "problem",
+                    "RelatingCodes"
                   ].indexOf(k) < 0
                 );
               })
@@ -530,10 +570,9 @@ export default {
               : ``
           }
           ${
-            // id == "xq"
-            //   ? `<div class="bottomBtn xq_btn" data-val="{name}">进出人员统计</div>`
-            //   : ``
-            ``
+            id == "glmd"
+              ? `<div class="bottomBtn gjmj_btn" data-val="{Name}">密切接触者分布</div>`
+              : ``
           }`
             };
           }
@@ -963,6 +1002,12 @@ export default {
           });
         });
       });
+    },
+    getApi() {
+      const that = this;
+      // testApitestApi.ds().then(({ data }) => {
+      //   console.log("data", data);
+      // });
     }
   }
 };
