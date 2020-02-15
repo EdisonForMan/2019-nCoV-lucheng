@@ -39,7 +39,8 @@ export const tipHash = {
     nj_xm_1: "njxmHash",
     nj_xm_2: "njxmHash",
     glmd: "illHash",
-    gjmj: "mjHash"
+    gjmj: "mjHash",
+    wm_gs: "wmgsHash"
 }
 
 const gldListHash = [{
@@ -702,6 +703,19 @@ const njxmHash = [{
 }]
 
 
+// 五马街道规上企业
+const wmgsHash = [{
+    fieldName: "Name",
+    label: "单位详细名称"
+}, {
+    fieldName: "Address",
+    label: "街(村)、门牌号(注册地址)"
+}, {
+    fieldName: "ChargeMan",
+    label: "法定代表人（单位负责人）"
+}]
+
+
 
 export const Hash = {
     hospitalHash,
@@ -729,7 +743,8 @@ export const Hash = {
     njxmHash,
     gldListHash,
     sccsHash,
-    nmscHash
+    nmscHash,
+    wmgsHash
 }
 
 

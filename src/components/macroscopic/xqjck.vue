@@ -34,10 +34,30 @@
         </tbody>
       </table>
     </div>-->
+    <div class="statistics">
+      <table border="0" cellpadding="0" cellspacing="0">
+        <tbody>
+          <tr>
+            <td>小区出入人数：4</td>
+            <td>小区登记人数： 200</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <div class="content">
       <div class="inner-title">
-        <span>进出人员详情</span>
+        <span>[ 2月14日 ] - 进出人员详情</span>
       </div>
+      <!-- <table border="0" cellpadding="0" cellspacing="0">
+        <tbody>
+          <tr>
+            <td style="border: 1px solid #fff;">小区出入人数</td>
+            <td style="border: 1px solid #fff;">4</td>
+            <td style="border: 1px solid #fff;">小区登记人数</td>
+            <td style="border: 1px solid #fff;">200</td>
+          </tr>
+        </tbody>
+      </table>-->
       <table border="0" cellpadding="0" cellspacing="0">
         <thead>
           <tr>
@@ -155,6 +175,8 @@ export default {
     filterItem(name) {
       this.title = name;
       this.forceData = this.crjlList.filter(item => item.ssxq == name);
+      this.sArr = this.ryxxList.filter(item => item.ssxq == name);
+      console.log(this.ryxxList.map(item => item.ssxq));
     },
     /* filteItem() {
       const data = this.data;
@@ -555,6 +577,10 @@ export default {
   height: 78%;
   background: #24386a;
   border: 1px solid #04ecff;
+  box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.4),
+    0px 0px 44px 0px rgba(16, 146, 236, 0.3);
+  border-radius: 5px;
+  opacity: 0.95;
   z-index: 25;
   top: 0;
   margin: auto;
@@ -570,57 +596,24 @@ export default {
     }
 
     a {
-      float: right;
+      position: absolute;
+      top: 5px;
+      right: 10px;
       font-size: 40px;
-      margin-right: 10px;
       cursor: pointer;
     }
   }
-  .search {
-    height: 60px;
-    select {
-      background-color: #0c7cd2;
-      border: none;
-      color: #fff;
-      padding: 7px 7px;
-      margin-right: 5px;
-    }
-
-    input {
-      width: 15%;
-      margin-top: 10px;
-      margin-right: 5px;
-      background-color: #162449;
-      border: 1px solid #75c8f4;
-      border-radius: 8px;
-      padding: 8px 9px;
-      color: #fff;
-    }
-
-    button {
-      background-color: #162449;
-      border: 1px solid #75c8f4;
-      border-radius: 8px;
-      padding: 7px 9px;
-      color: #fff;
-      margin-right: 4px;
-    }
-  }
-  // .content::-webkit-scrollbar {
-  //   display: none;
-  // }
 
   .statistics {
-    height: 20%;
+    display: flex;
+    justify-content: flex-end;
 
     table {
-      border: 1px solid #ccc;
-      width: 96%;
+      width: 26%;
       margin: 0% 2%;
 
       th,
       td {
-        border-bottom: 1px solid #ccc;
         padding: 10px 5px;
       }
     }

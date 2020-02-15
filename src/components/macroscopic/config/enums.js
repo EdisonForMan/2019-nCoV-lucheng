@@ -91,8 +91,7 @@ export const leftOptions = [{
                 icon: "密接",
                 check: false
             }, {
-                // name: `居家隔离人员 (${lc.jjgl}例)`,
-                name: `居家隔离人员 ( 0 例)`,
+                name: `居家隔离人员 (${lc.jjgl}例)`,
                 id: "jjgl",
                 ytname: -1,
                 url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
@@ -100,7 +99,7 @@ export const leftOptions = [{
                 icon: "死亡",
                 check: false
             }, {
-                name: `湖北回鹿人员信令 (${lc.hbhw}例)`,
+                name: `湖北回鹿人员/信令 (${lc.hbhw}例/${lc.hbhw_xl}例)`,
                 id: "hbhw",
                 ytname: -1,
                 url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
@@ -354,7 +353,7 @@ export const leftOptions = [{
             },
             {
                 name: -1,
-                ytname: `密切接触者 (${macroscopic.glmd}例)`,
+                ytname: `密切接触者 (${macroscopic.gjmj}例)`,
                 // ytd: "IdentityType like '%银泰%'",
                 id: "gjmj",
                 url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
@@ -400,6 +399,14 @@ export const leftOptions = [{
             sublayers: "1",
             definitionExpression: "CompanyType = '南郊街道辖区在建项目企业'",
             icon: "在建项目",
+            check: false
+        }, {
+            name: `五马街道规上企业 (${macroscopic.wm_gs}家)`,
+            id: "wm_gs",
+            url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
+            sublayers: "18",
+            // definitionExpression: "CompanyType = '南郊街道辖区在建项目企业'",
+            icon: "重点企业",
             check: false
         }]
     }
