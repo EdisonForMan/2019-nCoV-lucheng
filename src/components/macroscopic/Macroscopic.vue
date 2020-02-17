@@ -6,21 +6,21 @@
     <div class="Com_container" style="z-index: 10;">
       <div :class="`leftside animated ${icon_show_left?`slideOutLeft`:`slideInLeft`}`">
         <leftMultiSelect :leftOptions="leftOptions" ref="leftOptions" />
-        <span @click="toggle" class="hidden_button"></span>
+        <span @click="toggle(), legend()" class="hidden_button"></span>
       </div>
       <div :class="`rightside animated ${icon_show_right?`slideOutRight`:`slideInRight`}`">
         <div id="rightFrame">
           <bqtj ref="bqtj" />
-          <ylzy />
+          <bqtj2 ref="bqtj2" />
+          <!-- <ylzy /> -->
           <sbDate ref="table" />
         </div>
         <span @click="toggle2" class="hidden_right_button"></span>
       </div>
     </div>
-    <xzDate :style="{left:moveLeft + 'px'}" />
+    <xzDate />
     <bottomBtn />
     <topDate />
-    <popOpen />
     <!-- //弹出框 -->
     <sbxq ref="sbxq" v-show="xqShow" />
     <listxq ref="listxq" v-show="listShow" />
@@ -50,20 +50,21 @@ import bottomBtn from "./bottomBtn";
 
 //  chartTable
 import bqtj from "./rightDiv/bqtj";
+import bqtj2 from "./rightDiv/bqtj2";
 import ylzy from "./rightDiv/ylzy";
 import sbDate from "./rightDiv/sbDate";
-import sbxq from "./sbxq";
+
+import sbxq from "./pop/sbxq";
 import topDate from "./topDate";
 import xzDate from "./xzDate";
-import listxq from "./listxq";
-import popOpen from "./popOpen";
+import listxq from "./pop/listxq";
 import mjChart from "./frame/mjChart";
 import streetFrame from "./frame/streetFrame";
 import queryForm from "./queryForm";
 import gldxq from "./gldxq";
 import xqjck from "./xqjck";
 import ssryForm from "./ssryForm";
-import lsryForm from "./ssryForm";
+import lsryForm from "./lsryForm";
 
 import qzTable from "./frame/qzTable"; //圈主信息
 
@@ -91,11 +92,10 @@ export default {
     bqtj, //病例统计
     sbDate, //上报动态数据
     sbxq, //上报详情
-    ylzy, //医疗资源状况
+    bqtj2, //趋势分析
     bottomBtn, //底部按钮
     topDate, //顶部数据
     xzDate, //详情须知
-    popOpen, //弹出详情框
     mjChart, //密接列表、图表
     streetFrame, //街道疫情
     listxq, //点击列表的详情框
@@ -134,6 +134,13 @@ export default {
     rightHidden() {
       this.icon_show_right = true;
       this.moveRight = "20";
+    },
+    legend() {
+      if (!this.icon_show_left) {
+        $("body .esri-ui-bottom-left").css({ left: "360px" });
+      } else {
+        $("body .esri-ui-bottom-left").css({ left: "20px" });
+      }
     }
   }
 };

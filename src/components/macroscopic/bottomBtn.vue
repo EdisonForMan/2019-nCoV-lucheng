@@ -63,7 +63,7 @@ export default {
 #btnDiv {
   position: absolute;
   bottom: 2%;
-  right: 30%;
+  right: 35%;
 
   > ul {
     > li {

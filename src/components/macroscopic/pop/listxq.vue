@@ -2,10 +2,10 @@
   <div id="listxq">
     <div class="head">
       <span>[ {{title}} ] - 详情列表</span>
-      <a v-on:click="sbclose">×</a>
+      <a @click="()=>{ this.$parent.listShow = false }">×</a>
     </div>
     <div class="search" v-if="sArr.length && sArr[0].Country">
-      <select id="select" @change="xqsearch($event)" v-if="sArr.length && sArr[0].Country">
+      <select id="select" @change="selectCountry($event)" v-if="sArr.length && sArr[0].Country">
         <option value="0">全部</option>
         <option
           v-for="(citem,cindex) in sArr"
@@ -14,65 +14,23 @@
         >{{ citem.Country }}</option>
       </select>
       <input type="text" v-model="text" placeholder="请输入查询" />
-      <button @click="()=>{filteItem()}">查询</button>
+      <button @click="filteItem">查询</button>
     </div>
+
+    <el-table :data="elList" height="68%" border @row-click="clickTr">
+      <el-table-column
+        v-for="(item,index) in keyList"
+        :key="index"
+        :prop="item.prop"
+        :label="item.label"
+      ></el-table-column>
+      <el-table-column v-if="qzflag && forceData.length" label="关系图谱">
+        <template slot-scope="scope">
+          <el-button @click.native.prevent="clickCell(scope.$index)" type="text">详情</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
     <div class="content">
-      <table border="0" cellpadding="0" cellspacing="0" v-if="qzflag && forceData.length">
-        <thead>
-          <tr>
-            <th>序号</th>
-            <th v-for="(k,i) in keyData" :key="i">{{ forceData[0].fieldAliases[k] }}</th>
-            <th>关系图谱</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(item,index) in forceData" :key="index">
-            <td>{{ ++index }}</td>
-            <td
-              v-for="(k,i) in keyData"
-              :key="i"
-              @click="goLocation(item)"
-              style="cursor: pointer;"
-            >{{ item.attributes[k]?(~["Name"].indexOf(k)?`${item.attributes[k].trim().substr(0,1)}*${item.attributes[k].trim().substr(-1,1)}`:item.attributes[k]):"无" }}</td>
-            <td @click="showrelation(item)" style="cursor: pointer;">详情</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table border="0" cellpadding="0" cellspacing="0" v-if="!qzflag && forceData.length">
-        <thead>
-          <tr>
-            <th>序号</th>
-            <th v-for="(k,i) in keyData" :key="i">{{ forceData[0].fieldAliases[k] }}</th>
-          </tr>
-        </thead>
-        <tbody v-if="title == '集中医学观察点'">
-          <tr
-            v-for="(item,index) in forceData"
-            :key="index"
-            @click="goLocation(item)"
-            style="cursor: pointer;"
-          >
-            <td>{{ ++index }}</td>
-            <td v-for="(k,i) in keyData" :key="i">{{ item.attributes[k] || "无" }}</td>
-          </tr>
-        </tbody>
-        <tbody v-else>
-          <tr
-            v-for="(item,index) in forceData"
-            :key="index"
-            @click="goLocation(item)"
-            style="cursor: pointer;"
-          >
-            <td>{{ ++index }}</td>
-            <td
-              v-for="(k,i) in keyData"
-              :key="i"
-            >{{ item.attributes[k]?(~["Name","NAME"].indexOf(k)?`${item.attributes[k].trim().substr(0,1)}*${item.attributes[k].trim().substr(-1,1)}`:item.attributes[k]):"无" }}</td>
-          </tr>
-        </tbody>
-      </table>
-
       <table border="0" cellpadding="0" cellspacing="0" v-if="sArr.length && sArr[0].Country">
         <thead>
           <tr>
@@ -87,14 +45,6 @@
           </tr>
         </tbody>
       </table>
-
-      <table border="0" cellpadding="0" cellspacing="0" v-if="!sArr.length && !forceData.length">
-        <tbody>
-          <tr>
-            <td>暂无数据</td>
-          </tr>
-        </tbody>
-      </table>
     </div>
     <relation ref="relation" v-show="relationShow" />
   </div>
@@ -104,17 +54,19 @@
 /* eslint-disable */
 import { loadModules } from "esri-loader";
 import { OPTION } from "@/components/common/Tmap";
-import { leftOptions } from "./config/enums";
+import { leftOptions } from "../config/enums";
+import { sbFields } from "../config/field";
+
 import relation from "./relation";
 
 export default {
-  name: "sbDate",
+  name: "listxq",
   data() {
     return {
       text: undefined,
       data: [],
       forceData: [],
-      keyData: [],
+      fieldList: [],
       title: "",
       qzflag: false,
       relationShow: false,
@@ -122,6 +74,8 @@ export default {
       sObj: {},
       sArr: [],
       sum: 0,
+      keyList: [],
+      elList: [],
       countryHash: {
         山福: 1,
         藤桥: 2,
@@ -139,6 +93,7 @@ export default {
         七都: 14,
         区直设: 15
       }
+      // arr:[]
     };
   },
   created() {},
@@ -146,6 +101,59 @@ export default {
     this.getItem(leftOptions[0].children[0], leftOptions[0].label);
   },
   components: { relation },
+  watch: {
+    forceData(newV, oldV) {
+      const that = this;
+
+      this.keyList = [];
+      this.elList = [];
+
+      if (this.forceData.length) {
+        this.keyList.push({
+          prop: "index",
+          label: "序号"
+        });
+
+        this.fieldList.length &&
+          this.fieldList.map(k => {
+            this.keyList.push({
+              prop: k,
+              label: that.forceData[0].fieldAliases[k]
+            });
+          });
+
+        this.forceData.map((item, index) => {
+          const obj = {};
+          that.keyList.map((_item, i) => {
+            if (_item.prop == "index") {
+              obj[_item.prop] = index + 1;
+            } else if (
+              ~["Name", "NAME"].indexOf(_item.prop) &&
+              ~[
+                "确诊病例",
+                "疑似病例",
+                "集中医学观察点人员名单",
+                "密切接触者",
+                "居家隔离人员",
+                "湖北回鹿人员信令",
+                "银泰员工",
+                "隔离名单"
+              ].indexOf(that.title)
+            ) {
+              obj[_item.prop] = `${item.attributes[_item.prop] &&
+                item.attributes[_item.prop].trim().substr(0, 1)}*${item
+                .attributes[_item.prop] &&
+                item.attributes[_item.prop].trim().substr(-1, 1)}`;
+            } else {
+              obj[_item.prop] = item.attributes[_item.prop];
+            }
+          });
+
+          that.elList.push(obj);
+        });
+      }
+    }
+  },
   methods: {
     filteItem() {
       const data = this.data;
@@ -173,7 +181,7 @@ export default {
       });
       this.forceData = forceData;
     },
-    xqsearch(event) {
+    selectCountry(event) {
       this.selectValue = event.target.value;
       const data = this.data;
       const forceData = [];
@@ -292,9 +300,6 @@ export default {
         for (let k in this.sObj) {
           this.sArr.push(this.sObj[k]);
         }
-        // this.sArr.map(item => {
-        //   this.sum += parseInt(item.count);
-        // });
 
         this.sArr.sort((a, b) => {
           const count1 = a.count;
@@ -340,149 +345,11 @@ export default {
           return count2 - count1;
         });
 
-        /* this.keyData = Object.keys(this.forceData[0].fieldAliases).filter(k => {
-          return (
-            [
-              "序号",
-              "隔离点编码",
-              "OBJECTID",
-              "OBJECTID_1",
-              "Bid",
-              "bid",
-              "Question",
-              "question",
-              "yy",
-              "Note",
-              "RelatingCodes",
-              "Shape.STArea()",
-              "Shape.STLength()",
-              "小区面名称",
-              "小区面唯一码",
-              "MansionName",
-              "TF",
-              "Shape_Length_1",
-              "Shape_Area_1",
-              "Id"
-            ].indexOf(k) < 0
-          );
-        }); */
-
-        if (id == "qzbl" || id == "zzbl") {
-          this.keyData =
-            this.forceData[0] &&
-            Object.keys(this.forceData[0].fieldAliases).filter(k => {
-              return ~[
-                "Name",
-                "Sex",
-                "Age",
-                "Profession",
-                "Country",
-                "DiseaseTime",
-                "Hospital"
-              ].indexOf(k);
-            });
-        } else if (id == "ytyg") {
-          this.keyData =
-            this.forceData[0] &&
-            Object.keys(this.forceData[0].fieldAliases).filter(k => {
-              return ~["Name", "Phone", "Country", "Address"].indexOf(k);
-            });
-        } else if (id == "gld") {
-          this.keyData =
-            this.forceData[0] &&
-            Object.keys(this.forceData[0].fieldAliases).filter(k => {
-              return ~[
-                "Name",
-                "Address",
-                "Country",
-                "Linkman",
-                "Phone",
-                "IsUsing"
-              ].indexOf(k);
-            });
-        } else if (id == "gld_list") {
-          this.keyData =
-            this.forceData[0] &&
-            Object.keys(this.forceData[0].fieldAliases).filter(k => {
-              return ~[
-                "Name",
-                "Sex",
-                "Phone",
-                "IsolatePlace",
-                "Room",
-                "StartIsolationTime",
-                "IsTerminateIsolate"
-              ].indexOf(k);
-            });
-        } else if (id == "mj") {
-          this.keyData =
-            this.forceData[0] &&
-            Object.keys(this.forceData[0].fieldAliases).filter(k => {
-              return ~[
-                "Name",
-                "NAME",
-                "Sex",
-                "Phone",
-                "Country",
-                // "Supervision",
-                // "DividePlace",
-                "Patient",
-                "Relation"
-              ].indexOf(k);
-            });
-        } else if (id == "jjgl") {
-          this.keyData =
-            this.forceData[0] &&
-            Object.keys(this.forceData[0].fieldAliases).filter(k => {
-              return ~[
-                "Name",
-                "Sex",
-                "Phone",
-                "Address",
-                "Country",
-                "StartDivideTime",
-                "IsDivide"
-              ].indexOf(k);
-            });
-        } else if (id == "hbhw") {
-          this.keyData =
-            this.forceData[0] &&
-            Object.keys(this.forceData[0].fieldAliases).filter(k => {
-              return ~[
-                "Name",
-                "Sex",
-                "Age",
-                "Country",
-                "ChargeManPhone"
-              ].indexOf(k);
-            });
-        } else if (id == "glmd") {
-          this.keyData =
-            this.forceData[0] &&
-            Object.keys(this.forceData[0].fieldAliases).filter(k => {
-              return ~[
-                "Name",
-                "Sex",
-                "Phone",
-                "Address",
-                "Community",
-                "KSGCSJ"
-              ].indexOf(k);
-            });
-        } else if (id == "gjmj") {
-          this.keyData =
-            this.forceData[0] &&
-            Object.keys(this.forceData[0].fieldAliases).filter(k => {
-              return ~[
-                "NAME",
-                "Sex",
-                "Phone",
-                "Relation ",
-                "DividePlace",
-                "Country"
-              ].indexOf(k);
-            });
-        }
+        this.fieldList =
+          this.forceData[0] &&
+          Object.keys(this.forceData[0].fieldAliases).filter(k => {
+            return ~sbFields[id].indexOf(k);
+          });
 
         this.text = undefined;
       });
@@ -543,10 +410,25 @@ export default {
       this.relationShow = true;
       this.$refs.relation.list = item.mjList;
       this.$refs.relation.title = item.attributes.Name;
-      // console.log(item);
     },
-    sbclose() {
-      this.$parent.listShow = false;
+    // 详情点击事件
+    clickCell(index) {
+      const item = this.forceData[index];
+      this.showrelation(item);
+    },
+    // 表格行点击事件
+    clickTr(row, column, event) {
+      if (event.target.innerText != "详情") {
+        const item = this.forceData[row.index - 1];
+        item["id"] =
+          this.title == "确诊病例"
+            ? "qzbl"
+            : this.title == "集中医学观察点"
+            ? "gld"
+            : null;
+        this.$parent.$refs.macroArcgis.goloaction(item);
+        this.$parent.listShow = false;
+      }
     }
   }
 };
@@ -555,15 +437,13 @@ export default {
 <style lang="less" scoped>
 #listxq {
   position: absolute;
+  top: 10%;
+  left: 6%;
   width: 88%;
   height: 78%;
   background: #24386a;
   border: 1px solid #04ecff;
   z-index: 20;
-  top: 0;
-  margin: auto;
-  left: 6%;
-  top: 10%;
 
   .head {
     height: 7%;
@@ -574,12 +454,14 @@ export default {
     }
 
     a {
-      float: right;
+      position: absolute;
+      top: 5px;
+      right: 10px;
       font-size: 40px;
-      margin-right: 10px;
       cursor: pointer;
     }
   }
+
   .search {
     height: 60px;
     select {
@@ -610,12 +492,20 @@ export default {
       margin-right: 4px;
     }
   }
-  // .content::-webkit-scrollbar {
-  //   display: none;
-  // }
+
+  // element-table
+  .el-table {
+    width: 96%;
+    margin: auto;
+    background-color: #24386a;
+  }
+
+  .el-button--text {
+    font-size: 16px;
+  }
+
   .content {
-    height: 80%;
-    overflow: auto;
+    height: 12%;
 
     table {
       border: 1px solid #ccc;

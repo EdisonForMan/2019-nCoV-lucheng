@@ -103,7 +103,7 @@ export default {
   },
   methods: {
     filterItem(index) {
-      this.$parent.$refs.bqtj.filterItem(0);
+      // this.$parent.$refs.bqtj.filterItem(0);
     },
     hidden() {
       this.icon_show = !this.icon_show;
@@ -146,8 +146,9 @@ export default {
       // this.$parent.listShow = true;
       this.$parent.leftHidden();
       this.$parent.rightHidden();
-      this.$parent.$refs.ssryForm.getItem(oitem, item.label, 1);
-      this.$parent.$refs.lsryForm.getItem(oitem, item.label, 2);
+      this.$parent.legend();
+      this.$parent.$refs.ssryForm.getItem(oitem, 1);
+      this.$parent.$refs.lsryForm.getItem(oitem, 2);
     },
     intercept() {
       const _tree = this.$util.clone(this.tree);
@@ -185,6 +186,18 @@ export default {
       this.$parent.$refs.mjChart.list = [];
       // 关闭隔离点面板
       this.$parent.$refs.gldxq.list = [];
+      // 清除小区点
+
+      // console.log(
+      //   "bol",
+      //   this.$parent.$refs.macroArcgis.map.findLayerById("xqd")
+      // );
+
+      this.$parent.$refs.macroArcgis.map &&
+        this.$parent.$refs.macroArcgis.map.findLayerById("xqd") &&
+        this.$parent.$refs.macroArcgis.map.remove(
+          this.$parent.$refs.macroArcgis.map.findLayerById("xqd")
+        );
     },
     change(id) {
       const that = this;
@@ -216,7 +229,7 @@ export default {
     },
     tabIndex(newV, oldV) {
       // console.log(newV);
-      util.$emit("chartDataMod", newV);
+      // util.$emit("chartDataMod", newV);
       this.clean();
     }
   }

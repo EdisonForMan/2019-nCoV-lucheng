@@ -20,9 +20,9 @@ Vue.prototype.$env = window.env;
  * 1.需要登录    直接通过js登录获取token 用于本地调试、对外用户 无需跳转重登
  * 2.不需要登录  通过外部登录的session获取token 若失效需跳转重登
  */
-window.shallLogin =
-  location.host.includes("localhost") ||
-  location.host.includes("lysb.lucheng.gov.cn");
+window.shallLogin = true
+// location.host.includes("localhost") ||
+// location.host.includes("lysb.lucheng.gov.cn");
 //  此console不删
 console.log(`[env]${window.env}`, `[shallLogin]${window.shallLogin}`);
 

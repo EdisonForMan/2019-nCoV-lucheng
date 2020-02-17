@@ -55,14 +55,16 @@ export default {
 #xzDateDiv {
   position: absolute;
   bottom: 2%;
+  right: 28%;
   transition: all 1s;
   z-index: 50;
 
   #xzDateTag {
     background-color: #1d449f;
     border: 1px solid #04f2ff;
-    padding: 5px 12px;
+    padding: 10px 12px;
     cursor: pointer;
+    height: 21px;
   }
 
   #xzDateMain {

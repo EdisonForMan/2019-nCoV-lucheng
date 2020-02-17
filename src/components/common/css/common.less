@@ -33,7 +33,7 @@ body {
   position: absolute;
   width: 100%;
   z-index: 1000;
-  background-image: linear-gradient(rgba(22,80,195,1), rgba(0,0,0,0));
+  background-image: linear-gradient(rgba(22, 80, 195, 1), rgba(0, 0, 0, 0));
 
 
   .app_icon,
@@ -272,19 +272,17 @@ body {
   .esri-ui-corner .esri-expand .esri-widget--panel-height-only,
   .esri-ui-corner .esri-component.esri-widget--panel {
     width: unset !important;
+    padding: 5px;
   }
 
   .esri-ui-bottom-right,
   .esri-ui-bottom-left {
-    right: 410px;
+    // width: 200px;
+    left: 360px;
     transition: all 1s;
 
     .esri-legend__service {
-      padding: 10px;
-    }
-
-    .esri-legend__service-label {
-      display: none;
+      padding: 0px;
     }
 
     .esri-legend {
@@ -309,8 +307,26 @@ body {
       border-radius: 3px;
     }
 
+    .esri-legend__layer {
+      margin-left: 0px;
+    }
+
+    .esri-legend__layer-body {
+      margin-left: 0px;
+      // display: flex;
+      // justify-content: center;
+    }
+
+    .esri-legend__layer-cell {
+      min-width: 65px;
+      min-height: 0px;
+      padding: 0px;
+    }
+
     .esri-widget__heading {
       color: unset;
+      margin: 0px;
+      // display: none;
     }
   }
 
@@ -351,23 +367,25 @@ body {
       color: #2AFFFA;
       //background-color: #162449;
       background-image: url("../image/yqpop.png");
+
       //border: 1px solid #02fffc;
       .bottomBtn {
-            position: absolute;
-            height: 30px;
-            line-height: 30px;
-            padding: 0 10px;
-            font-size: 16px;
-            bottom: 0px;
-            left: 50%;
-            -webkit-transform: translate(-50%, 0);
-            transform: translate(-50%, 0);
-            background-color: rgba(0,0,0,0.5);
-            border-radius: 10px;
-            border: 1px #fff solid;
-            color: #fff;
-            cursor: pointer;
+        position: absolute;
+        height: 30px;
+        line-height: 30px;
+        padding: 0 10px;
+        font-size: 16px;
+        bottom: 0px;
+        left: 50%;
+        -webkit-transform: translate(-50%, 0);
+        transform: translate(-50%, 0);
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 10px;
+        border: 1px #fff solid;
+        color: #fff;
+        cursor: pointer;
       }
+
       .frameBtn {
         background-color: #162449 !important;
         border: 1px solid #75c8f4 !important;
@@ -416,8 +434,8 @@ body {
 
     .esri-popup__header-title {
       text-align: center;
-      font-size:20px;
-      color:rgba(130,255,252,1);
+      font-size: 20px;
+      color: rgba(130, 255, 252, 1);
       line-height: 30px;
     }
 
@@ -480,6 +498,24 @@ body {
   border-radius: 6px;
 }
 
-.wh_content_item .wh_isToday{
+.wh_content_item .wh_isToday {
   background: #0ff;
+}
+
+
+// element-table
+.el-table th,
+.el-table tr {
+  background-color: #24386a !important;
+}
+
+.el-table thead,
+.el-table tbody {
+  color: #fff !important;
+  font-size: 16px;
+}
+
+.el-table--enable-row-hover .el-table__body tr:hover>td>div {
+  color: #000 !important;
+  cursor: pointer;
 }

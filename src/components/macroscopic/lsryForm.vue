@@ -1,10 +1,37 @@
 <template>
-  <div id="lsyrform" v-if="list.length">
+  <div id="lsyrform" v-if="sArr.length">
     <div class="head">
-      <span>小区出入情况历史统计</span>
-      <a @click="()=>{list = []}">×</a>
+      <div class="title">{{ title }}</div>
+      <div class="time" v-if="type == 1">{{ time }}</div>
+      <a @click="()=>{sArr = []}">×</a>
     </div>
-    <div class="content">
+    <div class="choose_div" v-if="type == 2">
+      <!-- <div class="choose_time"> -->
+      <span>起始时间 {{ time_start }}</span>
+      <img src="../common/image/日历.png" @click="()=>{ calShow1 = !calShow1; calShow2 = false; }" />
+      <Calendar
+        ref="calendar1"
+        @choseDay="clickDay1"
+        :futureDayHide="future"
+        v-if="type == 2"
+        v-show="calShow1"
+      ></Calendar>
+      <!-- </div> -->
+
+      <!-- <div class="choose_time"> -->
+      <span>结束时间 {{ time_end }}</span>
+      <img src="../common/image/日历.png" @click="()=>{ calShow2 = !calShow2; }" />
+      <Calendar
+        ref="calendar2"
+        @choseDay="clickDay2"
+        :agoDayHide="ago"
+        :futureDayHide="now"
+        v-if="type == 2"
+        v-show="calShow2"
+      ></Calendar>
+      <!-- </div> -->
+    </div>
+    <div class="content ctn1" v-if="type == 1">
       <table border="0" cellpadding="0" cellspacing="0">
         <thead>
           <tr>
@@ -15,7 +42,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in list" :key="index">
+          <tr
+            v-for="(item, index) in list"
+            :key="index"
+            @click="showMsg(item)"
+            style="cursor: pointer;"
+          >
             <td>{{ ++index }}</td>
             <td>{{ item.name }}</td>
             <td>{{ item.num_out }}</td>
@@ -32,52 +64,345 @@
         </tbody>
       </table>
     </div>
+    <div class="content ctn2" v-if="type == 2">
+      <div class="chart" v-for="(item, index) in sArr" :key="index" :id="`chart${index}`"></div>
+    </div>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
 const server = "http://172.20.89.68:5001/s";
-import { imgHash } from "./config/hash.js";
+import { loadModules } from "esri-loader";
+import { OPTION } from "@/components/common/Tmap";
+import { xqjckFormUpdate } from "./frame/xqjckArcgis";
+import Calendar from "vue-calendar-component";
+
+import { mapState } from "vuex";
+
 export default {
   name: "lsryForm",
   data() {
     return {
       server,
-      imgHash,
       title: "",
-      list: []
+      list: [],
+      type: 1,
+      calShow1: false,
+      calShow2: false,
+      time_start: "",
+      time_end: "",
+      ago: "",
+      future: "",
+      now: "",
+      time: "",
+      charts: [],
+      sArr: []
     };
   },
-  mounted() {
-    // this.getItem(leftOptions[0].children[0], leftOptions[0].label);
+  components: { Calendar },
+  computed: {
+    ...mapState({
+      crjlList: state => state.crjlList,
+      ryxxList: state => state.ryxxList
+    })
   },
+  created() {
+    this.future = this.now = new Date()
+      .valueOf()
+      .toString()
+      .substr(0, 10);
+    this.time_start = this.dateFormat(
+      "YYYY/mm/dd",
+      new Date(new Date() - 7 * 24 * 60 * 60 * 1000)
+    );
+    this.time_end = this.dateFormat("YYYY/mm/dd", new Date());
+  },
+  mounted() {},
   methods: {
     goLocation(item) {
       // console.log(item);
       item.geometry && this.$parent.$refs.macroArcgis.goloaction(item);
     },
-    getItem(
-      { url, sublayers, id, name, definitionExpression, ytname, ytd },
-      label
-    ) {
-      this.list = [
-        {
-          name: "金海嘉苑",
-          num_in: 20,
-          num_out: 20
-        },
-        {
-          name: "仁和嘉园",
-          num_in: 20,
-          num_out: 20
-        },
-        {
-          name: "大自然家园二期",
-          num_in: 20,
-          num_out: 20
+
+    getItem({ url, sublayers }, type) {
+      const that = this;
+      this.type = type;
+      const datetime = this.dateFormat("YYYY-mm-dd", new Date());
+      this.time = `截至 ${datetime}`;
+      this.title = type == 1 ? `小区出入情况` : `小区出入情况历史统计`;
+
+      // console.log("getitem", this.crjlList);
+
+      const obj = {};
+
+      this.crjlList.map(item => {
+        !obj[item.ssxq] && (obj[item.ssxq] = {});
+
+        const time_out = this.dateFormat("YYYY-mm-dd", new Date(item.cmsj));
+        const time_in = this.dateFormat("YYYY-mm-dd", new Date(item.fhsj));
+
+        if (item.cmsj != "1899-12-30 00:00:00") {
+          !obj[item.ssxq][time_out] &&
+            (obj[item.ssxq][time_out] = {
+              num_in: 0,
+              num_out: 0
+            });
+
+          obj[item.ssxq][time_out].num_out++;
         }
-      ];
+
+        if (item.fhsj != "1899-12-30 00:00:00") {
+          !obj[item.ssxq][time_in] &&
+            (obj[item.ssxq][time_in] = {
+              num_in: 0,
+              num_out: 0
+            });
+
+          obj[item.ssxq][time_in].num_in++;
+        }
+      });
+
+      const arr = [];
+
+      Object.keys(obj).map(item => {
+        const _arr = [];
+        Object.keys(obj[item]).map(_item => {
+          _arr.push({
+            time: _item,
+            num_in: obj[item][_item].num_in,
+            num_out: obj[item][_item].num_out
+          });
+        });
+
+        arr.push({ name: item, value: _arr });
+      });
+
+      arr.map(item => {
+        item.value.sort((a, b) => {
+          return new Date(b.time).valueOf() - new Date(a.time).valueOf();
+        });
+
+        that.sArr.push({
+          name: item.name,
+          time: item.value.map(item => item.time),
+          in_value: item.value.map(item => item.num_in),
+          out_value: item.value.map(item => item.num_out)
+        });
+      });
+    },
+    showMsg(item) {
+      // console.log(item);
+      const that = this;
+      // xqjckFormUpdate(that, item.name);
+
+      this.$parent.xqjckShow = true;
+
+      this.$parent.$refs.xqjck.filterItem(item.name);
+    },
+    doChart() {
+      const list = this.getList();
+
+      list.map((item, index) => {
+        const chart = this.$echarts.init(
+          document.getElementById(`chart${index}`)
+        );
+
+        chart.setOption({
+          title: {
+            text: `${item.name}`,
+            left: "20px",
+            textStyle: {
+              color: "#fff"
+            }
+          },
+          legend: {
+            show: true,
+            right: "8%",
+            textStyle: {
+              color: "#fff"
+            }
+          },
+          tooltip: {
+            show: true,
+            trigger: "axis"
+          },
+          grid: {
+            bottom: "10%",
+            left: "5%",
+            right: "4%",
+            containLabel: true
+          },
+          xAxis: {
+            axisLine: {
+              lineStyle: {
+                color: "#fff"
+              }
+            },
+            axisTick: {
+              show: false
+            },
+            data: item.time
+          },
+          yAxis: {
+            axisLine: {
+              lineStyle: {
+                color: "#fff"
+              }
+            },
+            axisTick: {
+              show: false
+            },
+            splitLine: {
+              show: false
+            }
+          },
+          series: [
+            {
+              name: "进入人数",
+              type: "line",
+              itemStyle: {
+                color: "#fd344b"
+              },
+              data: item.in_value
+            },
+            {
+              name: "出去人数",
+              type: "line",
+              itemStyle: {
+                color: "#00ffff"
+              },
+              data: item.out_value
+            }
+          ]
+        });
+
+        this.charts.push(chart);
+      });
+    },
+    // 更新图表
+    updateChart() {
+      const list = this.getList();
+
+      this.charts.map((item, index) => {
+        item.setOption({
+          xAxis: {
+            data: list[index].time
+          },
+          series: [
+            {
+              name: "进入人数",
+              type: "line",
+              itemStyle: {
+                color: "#fd344b"
+              },
+              data: list[index].in_value
+            },
+            {
+              name: "出去人数",
+              type: "line",
+              itemStyle: {
+                color: "#00ffff"
+              },
+              data: list[index].out_value
+            }
+          ]
+        });
+      });
+    },
+    // [calendar1]点击事件
+    clickDay1(data) {
+      this.calShow1 = false;
+      this.time_start = data;
+      this.ago = new Date(data)
+        .valueOf()
+        .toString()
+        .substr(0, 10);
+
+      this.updateChart();
+    },
+    // [calendar2]点击事件
+    clickDay2(data) {
+      this.calShow2 = false;
+      this.time_end = data;
+      this.future = new Date(data)
+        .valueOf()
+        .toString()
+        .substr(0, 10);
+
+      this.updateChart();
+    },
+    // 日期格式化
+    dateFormat(fmt, date) {
+      let ret;
+      const opt = {
+        "Y+": date.getFullYear().toString(),
+        "m+": (date.getMonth() + 1).toString(),
+        "d+": date.getDate().toString(),
+        "H+": date.getHours().toString(),
+        "M+": date.getMinutes().toString(),
+        "S+": date.getSeconds().toString()
+      };
+      for (let k in opt) {
+        ret = new RegExp("(" + k + ")").exec(fmt);
+        if (ret) {
+          fmt = fmt.replace(
+            ret[1],
+            ret[1].length == 1 ? opt[k] : opt[k].padStart(ret[1].length, "0")
+          );
+        }
+      }
+      return fmt;
+    },
+    getList() {
+      const list = [];
+      const that = this;
+      this.sArr.map((item, index) => {
+        const obj = {};
+
+        item.time.map((_item, _index) => {
+          if (
+            new Date(_item).valueOf() >= new Date(that.time_start).valueOf() &&
+            new Date(_item).valueOf() <=
+              new Date(that.time_end).valueOf() + 24 * 60 * 60 * 1000
+          ) {
+            !obj["time"] && (obj["time"] = []);
+            !obj["num"] && (obj["num"] = []);
+
+            obj["time"].push(_item);
+            obj["num"].push(_index);
+          }
+        });
+
+        item.in_value.map((_item, _index) => {
+          if (obj.num && ~obj.num.indexOf(_index)) {
+            !obj["in_value"] && (obj["in_value"] = []);
+
+            obj["in_value"].push(_item);
+          }
+        });
+
+        item.out_value.map((_item, _index) => {
+          if (obj.num && ~obj.num.indexOf(_index)) {
+            !obj["out_value"] && (obj["out_value"] = []);
+
+            obj["out_value"].push(_item);
+          }
+        });
+
+        obj["name"] = item.name;
+
+        list.push(obj);
+      });
+
+      return list;
+    }
+  },
+  watch: {
+    sArr(newV, oldV) {
+      this.$nextTick(() => {
+        newV.length && this.doChart();
+      });
     }
   }
 };
@@ -98,55 +423,74 @@ export default {
   transition: all 1s;
 
   .head {
-    height: 7%;
     margin-top: 1%;
 
-    span {
+    .title {
       font-size: 22px;
     }
 
+    .time {
+      font-size: 16px;
+    }
+
     a {
-      float: right;
+      position: absolute;
+      top: 0px;
+      right: 10px;
       font-size: 30px;
-      margin-right: 10px;
       cursor: pointer;
     }
   }
-  .search {
-    height: 60px;
-    select {
-      background-color: #0c7cd2;
-      border: none;
-      color: #fff;
-      padding: 7px 7px;
-      margin-right: 5px;
+
+  .choose_div {
+    margin: 2%;
+    padding: 2% 0%;
+
+    .wh_container {
+      position: absolute;
+      right: 0px;
+      z-index: 30;
     }
 
-    input {
-      width: 15%;
-      margin-top: 10px;
-      margin-right: 5px;
-      background-color: #162449;
-      border: 1px solid #75c8f4;
-      border-radius: 8px;
-      padding: 8px 9px;
-      color: #fff;
+    span {
+      font-size: 16px;
     }
 
-    button {
-      background-color: #162449;
-      border: 1px solid #75c8f4;
-      border-radius: 8px;
-      padding: 7px 9px;
-      color: #fff;
-      margin-right: 4px;
+    img {
+      // position: absolute;
+      width: 16px;
+      height: 16px;
+      margin-left: 10px;
+      margin-right: 30px;
+      cursor: pointer;
+    }
+
+    .choose_time {
+      padding: 5px 0px;
+
+      span {
+        font-size: 18px;
+      }
+
+      img {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        margin-left: 12px;
+        cursor: pointer;
+      }
+
+      .wh_container {
+        position: absolute;
+        right: 0px;
+        z-index: 30;
+      }
     }
   }
-  // .content::-webkit-scrollbar {
-  //   display: none;
-  // }
-  .content {
-    height: 80%;
+
+  .ctn1 {
+    height: 85%;
+    margin-top: 5%;
     overflow: auto;
 
     table {
@@ -160,6 +504,29 @@ export default {
         padding: 10px 5px;
       }
     }
+  }
+
+  .ctn2 {
+    height: 85%;
+    overflow: auto;
+
+    .chart {
+      width: 100%;
+      height: 230px;
+      margin: 10px 0px;
+    }
+  }
+
+  .content::-webkit-scrollbar {
+    display: block;
+    width: 10px;
+    background-color: rgb(107, 134, 223);
+    border-radius: 3px;
+  }
+  .content::-webkit-scrollbar-thumb {
+    width: 10px;
+    background-color: rgb(14, 10, 247);
+    border-radius: 3px;
   }
 }
 </style>

@@ -47,7 +47,7 @@ export default {
     },
     goqzTable() {
       var name = this.title;
-      console.log(name);
+      // console.log(name);
       this.$parent.$refs.qzTable.qzTableFun();
       qzTableUpdate(name);
     },

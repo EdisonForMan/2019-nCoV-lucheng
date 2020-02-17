@@ -24,6 +24,7 @@ export const tipHash = {
     highway_type_1: "subwayHash",
     highway_type_2: "subwayHash",
     highway_type_3: "carHash",
+    highway_type_4: "highwayHash",
     clinic_type_1: "hospitalHash",
     clinic_type_2: "hospitalHash",
     clinic_type_3: "hospitalHash",
@@ -40,9 +41,11 @@ export const tipHash = {
     nj_xm_2: "njxmHash",
     glmd: "illHash",
     gjmj: "mjHash",
-    wm_gs: "wmgsHash"
+    wm_gs: "wmgsHash",
+    qyfg: "qyfgHash"
 }
 
+// 隔离点人员名单
 const gldListHash = [{
     fieldName: "Country",
     label: "街道"
@@ -68,23 +71,8 @@ const gldListHash = [{
     fieldName: "IsolationPlace",
     label: "隔离点"
 }, {
-    fieldName: "RelatingCodes",
-    label: "隔离点编码"
-}, {
     fieldName: "Room",
     label: "房间号"
-}, {
-    fieldName: "IsolationPlaceAddress",
-    label: "隔离点地址"
-}, {
-    fieldName: "LinkMan",
-    label: "联络人"
-}, {
-    fieldName: "LinkManPhone",
-    label: "联络人电话"
-}, {
-    fieldName: "IsIsolated",
-    label: "是否解除隔离"
 }]
 
 
@@ -224,43 +212,39 @@ const hbhwHash = [{
     label: "状态说明"
 }]
 
+// 隔离点
 const gldHash = [{
-        fieldName: "Name",
-        label: "集中医学观察点名称"
-    },
-    {
-        fieldName: "Country",
-        label: "街道"
-    }, {
-        fieldName: "Address",
-        label: "地点"
-    },
-    {
-        fieldName: "Rooms",
-        label: "可用医学观察房间"
-    }, {
-        fieldName: "UseNumber",
-        label: "使用人数"
-    }, {
-        fieldName: "Linkman",
-        label: "联络人"
-    }, {
-        fieldName: "Phone",
-        label: "联络电话"
-    }, {
-        fieldName: "RemainRooms",
-        label: "可用房间数"
-    }, {
-        fieldName: "HBtoLCNumber",
-        label: "其中湖北回鹿人数"
-    }, {
-        fieldName: "TerminateIsolationNumber",
-        label: "解除隔离人数"
-    }, {
-        fieldName: "TerminateIsolationNumber_HB ",
-        label: "解除隔离人数（湖北）"
-    },
-]
+    fieldName: "Name",
+    label: "集中医学观察点名称"
+}, {
+    fieldName: "Country",
+    label: "街道"
+}, {
+    fieldName: "Address",
+    label: "地点"
+}, {
+    fieldName: "Rooms",
+    label: "可用医学观察房间"
+}, {
+    fieldName: "UseNumber",
+    label: "使用人数"
+}, {
+    fieldName: "Linkman",
+    label: "联络人"
+}, {
+    fieldName: "Phone",
+    label: "联络电话"
+}, {
+    fieldName: "RemainRooms",
+    label: "可用房间数"
+}, {
+    fieldName: "TerminateIsolationNumber",
+    label: "其中湖北回鹿人数"
+}, {
+    fieldName: "TerminateIsolationNumber_add",
+    label: "解除隔离人数"
+}]
+
 // 留观
 const lgHash = [{
     fieldName: "Name",
@@ -523,6 +507,21 @@ const carHash = [{
         label: "类型"
     }
 ]
+// 交通卡口
+const highwayHash = [{
+        fieldName: "Name",
+        label: "交通卡口名称"
+    },
+    {
+        fieldName: "FGLD",
+        label: "分管领导"
+    },
+    {
+        fieldName: "LLY",
+        label: "联络员"
+    }
+]
+
 //  市场
 const marketHash = [{
         fieldName: "name",
@@ -716,6 +715,60 @@ const wmgsHash = [{
 }]
 
 
+// 企业返工
+/* const qyfgHash = [{
+    fieldName: "qymc",
+    label: "企业名称"
+}, {
+    fieldName: "tyshm",
+    label: "统一社会码"
+}, {
+    fieldName: "fddbr",
+    label: "法定代表人"
+}, {
+    fieldName: "jydz",
+    label: "经营地址"
+}, {
+    fieldName: "qylx",
+    label: "企业类型"
+}, {
+    fieldName: "zczbw",
+    label: "注册资本（单位：万元）"
+}, {
+    fieldName: "jyfw",
+    label: "经营范围"
+}, {
+    fieldName: "clrq",
+    label: "成立日期"
+}, {
+    fieldName: "jyjzrq",
+    label: "经营截止日期"
+}, {
+    fieldName: "djjg",
+    label: "登记机关"
+}, {
+    fieldName: "hydm",
+    label: "登记机关"
+}, {
+    fieldName: "hyfl",
+    label: "登记机关"
+}] */
+
+const qyfgHash = [{
+    fieldName: "企业名称",
+    label: "企业名称"
+}, {
+    fieldName: "统一社会信",
+    label: "统一社会信"
+}, {
+    fieldName: "行业代码",
+    label: "行业代码"
+}, {
+    fieldName: "行业分类",
+    label: "行业分类"
+}]
+
+
 
 export const Hash = {
     hospitalHash,
@@ -724,6 +777,7 @@ export const Hash = {
     marketHash,
     subwayHash,
     carHash,
+    highwayHash,
     xqHash,
     xqjckHash,
     scHash,
@@ -744,7 +798,8 @@ export const Hash = {
     gldListHash,
     sccsHash,
     nmscHash,
-    wmgsHash
+    wmgsHash,
+    qyfgHash
 }
 
 

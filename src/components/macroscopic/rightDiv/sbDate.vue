@@ -1,63 +1,53 @@
 <template>
   <div id="sbDateDiv">
-    <input
-      type="text"
-      v-model="text"
-      placeholder="请输入查询"
-      style="width: 60%;margin-top: 10px;background-color: #162449;border: 1px solid #75c8f4;border-radius: 8px;padding: 8px 9px; color:#fff"
-    />
-    <button
-      style="background-color: #162449;border: 1px solid #75c8f4;border-radius: 8px;padding: 7px 9px; color:#fff;margin-right:4px"
-      @click="()=>{text && filteItem()}"
-    >查询</button>
-    <button
-      style="background-color: #162449;border: 1px solid #75c8f4;border-radius: 8px;padding: 7px 9px; color:#fff;cursor: pointer;"
-      @click="show()"
-    >详情</button>
-    <!-- <h3>- 确诊病例动态更新 -</h3> -->
-    <ul>
-      <li v-for="(item,index) in forceData" :key="index" @click="goLocation(item)">
-        <span
-          v-if="item.label == '疫情分布' && ['gld','gld_list','mj','mj2','hbhw','ytyg','glmd'].indexOf(item.id) < 0"
-        >{{++index}}. 患者：{{item.attributes.Name?`${item.attributes.Name.trim().substr(0,1)}*${item.attributes.Name.trim().substr(-1,1)}`:'**'}}, {{item.attributes.Sex}}, {{item.attributes.Address}}, {{item.attributes.Age}}</span>
-        <span
-          v-if="~['mj','mj2','gjmj'].indexOf(item.id)"
-        >{{++index}}. {{item.attributes.NAME?`${item.attributes.NAME.trim().substr(0,1)}*${item.attributes.NAME.trim().substr(-1,1)}`:'**'}}, {{item.attributes.Sex}}, {{item.attributes.Address_Department}}</span>
-        <span
-          v-if="~['gld'].indexOf(item.id)"
-        >{{++index}}. {{item.attributes.Name}}, {{item.attributes.Address}}</span>
-        <span
-          v-if="~['gld_list','ytyg','glmd','hbhw'].indexOf(item.id)"
-        >{{++index}}. {{item.attributes.Name?`${item.attributes.Name.trim().substr(0,1)}*${item.attributes.Name.trim().substr(-1,1)}`:'**'}}, {{item.attributes.Address}}</span>
-        <span v-if="item.label == '医疗资源'">{{++index}}.{{item.attributes.NAME}}</span>
-        <span
-          v-if="~['highway_type_1','highway_type_2','highway_type_3'].indexOf(item.id)"
-        >{{++index}}. {{item.attributes.Name}}</span>
-        <span
-          v-if="item.label == '人员密集场所' && item.id == 'people_type_3'"
-        >{{++index}}. {{item.attributes.name}}</span>
-        <span
-          v-if="item.label == '人员密集场所' && (item.id == 'people_type_7')"
-        >{{++index}}. {{item.attributes.Address}}</span>
-        <span
-          v-if="item.label == '人员密集场所' && item.id != 'people_type_3' && item.id != 'people_type_7'"
-        >{{++index}}. {{item.attributes.Name}}</span>
-        <span
-          v-if="item.id == 'people_type_8' || item.id == 'people_type_9'"
-        >{{++index}}. {{item.attributes.Name}}</span>
-        <span v-if="item.id == 'xq'">{{++index}}. {{item.attributes.name}}</span>
-        <span
-          v-if="item.id == 'xqjck'"
-        >{{++index}}. {{item.attributes.社区名称}}, {{item.attributes.小区名称}}</span>
-        <span v-if="item.id == 'wg'">{{++index}}. {{item.attributes.Name}}</span>
-        <span
-          v-if="item.id == 'chanyePlate'"
-        >{{++index}}. {{item.attributes.名称}}（{{item.attributes.num}}例）</span>
-        <span
-          v-if="~['jzgd','nj_zdqy','nj_xm_1','nj_xm_2','wm_gs'].indexOf(item.id)"
-        >{{++index}}. {{item.attributes.Name?item.attributes.Name:(item.attributes.ProjectName?item.attributes.ProjectName:(item.attributes.CompanyName?item.attributes.CompanyName:item.attributes.项目名称))}}</span>
-      </li>
-    </ul>
+    <input type="text" v-model="text" placeholder="请输入查询" />
+    <button id="cx" @click="filteItem">查询</button>
+    <button id="xq" @click="show">详情</button>
+    <div class="list">
+      <ul>
+        <li v-for="(item,index) in forceData" :key="index" @click="goLocation(item)">
+          <span
+            v-if="item.label == '疫情分布' && ['gld','gld_list','mj','mj2','hbhw','ytyg','glmd'].indexOf(item.id) < 0"
+          >{{++index}}. 患者：{{item.attributes.Name?`${item.attributes.Name.trim().substr(0,1)}*${item.attributes.Name.trim().substr(-1,1)}`:'**'}}, {{item.attributes.Sex}}, {{item.attributes.Address}}, {{item.attributes.Age}}</span>
+          <span
+            v-if="~['mj','mj2','gjmj'].indexOf(item.id)"
+          >{{++index}}. {{item.attributes.NAME?`${item.attributes.NAME.trim().substr(0,1)}*${item.attributes.NAME.trim().substr(-1,1)}`:'**'}}, {{item.attributes.Sex}}, {{item.attributes.Address_Department}}</span>
+          <span
+            v-if="~['gld'].indexOf(item.id)"
+          >{{++index}}. {{item.attributes.Name}}, {{item.attributes.Address}}</span>
+          <span
+            v-if="~['gld_list','ytyg','glmd','hbhw'].indexOf(item.id)"
+          >{{++index}}. {{item.attributes.Name?`${item.attributes.Name.trim().substr(0,1)}*${item.attributes.Name.trim().substr(-1,1)}`:'**'}}, {{item.attributes.Address}}</span>
+          <span v-if="item.label == '医疗资源'">{{++index}}.{{item.attributes.NAME}}</span>
+          <span
+            v-if="~['highway_type_1','highway_type_2','highway_type_3','highway_type_4'].indexOf(item.id)"
+          >{{++index}}. {{item.attributes.Name}}</span>
+          <span
+            v-if="item.label == '人员密集场所' && item.id == 'people_type_3'"
+          >{{++index}}. {{item.attributes.name}}</span>
+          <span
+            v-if="item.label == '人员密集场所' && (item.id == 'people_type_7')"
+          >{{++index}}. {{item.attributes.Address}}</span>
+          <span
+            v-if="item.label == '人员密集场所' && item.id != 'people_type_3' && item.id != 'people_type_7'"
+          >{{++index}}. {{item.attributes.Name}}</span>
+          <span
+            v-if="item.id == 'people_type_8' || item.id == 'people_type_9'"
+          >{{++index}}. {{item.attributes.Name}}</span>
+          <span v-if="item.id == 'xq'">{{++index}}. {{item.attributes.name}}</span>
+          <span
+            v-if="item.id == 'xqjck'"
+          >{{++index}}. {{item.attributes.社区名称}}, {{item.attributes.小区名称}}</span>
+          <span v-if="item.id == 'wg'">{{++index}}. {{item.attributes.Name}}</span>
+          <span
+            v-if="item.id == 'chanyePlate'"
+          >{{++index}}. {{item.attributes.名称}}（{{item.attributes.num}}例）</span>
+          <span
+            v-if="~['jzgd','nj_zdqy','nj_xm_1','nj_xm_2','wm_gs','qyfg'].indexOf(item.id)"
+          >{{++index}}. {{item.attributes.Name || item.attributes.ProjectName || item.attributes.CompanyName || item.attributes.项目名称 || item.attributes.企业名称}}</span>
+        </li>
+      </ul>
+    </div>
     <Loading v-if="isLoading" />
   </div>
 </template>
@@ -98,13 +88,12 @@ export default {
           attributes.Address ||
           attributes.short_name ||
           attributes.姓名;
-        tag && ~tag.indexOf(this.text) && forceData.push(item);
+        tag && ~tag.indexOf(this.text || "") && forceData.push(item);
       });
-      this.forceData = forceData;
+      this.forceData = forceData.slice(0, 20);
       this.isLoading = false;
     },
     getItem({ url, sublayers, id, name, definitionExpression, ytd }, label) {
-      // console.log(url);
       this.isLoading = true;
       const d = [];
       definitionExpression && d.push(definitionExpression);
@@ -125,7 +114,6 @@ export default {
         fields.map(item => {
           fieldAliases[item.name] = item.alias;
         });
-        // console.log(features);
         const list = features.map(item => {
           item.fieldAliases = fieldAliases;
           item.label = label;
@@ -165,13 +153,12 @@ export default {
           });
         }
         this.data = list;
-        this.forceData = list.filter((item, index) => {
-          return index < 20;
-        });
+        this.forceData = list.slice(0, 20);
         this.text = undefined;
         this.isLoading = false;
       });
     },
+    // 高速口详情
     getHighWay(url) {
       return new Promise((resolve, reject) => {
         loadModules(
@@ -198,13 +185,11 @@ export default {
             item.fieldAliases = fieldAliases;
             return item;
           });
-
-          // console.log("高速值班", list);
-
           resolve(list);
         });
       });
     },
+    // 密接详情
     getMj(url) {
       return new Promise((resolve, reject) => {
         loadModules(
@@ -230,6 +215,7 @@ export default {
         });
       });
     },
+    // 确诊病例
     getQzbl(Country) {
       return new Promise((resolve, reject) => {
         loadModules(
@@ -271,46 +257,72 @@ export default {
   height: 32%;
   background-color: rgba(5, 26, 79, 0.5);
   border: 1px solid #035acd;
-  overflow-y: scroll;
   position: relative;
 
   input::-webkit-input-placeholder {
     color: #fff;
   }
 
-  h3 {
-    color: #23c9f3;
+  input {
+    width: 60%;
     margin-top: 10px;
+    background-color: #162449;
+    border: 1px solid #75c8f4;
+    border-radius: 8px;
+    padding: 8px 9px;
+    color: #fff;
   }
 
-  ul {
-    list-style: none;
-    width: 96%;
-    margin-left: 2%;
-    margin-top: 3%;
+  #cx {
+    background-color: #162449;
+    border: 1px solid #75c8f4;
+    border-radius: 8px;
+    padding: 7px 9px;
+    color: #fff;
+    margin-right: 4px;
+  }
 
-    li {
-      padding: 10px 0;
-      background: #122960;
-      text-align: left;
-      padding-left: 15px;
-      overflow: hidden; /*超出部分隐藏*/
-      white-space: nowrap; /*不换行*/
-      text-overflow: ellipsis; /*超出部分文字以...显示*/
-    }
+  #xq {
+    background-color: #162449;
+    border: 1px solid #75c8f4;
+    border-radius: 8px;
+    padding: 7px 9px;
+    color: #fff;
+    cursor: pointer;
+  }
 
-    li:nth-child(even) {
-      background: #081942;
-    }
+  .list {
+    margin-top: 2%;
+    height: 78%;
+    overflow-y: scroll;
+    ul {
+      list-style: none;
+      width: 96%;
+      margin-left: 2%;
 
-    li:hover {
-      cursor: pointer;
-      background-color: #0b5cc7;
+      li {
+        padding: 10px 0;
+        background: #122960;
+        text-align: left;
+        padding-left: 15px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+      li:nth-child(even) {
+        background: #081942;
+      }
+
+      li:hover {
+        cursor: pointer;
+        background-color: #0b5cc7;
+      }
     }
   }
-}
 
-#sbDateDiv::-webkit-scrollbar {
-  display: none;
+  .list::-webkit-scrollbar {
+    display: none;
+  }
 }
 </style>

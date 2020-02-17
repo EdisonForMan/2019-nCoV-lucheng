@@ -38,15 +38,15 @@
       <table border="0" cellpadding="0" cellspacing="0">
         <tbody>
           <tr>
-            <td>小区出入人数：4</td>
-            <td>小区登记人数： 200</td>
+            <td>小区出入人数： {{ crrs }}</td>
+            <td>小区登记人数： {{ djrs }}</td>
           </tr>
         </tbody>
       </table>
     </div>
     <div class="content">
       <div class="inner-title">
-        <span>[ 2月14日 ] - 进出人员详情</span>
+        <span>[ {{ time }} ] - 进出人员详情</span>
       </div>
       <!-- <table border="0" cellpadding="0" cellspacing="0">
         <tbody>
@@ -80,8 +80,8 @@
             <td>{{ item.sfzh }}</td>
             <td>{{ item.ssxq }}</td>
             <td>{{ item.mph }}</td>
-            <td>{{ item.cmsj }}</td>
-            <td>{{ item.fhsj }}</td>
+            <td>{{ item.cmsj != "1899-12-30 00:00:00" ? item.cmsj : "" }}</td>
+            <td>{{ item.fhsj != "1899-12-30 00:00:00" ? item.fhsj : ""}}</td>
             <td>{{ item.bz }}</td>
           </tr>
           <!-- <tr>
@@ -141,12 +141,16 @@ export default {
         滨江: 13,
         七都: 14,
         区直设: 15
-      }
+      },
+      crrs: 0,
+      djrs: 0,
+      time: null
     };
   },
   created() {},
   mounted() {
     // this.getItem(leftOptions[0].children[0], leftOptions[0].label);
+    this.time = this.dateFormat("YYYY年mm月dd日", new Date());
   },
   components: {},
   watch: {
@@ -166,17 +170,58 @@ export default {
   methods: {
     crjlDataFix() {
       if (!this.crjlList.length) return;
-      console.log("crjl", this.crjlList);
+      // console.log("crjl", this.crjlList);
     },
     ryxxDataFix() {
       if (!this.ryxxList.length) return;
-      console.log("ryxx", this.ryxxList);
+      // console.log("ryxx", this.ryxxList);
     },
+
     filterItem(name) {
+      const that = this;
       this.title = name;
-      this.forceData = this.crjlList.filter(item => item.ssxq == name);
-      this.sArr = this.ryxxList.filter(item => item.ssxq == name);
-      console.log(this.ryxxList.map(item => item.ssxq));
+      // this.forceData = this.crjlList.filter(item => item.ssxq == name);
+
+      const datetime = this.dateFormat("YYYY-mm-dd", new Date());
+
+      this.forceData = this.crjlList.filter(item => {
+        const time_out = that.dateFormat("YYYY-mm-dd", new Date(item.cmsj));
+        const time_in = that.dateFormat("YYYY-mm-dd", new Date(item.fhsj));
+
+        if (
+          item.ssxq == name &&
+          (time_in == datetime || time_out == datetime)
+        ) {
+          // console.log(time_in, time_out);
+          return item;
+        }
+      });
+
+      this.crrs = this.forceData.length;
+      this.djrs = this.ryxxList.filter(item => item.ssxq == name).length;
+    },
+
+    // 日期格式化
+    dateFormat(fmt, date) {
+      let ret;
+      const opt = {
+        "Y+": date.getFullYear().toString(),
+        "m+": (date.getMonth() + 1).toString(),
+        "d+": date.getDate().toString(),
+        "H+": date.getHours().toString(),
+        "M+": date.getMinutes().toString(),
+        "S+": date.getSeconds().toString()
+      };
+      for (let k in opt) {
+        ret = new RegExp("(" + k + ")").exec(fmt);
+        if (ret) {
+          fmt = fmt.replace(
+            ret[1],
+            ret[1].length == 1 ? opt[k] : opt[k].padStart(ret[1].length, "0")
+          );
+        }
+      }
+      return fmt;
     },
     /* filteItem() {
       const data = this.data;
@@ -619,7 +664,7 @@ export default {
     }
   }
   .content {
-    height: 60%;
+    height: 80%;
     overflow: auto;
 
     .inner-title {

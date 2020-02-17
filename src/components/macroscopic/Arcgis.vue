@@ -34,6 +34,7 @@ import {
 } from "@/components/common/Tmap";
 import { tipHash, Hash } from "./config/hash.js";
 const server = "http://172.20.89.68:5001/s";
+import { noShowFields } from "./config/field.js";
 
 // import testApi from "@/api/beans/u_test";
 
@@ -81,7 +82,7 @@ export default {
         });
       },
       deep: true
-    },
+    }
     // crjlList() {
     //   this.crjlDataFix();
     // },
@@ -192,8 +193,10 @@ export default {
           });
           that.map.add(layer);
           that.legend = new Legend({
+            label: "图例",
             view: that.view
           });
+          that.view.ui.add(that.legend, "bottom-left");
           that.view.on("click", function(evt) {});
           resolve(true);
         });
@@ -207,12 +210,14 @@ export default {
         addQZLinkFeature(context, val);
         mjChartUpdate(context, val);
         context.$parent.leftHidden();
+        context.$parent.legend();
       });
       //  街道疫情分布
       $("body").on("click", ".cp_btn", function() {
         const val = $(this).attr("data-val");
         linkCPFeatures(context, val);
         context.$parent.leftHidden();
+        context.$parent.legend();
       });
       //  小区进出口人员
       $("body").on("click", ".gjmj_btn", function() {
@@ -223,8 +228,8 @@ export default {
         addQZLinkFeature_gj(context, val);
         mjChartUpdate_gj(context, val);
         context.$parent.leftHidden();
+        context.$parent.legend();
 
-        // context.getApi();
         // console.log("cr", this.CRList);
         // xqjckFormUpdate(context, val);
         // context.$parent.leftHidden();
@@ -235,6 +240,7 @@ export default {
         const val = $(this).attr("data-val");
         linkXQ_ENTERFeatures(context, val);
         context.$parent.leftHidden();
+        context.$parent.legend();
       });
       //  隔离点人员详情
       $("body").on("click", ".gld_btn", function() {
@@ -242,6 +248,7 @@ export default {
         const bid = $(this).attr("data-val2");
         gldChartUpdate(context, name, bid);
         context.$parent.leftHidden();
+        context.$parent.legend();
       });
     },
     //  添加区划图
@@ -310,29 +317,25 @@ export default {
             : `<table class="esri-widget__table" summary="属性和值列表"><tbody>
             ${Object.keys(attributes)
               .filter(k => {
-                return (
-                  [
-                    "OBJECTID",
-                    "OBJECTID_1",
-                    "FEATUREGUID",
-                    "Bid",
-                    "Question",
-                    "question",
-                    "yy",
-                    "Id",
-                    "小区面名称",
-                    "小区面唯一码",
-                    "X",
-                    "Y",
-                    "problem",
-                    "RelatingCodes"
-                  ].indexOf(k) < 0
-                );
+                if (id == "clinic_type_3" || id == "clinic_type_5") {
+                  return ~["SHORTNAME", "ADDRESS", "TYPE", "PHONE"].indexOf(k);
+                } else {
+                  return noShowFields.indexOf(k) < 0;
+                }
               })
               .map(k => {
                 return `<tr>
-                  <th class="esri-feature__field-header">${fieldAliases[k] ||
-                    k}</th>
+                  <th class="esri-feature__field-header">${
+                    fieldAliases[k] == "Phone"
+                      ? "联系方式"
+                      : fieldAliases[k] == "Name"
+                      ? "名称"
+                      : fieldAliases[k] == "Country"
+                      ? "街道"
+                      : fieldAliases[k] == "Address"
+                      ? "地址"
+                      : fieldAliases[k]
+                  }</th>
                   <td class="esri-feature__field-data">${attributes[k] ||
                     ""}</td>
                 </tr>`;
@@ -443,13 +446,15 @@ export default {
         loadModules(["esri/layers/MapImageLayer"], OPTION).then(
           ([MapImageLayer]) => {
             const chanyePlate = new MapImageLayer({
-              url: XZJD,
+              url:
+                "http://172.20.89.7:6082/arcgis/rest/services/lucheng/xzjd_ws/MapServer",
               id: "chanyePlate",
               opacity: 1
             });
             //  优先级置顶
             that.map.add(chanyePlate, 2);
             that.legend.layerInfos.push({
+              title: "五色风险评估",
               layer: chanyePlate
             });
             resolve(true);
@@ -614,11 +619,20 @@ export default {
                   url: `${server}/icon/other/${item.icon}.png`,
                   width: "30px",
                   height: "32px"
-                }
+                },
+                label:
+                  item.name != "-1"
+                    ? `${item.name}`.split(" ")[0]
+                    : `${item.ytname}`.split(" ")[0]
               });
 
             const feature = new _layers_(option);
             that.map.add(feature);
+
+            that.legend.layerInfos.push({
+              title: "",
+              layer: feature
+            });
 
             option.id = "people_type_9_2";
 
@@ -632,11 +646,20 @@ export default {
                   url: `${server}/icon/other/${item.icon2}.png`,
                   width: "30px",
                   height: "32px"
-                }
+                },
+                label:
+                  item.name != "-1"
+                    ? `${item.name}`.split(" ")[0]
+                    : `${item.ytname}`.split(" ")[0]
               });
 
             const feature2 = new _layers_(option);
             that.map.add(feature2);
+
+            that.legend.layerInfos.push({
+              title: "",
+              layer: feature2
+            });
           } else {
             if (item.definitionExpression || shallYT) {
               const d = [];
@@ -658,11 +681,22 @@ export default {
                   url: `${server}/icon/other/${item.icon}.png`,
                   width: "30px",
                   height: "32px"
-                }
+                },
+                label:
+                  item.name != "-1"
+                    ? `${item.name}`.split(" ")[0]
+                    : `${item.ytname}`.split(" ")[0]
               });
 
             const feature = new _layers_(option);
             that.map.add(feature);
+
+            if (id != "wg" && id != "xq") {
+              that.legend.layerInfos.push({
+                title: "",
+                layer: feature
+              });
+            }
           }
           resolve(true);
         });
@@ -951,6 +985,7 @@ export default {
       });
 
       that.$parent.leftHidden();
+      that.$parent.legend();
     },
     // 单独查询
     querySingle(type, url, icon, spaceGraphicsLayer, graphic) {
@@ -1002,12 +1037,6 @@ export default {
           });
         });
       });
-    },
-    getApi() {
-      const that = this;
-      // testApitestApi.ds().then(({ data }) => {
-      //   console.log("data", data);
-      // });
     }
   }
 };

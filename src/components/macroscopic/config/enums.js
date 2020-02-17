@@ -70,7 +70,7 @@ export const leftOptions = [{
                 ytname: -1,
                 url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer",
                 sublayers: "5",
-                icon: "治愈",
+                icon: "集聚区",
                 check: false
             }, {
                 name: `密切接触者 (${lc.mj}例)`,
@@ -117,11 +117,12 @@ export const leftOptions = [{
         check: false,
         show: true,
         children: [{
-            name: "街镇网格",
+            name: "五色风险评估",
             id: "chanyePlate",
             sublayers: "0",
-            // isImg: true,
-            url: "http://172.20.89.7:6082/arcgis/rest/services/weijian/xzjd/MapServer",
+            isImg: true,
+            // url: "http://172.20.89.7:6082/arcgis/rest/services/weijian/xzjd/MapServer",
+            url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/xzjd_ws/MapServer",
             check: true
         }, {
             name: "社区网格",
@@ -145,14 +146,15 @@ export const leftOptions = [{
         sflabel: -1,
         check: false,
         show: true,
-        children: [{
-                name: `高速卡口 (${macroscopic.highway_type_1}个)`,
-                id: "highway_type_1",
-                url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer",
-                sublayers: "0",
-                icon: "高速",
-                check: false
-            },
+        children: [
+            // {
+            //     name: `高速卡口 (${macroscopic.highway_type_1}个)`,
+            //     id: "highway_type_1",
+            //     url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer",
+            //     sublayers: "0",
+            //     icon: "高速",
+            //     check: false
+            // },
             // {
             //     name: "汽车站 (4个)",
             //     id: "highway_type_3",
@@ -161,14 +163,23 @@ export const leftOptions = [{
             //     icon: "汽车站",
             //     check: false
             // },
+            // {
+            //     name: `火车站 (${macroscopic.highway_type_2}个)`,
+            //     id: "highway_type_2",
+            //     url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer",
+            //     sublayers: "1",
+            //     icon: "火车站",
+            //     check: false
+            // }, 
             {
-                name: `火车站 (${macroscopic.highway_type_2}个)`,
-                id: "highway_type_2",
+                name: `交通卡口 (${macroscopic.highway_type_4}个)`,
+                id: "highway_type_4",
                 url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer",
-                sublayers: "1",
-                icon: "火车站",
+                sublayers: "6",
+                icon: "高速",
                 check: false
-            }, {
+            }, 
+            {
                 name: `商场超市 (${macroscopic.people_type_8}个)`,
                 id: "people_type_8",
                 url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer",
@@ -371,7 +382,7 @@ export const leftOptions = [{
         check: false,
         show: true,
         children: [{
-            name: `建筑工地信息 (${macroscopic.jzgd}家)`,
+            name: `工地返工信息 (${macroscopic.jzgd}家)`,
             id: "jzgd",
             url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
             sublayers: "13",
@@ -406,7 +417,15 @@ export const leftOptions = [{
             url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
             sublayers: "18",
             // definitionExpression: "CompanyType = '南郊街道辖区在建项目企业'",
-            icon: "重点企业",
+            icon: "旅馆",
+            check: false
+        }, {
+            name: `企业返工信息 (${macroscopic.qyfg}家)`,
+            id: "qyfg",
+            url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/LC_QYD/MapServer",
+            sublayers: "0",
+            // definitionExpression: "CompanyType = '南郊街道辖区在建项目企业'",
+            icon: "市场",
             check: false
         }]
     }

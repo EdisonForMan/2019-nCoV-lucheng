@@ -1,13 +1,13 @@
 <template>
   <div id="bltjDiv">
-    <header>
+    <!-- <header>
       <span :class="{active:tabIndex == 0}" @click="filterItem(0)">确诊病例统计</span>
       <i>/</i>
       <span :class="{active:tabIndex == 1}" @click="filterItem(1)">增长趋势分析</span>
       <i>/</i>
-      <span :class="{active:tabIndex == 2}" @click="filterItem(2)">累计趋势分析</span>
-      <!-- <span class="stateTipHeaderBar"></span> -->
-    </header>
+    <span :class="{active:tabIndex == 2}" @click="filterItem(2)">累计趋势分析</span>-->
+    <!-- <span class="stateTipHeaderBar"></span> -->
+    <!-- </header> -->
     <h3 id="selectDiv">
       - 鹿城区病例统计 -
       <select id="select" @change="bqSelect($event)">
@@ -158,7 +158,19 @@ export default {
             name: "合计确诊",
             type: "bar",
             barWidth: "20px",
+
             stack: "sum",
+            label: {
+              normal: {
+                show: true,
+                position: "inside",
+                color: "#fff",
+                fontSize: 14
+              }
+            },
+            itemStyle: {
+              color: "#f41e1e"
+            },
             data: this.dataAge
           },
           {
@@ -411,7 +423,7 @@ export default {
 
   #bqtjChart {
     width: 100%;
-    height: 70%;
+    height: 85%;
   }
 }
 </style>

@@ -1,27 +1,38 @@
 <template>
   <div id="ssyrform" v-if="list.length">
     <div class="head">
-      <div class="title">
-        {{ title }}
-        <img
-          src="../common/image/日历.png"
-          v-if="type == 2"
-          @click="()=>{ calShow = !calShow }"
-        />
-      </div>
+      <div class="title">{{ title }}</div>
       <div class="time" v-if="type == 1">{{ time }}</div>
       <a @click="()=>{list = []}">×</a>
+    </div>
+    <div class="choose_div" v-if="type == 2">
+      <!-- <div class="choose_time"> -->
+      <span>起始时间 {{ time_start }}</span>
+      <img src="../common/image/日历.png" @click="()=>{ calShow1 = !calShow1; calShow2 = false; }" />
       <Calendar
-        ref="calendar"
-        @choseDay="clickDay"
-        @changeMonth="changeDate"
+        ref="calendar1"
+        @choseDay="clickDay1"
+        :futureDayHide="future"
+        v-if="type == 2"
+        v-show="calShow1"
+      ></Calendar>
+      <!-- </div> -->
+
+      <!-- <div class="choose_time"> -->
+      <span>结束时间 {{ time_end }}</span>
+      <img src="../common/image/日历.png" @click="()=>{ calShow2 = !calShow2; }" />
+      <Calendar
+        ref="calendar2"
+        @choseDay="clickDay2"
+        :agoDayHide="ago"
         :futureDayHide="now"
         v-if="type == 2"
-        v-show="calShow"
+        v-show="calShow2"
       ></Calendar>
+      <!-- </div> -->
     </div>
-    <div class="content">
-      <table border="0" cellpadding="0" cellspacing="0" v-if="type == 1">
+    <div class="content ctn1" v-if="type == 1">
+      <table border="0" cellpadding="0" cellspacing="0">
         <thead>
           <tr>
             <th style="width: 10%">序号</th>
@@ -52,14 +63,9 @@
           </tr>
         </tbody>
       </table>
-      <!-- <div v-if="type == 2" class="chart" id="chart"></div> -->
-      <div
-        v-if="type == 2"
-        class="chart"
-        v-for="(item, index) in sArr"
-        :key="index"
-        :id="`chart${index}`"
-      ></div>
+    </div>
+    <div class="content ctn2" v-if="type == 2">
+      <div class="chart" v-for="(item, index) in sArr" :key="index" :id="`chart${index}`"></div>
     </div>
   </div>
 </template>
@@ -67,8 +73,13 @@
 <script>
 /* eslint-disable */
 const server = "http://172.20.89.68:5001/s";
+import { loadModules } from "esri-loader";
+import { OPTION } from "@/components/common/Tmap";
 import { xqjckFormUpdate } from "./frame/xqjckArcgis";
 import Calendar from "vue-calendar-component";
+
+import { mapState } from "vuex";
+
 export default {
   name: "ssryForm",
   data() {
@@ -77,40 +88,35 @@ export default {
       title: "",
       list: [],
       type: 1,
-      calShow: false,
+      calShow1: false,
+      calShow2: false,
+      time_start: "",
+      time_end: "",
+      ago: "",
+      future: "",
       now: "",
       time: "",
-      chart: undefined,
-      sArr: [
-        {
-          name: "金海嘉苑",
-          time: ["2020-02-13", "2020-02-14"],
-          in_value: [200, 100],
-          out_value: [100, 200]
-        },
-        {
-          name: "美曦大厦",
-          time: ["2020-02-13", "2020-02-14"],
-          in_value: [200, 100],
-          out_value: [100, 200]
-        },
-        {
-          name: "大自然家园二期",
-          time: ["2020-02-13", "2020-02-14"],
-          in_value: [200, 100],
-          out_value: [100, 200]
-        }
-      ]
+      charts: [],
+      sArr: []
     };
   },
   components: { Calendar },
+  computed: {
+    ...mapState({
+      crjlList: state => state.crjlList,
+      ryxxList: state => state.ryxxList
+    })
+  },
   created() {
-    this.now = new Date()
+    this.future = this.now = new Date()
       .valueOf()
       .toString()
       .substr(0, 10);
-    // this.chart = this.$echarts.init(document.getElementById("chart"));
-    // console.log(1)
+    this.time_start = this.dateFormat(
+      "YYYY/mm/dd",
+      new Date(new Date() - 7 * 24 * 60 * 60 * 1000)
+    );
+    this.time_end = this.dateFormat("YYYY/mm/dd", new Date());
   },
   mounted() {},
   methods: {
@@ -118,54 +124,102 @@ export default {
       // console.log(item);
       item.geometry && this.$parent.$refs.macroArcgis.goloaction(item);
     },
-    getItem(
-      { url, sublayers, id, name, definitionExpression, ytname, ytd },
-      label,
-      type
-    ) {
+
+    getItem({ url, sublayers }, type) {
+      const that = this;
       this.type = type;
-      const datetime = new Date();
-      const now_year = datetime.getFullYear();
-      const now_month = datetime.getMonth() + 1;
-      const now_day = datetime.getDate();
-      this.time = `截至 ${now_year}-${now_month}-${now_day}`;
+      const datetime = this.dateFormat("YYYY-mm-dd", new Date());
+      this.time = `截至 ${datetime}`;
       this.title = type == 1 ? `小区出入情况` : `小区出入情况历史统计`;
-      this.list =
-        type == 1
-          ? [
-              {
-                name: "金海嘉苑",
-                num_in: 20,
-                num_out: 20
-              },
-              {
-                name: "美曦大厦",
-                num_in: 20,
-                num_out: 20
-              },
-              {
-                name: "大自然家园二期",
-                num_in: 20,
-                num_out: 20
+      // this.doChart();
+      // console.log("getitem", this.crjlList);
+
+      const obj = {};
+
+      this.crjlList.map(item => {
+        if (!obj[item.ssxq]) {
+          obj[item.ssxq] = {
+            name: item.ssxq,
+            num_in: 0,
+            num_out: 0
+          };
+        }
+
+        const time_out = this.dateFormat("YYYY-mm-dd", new Date(item.cmsj));
+        const time_in = this.dateFormat("YYYY-mm-dd", new Date(item.fhsj));
+
+        if (item.cmsj != "1899-12-30 00:00:00" && time_out == datetime) {
+          obj[item.ssxq].num_out++;
+        }
+
+        if (item.fhsj != "1899-12-30 00:00:00" && time_in == datetime) {
+          obj[item.ssxq].num_in++;
+        }
+      });
+
+      // console.log("obj", obj);
+
+      Object.values(obj).map(item => {
+        that.list.push(item);
+      });
+
+
+
+      // console.log(
+      //   "bol",
+      //   that.$parent.$refs.macroArcgis.map.findLayerById("xqd")
+      // );
+
+      if (!that.$parent.$refs.macroArcgis.map.findLayerById("xqd")) {
+        const querylist = this.list.map(item => `'${item.name}'`);
+
+        loadModules(
+          [
+            "esri/tasks/QueryTask",
+            "esri/tasks/support/Query",
+            "esri/layers/FeatureLayer"
+          ],
+          OPTION
+        ).then(async ([QueryTask, Query, FeatureLayer]) => {
+          // const queryTask = new QueryTask({ url: `${url}/${sublayers}` });
+          // const query = new Query();
+          // query.outFields = "*";
+          // query.where = querylist.length
+          //   ? `MansionName in (${querylist})`
+          //   : "1=1";
+          // query.returnGeometry = true;
+          // console.log("query", query);
+          // const { fields, features } = await queryTask.execute(query);
+
+          // console.log("fe", features);
+
+          const layer = new FeatureLayer({
+            url:
+              "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/19",
+            definitionExpression: `MansionName in (${querylist})`,
+            id: "xqd",
+            renderer: {
+              type: "simple", // autocasts as new SimpleRenderer()
+              symbol: {
+                type: "picture-marker",
+                url: `${server}/icon/other/小区.png`,
+                width: "30px",
+                height: "32px"
               }
-            ]
-          : [
-              {
-                name: "金海嘉苑",
-                num_in: 200,
-                num_out: 200
-              },
-              {
-                name: "美曦大厦",
-                num_in: 200,
-                num_out: 200
-              },
-              {
-                name: "大自然家园二期",
-                num_in: 200,
-                num_out: 200
-              }
-            ];
+            }
+          });
+
+          that.$parent.$refs.macroArcgis.map.add(layer);
+
+          // that.$parent.$refs.macroArcgis.legend.layerInfos.push({
+          //   layer: layer
+          // });
+        });
+
+        // console.log("map", that.$parent.$refs.macroArcgis.map);
+      }
+
+      
     },
     showMsg(item) {
       // console.log(item);
@@ -176,12 +230,11 @@ export default {
 
       this.$parent.$refs.xqjck.filterItem(item.name);
     },
-    doChart(list) {
+    doChart() {
       this.sArr.map((item, index) => {
         const chart = this.$echarts.init(
           document.getElementById(`chart${index}`)
         );
-        // this.chart = this.$echarts.init(document.getElementById("chart"));
 
         chart.setOption({
           title: {
@@ -191,13 +244,19 @@ export default {
               color: "#fff"
             }
           },
+          legend: {
+            show: true,
+            right: "8%",
+            textStyle: {
+              color: "#fff"
+            }
+          },
           tooltip: {
             show: true,
             trigger: "axis"
           },
           grid: {
-            // top: "10%",
-            bottom: "2%",
+            bottom: "10%",
             left: "5%",
             right: "4%",
             containLabel: true
@@ -245,49 +304,127 @@ export default {
             }
           ]
         });
+
+        this.charts.push(chart);
       });
     },
-    clickDay(data) {
-      console.log(data); //选中某天
-      this.calShow = false;
+    // 更新图表
+    updateChart() {
+      const list = [];
+      const that = this;
       this.sArr.map((item, index) => {
-        const chart = this.$echarts.init(
-          document.getElementById(`chart${index}`)
-        );
-        // this.chart = this.$echarts.init(document.getElementById("chart"));
+        const obj = {};
 
-        chart.setOption({
-          title: {
-            text: "ECharts 入门示例xxxxxx"
-          },
-          tooltip: {},
-          legend: {
-            data: ["销量"]
-          },
+        item.time.map((_item, _index) => {
+          if (
+            new Date(_item).valueOf() >= new Date(that.time_start).valueOf() &&
+            new Date(_item).valueOf() <=
+              new Date(that.time_end).valueOf() + 24 * 60 * 60 * 1000
+          ) {
+            !obj["time"] && (obj["time"] = []);
+            !obj["num"] && (obj["num"] = []);
+
+            obj["time"].push(_item);
+            obj["num"].push(_index);
+          }
+        });
+
+        item.in_value.map((_item, _index) => {
+          if (~obj.num.indexOf(_index)) {
+            !obj["in_value"] && (obj["in_value"] = []);
+
+            obj["in_value"].push(_item);
+          }
+        });
+
+        item.out_value.map((_item, _index) => {
+          if (~obj.num.indexOf(_index)) {
+            !obj["out_value"] && (obj["out_value"] = []);
+
+            obj["out_value"].push(_item);
+          }
+        });
+
+        list.push(obj);
+      });
+
+      this.charts.map((item, index) => {
+        item.setOption({
           xAxis: {
-            data: ["衬衫", "羊毛衫", "雪纺衫", "裤子"]
+            data: list[index].time
           },
-          yAxis: {},
           series: [
             {
-              name: "销量",
-              type: "bar",
-              data: [5, 20, 36, 10]
+              name: "进入人数",
+              type: "line",
+              itemStyle: {
+                color: "#fd344b"
+              },
+              data: list[index].in_value
+            },
+            {
+              name: "出去人数",
+              type: "line",
+              itemStyle: {
+                color: "#00ffff"
+              },
+              data: list[index].out_value
             }
           ]
         });
       });
     },
-    changeDate(data) {
-      console.log(data); //左右点击切换月份
+    // [calendar1]点击事件
+    clickDay1(data) {
+      this.calShow1 = false;
+      this.time_start = data;
+      this.ago = new Date(data)
+        .valueOf()
+        .toString()
+        .substr(0, 10);
+
+      this.updateChart();
+    },
+    // [calendar2]点击事件
+    clickDay2(data) {
+      this.calShow2 = false;
+      this.time_end = data;
+      this.future = new Date(data)
+        .valueOf()
+        .toString()
+        .substr(0, 10);
+
+      this.updateChart();
+    },
+    // 日期格式化
+    dateFormat(fmt, date) {
+      let ret;
+      const opt = {
+        "Y+": date.getFullYear().toString(),
+        "m+": (date.getMonth() + 1).toString(),
+        "d+": date.getDate().toString(),
+        "H+": date.getHours().toString(),
+        "M+": date.getMinutes().toString(),
+        "S+": date.getSeconds().toString()
+      };
+      for (let k in opt) {
+        ret = new RegExp("(" + k + ")").exec(fmt);
+        if (ret) {
+          fmt = fmt.replace(
+            ret[1],
+            ret[1].length == 1 ? opt[k] : opt[k].padStart(ret[1].length, "0")
+          );
+        }
+      }
+      return fmt;
     }
   },
   watch: {
-    list(newV, oldV) {
-      this.$nextTick(() => {
-        newV.length && this.doChart(newV);
-      });
-    }
+    // list(newV, oldV) {
+    //   this.$nextTick(() => {
+    //     newV.length && this.doChart();
+    //   });
+    // }
   }
 };
 </script>
@@ -307,7 +444,6 @@ export default {
   transition: all 1s;
 
   .head {
-    height: 9%;
     margin-top: 1%;
 
     .title {
@@ -325,6 +461,11 @@ export default {
       font-size: 30px;
       cursor: pointer;
     }
+  }
+
+  .choose_div {
+    margin: 2%;
+    padding: 2% 0%;
 
     .wh_container {
       position: absolute;
@@ -332,57 +473,46 @@ export default {
       z-index: 30;
     }
 
+    span {
+      font-size: 16px;
+    }
+
     img {
-      width: 25px;
-      height: 25px;
-      position: absolute;
-      margin-top: 1px;
-      margin-left: 8px;
+      // position: absolute;
+      width: 16px;
+      height: 16px;
+      margin-left: 10px;
+      margin-right: 30px;
       cursor: pointer;
     }
-  }
-  .search {
-    height: 60px;
-    select {
-      background-color: #0c7cd2;
-      border: none;
-      color: #fff;
-      padding: 7px 7px;
-      margin-right: 5px;
-    }
 
-    input {
-      width: 15%;
-      margin-top: 10px;
-      margin-right: 5px;
-      background-color: #162449;
-      border: 1px solid #75c8f4;
-      border-radius: 8px;
-      padding: 8px 9px;
-      color: #fff;
-    }
+    .choose_time {
+      padding: 5px 0px;
 
-    button {
-      background-color: #162449;
-      border: 1px solid #75c8f4;
-      border-radius: 8px;
-      padding: 7px 9px;
-      color: #fff;
-      margin-right: 4px;
+      span {
+        font-size: 18px;
+      }
+
+      img {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        margin-left: 12px;
+        cursor: pointer;
+      }
+
+      .wh_container {
+        position: absolute;
+        right: 0px;
+        z-index: 30;
+      }
     }
   }
-  // .content::-webkit-scrollbar {
-  //   display: none;
-  // }
-  .content {
-    height: 85%;
+
+  .ctn1 {
+    height: 88%;
+    margin-top: 5%;
     overflow: auto;
-
-    .chart {
-      width: 100%;
-      height: 230px;
-      margin: 10px 0px;
-    }
 
     table {
       border: 1px solid #ccc;
@@ -394,6 +524,17 @@ export default {
         border-bottom: 1px solid #ccc;
         padding: 10px 5px;
       }
+    }
+  }
+
+  .ctn2 {
+    height: 85%;
+    overflow: auto;
+
+    .chart {
+      width: 100%;
+      height: 230px;
+      margin: 10px 0px;
     }
   }
 
