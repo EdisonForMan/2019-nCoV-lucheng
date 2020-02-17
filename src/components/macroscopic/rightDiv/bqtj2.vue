@@ -1,12 +1,9 @@
 <template>
   <div id="bltjDiv2">
     <header>
-      <!-- <span :class="{active:tabIndex == 0}" @click="filterItem(0)">确诊病例统计</span>
-      <i>/</i>-->
       <span :class="{active:tabIndex == 0}" @click="filterItem(0)">增长趋势分析</span>
       <i>/</i>
       <span :class="{active:tabIndex == 1}" @click="filterItem(1)">累计趋势分析</span>
-      <!-- <span class="stateTipHeaderBar"></span> -->
     </header>
     <div id="bqtjChart2"></div>
   </div>
@@ -14,7 +11,6 @@
 
 <script>
 /* eslint-disable */
-import util from "../util";
 export default {
   data() {
     return {
@@ -152,15 +148,6 @@ export default {
             }
           }
         },
-        // legend: {
-        //   show: true,
-        //   icon: "roundRect",
-        //   bottom: "2%",
-        //   textStyle: {
-        //     color: "#fff",
-        //     fontSize: 12
-        //   }
-        // },
         color: ["#0080ff", "#4cd5ce"],
         grid: {
           left: "3%",
@@ -262,36 +249,10 @@ export default {
     }
   },
   created() {
-    const {
-      dataAge,
-      XZAge,
-      YTdataAge,
-      dataName,
-      dataQS,
-      dataLC,
-      ysblDate,
-      jzglDate,
-      glryDate,
-      mqzDate,
-      jjglDate,
-      hbhlDate
-    } = this.$window.nCov_luchengChart;
-    this.dataAge = dataAge;
-    this.XZAge = XZAge;
-    this.YTdataAge = YTdataAge;
+    const { dataName, dataQS, dataLC } = this.$window.nCov_luchengChart;
     this.dataName = dataName;
     this.dataQS = dataQS;
     this.dataLC = dataLC;
-
-    this.dataHash = {
-      qzbl: dataAge,
-      zzbl: ysblDate,
-      gld: jzglDate,
-      gld_list: glryDate,
-      mj: mqzDate,
-      jjgl: jjglDate,
-      hbhw: hbhlDate
-    };
   },
   mounted() {
     const qsArr = [];
@@ -332,19 +293,6 @@ export default {
     .active {
       font-weight: 700;
       color: #fff;
-    }
-  }
-
-  h3 {
-    color: #23c9f3;
-    margin-top: 10px;
-
-    select {
-      background-color: #0c7cd2;
-      border: none;
-      color: #fff;
-      padding: 7px 7px;
-      margin-left: 5px;
     }
   }
 

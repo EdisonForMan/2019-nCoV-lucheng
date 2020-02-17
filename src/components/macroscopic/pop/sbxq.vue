@@ -5,7 +5,7 @@
       <a @click="()=>{ this.$parent.xqShow = false }">×</a>
     </div>
 
-    <el-table :data="elList" height="88%" border @row-click="clickTr">
+    <el-table :data="elList" height="660" border @row-click="clickTr">
       <el-table-column
         v-for="(item,index) in keyList"
         :key="index"

@@ -5,32 +5,6 @@
       <div class="time" v-if="type == 1">{{ time }}</div>
       <a @click="()=>{list = []}">×</a>
     </div>
-    <div class="choose_div" v-if="type == 2">
-      <!-- <div class="choose_time"> -->
-      <span>起始时间 {{ time_start }}</span>
-      <img src="../common/image/日历.png" @click="()=>{ calShow1 = !calShow1; calShow2 = false; }" />
-      <Calendar
-        ref="calendar1"
-        @choseDay="clickDay1"
-        :futureDayHide="future"
-        v-if="type == 2"
-        v-show="calShow1"
-      ></Calendar>
-      <!-- </div> -->
-
-      <!-- <div class="choose_time"> -->
-      <span>结束时间 {{ time_end }}</span>
-      <img src="../common/image/日历.png" @click="()=>{ calShow2 = !calShow2; }" />
-      <Calendar
-        ref="calendar2"
-        @choseDay="clickDay2"
-        :agoDayHide="ago"
-        :futureDayHide="now"
-        v-if="type == 2"
-        v-show="calShow2"
-      ></Calendar>
-      <!-- </div> -->
-    </div>
     <div class="content ctn1" v-if="type == 1">
       <table border="0" cellpadding="0" cellspacing="0">
         <thead>
@@ -130,7 +104,7 @@ export default {
       this.type = type;
       const datetime = this.dateFormat("YYYY-mm-dd", new Date());
       this.time = `截至 ${datetime}`;
-      this.title = type == 1 ? `小区出入情况` : `小区出入情况历史统计`;
+      this.title = type == 1 ? `小区出入实时情况` : `小区出入情况历史统计`;
       // this.doChart();
       // console.log("getitem", this.crjlList);
 
@@ -163,8 +137,6 @@ export default {
         that.list.push(item);
       });
 
-
-
       // console.log(
       //   "bol",
       //   that.$parent.$refs.macroArcgis.map.findLayerById("xqd")
@@ -181,45 +153,49 @@ export default {
           ],
           OPTION
         ).then(async ([QueryTask, Query, FeatureLayer]) => {
-          // const queryTask = new QueryTask({ url: `${url}/${sublayers}` });
-          // const query = new Query();
-          // query.outFields = "*";
-          // query.where = querylist.length
-          //   ? `MansionName in (${querylist})`
-          //   : "1=1";
-          // query.returnGeometry = true;
-          // console.log("query", query);
-          // const { fields, features } = await queryTask.execute(query);
-
-          // console.log("fe", features);
-
           const layer = new FeatureLayer({
             url:
               "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/19",
             definitionExpression: `MansionName in (${querylist})`,
             id: "xqd",
             renderer: {
-              type: "simple", // autocasts as new SimpleRenderer()
+              type: "simple",
               symbol: {
                 type: "picture-marker",
                 url: `${server}/icon/other/小区.png`,
                 width: "30px",
                 height: "32px"
+              },
+              label: "小区"
+            },
+            labelingInfo: [
+              {
+                symbol: {
+                  type: "text",
+                  color: "white",
+                  haloColor: "black",
+                  haloSize: "1px",
+                  font: {
+                    family: "Arial Unicode MS Regular",
+                    size: 12
+                  }
+                },
+                labelPlacement: "below-center",
+                labelExpressionInfo: {
+                  expression: "$feature.MansionName"
+                }
               }
-            }
+            ]
           });
 
           that.$parent.$refs.macroArcgis.map.add(layer);
 
-          // that.$parent.$refs.macroArcgis.legend.layerInfos.push({
-          //   layer: layer
-          // });
+          that.$parent.$refs.macroArcgis.legend.layerInfos.push({
+            title: "",
+            layer: layer
+          });
         });
-
-        // console.log("map", that.$parent.$refs.macroArcgis.map);
       }
-
-      
     },
     showMsg(item) {
       // console.log(item);

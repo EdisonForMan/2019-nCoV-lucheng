@@ -6,6 +6,7 @@
 
 <script>
 /* eslint-disable */
+const server = "http://172.20.89.68:5001/s";
 import {
   addQZLinkFeature,
   mjChartUpdate,
@@ -25,20 +26,12 @@ import {
   OPTION,
   spatialReference,
   QHMB,
-  CYBJ,
   IMAGELAYER,
-  LCYQ,
-  XZJD,
   TDTIMAGE2017,
   TDTDSJ
 } from "@/components/common/Tmap";
 import { tipHash, Hash } from "./config/hash.js";
-const server = "http://172.20.89.68:5001/s";
 import { noShowFields } from "./config/field.js";
-
-// import testApi from "@/api/beans/u_test";
-
-// import { mapState } from "vuex";
 
 export default {
   name: "MacroscopicArcgis",
@@ -56,10 +49,9 @@ export default {
     const that = this;
     /**init map**/
     await this.createMap();
-    await this.addQh();
-    await this.addmbk();
+    // await this.addQh();
+    // await this.addmbk();
     await this.addChanyePlate();
-    // await this.addHeat();
     this.$props.leftOptions &&
       this.$props.leftOptions.map(_item => {
         _item.children.map(item => {
@@ -83,36 +75,13 @@ export default {
       },
       deep: true
     }
-    // crjlList() {
-    //   this.crjlDataFix();
-    // },
-    // ryxxList() {
-    //   this.ryxxDataFix();
-    // }
-  },
-  computed: {
-    // ...mapState({
-    //   crjlList: state => state.crjlList,
-    //   ryxxList: state => state.ryxxList
-    // })
   },
   methods: {
-    // crjlDataFix() {
-    //   if (!this.crjlList.length) return;
-    //   console.log("crjl", this.crjlList);
-    // },
-    // ryxxDataFix() {
-    //   if (!this.ryxxList.length) return;
-    //   console.log("ryxx", this.ryxxList);
-    // },
-
     /**
      * 数、组勾选触发图层寻找
      * @param {Object} item 单个元素
      */
     doFun(item) {
-      // const shallYT = this.$parent.$refs.leftOptions.shallYT;
-      // const _id_ = (shallYT ? "yt_" : "") + item.id;
       const shallYT = this.$parent.$refs.leftOptions.tabIndex == 1;
       const _id_ = (shallYT ? "yt_" : "") + item.id;
       if (item.check) {
@@ -123,7 +92,6 @@ export default {
           ? (this.map.findLayerById("fangkong").visible = false)
           : null;
       } else {
-        // console.log(item.id, "yt_" + item.id);
         this.map && this.map.findLayerById(item.id)
           ? (this.map.findLayerById(item.id).visible = false)
           : null;
@@ -219,21 +187,13 @@ export default {
         context.$parent.leftHidden();
         context.$parent.legend();
       });
-      //  小区进出口人员
+      //  国际专题密接
       $("body").on("click", ".gjmj_btn", function() {
         const val = $(this).attr("data-val");
-
-        console.log(val);
-
         addQZLinkFeature_gj(context, val);
         mjChartUpdate_gj(context, val);
         context.$parent.leftHidden();
         context.$parent.legend();
-
-        // console.log("cr", this.CRList);
-        // xqjckFormUpdate(context, val);
-        // context.$parent.leftHidden();
-        // context.$parent.xqjckShow = true;
       });
       //  小区卡口分布
       $("body").on("click", ".xq_enter_btn", function() {
@@ -268,22 +228,7 @@ export default {
         );
       });
     },
-    ybclick() {
-      const that = this;
-      return new Promise((resolve, reject) => {
-        loadModules(["esri/layers/MapImageLayer"], OPTION).then(
-          ([MapImageLayer]) => {
-            const fangkong = new MapImageLayer({
-              url: LCYQ,
-              id: "fangkong",
-              sublayers: [{ id: 4 }, { id: 3 }, { id: 2 }]
-            });
-            that.map.add(fangkong, 5);
-            resolve(true);
-          }
-        );
-      });
-    },
+    // 定位
     goloaction({
       id,
       attributes,
@@ -359,6 +304,11 @@ export default {
               : ``
           }
           ${
+            id == "glmd"
+              ? `<div class="bottomBtn gjmj_btn" data-val="${attributes.Name}">密切接触者分布</div>`
+              : ``
+          }
+          ${
             // id == "xq"
             //   ? `<div class="bottomBtn xq_btn" data-val="${attributes.name}">进出人员统计</div>`
             //   : ``··
@@ -390,39 +340,12 @@ export default {
                   })
                   .join("")
               : ``
-          }
-          ${
-            // 高速值班表额外添加
-            highWayList
-              ? highWayList
-                  .map(item => {
-                    return `<div><p>${
-                      item.attributes.Time
-                    }</p><table class="esri-widget__table" summary="值班表"><tbody>
-            ${Object.keys(item.attributes)
-              .filter(k => {
-                return ["Bid", "OBJECTID", "Time", "Expressway"].indexOf(k) < 0;
-              })
-              .map(k => {
-                return `<tr>
-                  <th class="esri-feature__field-header">${item.fieldAliases[
-                    k
-                  ] || k}</th>
-                  <td class="esri-feature__field-data">${item.attributes[k] ||
-                    "无"}</td>
-                </tr>`;
-              })
-              .join("")}
-            </tbody></table></div>`;
-                  })
-                  .join("")
-              : ``
-          }
-          `,
+          }`,
         location: [x, y]
       };
       that.view.popup.visible = true;
     },
+    // 蒙白
     addmbk() {
       const that = this;
       return new Promise((resolve, reject) => {
@@ -531,7 +454,6 @@ export default {
       }
     },
     addFeatures(item, _id_) {
-      // console.log(item);
       const id = _id_.replace(/yt_/g, "");
       const that = this;
       const { url } = item;
@@ -613,7 +535,7 @@ export default {
 
             item.icon &&
               (option.renderer = {
-                type: "simple", // autocasts as new SimpleRenderer()
+                type: "simple",
                 symbol: {
                   type: "picture-marker",
                   url: `${server}/icon/other/${item.icon}.png`,
@@ -675,7 +597,7 @@ export default {
 
             item.icon &&
               (option.renderer = {
-                type: "simple", // autocasts as new SimpleRenderer()
+                type: "simple",
                 symbol: {
                   type: "picture-marker",
                   url: `${server}/icon/other/${item.icon}.png`,
@@ -706,9 +628,7 @@ export default {
     // 点击面查询
     polygonQuery() {
       const that = this;
-
       that.view.on("click", function(evt) {
-        // console.log(evt);
         that.cleanQuery();
         if (
           (that.map.findLayerById("wg") &&
@@ -728,62 +648,6 @@ export default {
           });
         }
       });
-    },
-
-    //  查询
-    IdentifyTaskFun({ mapPoint }, fn) {
-      const that = this;
-      loadModules(
-        [
-          "esri/tasks/IdentifyTask",
-          "esri/tasks/support/IdentifyParameters",
-          "esri/tasks/QueryTask",
-          "esri/tasks/support/Query",
-          "esri/layers/MapImageLayer"
-        ],
-        OPTION
-      ).then(
-        ([
-          IdentifyTask,
-          IdentifyParameters,
-          QueryTask,
-          Query,
-          MapImageLayer
-        ]) => {
-          const url =
-            "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/12";
-          const identifyTask = new IdentifyTask(url);
-          const params = new IdentifyParameters();
-          params.tolerance = 10;
-          // params.layerIds = [0, 4];
-          // params.layerOption = "top";
-          params.returnGeometry = true;
-          params.geometry = mapPoint;
-          params.mapExtent = that.view.extent;
-          identifyTask.execute(params).then(res => {
-            // console.log(res);
-            // if (res.results.length > 0) {
-            //   const queryTask = new QueryTask({
-            //     url: `http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/4`
-            //   });
-            //   const query = new Query();
-            //   query.outFields = ["*"];
-            //   console.log(res.results[0].feature.attributes["唯一码"]);
-            //   query.where = `RelatingCodes like '%${res.results[0].feature.attributes["唯一码"]}%'`;
-            //   query.returnGeometry = true;
-            //   queryTask.execute(query).then(_res => {
-            //     console.log(_res);
-            //     const mbk = new MapImageLayer({
-            //       url: QHMB,
-            //       id: "mbk",
-            //       sublayers: [{ id: 1 }]
-            //     });
-            //     that.map.add(mbk, 4);
-            //   });
-            // }
-          });
-        }
-      );
     },
     //  监听热力图
     changeHeat(id, checked) {

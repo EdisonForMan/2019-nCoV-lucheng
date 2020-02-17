@@ -17,7 +17,7 @@
       <button @click="filteItem">查询</button>
     </div>
 
-    <el-table :data="elList" height="68%" border @row-click="clickTr">
+    <el-table :data="elList" height="510" border @row-click="clickTr">
       <el-table-column
         v-for="(item,index) in keyList"
         :key="index"
@@ -73,7 +73,6 @@ export default {
       selectValue: 0,
       sObj: {},
       sArr: [],
-      sum: 0,
       keyList: [],
       elList: [],
       countryHash: {
@@ -93,7 +92,6 @@ export default {
         七都: 14,
         区直设: 15
       }
-      // arr:[]
     };
   },
   created() {},
@@ -202,7 +200,6 @@ export default {
       const d = [];
       this.sObj = {};
       this.sArr = [];
-      this.sum = 0;
       definitionExpression && d.push(definitionExpression);
       this.$parent.$refs.leftOptions.tabIndex == 1 && ytd && d.push(ytd);
       this.title =
@@ -238,22 +235,7 @@ export default {
           item.fieldAliases = fieldAliases;
           return item;
         });
-        //  高速额外请求个服务
-        if (id == "highway_type_1") {
-          const highWayList = await this.getHighWay(url);
-          const highWayObject = {};
-          highWayList.map(item => {
-            if (!highWayObject[item.attributes.Expressway]) {
-              highWayObject[item.attributes.Expressway] = [];
-            }
-            highWayObject[item.attributes.Expressway].push(item);
-          });
-          list.map(item => {
-            highWayObject[item.attributes.Name] &&
-              (item.highWayList = highWayObject[item.attributes.Name]);
-            return item;
-          });
-        }
+
         // 密接关联
         if (id == "qzbl") {
           const mjList = await this.getMj(url);
@@ -354,29 +336,7 @@ export default {
         this.text = undefined;
       });
     },
-    getHighWay(url) {
-      return new Promise((resolve, reject) => {
-        loadModules(
-          ["esri/tasks/QueryTask", "esri/tasks/support/Query"],
-          OPTION
-        ).then(async ([QueryTask, Query]) => {
-          const queryTask = new QueryTask({ url: `${url}/1` });
-          const query = new Query();
-          query.outFields = ["*"];
-          query.where = `1=1`;
-          const { fields, features } = await queryTask.execute(query);
-          const fieldAliases = {};
-          fields.map(item => {
-            fieldAliases[item.name] = item.alias;
-          });
-          const list = features.map(item => {
-            item.fieldAliases = fieldAliases;
-            return item;
-          });
-          resolve(list);
-        });
-      });
-    },
+    // 密接详情
     getMj(url) {
       return new Promise((resolve, reject) => {
         loadModules(
@@ -505,7 +465,7 @@ export default {
   }
 
   .content {
-    height: 12%;
+    height: 90px;
 
     table {
       border: 1px solid #ccc;
