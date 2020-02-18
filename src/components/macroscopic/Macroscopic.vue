@@ -31,8 +31,11 @@
     <streetFrame ref="cpFrame" :style="{left:moveLeft + 'px'}" />
     <queryForm ref="queryForm" :style="{left:moveLeft + 'px'}" />
     <gldxq ref="gldxq" :style="{left:moveLeft + 'px'}" />
+
     <ssryForm ref="ssryForm" :style="{left:moveLeft + 'px'}" />
     <lsryForm ref="lsryForm" :style="{right:moveRight + 'px'}" />
+    <fgxqForm ref="fgxqForm" :style="{left:moveLeft + 'px'}" />
+    <fgtjForm ref="fgtjForm" :style="{right:moveRight + 'px'}" />
   </div>
 </template>
 
@@ -67,6 +70,9 @@ import ssryForm from "./ssryForm";
 import lsryForm from "./lsryForm";
 
 import qzTable from "./frame/qzTable"; //圈主信息
+
+import fgxqForm from "./pop/fgxqForm";
+import fgtjForm from "./pop/fgtjForm";
 
 import { leftOptions } from "./config/enums";
 
@@ -104,7 +110,11 @@ export default {
     gldxq, //隔离点详情
     xqjck, //小区进出口人员
     ssryForm, //实时人员
-    lsryForm //历史人员
+    lsryForm, //历史人员
+    // 返工信息
+    fgxqForm,
+    // 返工统计
+    fgtjForm
   },
   created() {},
   mounted() {
@@ -145,6 +155,6 @@ export default {
   }
 };
 </script>
- <style scoped lang="less">
+<style scoped lang="less">
 @import url("./Macroscopic.less");
 </style>

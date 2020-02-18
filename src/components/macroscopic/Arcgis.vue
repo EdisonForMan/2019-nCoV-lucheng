@@ -14,7 +14,6 @@ import {
   mjChartUpdate_gj
 } from "./frame/mjArcgis";
 import { gldChartUpdate } from "./frame/gldArcgis";
-import { xqjckFormUpdate } from "./frame/xqjckArcgis";
 import { linkCPFeatures } from "./frame/streetArcgis";
 import {
   linkXQFeatures,

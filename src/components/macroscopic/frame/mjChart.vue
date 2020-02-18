@@ -42,12 +42,10 @@ export default {
   mounted() {},
   methods: {
     goLocation(item) {
-      // console.log(item.geometry);
       item.geometry && this.$parent.$refs.macroArcgis.goloaction(item);
     },
     goqzTable() {
-      var name = this.title;
-      // console.log(name);
+      const name = this.title;
       this.$parent.$refs.qzTable.qzTableFun();
       qzTableUpdate(name);
     },
@@ -55,8 +53,6 @@ export default {
       this.chart = this.$echarts.init(document.getElementById("cframe"));
       const sObj = {};
       const sArr = [];
-
-      // console.log("list", list);
 
       list.map(({ attributes }) => {
         const { Country } = attributes;
@@ -129,38 +125,6 @@ export default {
           }
         ]
       });
-
-      // console.log("op1", [
-      //   {
-      //     name: this.title,
-      //     label: {
-      //       color: "#0fd",
-      //       fontSize: 15
-      //     }
-      //   },
-      //   ...this.list
-      //     .filter((item, index) => {
-      //       return index < 90;
-      //     })
-      //     .map(item => {
-      //       return { name: item.attributes.NAME };
-      //     })
-      // ]);
-
-      // console.log(
-      //   "op2",
-      //   this.list
-      //     .filter((item, index) => {
-      //       return index < 90;
-      //     })
-      //     .map(item => {
-      //       return {
-      //         source: this.title,
-      //         target: item.attributes.NAME,
-      //         value: item.attributes.Relation ? item.attributes.Relation : ""
-      //       };
-      //     })
-      // );
 
       this.chart2 = this.$echarts.init(document.getElementById("mjframe"));
       this.chart2.setOption({
@@ -327,8 +291,6 @@ export default {
     flex: 1;
     .list {
       height: 360px;
-      // overflow: auto;
-      // text-align: left;
       #mjframe {
         height: 100%;
         margin: 0px 5px;

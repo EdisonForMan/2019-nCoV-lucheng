@@ -6,26 +6,7 @@
   </head>
   <div>
     <div class="list">
-      <table border="0" cellpadding="0" cellspacing="0">
-        <thead>
-          <tr>
-            <th>序号</th>
-            <th>姓名</th>
-            <th>关系</th>
-            <th>性别</th>
-            <th>地址</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(item,index) in list" :key="index">
-            <td>{{++index}}.</td>
-            <td>{{ item.attributes.NAME?`${item.attributes.NAME.trim().substr(0,1)}*${item.attributes.NAME.trim().substr(-1,1)}`:"无" }}</td>
-            <td>{{item.attributes.Relation}}</td>
-            <td>{{item.attributes.Sex}}</td>
-            <td>{{item.attributes.Address_Department}}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div id="relationChart"></div>
     </div>
   </div>
 </div>
@@ -44,12 +25,132 @@ export default {
   },
   mounted() {},
   methods: {
-    goLocation(item) {
-      // console.log(item.geometry);
-      // item.geometry && this.$parent.$refs.macroArcgis.goloaction(item);
+    doChart(list) {
+      this.chart = this.$echarts.init(document.getElementById("relationChart"));
+      this.chart.setOption({
+        legend: {
+          orient: "vertical",
+          left: "10",
+          bottom: "20",
+          textStyle: {
+            color: "#fff"
+          }
+        },
+        series: [
+          {
+            type: "graph",
+            layout: "force",
+            symbolSize: 1,
+            roam: true,
+            label: {
+              normal: {
+                show: true
+              }
+            },
+            force: {
+              repulsion: list.length > 20 ? 260 : 800,
+              initLayout: "circular",
+              layoutAnimation: false
+            },
+            edgeSymbol: ["", "arrow"],
+            edgeLabel: {
+              normal: {
+                show: true,
+                formatter: "{c}",
+                color: "#fff"
+              }
+            },
+            categories: [
+              {
+                name: "非鹿城",
+                itemStyle: {
+                  normal: {
+                    color: "#00f"
+                  }
+                },
+                label: {
+                  normal: {
+                    color: "#00f"
+                  }
+                }
+              },
+              {
+                name: "鹿城内已解除隔离",
+                itemStyle: {
+                  normal: {
+                    color: "#0f0"
+                  }
+                },
+                label: {
+                  normal: {
+                    color: "#0f0"
+                  }
+                }
+              },
+              {
+                name: "鹿城内未解除隔离",
+                itemStyle: {
+                  normal: {
+                    color: "#f00"
+                  }
+                },
+                label: {
+                  normal: {
+                    color: "#f00"
+                  }
+                }
+              }
+            ],
+            data: [
+              {
+                name: this.title,
+                label: {
+                  color: "#0fd",
+                  fontSize: 15
+                }
+              },
+              ...this.list
+                .filter((item, index) => {
+                  return index < 90;
+                })
+                .map(item => {
+                  return {
+                    name: item.attributes.NAME,
+                    category:
+                      item.attributes.ZTLB && Number(item.attributes.ZTLB),
+                    label: {
+                      fontSize: 14,
+                      fontWeight: "bolder"
+                    }
+                  };
+                })
+            ],
+            links: this.list
+              .filter((item, index) => {
+                return index < 90;
+              })
+              .map(item => {
+                return {
+                  source: this.title,
+                  target: item.attributes.NAME,
+                  value: item.attributes.Relation
+                    ? item.attributes.Relation
+                    : ""
+                };
+              })
+          }
+        ]
+      });
     },
     close() {
       this.$parent.relationShow = false;
+    }
+  },
+  watch: {
+    list(newV, oldV) {
+      this.$nextTick(() => {
+        newV.length && this.doChart(newV);
+      });
     }
   }
 };
@@ -59,7 +160,7 @@ export default {
 .relation {
   position: absolute;
   width: 600px;
-  height: 300px;
+  height: 400px;
   background: #24386a;
   border: 1px solid #04ecff;
   z-index: 20;
@@ -70,7 +171,7 @@ export default {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  
+
   head {
     display: block;
     box-sizing: border-box;
@@ -88,31 +189,12 @@ export default {
     flex: 1;
 
     .list {
-      height: 258px;
-      overflow: auto;
+      height: 360px;
 
-      table {
-        border: 1px solid #ccc;
-        width: 96%;
-        margin: 0% 2%;
-
-        th,
-        td {
-          border-bottom: 1px solid #ccc;
-          padding: 10px 5px;
-        }
+      #relationChart {
+        height: 100%;
+        margin: 0px 5px;
       }
-    }
-    .list::-webkit-scrollbar {
-      display: block;
-      width: 6px;
-      background-color: rgb(50, 95, 245);
-      border-radius: 3px;
-    }
-    .list::-webkit-scrollbar-thumb {
-      width: 6px;
-      background-color: rgb(32, 28, 243);
-      border-radius: 3px;
     }
   }
 }

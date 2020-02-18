@@ -389,7 +389,7 @@ export const leftOptions = [{
             icon: "建筑工地",
             check: false
         }, {
-            name: `南郊重点企业 (${macroscopic.nj_zdqy}家)`,
+            name: `南郊规上服务业企业 (${macroscopic.nj_zdqy}家)`,
             id: "nj_zdqy",
             url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/nanjiao/MapServer",
             sublayers: "4",

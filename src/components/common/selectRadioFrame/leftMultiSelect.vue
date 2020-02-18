@@ -60,6 +60,7 @@
                 @click="ShowListxq(oitem,item)"
               >详情</span>
               <span id="ssry" v-if="oitem.id=='xq'" @click="ShowListssry(oitem,item)">实时人员</span>
+              <!-- <span id="fgxq" v-if="oitem.id=='jzgd'" @click="ShowListfgxq(oitem,item)">返工详情</span> -->
             </li>
           </ul>
         </div>
@@ -147,8 +148,18 @@ export default {
       this.$parent.leftHidden();
       this.$parent.rightHidden();
       this.$parent.legend();
-      this.$parent.$refs.ssryForm.getItem(oitem, 1);
-      this.$parent.$refs.lsryForm.getItem(oitem, 2);
+      this.$parent.$refs.ssryForm.getItem(oitem);
+      this.$parent.$refs.lsryForm.getItem(oitem);
+    },
+    ShowListfgxq(oitem, item) {
+      this.$parent.leftHidden();
+      this.$parent.rightHidden();
+      this.$parent.legend();
+
+      console.log("返工详情");
+
+      this.$parent.$refs.fgxqForm.getItem(oitem);
+      this.$parent.$refs.fgtjForm.getItem(oitem);
     },
     intercept() {
       const _tree = this.$util.clone(this.tree);
@@ -186,18 +197,21 @@ export default {
       this.$parent.$refs.mjChart.list = [];
       // 关闭隔离点面板
       this.$parent.$refs.gldxq.list = [];
+
+      // 关闭小区面板
+      this.$parent.$refs.ssryForm.list = [];
+      this.$parent.$refs.lsryForm.sArr = [];
+
       // 清除小区点
-
-      // console.log(
-      //   "bol",
-      //   this.$parent.$refs.macroArcgis.map.findLayerById("xqd")
-      // );
-
       this.$parent.$refs.macroArcgis.map &&
         this.$parent.$refs.macroArcgis.map.findLayerById("xqd") &&
         this.$parent.$refs.macroArcgis.map.remove(
           this.$parent.$refs.macroArcgis.map.findLayerById("xqd")
         );
+
+      // 关闭工地返工面板
+      this.$parent.$refs.fgxqForm.list = [];
+      this.$parent.$refs.fgtjForm.sArr = [];
     },
     change(id) {
       const that = this;
@@ -228,8 +242,6 @@ export default {
       this.tree = newV;
     },
     tabIndex(newV, oldV) {
-      // console.log(newV);
-      // util.$emit("chartDataMod", newV);
       this.clean();
     }
   }
@@ -405,7 +417,8 @@ export default {
             text-align: center;
             // float: right;
           }
-          #ssry {
+          #ssry,
+          #fgxq {
             background: unset;
             margin-bottom: unset;
             display: unset;

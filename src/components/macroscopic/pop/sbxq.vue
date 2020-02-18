@@ -11,6 +11,7 @@
         :key="index"
         :prop="item.prop"
         :label="item.label"
+        sortable
       ></el-table-column>
     </el-table>
   </div>

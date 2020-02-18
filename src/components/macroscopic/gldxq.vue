@@ -9,7 +9,7 @@
       <div>
         <ul>
           <li v-for="(item,index) in list" :key="index" @click="goLocation(item)">
-            <span>{{++index}}. {{item.attributes.Name?item.attributes.Name.slice(0,1):null}}**, {{item.attributes.Address}}, {{item.attributes.StartIsolationTime}}</span>
+            <span>{{++index}}. {{ item.attributes.Name?`${item.attributes.Name.trim().substr(0,1)}*${item.attributes.Name.trim().substr(-1,1)}`:"无" }}, {{item.attributes.Address}}, {{item.attributes.StartIsolationTime}}</span>
           </li>
         </ul>
       </div>
@@ -20,14 +20,10 @@
 
 <script>
 /* eslint-disable */
-const server = "http://172.20.89.68:5001/s";
-import { imgHash } from "./config/hash.js";
 export default {
   name: "queryForm",
   data() {
     return {
-      server,
-      imgHash,
       title: "",
       list: []
     };
@@ -35,7 +31,6 @@ export default {
   mounted() {},
   methods: {
     goLocation(item) {
-      // console.log(item);
       item.geometry && this.$parent.$refs.macroArcgis.goloaction(item);
     }
   }

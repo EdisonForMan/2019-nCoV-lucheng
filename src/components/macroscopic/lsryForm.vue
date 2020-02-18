@@ -2,69 +2,24 @@
   <div id="lsyrform" v-if="sArr.length">
     <div class="head">
       <div class="title">{{ title }}</div>
-      <div class="time" v-if="type == 1">{{ time }}</div>
       <a @click="()=>{sArr = []}">×</a>
     </div>
-    <div class="choose_div" v-if="type == 2">
-      <!-- <div class="choose_time"> -->
+    <div class="choose_div">
       <span>起始时间 {{ time_start }}</span>
       <img src="../common/image/日历.png" @click="()=>{ calShow1 = !calShow1; calShow2 = false; }" />
-      <Calendar
-        ref="calendar1"
-        @choseDay="clickDay1"
-        :futureDayHide="future"
-        v-if="type == 2"
-        v-show="calShow1"
-      ></Calendar>
-      <!-- </div> -->
+      <Calendar ref="calendar1" @choseDay="clickDay1" :futureDayHide="future" v-show="calShow1"></Calendar>
 
-      <!-- <div class="choose_time"> -->
       <span>结束时间 {{ time_end }}</span>
-      <img src="../common/image/日历.png" @click="()=>{ calShow2 = !calShow2; }" />
+      <img src="../common/image/日历.png" @click="()=>{ calShow2 = !calShow2; calShow1 = false; }" />
       <Calendar
         ref="calendar2"
         @choseDay="clickDay2"
         :agoDayHide="ago"
         :futureDayHide="now"
-        v-if="type == 2"
         v-show="calShow2"
       ></Calendar>
-      <!-- </div> -->
     </div>
-    <div class="content ctn1" v-if="type == 1">
-      <table border="0" cellpadding="0" cellspacing="0">
-        <thead>
-          <tr>
-            <th style="width: 10%">序号</th>
-            <th style="width: 50%">小区名</th>
-            <th style="width: 20%">出小区人次</th>
-            <th style="width: 20%">入小区人次</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(item, index) in list"
-            :key="index"
-            @click="showMsg(item)"
-            style="cursor: pointer;"
-          >
-            <td>{{ ++index }}</td>
-            <td>{{ item.name }}</td>
-            <td>{{ item.num_out }}</td>
-            <td>{{ item.num_in }}</td>
-            <!-- <td>1</td> -->
-            <!-- <td
-              v-for="(k,i) in keyData"
-              :key="i"
-              @click="goLocation(item)"
-              style="cursor: pointer;"
-            >{{ item.attributes[k]?(~["Name"].indexOf(k)?`${item.attributes[k].trim().substr(0,1)}*${item.attributes[k].trim().substr(-1,1)}`:item.attributes[k]):"无" }}</td>
-            <td @click="showrelation(item)" style="cursor: pointer;">详情</td>-->
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="content ctn2" v-if="type == 2">
+    <div class="content ctn2">
       <div class="chart" v-for="(item, index) in sArr" :key="index" :id="`chart${index}`"></div>
     </div>
   </div>
@@ -75,7 +30,6 @@
 const server = "http://172.20.89.68:5001/s";
 import { loadModules } from "esri-loader";
 import { OPTION } from "@/components/common/Tmap";
-import { xqjckFormUpdate } from "./frame/xqjckArcgis";
 import Calendar from "vue-calendar-component";
 
 import { mapState } from "vuex";
@@ -87,7 +41,6 @@ export default {
       server,
       title: "",
       list: [],
-      type: 1,
       calShow1: false,
       calShow2: false,
       time_start: "",
@@ -125,12 +78,11 @@ export default {
       item.geometry && this.$parent.$refs.macroArcgis.goloaction(item);
     },
 
-    getItem({ url, sublayers }, type) {
+    getItem({ url, sublayers }) {
       const that = this;
-      this.type = type;
       const datetime = this.dateFormat("YYYY-mm-dd", new Date());
       this.time = `截至 ${datetime}`;
-      this.title = type == 1 ? `小区出入情况` : `小区出入情况历史统计`;
+      this.title = `小区出入情况历史统计`;
 
       // console.log("getitem", this.crjlList);
 
@@ -180,7 +132,7 @@ export default {
 
       arr.map(item => {
         item.value.sort((a, b) => {
-          return new Date(b.time).valueOf() - new Date(a.time).valueOf();
+          return new Date(a.time).valueOf() - new Date(b.time).valueOf();
         });
 
         that.sArr.push({
@@ -190,15 +142,6 @@ export default {
           out_value: item.value.map(item => item.num_out)
         });
       });
-    },
-    showMsg(item) {
-      // console.log(item);
-      const that = this;
-      // xqjckFormUpdate(that, item.name);
-
-      this.$parent.xqjckShow = true;
-
-      this.$parent.$refs.xqjck.filterItem(item.name);
     },
     doChart() {
       const list = this.getList();
@@ -242,7 +185,7 @@ export default {
             axisTick: {
               show: false
             },
-            data: item.time
+            data: item.time || []
           },
           yAxis: {
             axisLine: {
@@ -264,7 +207,7 @@ export default {
               itemStyle: {
                 color: "#fd344b"
               },
-              data: item.in_value
+              data: item.in_value || []
             },
             {
               name: "出去人数",
@@ -272,7 +215,7 @@ export default {
               itemStyle: {
                 color: "#00ffff"
               },
-              data: item.out_value
+              data: item.out_value || []
             }
           ]
         });
@@ -287,7 +230,7 @@ export default {
       this.charts.map((item, index) => {
         item.setOption({
           xAxis: {
-            data: list[index].time
+            data: list[index].time || []
           },
           series: [
             {
@@ -296,7 +239,7 @@ export default {
               itemStyle: {
                 color: "#fd344b"
               },
-              data: list[index].in_value
+              data: list[index].in_value || []
             },
             {
               name: "出去人数",
@@ -304,7 +247,7 @@ export default {
               itemStyle: {
                 color: "#00ffff"
               },
-              data: list[index].out_value
+              data: list[index].out_value || []
             }
           ]
         });
@@ -457,52 +400,11 @@ export default {
     }
 
     img {
-      // position: absolute;
       width: 16px;
       height: 16px;
       margin-left: 10px;
       margin-right: 30px;
       cursor: pointer;
-    }
-
-    .choose_time {
-      padding: 5px 0px;
-
-      span {
-        font-size: 18px;
-      }
-
-      img {
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        margin-left: 12px;
-        cursor: pointer;
-      }
-
-      .wh_container {
-        position: absolute;
-        right: 0px;
-        z-index: 30;
-      }
-    }
-  }
-
-  .ctn1 {
-    height: 85%;
-    margin-top: 5%;
-    overflow: auto;
-
-    table {
-      border: 1px solid #ccc;
-      width: 96%;
-      margin: 0% 2%;
-
-      th,
-      td {
-        border-bottom: 1px solid #ccc;
-        padding: 10px 5px;
-      }
     }
   }
 

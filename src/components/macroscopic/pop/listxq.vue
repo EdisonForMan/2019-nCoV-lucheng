@@ -23,6 +23,7 @@
         :key="index"
         :prop="item.prop"
         :label="item.label"
+        sortable
       ></el-table-column>
       <el-table-column v-if="qzflag && forceData.length" label="关系图谱">
         <template slot-scope="scope">
@@ -133,7 +134,7 @@ export default {
                 "集中医学观察点人员名单",
                 "密切接触者",
                 "居家隔离人员",
-                "湖北回鹿人员信令",
+                "湖北回鹿人员/信令",
                 "银泰员工",
                 "隔离名单"
               ].indexOf(that.title)
