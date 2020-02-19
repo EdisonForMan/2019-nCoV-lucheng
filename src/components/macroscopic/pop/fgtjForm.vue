@@ -1,18 +1,22 @@
 <template>
-  <div id="fgtjform" v-if="sArr.length">
+  <div id="fgtjform" v-if="list.length">
     <div class="head">
       <div class="title">{{ title }}</div>
-      <a @click="()=>{sArr = []}">×</a>
+      <a @click="()=>{ list = [] }">×</a>
     </div>
     <div class="content ctn2">
-      <div class="chart" v-for="(item, index) in sArr" :key="index" :id="`chart${index}`"></div>
+      <div class="chart" id="chart0"></div>
+      <div class="chart" id="chart1"></div>
+      <div class="chart" id="chart2"></div>
+      <div class="chart" id="chart3"></div>
+      <div class="chart" id="chart4"></div>
+      <div class="chart" id="chart5"></div>
     </div>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
-const server = "http://172.20.89.68:5001/s";
 import { loadModules } from "esri-loader";
 import { OPTION } from "@/components/common/Tmap";
 
@@ -20,262 +24,245 @@ export default {
   name: "fgtjForm",
   data() {
     return {
-      server,
       title: "",
-      charts: [],
+      list: [],
       sArr: []
     };
   },
   components: {},
-  computed: {},
-  created() {},
-  mounted() {},
-  methods: {
-    getItem({ url, sublayers }) {
-      const that = this;
+  created() {
+    const that = this;
 
-      this.title = `工地返工统计`;
+    const sObj = {};
 
-      this.sArr = [1, 2, 3, 4];
+    loadModules(
+      ["esri/tasks/QueryTask", "esri/tasks/support/Query"],
+      OPTION
+    ).then(async ([QueryTask, Query]) => {
+      const queryTask = new QueryTask({
+        url: `http://172.20.89.7:6082/arcgis/rest/services/lucheng/fgfc/MapServer/0`
+      });
+      const query = new Query();
+      query.outFields = ["*"];
+      query.returnGeometry = true;
+      query.where = `1=1`;
+      const { fields, features } = await queryTask.execute(query);
 
-      this.sArr = [
-        {
-          name: "复工后工地人员总数量",
-          dateName: [
-            "山福镇",
-            "藤桥镇",
-            "仰义街道",
-            "丰门街道",
-            "双屿街道",
-            "广化街道",
-            "松台街道",
-            "五马街道",
-            "大南街道",
-            "南郊街道",
-            "蒲鞋市街道",
-            "南汇街道",
-            "滨江街道",
-            "七都街道"
-          ],
-          dataList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-        },
-        {
-          name: "复工后湖北籍总数量",
-          dateName: [
-            "山福镇",
-            "藤桥镇",
-            "仰义街道",
-            "丰门街道",
-            "双屿街道",
-            "广化街道",
-            "松台街道",
-            "五马街道",
-            "大南街道",
-            "南郊街道",
-            "蒲鞋市街道",
-            "南汇街道",
-            "滨江街道",
-            "七都街道"
-          ],
-          dataList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-        },
-        {
-          name: "复工后建设单位人员总数量",
-          dateName: [
-            "山福镇",
-            "藤桥镇",
-            "仰义街道",
-            "丰门街道",
-            "双屿街道",
-            "广化街道",
-            "松台街道",
-            "五马街道",
-            "大南街道",
-            "南郊街道",
-            "蒲鞋市街道",
-            "南汇街道",
-            "滨江街道",
-            "七都街道"
-          ],
-          dataList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-        },
-        {
-          name: "复工后建设单位湖北籍员工总数量",
-          dateName: [
-            "山福镇",
-            "藤桥镇",
-            "仰义街道",
-            "丰门街道",
-            "双屿街道",
-            "广化街道",
-            "松台街道",
-            "五马街道",
-            "大南街道",
-            "南郊街道",
-            "蒲鞋市街道",
-            "南汇街道",
-            "滨江街道",
-            "七都街道"
-          ],
-          dataList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-        },
-        {
-          name: "复工后施工单位人员总数量",
-          dateName: [
-            "山福镇",
-            "藤桥镇",
-            "仰义街道",
-            "丰门街道",
-            "双屿街道",
-            "广化街道",
-            "松台街道",
-            "五马街道",
-            "大南街道",
-            "南郊街道",
-            "蒲鞋市街道",
-            "南汇街道",
-            "滨江街道",
-            "七都街道"
-          ],
-          dataList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+      const list = features;
+
+      that.forceData = list;
+
+      list.map(({ attributes }) => {
+        const {
+          JD,
+          YJFGHJSDWRYSL,
+          YJFGHJSDWHBYGSL,
+          YJFGSGDWRYSL,
+          YJFGHSGDWHBYGSL,
+          YJFGHJLDWRYSL,
+          YJFGHJLDWHBYGSL
+        } = attributes;
+        if (!JD) return false;
+        if (!sObj[JD]) {
+          sObj[JD] = {
+            Country: JD,
+            YJFGHJSDWRYSL: 0,
+            YJFGHJSDWHBYGSL: 0,
+            YJFGSGDWRYSL: 0,
+            YJFGHSGDWHBYGSL: 0,
+            YJFGHJLDWRYSL: 0,
+            YJFGHJLDWHBYGSL: 0
+          };
         }
-      ];
+        sObj[JD].YJFGHJSDWRYSL += YJFGHJSDWRYSL || 0;
+        sObj[JD].YJFGHJSDWHBYGSL += YJFGHJSDWHBYGSL || 0;
+        sObj[JD].YJFGSGDWRYSL += YJFGSGDWRYSL || 0;
+        sObj[JD].YJFGHSGDWHBYGSL += YJFGHSGDWHBYGSL || 0;
+        sObj[JD].YJFGHJLDWRYSL += YJFGHJLDWRYSL || 0;
+        sObj[JD].YJFGHJLDWHBYGSL += YJFGHJLDWHBYGSL || 0;
+      });
+      for (let k in sObj) {
+        that.sArr.push(sObj[k]);
+      }
+    });
+  },
+  /* mounted() {
+    const that = this;
+
+    const sObj = {};
+
+    loadModules(
+      ["esri/tasks/QueryTask", "esri/tasks/support/Query"],
+      OPTION
+    ).then(async ([QueryTask, Query]) => {
+      const queryTask = new QueryTask({
+        url: `http://172.20.89.7:6082/arcgis/rest/services/lucheng/fgfc/MapServer/0`
+      });
+      const query = new Query();
+      query.outFields = ["*"];
+      query.returnGeometry = true;
+      query.where = `1=1`;
+      const { fields, features } = await queryTask.execute(query);
+
+      const list = features;
+
+      that.forceData = list;
+
+      list.map(({ attributes }) => {
+        const {
+          JD,
+          YJFGHJSDWRYSL,
+          YJFGHJSDWHBYGSL,
+          YJFGSGDWRYSL,
+          YJFGHSGDWHBYGSL,
+          YJFGHJLDWRYSL,
+          YJFGHJLDWHBYGSL
+        } = attributes;
+        if (!JD) return false;
+        if (!sObj[JD]) {
+          sObj[JD] = {
+            Country: JD,
+            YJFGHJSDWRYSL: 0,
+            YJFGHJSDWHBYGSL: 0,
+            YJFGSGDWRYSL: 0,
+            YJFGHSGDWHBYGSL: 0,
+            YJFGHJLDWRYSL: 0,
+            YJFGHJLDWHBYGSL: 0
+          };
+        }
+        sObj[JD].YJFGHJSDWRYSL += YJFGHJSDWRYSL || 0;
+        sObj[JD].YJFGHJSDWHBYGSL += YJFGHJSDWHBYGSL || 0;
+        sObj[JD].YJFGSGDWRYSL += YJFGSGDWRYSL || 0;
+        sObj[JD].YJFGHSGDWHBYGSL += YJFGHSGDWHBYGSL || 0;
+        sObj[JD].YJFGHJLDWRYSL += YJFGHJLDWRYSL || 0;
+        sObj[JD].YJFGHJLDWHBYGSL += YJFGHJLDWHBYGSL || 0;
+      });
+      for (let k in sObj) {
+        that.sArr.push(sObj[k]);
+      }
+    });
+  }, */
+  methods: {
+    getItem() {
+      this.title = `工地返工统计`;
+      this.list = [1, 2, 3, 4];
     },
     doChart() {
-      const list = this.sArr;
+      const that = this;
+
+      const list = [
+        { field: "YJFGHJSDWRYSL", label: "预计复工后建设单位人员数量" },
+        {
+          field: "YJFGHJSDWHBYGSL",
+          label: "预计复工后建设单位湖北籍员工数量"
+        },
+        { field: "YJFGSGDWRYSL", label: "预计复工后施工单位人员数量" },
+        {
+          field: "YJFGHSGDWHBYGSL",
+          label: "预计复工后施工单位湖北籍员工数量"
+        },
+        { field: "YJFGHJLDWRYSL", label: "预计复工后监理单位人员数量" },
+        {
+          field: "YJFGHJLDWHBYGSL",
+          label: "预计复工后监理单位湖北籍员工数量"
+        }
+      ];
+
+      // 通用配置项
+      const baseOption = {
+        title: {
+          left: "20px",
+          textStyle: {
+            color: "#fff"
+          }
+        },
+        grid: {
+          bottom: "10%",
+          left: "5%",
+          right: "4%",
+          containLabel: true
+        },
+        tooltip: {
+          trigger: "axis"
+        },
+        xAxis: {
+          type: "category",
+          boundaryGap: true,
+          show: true,
+          axisTick: {
+            show: false
+          },
+          axisLabel: {
+            fontSize: 15,
+            color: "#FFF",
+            formatter: function(val) {
+              return val.split("").join("\n");
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              color: "#FFF"
+            }
+          }
+        },
+        yAxis: {
+          type: "value",
+          name: "",
+          axisLine: {
+            lineStyle: {
+              color: "#FFF"
+            }
+          },
+          axisTick: {
+            show: false
+          },
+          splitLine: {
+            show: false
+          }
+        },
+        series: [
+          {
+            name: "人数",
+            type: "bar",
+            barWidth: "20px",
+
+            stack: "sum",
+            label: {
+              normal: {
+                show: true,
+                position: "top",
+                color: "#fff",
+                fontSize: 12
+              }
+            },
+            itemStyle: {
+              color: "#f41e1e"
+            }
+          }
+        ]
+      };
 
       list.map((item, index) => {
         const chart = this.$echarts.init(
           document.getElementById(`chart${index}`)
         );
 
-        chart.setOption({
-          title: {
-            text: `${item.name}`,
-            left: "20px",
-            textStyle: {
-              color: "#fff"
-            }
-          },
-          grid: {
-            bottom: "10%",
-            left: "5%",
-            right: "4%",
-            containLabel: true
-          },
-          tooltip: {
-            trigger: "axis"
-          },
-          xAxis: {
-            type: "category",
-            boundaryGap: true,
-            show: true,
-            axisTick: {
-              show: false
-            },
-            axisLabel: {
-              fontSize: 15,
-              color: "#FFF",
-              formatter: function(val) {
-                return val.split("").join("\n");
-              }
-            },
-            axisLine: {
-              lineStyle: {
-                color: "#FFF"
-              }
-            },
-            data: item.dateName.map(item =>
-              item.replace("街道", "").replace("镇", "")
-            )
-          },
-          yAxis: {
-            type: "value",
-            name: "",
-            axisLine: {
-              lineStyle: {
-                color: "#FFF"
-              }
-            },
-            axisTick: {
-              show: false
-            },
-            splitLine: {
-              show: false
-            }
-          },
-          series: [
-            {
-              name: "人数",
-              type: "bar",
-              barWidth: "20px",
+        const option = baseOption;
+        option.title.text = `${item.label}`;
+        option.xAxis.data = that.sArr
+          .sort((a, b) => b[item.field] - a[item.field])
+          .map(_item => _item.Country);
 
-              stack: "sum",
-              label: {
-                normal: {
-                  show: true,
-                  position: "top",
-                  color: "#fff",
-                  fontSize: 13
-                }
-              },
-              itemStyle: {
-                color: "#f41e1e"
-              },
-              data: item.dataList
-            }
-          ]
+        option.series[0].data = that.sArr.map(_item => {
+          return _item[item.field];
         });
 
-        this.charts.push(chart);
+        chart.setOption(option);
       });
-    },
-    getList() {
-      const list = [];
-      const that = this;
-      this.sArr.map((item, index) => {
-        const obj = {};
-
-        item.time.map((_item, _index) => {
-          if (
-            new Date(_item).valueOf() >= new Date(that.time_start).valueOf() &&
-            new Date(_item).valueOf() <=
-              new Date(that.time_end).valueOf() + 24 * 60 * 60 * 1000
-          ) {
-            !obj["time"] && (obj["time"] = []);
-            !obj["num"] && (obj["num"] = []);
-
-            obj["time"].push(_item);
-            obj["num"].push(_index);
-          }
-        });
-
-        item.in_value.map((_item, _index) => {
-          if (obj.num && ~obj.num.indexOf(_index)) {
-            !obj["in_value"] && (obj["in_value"] = []);
-
-            obj["in_value"].push(_item);
-          }
-        });
-
-        item.out_value.map((_item, _index) => {
-          if (obj.num && ~obj.num.indexOf(_index)) {
-            !obj["out_value"] && (obj["out_value"] = []);
-
-            obj["out_value"].push(_item);
-          }
-        });
-
-        obj["name"] = item.name;
-
-        list.push(obj);
-      });
-
-      return list;
     }
   },
   watch: {
-    sArr(newV, oldV) {
+    list(newV, oldV) {
       this.$nextTick(() => {
         newV.length && this.doChart();
       });

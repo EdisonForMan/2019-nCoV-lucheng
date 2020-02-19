@@ -77,7 +77,9 @@ export const sbFields = {
     // 企业返工
     qyfg: ["企业名称", "统一社会信", "行业代码", "行业分类"],
     // 学校
-    school: ["NAME", "SHORTNAME", "ADDRESS", "PHONE"]
+    school: ["NAME", "SHORTNAME", "ADDRESS", "PHONE"],
+    // 在建工地
+    zjgd: ["ProjectName", "JSDD", "JD", "JQZFGSJ", "CNSQD"]
 
 
 
@@ -104,6 +106,7 @@ export const noShowFields = [
     "X",
     "Y",
     "problem",
+    "Problem",
     "RelatingCodes",
     "QZ_DATE",
     "DZMC",
@@ -129,5 +132,6 @@ export const noShowFields = [
     "企业名称_1",
     "POINT_X",
     "POINT_Y",
-    "FCODE"
+    "FCODE",
+    "DZPP"
 ]

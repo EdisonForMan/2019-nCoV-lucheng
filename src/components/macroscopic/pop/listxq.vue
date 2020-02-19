@@ -387,6 +387,9 @@ export default {
             : this.title == "集中医学观察点"
             ? "gld"
             : null;
+
+        console.log("item", item);
+
         this.$parent.$refs.macroArcgis.goloaction(item);
         this.$parent.listShow = false;
       }

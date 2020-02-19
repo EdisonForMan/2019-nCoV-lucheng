@@ -10,6 +10,7 @@ export const leftOptions = [{
         tabIndex: 0,
         dqlabel: "银泰专题",
         sflabel: -1,
+        fglabel: -1,
         check: false,
         show: true,
         children: [{
@@ -114,6 +115,7 @@ export const leftOptions = [{
         tabIndex: 0,
         dqlabel: -1,
         sflabel: -1,
+        fglabel: -1,
         check: false,
         show: true,
         children: [{
@@ -144,6 +146,7 @@ export const leftOptions = [{
         tabIndex: 0,
         dqlabel: -1,
         sflabel: -1,
+        fglabel: -1,
         check: false,
         show: true,
         children: [
@@ -209,6 +212,7 @@ export const leftOptions = [{
         tabIndex: 0,
         dqlabel: -1,
         sflabel: -1,
+        fglabel: -1,
         check: false,
         show: true,
         children: [{
@@ -284,6 +288,7 @@ export const leftOptions = [{
         tabIndex: 0,
         dqlabel: -1,
         sflabel: -1,
+        fglabel: -1,
         check: false,
         show: true,
         children: [{
@@ -350,6 +355,7 @@ export const leftOptions = [{
         tabIndex: 1,
         dqlabel: "国际专题",
         sflabel: -1,
+        fglabel: -1,
         check: false,
         show: true,
         children: [{
@@ -378,6 +384,7 @@ export const leftOptions = [{
         label: -1,
         dqlabel: -1,
         sflabel: "企业专题",
+        fglabel: -1,
         tabIndex: 2,
         check: false,
         show: true,
@@ -433,6 +440,7 @@ export const leftOptions = [{
         label: -1,
         dqlabel: -1,
         sflabel: "学校专题",
+        fglabel: -1,
         tabIndex: 2,
         check: false,
         show: true,
@@ -442,6 +450,23 @@ export const leftOptions = [{
             url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
             sublayers: "20",
             icon: "学校",
+            check: false
+        }]
+    },
+    {
+        label: -1,
+        dqlabel: -1,
+        sflabel: -1,
+        fglabel: "复工复产",
+        tabIndex: 3,
+        check: false,
+        show: true,
+        children: [{
+            name: `鹿城区在建工地 (${macroscopic.zjgd}家)`,
+            id: "zjgd",
+            url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fgfc/MapServer",
+            sublayers: "0",
+            icon: "建筑工地",
             check: false
         }]
     }

@@ -43,7 +43,8 @@ export const tipHash = {
     gjmj: "mjHash",
     wm_gs: "wmgsHash",
     qyfg: "qyfgHash",
-    school: "schoolHash"
+    school: "schoolHash",
+    zjgd: "zjgdHash"
 }
 
 // 隔离点人员名单
@@ -716,45 +717,73 @@ const wmgsHash = [{
 }]
 
 
-// 企业返工
-/* const qyfgHash = [{
-    fieldName: "qymc",
-    label: "企业名称"
+// 在建工地
+const zjgdHash = [{
+    fieldName: "ANBH",
+    label: "安监编号"
 }, {
-    fieldName: "tyshm",
-    label: "统一社会码"
+    fieldName: "ProjectName",
+    label: "工程名称"
 }, {
-    fieldName: "fddbr",
-    label: "法定代表人"
+    fieldName: "JSDD",
+    label: "建设地点"
 }, {
-    fieldName: "jydz",
-    label: "经营地址"
+    fieldName: "JZMJ",
+    label: "建筑面积"
 }, {
-    fieldName: "qylx",
-    label: "企业类型"
+    fieldName: "GCZJ",
+    label: "工程造价"
 }, {
-    fieldName: "zczbw",
-    label: "注册资本（单位：万元）"
+    fieldName: "SGDW",
+    label: "施工单位"
 }, {
-    fieldName: "jyfw",
-    label: "经营范围"
+    fieldName: "JLDW",
+    label: "监理单位"
 }, {
-    fieldName: "clrq",
-    label: "成立日期"
+    fieldName: "JSDW",
+    label: "建设单位"
 }, {
-    fieldName: "jyjzrq",
-    label: "经营截止日期"
+    fieldName: "LinkMan",
+    label: "负责人"
 }, {
-    fieldName: "djjg",
-    label: "登记机关"
+    fieldName: "LinkManPhone",
+    label: "联系电话"
 }, {
-    fieldName: "hydm",
-    label: "登记机关"
+    fieldName: "JD",
+    label: "街道"
 }, {
-    fieldName: "hyfl",
-    label: "登记机关"
-}] */
+    fieldName: "JQZFGSJ",
+    label: "经劝阻复工时间"
+}, {
+    fieldName: "YJFGHJSDWRYSL",
+    label: "预计复工后建设单位人员数量"
+}, {
+    fieldName: "YJFGHJSDWHBYGSL",
+    label: "预计复工后建设单位湖北籍员工数量已通知暂缓来项目"
+}, {
+    fieldName: "YJFGSGDWRYSL",
+    label: "预计复工后施工单位人员数量"
+}, {
+    fieldName: "YJFGHSGDWHBYGSL",
+    label: "预计复工后施工单位湖北籍员工数量已通知暂缓来项目"
+}, {
+    fieldName: "YJFGHJLDWRYSL",
+    label: "预计复工后监理单位人员数量"
+}, {
+    fieldName: "YJFGHJLDWHBYGSL",
+    label: "预计复工后监理单位湖北籍员工数量已通知暂缓来项目"
+}, {
+    fieldName: "DTGDRS",
+    label: "当天工地人数"
+}, {
+    fieldName: "DTGDHBHWRS",
+    label: "当天工地湖北籍回温人数或到过湖北的"
+}, {
+    fieldName: "CNSQD",
+    label: "承诺书签订"
+}]
 
+// 企业返工
 const qyfgHash = [{
     fieldName: "企业名称",
     label: "企业名称"
@@ -815,7 +844,8 @@ export const Hash = {
     nmscHash,
     wmgsHash,
     qyfgHash,
-    schoolHash
+    schoolHash,
+    zjgdHash
 }
 
 

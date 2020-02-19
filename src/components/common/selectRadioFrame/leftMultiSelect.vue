@@ -7,8 +7,8 @@
         <span :class="{active:tabIndex == 1}" @click="()=>{tabIndex = 1,filterItem(0)}">专题</span>
         <i>/</i>
         <span :class="{active:tabIndex == 2}" @click="()=>{tabIndex = 2,filterItem(0)}">三返</span>
-        <!-- <i>/</i>
-        <span :class="{active:tabIndex == 3}" @click="()=>{tabIndex = 3,filterItem(0)}">国际大酒店</span>-->
+        <i>/</i>
+        <span :class="{active:tabIndex == 3}" @click="()=>{tabIndex = 3,filterItem(0)}">复工复产</span>
         <!-- <span class="stateTipHeaderBar"></span> -->
       </header>
       <div class="selectFrame no_select">
@@ -19,9 +19,9 @@
           >-->
           <span
             @click="toggleTree(item.label,index)"
-            v-if="!((tabIndex==2&&item.sflabel==-1) || (tabIndex==1&&item.dqlabel==-1)|| (tabIndex==0&&item.label==-1))"
+            v-if="!((tabIndex==3&&item.fglabel==-1) || (tabIndex==2&&item.sflabel==-1) || (tabIndex==1&&item.dqlabel==-1) || (tabIndex==0&&item.label==-1))"
           >
-            {{tabIndex==2?item.sflabel:tabIndex==1?item.dqlabel:item.label}}
+            {{tabIndex==3?item.fglabel:tabIndex==2?item.sflabel:tabIndex==1?item.dqlabel:item.label}}
             <input
               v-if="!item.disabled"
               type="checkbox"
@@ -33,7 +33,7 @@
           </span>
           <ul
             v-show="item.show"
-            v-if="!((tabIndex==2&&item.sflabel==-1) || (tabIndex==1&&item.dqlabel==-1)|| (tabIndex==0&&item.label==-1))"
+            v-if="!((tabIndex==3&&item.fglabel==-1) || (tabIndex==2&&item.sflabel==-1) || (tabIndex==1&&item.dqlabel==-1)|| (tabIndex==0&&item.label==-1))"
           >
             <li
               v-for="(oitem,oindex) in item.children"
@@ -60,7 +60,7 @@
                 @click="ShowListxq(oitem,item)"
               >详情</span>
               <span id="ssry" v-if="oitem.id=='xq'" @click="ShowListssry(oitem,item)">实时人员</span>
-              <span id="fgxq" v-if="oitem.id=='jzgd'" @click="ShowListfgxq(oitem,item)">返工详情</span>
+              <span id="fgxq" v-if="oitem.id=='zjgd'" @click="ShowListfgxq(oitem,item)">返工详情</span>
             </li>
           </ul>
         </div>
@@ -155,11 +155,8 @@ export default {
       this.$parent.leftHidden();
       this.$parent.rightHidden();
       this.$parent.legend();
-
-      console.log("返工详情");
-
-      this.$parent.$refs.fgxqForm.getItem(oitem);
-      this.$parent.$refs.fgtjForm.getItem(oitem);
+      this.$parent.$refs.fgxqForm.getItem();
+      this.$parent.$refs.fgtjForm.getItem();
     },
     intercept() {
       const _tree = this.$util.clone(this.tree);
@@ -211,7 +208,7 @@ export default {
 
       // 关闭工地返工面板
       this.$parent.$refs.fgxqForm.list = [];
-      this.$parent.$refs.fgtjForm.sArr = [];
+      this.$parent.$refs.fgtjForm.list = [];
     },
     change(id) {
       const that = this;

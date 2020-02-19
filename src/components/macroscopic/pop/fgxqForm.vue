@@ -11,10 +11,11 @@
         row-key="id"
         :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
         border
+        @row-click="clickTr"
       >
         <el-table-column prop="index" label="街道" sortable></el-table-column>
         <el-table-column prop="project" label="项目" sortable></el-table-column>
-        <el-table-column prop="num" label="三返人员" sortable></el-table-column>
+        <el-table-column prop="num" label="返工人数" sortable></el-table-column>
       </el-table>
     </div>
   </div>
@@ -22,156 +23,124 @@
 
 <script>
 /* eslint-disable */
-const server = "http://172.20.89.68:5001/s";
 import { loadModules } from "esri-loader";
 import { OPTION } from "@/components/common/Tmap";
-
-import { mapState } from "vuex";
 
 export default {
   name: "fgxqForm",
   data() {
     return {
-      server,
       title: "",
       list: [],
-      time: ""
+      tableData: [],
+      forceData: []
     };
   },
   components: {},
-  computed: {},
-  created() {},
-  mounted() {},
+  mounted() {
+    const that = this;
+
+    const sObj = {};
+    const sArr = [];
+
+    loadModules(
+      ["esri/tasks/QueryTask", "esri/tasks/support/Query"],
+      OPTION
+    ).then(async ([QueryTask, Query]) => {
+      const queryTask = new QueryTask({
+        url: `http://172.20.89.7:6082/arcgis/rest/services/lucheng/fgfc/MapServer/0`
+      });
+      const query = new Query();
+      query.outFields = ["*"];
+      query.returnGeometry = true;
+      query.where = `1=1`;
+      const { fields, features } = await queryTask.execute(query);
+      const fieldAliases = {};
+      fields.map(item => {
+        fieldAliases[item.name] = item.alias;
+      });
+      const list = features.map(item => {
+        item.fieldAliases = fieldAliases;
+        return item;
+      });
+
+      that.forceData = list;
+
+      list.map(({ attributes }) => {
+        const {
+          JD,
+          YJFGHJSDWRYSL,
+          YJFGHJSDWHBYGSL,
+          YJFGSGDWRYSL,
+          YJFGHSGDWHBYGSL,
+          YJFGHJLDWRYSL,
+          YJFGHJLDWHBYGSL
+        } = attributes;
+        if (!JD) return false;
+        if (!sObj[JD]) {
+          sObj[JD] = { Country: JD, count: 0 };
+        }
+
+        [
+          YJFGHJSDWRYSL,
+          YJFGHJSDWHBYGSL,
+          YJFGSGDWRYSL,
+          YJFGHSGDWHBYGSL,
+          YJFGHJLDWRYSL,
+          YJFGHJLDWHBYGSL
+        ].map(item => {
+          item = item || 0;
+
+          sObj[JD].count = sObj[JD].count + item;
+        });
+      });
+
+      Object.keys(sObj).map((item, index) => {
+        sArr.push({
+          id: index + 1,
+          index: item,
+          num: sObj[item].count
+        });
+      });
+
+      sArr.map((item, index) => {
+        item["children"] = [];
+        list
+          .filter(({ attributes }) => attributes.JD == item.index)
+          .map((_item, _index) => {
+            item["children"].push({
+              id: (index + 1) * 1000 + (_index + 1),
+              index: `${index + 1}-${_index + 1}`,
+              project: _item.attributes.ProjectName,
+              objid: _item.attributes.OBJECTID,
+              num:
+                _item.attributes.YJFGHJSDWRYSL +
+                _item.attributes.YJFGHJSDWHBYGSL +
+                _item.attributes.YJFGSGDWRYSL +
+                _item.attributes.YJFGHSGDWHBYGSL +
+                _item.attributes.YJFGHJLDWRYSL +
+                _item.attributes.YJFGHJLDWHBYGSL
+            });
+          });
+      });
+    });
+
+    this.tableData = sArr;
+  },
   methods: {
-    goLocation(item) {
-      // console.log(item);
-      // item.geometry && this.$parent.$refs.macroArcgis.goloaction(item);
-    },
-
-    getItem({ url, sublayers }) {
-      const that = this;
-
+    getItem() {
       this.title = `工地返工详情`;
-      const datetime = this.dateFormat("YYYY-mm-dd", new Date());
-      this.time = `截至 ${datetime}`;
-
-      this.list = [1, 2, 3, 4];
-
-      this.tableData = [
-        {
-          id: 1,
-          index: "滨江街道",
-          // country: "滨江街道",
-          num: 2000,
-          children: [
-            {
-              id: 101,
-              index: "1-1",
-              project: "滨江商务区CBD片区13-03地块建设项目",
-              num: 1000
-            },
-            {
-              id: 102,
-              index: "1-2",
-              project:
-                "温州市滨江商务区桃花岛片区T04-16至T04-18地块及道路工程建设项目",
-              num: 1000
-            }
-          ]
-        },
-        {
-          id: 2,
-          index: "大南街道",
-          // country: "大南街道",
-          num: 2000,
-          children: [
-            {
-              id: 201,
-              index: "2-1",
-              project: "温州市荷花路南侧（E-25e）地块",
-              num: 1000
-            },
-            {
-              id: 202,
-              index: "2-2",
-              project: "鹿城区总工会大南办公点（鹿城区职工活动中心）装修工程",
-              num: 1000
-            }
-          ]
-        },
-        {
-          id: 3,
-          index: "丰门街道",
-          // country: "丰门街道",
-          num: 2000,
-          children: [
-            {
-              id: 301,
-              index: "3-1",
-              project: "仰义街道岩门旧村改造B-18地块安置房建设工程",
-              num: 1000
-            },
-            {
-              id: 302,
-              index: "302",
-              project: "双屿街道岩门村二产安置建设项目（标准厂房1#-6#）",
-              num: 1000
-            }
-          ]
-        },
-        {
-          id: 4,
-          index: "广化街道",
-          // country: "广化街道",
-          num: 2000,
-          children: [
-            {
-              id: 401,
-              index: "4-1",
-              project: "温州市鹿城区下桥城中村改造工程E-29 地块",
-              num: 1000
-            },
-            {
-              id: 402,
-              index: "4-2",
-              project:
-                "广化单元双桥村街坊E-10、E-20、E-24、E-09、E-21、E-23地块及双星路（上桥路至双南线）项目",
-              num: 1000
-            }
-          ]
-        }
-      ];
+      this.list = [1, 2, 3];
     },
-    showMsg(item) {
-      // console.log(item);
-      const that = this;
-      // xqjckFormUpdate(that, item.name);
+    // 表格行点击事件
+    clickTr(row, column, event) {
+      if (!row.children) {
+        const item = this.forceData.filter(
+          item => item.attributes.OBJECTID == row.objid
+        )[0];
 
-      this.$parent.xqjckShow = true;
-
-      this.$parent.$refs.xqjck.filterItem(item.name);
-    },
-    // 日期格式化
-    dateFormat(fmt, date) {
-      let ret;
-      const opt = {
-        "Y+": date.getFullYear().toString(),
-        "m+": (date.getMonth() + 1).toString(),
-        "d+": date.getDate().toString(),
-        "H+": date.getHours().toString(),
-        "M+": date.getMinutes().toString(),
-        "S+": date.getSeconds().toString()
-      };
-      for (let k in opt) {
-        ret = new RegExp("(" + k + ")").exec(fmt);
-        if (ret) {
-          fmt = fmt.replace(
-            ret[1],
-            ret[1].length == 1 ? opt[k] : opt[k].padStart(ret[1].length, "0")
-          );
-        }
+        this.$parent.$refs.macroArcgis.goloaction(item);
       }
-      return fmt;
     }
   }
 };
@@ -196,10 +165,6 @@ export default {
 
     .title {
       font-size: 22px;
-    }
-
-    .time {
-      font-size: 16px;
     }
 
     a {
