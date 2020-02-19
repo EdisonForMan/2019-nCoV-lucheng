@@ -48,7 +48,7 @@
  * 2.点击列表<RightDiv>,地图<commonArcgis>定位并显示内容
  */
 import commonArcgis from "./Arcgis";
-import leftMultiSelect from "@/components/common/selectRadioFrame/leftMultiSelect";
+import leftMultiSelect from "./leftMultiSelect";
 import bottomBtn from "./bottomBtn";
 
 //  chartTable

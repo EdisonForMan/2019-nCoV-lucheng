@@ -4,18 +4,18 @@
       <div class="app_icon">鹿城区新冠肺炎防控指挥地图</div>
       <div class="app_toptab_position app_toptab_normal">
         <ul class="app_toptab">
-          <!-- <li
+          <li
             v-for="(item,index) in toptab"
             :key="index"
             :class="{top_active:index==current}"
             @click="$goRoute(item.route),selected(index)"
-          >{{item.label}}</li>-->
+          >{{item.label}}</li>
           <!-- 2020/2/12 固定第二个页面 -->
-          <li
+          <!-- <li
             v-for="(item,index) in toptab"
             :class="{top_active:index==1}"
             :key="index"
-          >{{item.label}}</li>
+          >{{item.label}}</li>-->
         </ul>
         <p>截至日期：{{$window.nCov_luchengData.macroscopic.updateTime}}</p>
         <p style="position: absolute;right: 15px;top: 15px;">温州设计集团勘测院</p>
@@ -42,9 +42,10 @@ export default {
   data() {
     return {
       toptab: [
-        { label: "宏观管控", route: "control" },
+        // { label: "宏观管控", route: "control" },
+        { label: "宏观管控" },
         { label: "防疫布控", route: "macroscopic" },
-        { label: "疫情监控", route: "monitor" }
+        { label: "复工复产", route: "monitor" }
       ],
       current: 1,
       time: " ",
@@ -73,7 +74,9 @@ export default {
       });
     },
     selected(index) {
-      this.current = index;
+      if (index != 0) {
+        this.current = index;
+      }
     },
     doRegisterToken(token) {
       const that = this;

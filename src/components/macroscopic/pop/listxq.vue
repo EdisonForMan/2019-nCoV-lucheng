@@ -388,8 +388,6 @@ export default {
             ? "gld"
             : null;
 
-        console.log("item", item);
-
         this.$parent.$refs.macroArcgis.goloaction(item);
         this.$parent.listShow = false;
       }
