@@ -27,7 +27,7 @@ const server = "http://172.20.89.68:5001/s";
 import { loadModules } from "esri-loader";
 import { OPTION } from "@/components/common/Tmap";
 
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "ssryForm",
@@ -51,8 +51,14 @@ export default {
     setInterval(() => {
       this.getTime();
     }, 1000);
+    // 定时5分钟，请求人员进出数据
+    setInterval(() => {
+      this.fetchcrjlList();
+      this.fetchryxxList();
+    }, 300000);
   },
   methods: {
+    ...mapActions(["fetchcrjlList", "fetchryxxList"]),
     goLocation(item) {
       item.geometry && this.$parent.$refs.macroArcgis.goloaction(item);
     },

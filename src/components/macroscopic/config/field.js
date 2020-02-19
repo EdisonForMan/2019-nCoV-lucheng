@@ -75,7 +75,9 @@ export const sbFields = {
     // 五马规上
     wm_gs: ["Name", "Address", "ChargeMan"],
     // 企业返工
-    qyfg: ["企业名称", "统一社会信", "行业代码", "行业分类"]
+    qyfg: ["企业名称", "统一社会信", "行业代码", "行业分类"],
+    // 学校
+    school: ["NAME", "SHORTNAME", "ADDRESS", "PHONE"]
 
 
 
@@ -126,5 +128,6 @@ export const noShowFields = [
     "chanye",
     "企业名称_1",
     "POINT_X",
-    "POINT_Y"
+    "POINT_Y",
+    "FCODE"
 ]

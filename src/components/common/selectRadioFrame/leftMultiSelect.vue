@@ -60,7 +60,7 @@
                 @click="ShowListxq(oitem,item)"
               >详情</span>
               <span id="ssry" v-if="oitem.id=='xq'" @click="ShowListssry(oitem,item)">实时人员</span>
-              <!-- <span id="fgxq" v-if="oitem.id=='jzgd'" @click="ShowListfgxq(oitem,item)">返工详情</span> -->
+              <span id="fgxq" v-if="oitem.id=='jzgd'" @click="ShowListfgxq(oitem,item)">返工详情</span>
             </li>
           </ul>
         </div>

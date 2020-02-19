@@ -178,7 +178,7 @@ export const leftOptions = [{
                 sublayers: "6",
                 icon: "高速",
                 check: false
-            }, 
+            },
             {
                 name: `商场超市 (${macroscopic.people_type_8}个)`,
                 id: "people_type_8",
@@ -377,7 +377,7 @@ export const leftOptions = [{
     {
         label: -1,
         dqlabel: -1,
-        sflabel: "三返专题",
+        sflabel: "企业专题",
         tabIndex: 2,
         check: false,
         show: true,
@@ -426,6 +426,22 @@ export const leftOptions = [{
             sublayers: "0",
             // definitionExpression: "CompanyType = '南郊街道辖区在建项目企业'",
             icon: "市场",
+            check: false
+        }]
+    },
+    {
+        label: -1,
+        dqlabel: -1,
+        sflabel: "学校专题",
+        tabIndex: 2,
+        check: false,
+        show: true,
+        children: [{
+            name: `学校 (${macroscopic.school}家)`,
+            id: "school",
+            url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
+            sublayers: "20",
+            icon: "学校",
             check: false
         }]
     }

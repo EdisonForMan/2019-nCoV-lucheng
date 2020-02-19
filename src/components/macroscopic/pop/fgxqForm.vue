@@ -12,8 +12,8 @@
         :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
         border
       >
-        <el-table-column prop="index" label="序号" sortable></el-table-column>
-        <el-table-column prop="country" label="街道" sortable></el-table-column>
+        <el-table-column prop="index" label="街道" sortable></el-table-column>
+        <el-table-column prop="project" label="项目" sortable></el-table-column>
         <el-table-column prop="num" label="三返人员" sortable></el-table-column>
       </el-table>
     </div>
@@ -60,20 +60,20 @@ export default {
       this.tableData = [
         {
           id: 1,
-          index: "1",
-          country: "滨江街道",
+          index: "滨江街道",
+          // country: "滨江街道",
           num: 2000,
           children: [
             {
               id: 101,
               index: "1-1",
-              country: "滨江商务区CBD片区13-03地块建设项目",
+              project: "滨江商务区CBD片区13-03地块建设项目",
               num: 1000
             },
             {
               id: 102,
               index: "1-2",
-              country:
+              project:
                 "温州市滨江商务区桃花岛片区T04-16至T04-18地块及道路工程建设项目",
               num: 1000
             }
@@ -81,60 +81,60 @@ export default {
         },
         {
           id: 2,
-          index: "2",
-          country: "大南街道",
+          index: "大南街道",
+          // country: "大南街道",
           num: 2000,
           children: [
             {
               id: 201,
               index: "2-1",
-              country: "温州市荷花路南侧（E-25e）地块",
+              project: "温州市荷花路南侧（E-25e）地块",
               num: 1000
             },
             {
               id: 202,
               index: "2-2",
-              country: "鹿城区总工会大南办公点（鹿城区职工活动中心）装修工程",
+              project: "鹿城区总工会大南办公点（鹿城区职工活动中心）装修工程",
               num: 1000
             }
           ]
         },
         {
           id: 3,
-          index: "3",
-          country: "丰门街道",
+          index: "丰门街道",
+          // country: "丰门街道",
           num: 2000,
           children: [
             {
               id: 301,
               index: "3-1",
-              country: "仰义街道岩门旧村改造B-18地块安置房建设工程",
+              project: "仰义街道岩门旧村改造B-18地块安置房建设工程",
               num: 1000
             },
             {
               id: 302,
               index: "302",
-              country: "双屿街道岩门村二产安置建设项目（标准厂房1#-6#）",
+              project: "双屿街道岩门村二产安置建设项目（标准厂房1#-6#）",
               num: 1000
             }
           ]
         },
         {
           id: 4,
-          index: "4",
-          country: "广化街道",
+          index: "广化街道",
+          // country: "广化街道",
           num: 2000,
           children: [
             {
               id: 401,
               index: "4-1",
-              country: "温州市鹿城区下桥城中村改造工程E-29 地块",
+              project: "温州市鹿城区下桥城中村改造工程E-29 地块",
               num: 1000
             },
             {
               id: 402,
               index: "4-2",
-              country:
+              project:
                 "广化单元双桥村街坊E-10、E-20、E-24、E-09、E-21、E-23地块及双星路（上桥路至双南线）项目",
               num: 1000
             }

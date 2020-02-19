@@ -42,7 +42,8 @@ export const tipHash = {
     glmd: "illHash",
     gjmj: "mjHash",
     wm_gs: "wmgsHash",
-    qyfg: "qyfgHash"
+    qyfg: "qyfgHash",
+    school: "schoolHash"
 }
 
 // 隔离点人员名单
@@ -768,6 +769,20 @@ const qyfgHash = [{
     label: "行业分类"
 }]
 
+// 学校
+const schoolHash = [{
+    fieldName: "NAME",
+    label: "名称"
+}, {
+    fieldName: "SHORTNAME",
+    label: "简称"
+}, {
+    fieldName: "ADDRESS",
+    label: "地址"
+}, {
+    fieldName: "PHONE",
+    label: "电话"
+}]
 
 
 export const Hash = {
@@ -799,7 +814,8 @@ export const Hash = {
     sccsHash,
     nmscHash,
     wmgsHash,
-    qyfgHash
+    qyfgHash,
+    schoolHash
 }
 
 
