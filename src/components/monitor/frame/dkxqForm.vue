@@ -36,7 +36,7 @@
     </div>
     <div class="bottom">
       <span>负责人：李先生</span>
-      <span>联系方式：0577-88030503</span>
+      <span style="margin-left: 20px;">联系方式：0577-88030503</span>
     </div>
   </div>
 </template>
@@ -129,7 +129,7 @@ export default {
   .block {
     text-align: left;
     width: 100%;
-    height: 250px;
+    height: 248px;
     background: rgba(4, 30, 117, 0.5);
     border-bottom: 1px solid #4594ff;
     margin-bottom: 8px;
@@ -224,8 +224,8 @@ export default {
   }
   .bottom {
     width: 100%;
-    height: 30px;
-    line-height: 17px;
+    height: 24px;
+    line-height: 24px;
     background: rgba(4, 30, 117, 0.5);
     border-bottom: 1px solid #4594ff;
     border-top: 1px solid #4594ff;
