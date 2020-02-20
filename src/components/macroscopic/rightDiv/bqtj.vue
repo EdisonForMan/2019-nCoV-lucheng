@@ -18,7 +18,7 @@
 
 <script>
 /* eslint-disable */
-import util from "../util";
+import util from "../widget/util";
 export default {
   data() {
     return {

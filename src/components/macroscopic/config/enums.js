@@ -40,23 +40,6 @@ export const leftOptions = [{
                 icon: "银泰员工",
                 check: false
             },
-            //  {
-            //     name: `医院发热待查 (${lc.yydc}例)`,
-            //     id: "yydc",
-            //     ytname: -1,
-            //     url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
-            //     sublayers: "2",
-            //     icon: "医院发热待查",
-            //     check: false
-            // }, {
-            //     name: `社区发热待查 (${lc.sqdc}例)`,
-            //     id: "sqdc",
-            //     ytname: -1,
-            //     url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
-            //     sublayers: "3",
-            //     icon: "社区发热待查",
-            //     check: false
-            // }, 
             {
                 name: `集中医学观察点 (${lc.gld}个)`,
                 id: "gld",
@@ -149,32 +132,7 @@ export const leftOptions = [{
         fglabel: -1,
         check: false,
         show: true,
-        children: [
-            // {
-            //     name: `高速卡口 (${macroscopic.highway_type_1}个)`,
-            //     id: "highway_type_1",
-            //     url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer",
-            //     sublayers: "0",
-            //     icon: "高速",
-            //     check: false
-            // },
-            // {
-            //     name: "汽车站 (4个)",
-            //     id: "highway_type_3",
-            //     url: "http://172.20.89.7:6082/arcgis/rest/services/weijian/crowded/MapServer",
-            //     sublayers: "0",
-            //     icon: "汽车站",
-            //     check: false
-            // },
-            // {
-            //     name: `火车站 (${macroscopic.highway_type_2}个)`,
-            //     id: "highway_type_2",
-            //     url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer",
-            //     sublayers: "1",
-            //     icon: "火车站",
-            //     check: false
-            // }, 
-            {
+        children: [{
                 name: `交通卡口 (${macroscopic.highway_type_4}个)`,
                 id: "highway_type_4",
                 url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer",
@@ -314,15 +272,6 @@ export const leftOptions = [{
                 icon: "其他专科医院",
                 check: false
             },
-            // {
-            //     name: "乡镇卫生医院 (7129家)",
-            //     id: "clinic_type_4",
-            //     url: "https://services.wzmap.gov.cn/server/rest/services/TDT/ZhuanTiSJ/MapServer",
-            //     sublayers: "8",
-            //     definitionExpression: "TAG LIKE '%医疗卫生%'",
-            //     icon: "乡镇卫生院",
-            //     check: false
-            // },
             {
                 name: `医保药房 (${macroscopic.clinic_type_5}家)`,
                 id: "clinic_type_5",
@@ -332,14 +281,6 @@ export const leftOptions = [{
                 icon: "药店",
                 check: false
             },
-            // {
-            //     name: "其他医疗机构 (7129家)",
-            //     id: "clinic_type_6",
-            //     sublayers: "8",
-            //     url: "https://services.wzmap.gov.cn/server/rest/services/TDT/ZhuanTiSJ/MapServer",
-            //     icon: "其他医疗机构",
-            //     check: false
-            // },
             {
                 name: `疾控中心 (${macroscopic.clinic_type_7}家)`,
                 id: "clinic_type_7",
@@ -371,7 +312,6 @@ export const leftOptions = [{
             {
                 name: -1,
                 ytname: `密切接触者 (${macroscopic.gjmj}例)`,
-                // ytd: "IdentityType like '%银泰%'",
                 id: "gjmj",
                 url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
                 sublayers: "16",
@@ -396,10 +336,10 @@ export const leftOptions = [{
             icon: "建筑工地",
             check: false
         }, {
-            name: `南郊规上服务业企业 (${macroscopic.nj_zdqy}家)`,
-            id: "nj_zdqy",
+            name: `南郊企业 (${macroscopic.nj_qy}家)`,
+            id: "nj_qy",
             url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/nanjiao/MapServer",
-            sublayers: "4",
+            sublayers: "7",
             icon: "重点企业",
             check: false
         }, {
@@ -423,7 +363,6 @@ export const leftOptions = [{
             id: "wm_gs",
             url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
             sublayers: "18",
-            // definitionExpression: "CompanyType = '南郊街道辖区在建项目企业'",
             icon: "旅馆",
             check: false
         }, {
@@ -431,7 +370,6 @@ export const leftOptions = [{
             id: "qyfg",
             url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/LC_QYD/MapServer",
             sublayers: "0",
-            // definitionExpression: "CompanyType = '南郊街道辖区在建项目企业'",
             icon: "市场",
             check: false
         }]

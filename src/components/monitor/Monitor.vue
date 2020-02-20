@@ -3,7 +3,7 @@
     <div class="btnGroup">
       <ul>
         <li>企业复工</li>
-        <li>坐地地图</li>
+        <li>做地地图</li>
         <li>复产分析</li>
       </ul>
     </div>
@@ -63,9 +63,6 @@ export default {
       icon_show_left: false,
       icon_show_right: false,
       leftOptions,
-      xqShow: false,
-      listShow: false,
-      xqjckShow: false,
       moveLeft: "360",
       moveRight: "500"
     };

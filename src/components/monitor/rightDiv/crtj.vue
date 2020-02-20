@@ -1,20 +1,19 @@
 <template>
   <div id="crtjDiv">
-    <h3 id="selectDiv">
-      - 鹿城坐地出让统计 -
+    <div>
+      <span class="title">鹿城做地出让统计</span>
       <select id="select" @change="bqSelect($event)">
         <option value="crdk">出让地块</option>
         <option value="crje">出让金额</option>
         <option value="crmj">出让面积</option>
       </select>
-    </h3>
+    </div>
     <div id="crtjChart"></div>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
-import util from "../util";
 export default {
   data() {
     return {};
@@ -155,16 +154,29 @@ export default {
   background-color: rgba(5, 26, 79, 0.5);
   border: 1px solid #035acd;
 
-  h3 {
-    color: #23c9f3;
-    margin-top: 10px;
+  > div {
+    text-align: left;
+    height: 15%;
+    .title {
+      font-size: 20px;
+      color: rgba(97, 235, 255, 1);
+      position: relative;
+      top: 12px;
+      left: 20px;
+      font-weight: 500;
+      border-left: 5px solid;
+      padding-left: 5px;
+    }
 
     select {
-      background-color: #0c7cd2;
-      border: none;
+      position: relative;
+      float: right;
+      top: 12px;
+      right: 24px;
+      padding: 4px 9px;
+      background-color: #1b45a7;
+      border: 1px solid #61ebff;
       color: #fff;
-      padding: 7px 7px;
-      margin-left: 5px;
     }
   }
 

@@ -8,35 +8,23 @@ import Router from "vue-router";
 import Macroscopic from "./components/macroscopic/Macroscopic.vue";
 import Control from "./components/control/Control.vue";
 import Monitor from "./components/monitor/Monitor.vue";
-import Mobile from "./components/mobile/map.vue"
-import YQMobile from './components/mobilePage/index.vue';
 Vue.use(Router);
 
 export default new Router({
   mode: "hash",
-  routes:
-    [
-      {
-        path: "/",
-        name: "macroscopic",
-        component: Macroscopic
-        // path: "/",
-        // name: "Mobile",
-        // component: Mobile
-      }, {
-        path: "/control",
-        name: "control",
-        component: Control
-      },
-      {
-        path: "/monitor",
-        name: "monitor",
-        component: Monitor
-      },
-      {
-        path: "/yqmobile",
-        name: "yqmobile",
-        component: YQMobile
-      },
-    ]
+  routes: [{
+      path: "/",
+      name: "macroscopic",
+      component: Macroscopic
+    }, {
+      path: "/control",
+      name: "control",
+      component: Control
+    },
+    {
+      path: "/monitor",
+      name: "monitor",
+      component: Monitor
+    }
+  ]
 });

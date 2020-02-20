@@ -10,7 +10,8 @@ import {
 } from "@/components/common/Tmap";
 const server = "http://172.20.89.68:5001/s";
 
-export const gldChartUpdate = (context, name, bid) => {
+// 隔离点人员详情
+export const getGLDList = (context, name, bid) => {
   loadModules(
     ["esri/tasks/QueryTask", "esri/tasks/support/Query"],
     OPTION
@@ -36,5 +37,38 @@ export const gldChartUpdate = (context, name, bid) => {
     });
     context.$parent.$refs.gldxq.list = [...list];
     context.$parent.$refs.gldxq.title = name;
+  });
+};
+
+
+// 南郊企业人员
+export const getNJQYList = (context, name) => {
+  const nameFix = name.replace(/(^\s*)|(\s*$)/g, "")
+  loadModules(
+    ["esri/tasks/QueryTask", "esri/tasks/support/Query"],
+    OPTION
+  ).then(async ([QueryTask, Query]) => {
+    const queryTask = new QueryTask({
+      url: `http://172.20.89.7:6082/arcgis/rest/services/lucheng/nanjiao/MapServer/8`
+    });
+    const query = new Query();
+    query.outFields = ["*"];
+    query.returnGeometry = true;
+    query.where = `工作单位 like '%${nameFix}%'`;
+    const {
+      fields,
+      features
+    } = await queryTask.execute(query);
+
+    const fieldAliases = {};
+    fields.map(item => {
+      fieldAliases[item.name] = item.alias;
+    });
+    const list = features.map(item => {
+      item.fieldAliases = fieldAliases;
+      return item;
+    });
+    context.$parent.$refs.njqyForm.list = [...list];
+    context.$parent.$refs.njqyForm.title = name;
   });
 };

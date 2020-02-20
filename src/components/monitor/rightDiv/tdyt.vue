@@ -1,6 +1,8 @@
 <template>
   <div id="tdytDiv">
-    <h3>- 计划出让土地用途 -</h3>
+    <div>
+      <span class="title">计划出让土地用途</span>
+    </div>
     <div id="tdytChart"></div>
   </div>
 </template>
@@ -42,7 +44,6 @@ export default {
                 show: true,
                 position: "outter",
                 formatter: function(params) {
-                  console.log(params);
                   return `${params.data.name} ${params.percent}%`;
                 },
                 textStyle: {
@@ -103,9 +104,19 @@ export default {
   background-color: rgba(5, 26, 79, 0.5);
   border: 1px solid #035acd;
 
-  h3 {
-    color: #23c9f3;
-    margin-top: 10px;
+  > div {
+    text-align: left;
+    height: 15%;
+    .title {
+      font-size: 20px;
+      color: rgba(97, 235, 255, 1);
+      position: relative;
+      top: 12px;
+      left: 20px;
+      font-weight: 500;
+      border-left: 5px solid;
+      padding-left: 5px;
+    }
   }
 
   #tdytChart {

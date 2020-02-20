@@ -2,7 +2,7 @@
   <div id="dkxqForm">
     <a>×</a>
     <div class="block block1">
-      <span class="title">基本详情</span>
+      <span class="title">做地详情</span>
       <div class="carousel">
         <el-carousel height="200px" autoplay>
           <el-carousel-item v-for="item in 4" :key="item"></el-carousel-item>
@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="block block2">
-      <span class="title">区位优势</span>
+      <span class="title">区块优势</span>
       <div>
         <ul>
           <li v-for="(item,index) in qktable" :key="index">
@@ -43,60 +43,46 @@
 
 <script>
 /* eslint-disable */
-const server = "http://172.20.89.68:5001/s";
-import { loadModules } from "esri-loader";
-import { OPTION } from "@/components/common/Tmap";
 
 export default {
   name: "dkxqForm",
   data() {
-    return {
-      server,
-      title: "",
-      list: [],
-      calShow1: false,
-      calShow2: false,
-      time_start: "",
-      time_end: "",
-      ago: "",
-      future: "",
-      now: "",
-      time: "",
-      charts: [],
-      sArr: [],
-      qktable: [
-        {
-          title: "项目区位优势",
-          text:
-            "本次规划项目位于温州书鹿城区，地理位置优越交通便利，翠微大道贯通南北；翠微山、黄龙山、景山三山环抱景观丰富；项目地块边界方整，周边商业、教育、医疗设备配套设施完善"
-        },
-        {
-          title: "项目区位优势",
-          text:
-            "本次规划项目位于温州书鹿城区，地理位置优越交通便利，翠微大道贯通南北；翠微山、黄龙山、景山三山环抱景观丰富；项目地块边界方整，周边商业、教育、医疗设备配套设施完善"
-        },
-        {
-          title: "项目区位优势",
-          text:
-            "本次规划项目位于温州书鹿城区，地理位置优越交通便利，翠微大道贯通南北；翠微山、黄龙山、景山三山环抱景观丰富；项目地块边界方整，周边商业、教育、医疗设备配套设施完善"
-        }
-      ],
-      qtable: [
-        { text: "审批到位", tf: "是", color: "rgba(58,209,75,0.3)" },
-        { text: "审批到位", tf: "是", color: "rgba(255,51,83,0.3)" },
-        { text: "审批到位", tf: "是", color: "rgba(58,209,75,0.3)" },
-        { text: "审批到位", tf: "是", color: "rgba(255,51,83,0.3)" },
-        { text: "审批到位", tf: "是", color: "rgba(255,51,83,0.3)" },
-        { text: "审批到位", tf: "是", color: "rgba(58,209,75,0.3)" }
-      ]
-    };
+    return {};
   },
   components: {},
   computed: {},
-  created() {},
-  mounted() {},
-  methods: {},
-  watch: {}
+  created() {
+    this.qktable = [
+      {
+        title: "项目区位优势",
+        text:
+          "本次规划项目位于温州市鹿城区，地理位置优越交通便利，翠微大道贯通南北；翠微山、黄龙山、景山三山环抱景观丰富；项目地块边界方整，周边商业、教育、医疗设备配套设施完善。"
+      },
+      {
+        title: "项目区位优势",
+        text:
+          "本次规划项目位于温州市鹿城区，地理位置优越交通便利，翠微大道贯通南北；翠微山、黄龙山、景山三山环抱景观丰富；项目地块边界方整，周边商业、教育、医疗设备配套设施完善。"
+      },
+      {
+        title: "项目区位优势",
+        text:
+          "本次规划项目位于温州市鹿城区，地理位置优越交通便利，翠微大道贯通南北；翠微山、黄龙山、景山三山环抱景观丰富；项目地块边界方整，周边商业、教育、医疗设备配套设施完善。"
+      }
+    ];
+
+    this.qtable = [
+      { text: "审批到位", tf: "是", color: "rgba(58,209,75,0.3)" },
+      { text: "审批到位", tf: "是", color: "rgba(255,51,83,0.3)" },
+      { text: "审批到位", tf: "是", color: "rgba(58,209,75,0.3)" },
+      { text: "审批到位", tf: "是", color: "rgba(255,51,83,0.3)" },
+      { text: "审批到位", tf: "是", color: "rgba(255,51,83,0.3)" },
+      { text: "审批到位", tf: "是", color: "rgba(58,209,75,0.3)" },
+      { text: "审批到位", tf: "是", color: "rgba(255,51,83,0.3)" },
+      { text: "审批到位", tf: "是", color: "rgba(255,51,83,0.3)" },
+      { text: "审批到位", tf: "是", color: "rgba(58,209,75,0.3)" }
+    ];
+  },
+  methods: {}
 };
 </script>
 
@@ -104,16 +90,19 @@ export default {
 #dkxqForm {
   position: absolute;
   width: 450px;
-  height: 800px;
+  height: 88%;
   background: rgba(4, 30, 117, 0.5);
   border-left: 1px solid #04ecff;
   border-right: 1px solid #04ecff;
   border-radius: 6px;
   z-index: 20;
-  top: 18%;
+  top: 10%;
   margin: auto;
   box-sizing: border-box;
   transition: all 1s;
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
 
   a {
     position: absolute;
@@ -122,14 +111,10 @@ export default {
     font-size: 30px;
     cursor: pointer;
   }
-  span {
-    font-size: 14px;
-    color: #fff;
-  }
   .block {
     text-align: left;
     width: 100%;
-    height: 248px;
+    height: 32%;
     background: rgba(4, 30, 117, 0.5);
     border-bottom: 1px solid #4594ff;
     margin-bottom: 8px;
@@ -152,28 +137,29 @@ export default {
   }
 
   .block1 {
-    // height: 30%;
-    // padding: 2% 0%;
     .carousel {
-      // padding: 4px;
       height: 100%;
-      padding: 6px 20px;
+      padding: 15px 20px;
 
       .el-carousel__item:nth-child(2n) {
-        background-color: #99a9bf;
+        // background-color: #99a9bf;
+        background-image: url("../../common/image/dk/鹿城鞋艺小镇.png");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
       }
 
       .el-carousel__item:nth-child(2n + 1) {
-        background-color: #d3dce6;
+        // background-color: #d3dce6;
+        background-image: url("../../common/image/dk/黄龙商贸城集新未来社区项目.png");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
       }
     }
   }
 
   .block2 {
-    // height: 30%;
-    // padding: 2% 0%;
     div {
-      padding: 10px;
+      padding: 17px 15px;
       ul {
         width: 100%;
         height: 100%;
@@ -182,7 +168,6 @@ export default {
         li {
           display: inline-block;
           width: 100%;
-          height: 40px;
           box-sizing: border-box;
           padding: 19px;
           p {
@@ -196,19 +181,15 @@ export default {
   }
 
   .block3 {
-    // height: 30%;
-    // padding: 2% 0%;
     div {
       padding: 10px;
+      text-align: center;
       ul {
-        width: 100%;
-        height: 100%;
         width: 100%;
         height: 100%;
         list-style: none;
         li {
           width: 30%;
-          height: 50%;
           display: inline-block;
           text-align: center;
           padding: 5px;
@@ -222,10 +203,11 @@ export default {
       }
     }
   }
+
   .bottom {
     width: 100%;
-    height: 24px;
-    line-height: 24px;
+    height: 28px;
+    line-height: 28px;
     background: rgba(4, 30, 117, 0.5);
     border-bottom: 1px solid #4594ff;
     border-top: 1px solid #4594ff;
@@ -234,13 +216,13 @@ export default {
   .block2 ul::-webkit-scrollbar {
     display: block;
     width: 10px;
-    background-color: rgb(107, 134, 223);
-    border-radius: 3px;
+    background-color: #1a3561;
+    border-radius: 10px;
   }
   .block2 ul::-webkit-scrollbar-thumb {
     width: 10px;
-    background-color: rgb(14, 10, 247);
-    border-radius: 3px;
+    background-color: #45cdff;
+    border-radius: 10px;
   }
 }
 </style>

@@ -15,30 +15,32 @@
         <div id="rightFrame">
           <bqtj ref="bqtj" />
           <bqtj2 ref="bqtj2" />
-          <!-- <ylzy /> -->
           <sbDate ref="table" />
         </div>
         <span @click="toggle2" class="hidden_right_button"></span>
       </div>
     </div>
+    <topDate />
     <xzDate />
     <bottomBtn />
-    <topDate />
-    <!-- //弹出框 -->
+
     <sbxq ref="sbxq" v-show="xqShow" />
-    <listxq ref="listxq" v-show="listShow" />
+    
     <xqjck ref="xqjck" v-show="xqjckShow" />
     <mjChart ref="mjChart" :style="{left:moveLeft + 'px'}" />
-    <!-- 圈主信息 -->
-    <qzTable ref="qzTable" :style="{left:(Number(moveLeft) + Number(520)) + 'px'}" />
     <streetFrame ref="cpFrame" :style="{left:moveLeft + 'px'}" />
+    <listxq ref="listxq" v-show="listShow" />
     <queryForm ref="queryForm" :style="{left:moveLeft + 'px'}" />
+    <qzTable ref="qzTable" :style="{left:(Number(moveLeft) + Number(520)) + 'px'}" /> 
     <gldxq ref="gldxq" :style="{left:moveLeft + 'px'}" />
 
     <ssryForm ref="ssryForm" :style="{left:moveLeft + 'px'}" />
     <lsryForm ref="lsryForm" :style="{right:moveRight + 'px'}" />
+    
     <fgxqForm ref="fgxqForm" :style="{left:moveLeft + 'px'}" />
     <fgtjForm ref="fgtjForm" :style="{right:moveRight + 'px'}" />
+
+    <njqyForm ref="njqyForm" :style="{left:moveLeft + 'px'}" />
   </div>
 </template>
 
@@ -51,31 +53,31 @@
  * 2.点击列表<RightDiv>,地图<commonArcgis>定位并显示内容
  */
 import commonArcgis from "./Arcgis";
-import leftMultiSelect from "./leftMultiSelect";
-import bottomBtn from "./bottomBtn";
+import leftMultiSelect from "./widget/leftMultiSelect";
+
+import topDate from "./widget/topDate";
+import xzDate from "./widget/xzDate";
+import bottomBtn from "./widget/bottomBtn";
 
 //  chartTable
 import bqtj from "./rightDiv/bqtj";
 import bqtj2 from "./rightDiv/bqtj2";
-import ylzy from "./rightDiv/ylzy";
 import sbDate from "./rightDiv/sbDate";
-
 import sbxq from "./pop/sbxq";
-import topDate from "./topDate";
-import xzDate from "./xzDate";
-import listxq from "./pop/listxq";
+
 import mjChart from "./frame/mjChart";
 import streetFrame from "./frame/streetFrame";
-import queryForm from "./queryForm";
-import gldxq from "./gldxq";
-import xqjck from "./xqjck";
-import ssryForm from "./ssryForm";
-import lsryForm from "./lsryForm";
-
-import qzTable from "./frame/qzTable"; //圈主信息
-
+import listxq from "./pop/listxq";
+import queryForm from "./pop/queryForm";
+import qzTable from "./frame/qzTable";
+import gldxq from "./pop/gldxq";
+import xqjck from "./pop/xqjck";
+import ssryForm from "./pop/ssryForm";
+import lsryForm from "./pop/lsryForm";
 import fgxqForm from "./pop/fgxqForm";
 import fgtjForm from "./pop/fgtjForm";
+
+import njqyForm from "./pop/njqyForm";
 
 import { leftOptions } from "./config/enums";
 
@@ -98,26 +100,48 @@ export default {
   components: {
     commonArcgis,
     leftMultiSelect,
-    bqtj, //病例统计
-    sbDate, //上报动态数据
-    sbxq, //上报详情
-    bqtj2, //趋势分析
-    bottomBtn, //底部按钮
-    topDate, //顶部数据
-    xzDate, //详情须知
-    mjChart, //密接列表、图表
-    streetFrame, //街道疫情
-    listxq, //点击列表的详情框
-    queryForm, //空间查询结果
-    qzTable, //圈主信息
-    gldxq, //隔离点详情
-    xqjck, //小区进出口人员
-    ssryForm, //实时人员
-    lsryForm, //历史人员
+
+    // 顶部数据
+    topDate,
+    // 详情须知
+    xzDate,
+    // 底部按钮
+    bottomBtn,
+
+    // 病例统计
+    bqtj,
+    // 趋势分析
+    bqtj2,
+    // 上报动态数据
+    sbDate,
+    // 上报详情
+    sbxq,
+
+    // 密接列表、图表
+    mjChart,
+    // 街道疫情
+    streetFrame,
+    // 列表详情框
+    listxq,
+    // 空间查询结果
+    queryForm,
+    // 圈主信息
+    qzTable,
+    // 隔离点详情
+    gldxq,
+    // 小区进出口人员详情
+    xqjck,
+    // 实时人员
+    ssryForm,
+    // 历史人员
+    lsryForm,
     // 返工信息
     fgxqForm,
     // 返工统计
-    fgtjForm
+    fgtjForm,
+
+    // 南郊企业员工
+    njqyForm
   },
   created() {},
   mounted() {

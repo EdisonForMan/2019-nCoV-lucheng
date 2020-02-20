@@ -1,6 +1,8 @@
 <template>
   <div id="crjzDiv">
-    <h3>- 月度出让价值 -</h3>
+    <div>
+      <span class="title">月度出让价值</span>
+    </div>
     <div id="crjzChart"></div>
   </div>
 </template>
@@ -9,19 +11,7 @@
 /* eslint-disable */
 export default {
   data() {
-    return {
-      tabIndex: 0,
-      // 温州数据
-      ChartDataWZ: [],
-      // 鹿城数据
-      ChartDataLC: [],
-      // 鹿城新增
-      ChartDataLC_Add: [],
-      // 变化趋势时间
-      dataTime: [],
-      // 新增时间
-      dataTime_add: []
-    };
+    return {};
   },
   methods: {
     doChart() {
@@ -33,7 +23,7 @@ export default {
         grid: {
           left: "3%",
           right: "6%",
-          top: "14%",
+          top: "16%",
           bottom: "3%",
           containLabel: true
         },
@@ -137,29 +127,18 @@ export default {
   background-color: rgba(5, 26, 79, 0.5);
   border: 1px solid #035acd;
 
-  h3 {
-    color: #23c9f3;
-    margin-top: 10px;
-  }
-
-  header {
-    height: 55px;
-    line-height: 55px;
+  > div {
     text-align: left;
-    font-size: 20px;
-    color: #4cd7ec;
-    text-shadow: 0px 0px 4px rgba(76, 215, 236, 0.3);
-    padding-left: 20px;
-    text-align: center;
-    cursor: pointer;
-
-    span {
-      padding: 0px 10px;
-    }
-
-    .active {
-      font-weight: 700;
-      color: #fff;
+    height: 15%;
+    .title {
+      font-size: 20px;
+      color: rgba(97, 235, 255, 1);
+      position: relative;
+      top: 12px;
+      left: 20px;
+      font-weight: 500;
+      border-left: 5px solid;
+      padding-left: 5px;
     }
   }
 

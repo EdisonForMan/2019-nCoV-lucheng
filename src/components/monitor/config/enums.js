@@ -106,23 +106,4 @@ export const leftOptions = [{
         definitionExpression: ``,
         check: false
     }]
-}, {
-    label: "网格管理",
-    tabIndex: 0,
-    check: false,
-    show: true,
-    children: [{
-        name: "社区网格",
-        id: "wg",
-        sublayers: "12",
-        url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
-        check: false
-    }, {
-        name: "小区、大厦",
-        id: "xq",
-        sublayers: "14",
-        // isImg: true,
-        url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
-        check: false
-    }]
 }]

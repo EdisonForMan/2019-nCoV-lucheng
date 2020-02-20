@@ -13,7 +13,7 @@ import {
   addQZLinkFeature_gj,
   mjChartUpdate_gj
 } from "./frame/mjArcgis";
-import { gldChartUpdate } from "./frame/gldArcgis";
+import { getGLDList, getNJQYList } from "./frame/gldArcgis";
 import { linkCPFeatures } from "./frame/streetArcgis";
 import {
   linkXQFeatures,
@@ -205,7 +205,14 @@ export default {
       $("body").on("click", ".gld_btn", function() {
         const name = $(this).attr("data-val");
         const bid = $(this).attr("data-val2");
-        gldChartUpdate(context, name, bid);
+        getGLDList(context, name, bid);
+        context.$parent.leftHidden();
+        context.$parent.legend();
+      });
+      //  三返企业员工
+      $("body").on("click", ".njqy_btn", function() {
+        const val = $(this).attr("data-val");
+        getNJQYList(context, val);
         context.$parent.leftHidden();
         context.$parent.legend();
       });
@@ -251,7 +258,7 @@ export default {
         y = y_ / geometry.rings[0].length;
       }
       that.view.goTo({
-        center: [x, y]
+        center: [x, y + 0.04]
       });
       that.view.popup = {
         title: "",
@@ -305,6 +312,11 @@ export default {
           ${
             id == "glmd"
               ? `<div class="bottomBtn gjmj_btn" data-val="${attributes.Name}">密切接触者分布</div>`
+              : ``
+          }
+          ${
+            id == "nj_qy"
+              ? `<div class="bottomBtn njqy_btn" data-val="${attributes.CompanyName}">企业员工详情</div>`
               : ``
           }
           ${
@@ -406,7 +418,7 @@ export default {
               id: "img"
             });
             //  优先级置顶
-            that.map.add(imgLayer, 2);
+            that.map.add(imgLayer, 1);
             that.legend.layerInfos.push({
               layer: imgLayer
             });
@@ -442,7 +454,7 @@ export default {
                 id: "dsj"
               });
               //  优先级置顶
-              that.map.add(vecLayer, 2);
+              that.map.add(vecLayer, 1);
               that.legend.layerInfos.push({
                 layer: vecLayer
               });
@@ -498,6 +510,11 @@ export default {
           ${
             id == "glmd"
               ? `<div class="bottomBtn gjmj_btn" data-val="{Name}">密切接触者分布</div>`
+              : ``
+          }
+          ${
+            id == "nj_qy"
+              ? `<div class="bottomBtn njqy_btn" data-val="{CompanyName}">企业员工详情</div>`
               : ``
           }`
             };

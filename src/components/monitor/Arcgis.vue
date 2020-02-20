@@ -352,6 +352,7 @@ export default {
             const _hash_ = Hash[tipHash[id]];
             option.popupTemplate = {
               content: `
+              <div class="dkTitle">地块基本信息</div>
               <table class="esri-widget__table" summary="属性和值列表"><tbody>
                 ${_hash_
                   .map(k => {
@@ -361,7 +362,7 @@ export default {
                       </tr>`;
                   })
                   .join("")}
-                </tbody></table>
+              </tbody></table>
               <div class="bottomBtn dk_btn" data-val="{名称}">查看详情</div>`
             };
           }

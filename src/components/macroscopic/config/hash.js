@@ -44,7 +44,8 @@ export const tipHash = {
     wm_gs: "wmgsHash",
     qyfg: "qyfgHash",
     school: "schoolHash",
-    zjgd: "zjgdHash"
+    zjgd: "zjgdHash",
+    nj_qy: "njqyHash"
 }
 
 // 隔离点人员名单
@@ -110,44 +111,42 @@ const bwgHash = [{
 }]
 
 const wgHash = [{
-        fieldName: "Name",
-        label: "名称"
-    },
-    {
-        fieldName: "数据来源",
-        label: "数据来源"
-    }, {
-        fieldName: "jd",
-        label: "街镇"
-    }, {
-        fieldName: "jwh",
-        label: "居委会、村委会名称"
-    }, {
-        fieldName: "sq",
-        label: "社（小）区、自然村名称"
-    }, {
-        fieldName: "wgpzlxdh",
-        label: "网格片长（街镇领导）联系电话"
-    }, {
-        fieldName: "wgpzxm",
-        label: "网格片长（街镇领导）姓名"
-    }, {
-        fieldName: "wgzdylxdh",
-        label: "网格指导员（楼栋长）联系电话"
-    }, {
-        fieldName: "wgzdyxm",
-        label: "网格指导员（楼栋长）姓名"
-    }, {
-        fieldName: "wgzlxdh",
-        label: "网格长（社区主任）联系电话"
-    }, {
-        fieldName: "wgzxm",
-        label: "网格长（社区主任）姓名"
-    }, {
-        fieldName: "问题描述",
-        label: "问题描述"
-    }
-]
+    fieldName: "Name",
+    label: "名称"
+}, {
+    fieldName: "数据来源",
+    label: "数据来源"
+}, {
+    fieldName: "jd",
+    label: "街镇"
+}, {
+    fieldName: "jwh",
+    label: "居委会、村委会名称"
+}, {
+    fieldName: "sq",
+    label: "社（小）区、自然村名称"
+}, {
+    fieldName: "wgpzlxdh",
+    label: "网格片长（街镇领导）联系电话"
+}, {
+    fieldName: "wgpzxm",
+    label: "网格片长（街镇领导）姓名"
+}, {
+    fieldName: "wgzdylxdh",
+    label: "网格指导员（楼栋长）联系电话"
+}, {
+    fieldName: "wgzdyxm",
+    label: "网格指导员（楼栋长）姓名"
+}, {
+    fieldName: "wgzlxdh",
+    label: "网格长（社区主任）联系电话"
+}, {
+    fieldName: "wgzxm",
+    label: "网格长（社区主任）姓名"
+}, {
+    fieldName: "问题描述",
+    label: "问题描述"
+}]
 // 居家隔离
 const jjglHash = [{
     fieldName: "Name",
@@ -813,6 +812,69 @@ const schoolHash = [{
     label: "电话"
 }]
 
+// 南郊企业
+const njqyHash = [{
+    fieldName: "CompanyCode",
+    label: "组织机构代码"
+}, {
+    fieldName: "JPCode",
+    label: "经普码"
+}, {
+    fieldName: "Type",
+    label: "类型"
+}, {
+    fieldName: "CompanyName",
+    label: "单位详情名称"
+}, {
+    fieldName: "Address",
+    label: "单位地址"
+}, {
+    fieldName: "MajorBusiness",
+    label: "主要业务活动"
+}, {
+    fieldName: "LegalPerson",
+    label: "法人代表"
+}, {
+    fieldName: "LegalPersonPhone",
+    label: "法人联系号码"
+}, {
+    fieldName: "LinkMan",
+    label: "联系人"
+}, {
+    fieldName: "LinkManPhone",
+    label: "联系人号码"
+}, {
+    fieldName: "OfficeLinkMan",
+    label: "办公室联系人"
+}, {
+    fieldName: "OfficeLinkManPhone",
+    label: "办公室联系号码"
+}, {
+    fieldName: "单位负责人",
+    label: "单位负责人"
+}, {
+    fieldName: "单位负责人联系电话",
+    label: "单位负责人联系电话"
+}, {
+    fieldName: "Accountant",
+    label: "会计姓名"
+}, {
+    fieldName: "AccountantPhone",
+    label: "会计联系号码"
+}, {
+    fieldName: "Phone",
+    label: "电话号码"
+}, {
+    fieldName: "Fax",
+    label: "传真"
+}, {
+    fieldName: "Note",
+    label: "备注"
+}, {
+    fieldName: "企业性质",
+    label: "企业性质"
+}]
+
 
 export const Hash = {
     hospitalHash,
@@ -845,7 +907,8 @@ export const Hash = {
     wmgsHash,
     qyfgHash,
     schoolHash,
-    zjgdHash
+    zjgdHash,
+    njqyHash
 }
 
 

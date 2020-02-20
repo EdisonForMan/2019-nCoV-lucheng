@@ -79,12 +79,9 @@ export const sbFields = {
     // 学校
     school: ["NAME", "SHORTNAME", "ADDRESS", "PHONE"],
     // 在建工地
-    zjgd: ["ProjectName", "JSDD", "JD", "JQZFGSJ", "CNSQD"]
-
-
-
-
-
+    zjgd: ["ProjectName", "JSDD", "JD", "JQZFGSJ", "CNSQD"],
+    // 南郊企业
+    nj_qy: ["CompanyName", "Address", "MajorBusiness", "单位负责人", "单位负责人联系电话"]
 }
 
 
@@ -133,5 +130,12 @@ export const noShowFields = [
     "POINT_X",
     "POINT_Y",
     "FCODE",
-    "DZPP"
+    "DZPP",
+    "Longitude",
+    "Latitude",
+    "OldBid",
+    "形状",
+    "DateUsource",
+    "经度",
+    "纬度"
 ]

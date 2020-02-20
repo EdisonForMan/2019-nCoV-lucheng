@@ -43,7 +43,7 @@
             v-if="item.id == 'chanyePlate'"
           >{{++index}}. {{item.attributes.名称}}（{{item.attributes.num}}例）</span>
           <span
-            v-if="~['jzgd','nj_zdqy','nj_xm_1','nj_xm_2','wm_gs','qyfg','school','zjgd'].indexOf(item.id)"
+            v-if="~['jzgd','nj_zdqy','nj_xm_1','nj_xm_2','wm_gs','qyfg','school','zjgd','nj_qy'].indexOf(item.id)"
           >{{++index}}. {{item.attributes.Name || item.attributes.ProjectName || item.attributes.CompanyName || item.attributes.项目名称 || item.attributes.企业名称 || item.attributes.NAME}}</span>
         </li>
       </ul>
