@@ -1,7 +1,7 @@
 <template>
   <div id="btnDiv">
     <ul>
-      <!-- <li @click="xzqh">行政区划</li> -->
+      <li @click="xzqh">五色风险评估</li>
       <li @click="yxt">影像图</li>
       <li @click="slt">矢量图</li>
       <li @click="ygt">夜光图</li>
@@ -13,7 +13,7 @@
             <li @click="doSpaceQuery">多边形查询</li>
           </ul>
         </div>
-      </li> -->
+      </li>-->
       <li @click="clean">清除</li>
     </ul>
   </div>
@@ -31,29 +31,28 @@ export default {
   computed: {},
   methods: {
     xzqh() {
-      this.$parent.$refs.macroArcgis.romoveLayer();
+      this.$parent.$refs.montorArcgis.romoveChanyePlate();
     },
     yxt() {
-      this.$parent.$refs.macroArcgis.yxt();
+      this.$parent.$refs.montorArcgis.yxt();
     },
     slt() {
-      this.$parent.$refs.macroArcgis.slt();
+      this.$parent.$refs.montorArcgis.slt();
     },
     ygt() {
-      this.$parent.$refs.macroArcgis.ygt();
+      this.$parent.$refs.montorArcgis.ygt();
     },
     clean() {
       this.$parent.$refs.leftOptions.clean();
-      this.$parent.$refs.macroArcgis.view.popup.visible = false;
-      this.$parent.$refs.queryForm.list = [];
+      this.$parent.$refs.montorArcgis.view.popup.visible = false;
     },
     doCircleQuery() {
       // console.log("圆形查询");
-      this.$parent.$refs.macroArcgis.doCircleQuery();
+      this.$parent.$refs.montorArcgis.doCircleQuery();
     },
     doSpaceQuery() {
       // console.log("多边形查询");
-      this.$parent.$refs.macroArcgis.doSpaceQuery();
+      this.$parent.$refs.montorArcgis.doSpaceQuery();
     }
   }
 };

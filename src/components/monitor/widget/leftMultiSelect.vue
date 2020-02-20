@@ -2,39 +2,25 @@
   <div class="leftMultiSelect">
     <div class="topic">
       <header>
-        <span :class="{active:tabIndex == 0}" @click="()=>{tabIndex = 0,filterItem(0)}">地块清单</span>
-        <input type="text" v-model="text" placeholder="请输入查询" />
+        <span>地块清单</span>
+        <input type="text" v-model="text" placeholder="请输入..." />
         <button>搜索</button>
       </header>
+      <div class="switch">
+        <span :class="{active:tabIndex == 0}" @click="()=>{tabIndex = 0}">街道专题</span>
+        <i>/</i>
+        <span :class="{active:tabIndex == 1}" @click="()=>{tabIndex = 1}">权属专题</span>
+      </div>
       <div class="selectFrame no_select">
         <div v-for="(item,index) in this.tree" :key="index">
-          <!-- <span
-            @click="toggleTree(item.label,index)"
-            v-if="!((tabIndex==2&&item.sflabel==-1) || (tabIndex!=2&&item.label==-1))"
-          >-->
-          <span
-            @click="toggleTree(item.label,index)"
-            v-if="!((tabIndex==3&&item.fglabel==-1) || (tabIndex==2&&item.sflabel==-1) || (tabIndex==1&&item.dqlabel==-1) || (tabIndex==0&&item.label==-1))"
-          >
-            {{tabIndex==3?item.fglabel:tabIndex==2?item.sflabel:tabIndex==1?item.dqlabel:item.label}}
-            <input
-              v-if="!item.disabled"
-              type="checkbox"
-              v-model="item.check"
-              @change="changeBox(item.check,index)"
-              @click="stop($event)"
-            />
-            <i :class="`iconfont ${item.show?`icon-angle-double-up`:`icon-angle-double-down`}`"></i>
+          <span @click="toggleTree(item.label,index)">
+            {{item.label}}
+            <i
+              :class="`iconfont ${item.show?`icon-angle-double-up`:`icon-angle-double-down`}`"
+            ></i>
           </span>
-          <ul
-            v-show="item.show"
-            v-if="!((tabIndex==3&&item.fglabel==-1) || (tabIndex==2&&item.sflabel==-1) || (tabIndex==1&&item.dqlabel==-1)|| (tabIndex==0&&item.label==-1))"
-          >
-            <li
-              v-for="(oitem,oindex) in item.children"
-              :key="oindex"
-              v-if="!((tabIndex==1 && oitem.ytname == -1) || (tabIndex!=1 && oitem.name == -1))"
-            >
+          <ul v-show="item.show">
+            <li v-for="(oitem,oindex) in item.children" :key="oindex">
               <input
                 type="checkbox"
                 v-if="!item.disabled"
@@ -171,7 +157,7 @@ export default {
   }
 };
 </script>
-<style lang="less">
+<style scoped lang="less">
 // @import url("../css/style.less");
 .leftMultiSelect {
   height: 100%;
@@ -210,45 +196,73 @@ export default {
       height: 50px;
       line-height: 50px;
       text-align: left;
+      padding-left: 15px;
+      margin-top: 10px;
       font-size: 20px;
       color: #4cd7ec;
       text-shadow: 0px 0px 4px rgba(76, 215, 236, 0.3);
-      padding-left: 20px;
       display: flex;
       align-items: center;
+
+      input {
+        width: 140px;
+        margin: 0px 10px;
+        background-color: #495a94;
+        border: 1px solid #2da4da;
+        // border-radius: 8px;
+        padding: 7px 9px;
+        color: #fff;
+      }
+
+      input::-webkit-input-placeholder {
+        color: #fff;
+      }
+
+      input:-moz-placeholder {
+        color: #fff;
+      }
+
+      input::-moz-placeholder {
+        color: #fff;
+      }
+
+      input:-ms-input-placeholder {
+        color: #fff;
+      }
+
+      button {
+        background-color: #2da4da;
+        border: none;
+        padding: 7px 11px;
+        color: #fff;
+      }
+    }
+
+    .switch {
+      height: 45px;
+      line-height: 45px;
+      text-align: left;
+      padding-left: 15px;
+      font-size: 20px;
+      color: #4cd7ec;
+      text-shadow: 0px 0px 4px rgba(76, 215, 236, 0.3);
+
       cursor: pointer;
       .active {
-        font-weight: 700;
+        // font-weight: bolder;
         color: #fff;
       }
       i {
         font-style: normal;
         margin: 0 10px;
       }
-
-      input {
-        width: 130px;
-        margin: 0px 10px;
-        background-color: #162449;
-        border: 1px solid #75c8f4;
-        border-radius: 8px;
-        padding: 8px 9px;
-        color: #fff;
-      }
-
-      button {
-        background-color: #162449;
-        border: 1px solid #75c8f4;
-        border-radius: 8px;
-        padding: 7px 9px;
-        color: #fff;
-      }
     }
+
     .selectFrame::-webkit-scrollbar {
       display: none;
     }
     .selectFrame {
-      height: 806px;
+      height: 740px;
       overflow-y: auto;
       box-sizing: border-box;
       padding: 10px;
@@ -261,7 +275,7 @@ export default {
           height: 52px;
           line-height: 54px;
           height: 52px;
-          background: rgba(102, 164, 255, 0.45);
+          background: #4691ed;
           box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
           border: 1px solid rgba(255, 255, 255, 0.2);
           padding-left: 12px;
@@ -304,7 +318,7 @@ export default {
           top: 4px;
         }
         li {
-          height: 44px;
+          height: 33px;
           line-height: 28px;
           list-style: none;
           background: rgba(120, 171, 246, 0.2);

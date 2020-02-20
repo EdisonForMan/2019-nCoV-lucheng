@@ -32,6 +32,7 @@ export default {
     const that = this;
     // init map
     await this.createMap();
+    await this.addChanyePlate();
 
     this.$props.leftOptions &&
       this.$props.leftOptions.map(_item => {
@@ -125,6 +126,35 @@ export default {
         // mjChartUpdate(context, val);
         context.$parent.rightHidden();
       });
+    },
+    // 产业板块
+    addChanyePlate() {
+      const that = this;
+      return new Promise((resolve, reject) => {
+        loadModules(["esri/layers/MapImageLayer"], OPTION).then(
+          ([MapImageLayer]) => {
+            const chanyePlate = new MapImageLayer({
+              url:
+                "http://172.20.89.7:6082/arcgis/rest/services/lucheng/xzjd_ws/MapServer",
+              id: "chanyePlate",
+              opacity: 1
+            });
+            //  优先级置顶
+            that.map.add(chanyePlate, 2);
+            that.legend.layerInfos.push({
+              title: "五色风险评估",
+              layer: chanyePlate
+            });
+            resolve(true);
+          }
+        );
+      });
+    },
+    // 移除产业板块
+    romoveChanyePlate() {
+      this.map.findLayerById("chanyePlate").visible = !this.map.findLayerById(
+        "chanyePlate"
+      ).visible;
     },
     // 定位
     goloaction({
@@ -261,7 +291,7 @@ export default {
               id: "img"
             });
             //  优先级置顶
-            that.map.add(imgLayer, 2);
+            that.map.add(imgLayer, 1);
             that.legend.layerInfos.push({
               layer: imgLayer
             });
@@ -297,7 +327,7 @@ export default {
                 id: "dsj"
               });
               //  优先级置顶
-              that.map.add(vecLayer, 2);
+              that.map.add(vecLayer, 1);
               that.legend.layerInfos.push({
                 layer: vecLayer
               });
@@ -332,7 +362,7 @@ export default {
                   })
                   .join("")}
                 </tbody></table>
-              <div class="bottomBtn dk_btn" data-val="{名称}">详情</div>`
+              <div class="bottomBtn dk_btn" data-val="{名称}">查看详情</div>`
             };
           }
 

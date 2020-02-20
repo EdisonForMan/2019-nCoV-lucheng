@@ -28,25 +28,19 @@ export default {
       const chart = this.$echarts.init(document.getElementById("crjzChart"));
       chart.setOption({
         tooltip: {
-          trigger: "axis",
-          axisPointer: {
-            label: {
-              backgroundColor: "#6a7985"
-            }
-          }
+          trigger: "axis"
         },
-        color: ["#0080ff", "#4cd5ce"],
         grid: {
           left: "3%",
           right: "6%",
-          top: "10%",
-          bottom: "15%",
+          top: "14%",
+          bottom: "3%",
           containLabel: true
         },
         xAxis: {
           type: "category",
           boundaryGap: false,
-          data: this.dataTime_add,
+          data: this.timeList,
           axisLabel: {
             show: true,
             textStyle: {
@@ -88,13 +82,12 @@ export default {
         },
         series: [
           {
-            name: "鹿城确诊人员增长趋势(例)",
+            name: "出让价值",
             type: "line",
             smooth: true,
-            //  symbol: "none", //去掉折线点
             itemStyle: {
               normal: {
-                color: "rgba(254,77,105)", //背景色
+                color: "rgba(254,77,105)",
                 lineStyle: {
                   width: 2,
                   type: "solid",
@@ -107,27 +100,31 @@ export default {
             areaStyle: {
               normal: {}
             },
-            data: this.ChartDataLC_Add
+            data: this.dataList
           }
         ]
       });
     }
   },
   created() {
-    const { dataName, dataQS, dataLC } = this.$window.nCov_luchengChart;
-    this.dataName = dataName;
-    this.dataQS = dataQS;
-    this.dataLC = dataLC;
+    this.timeList = [
+      "1月",
+      "2月",
+      "3月",
+      "4月",
+      "5月",
+      "6月",
+      "7月",
+      "8月",
+      "9月",
+      "10月",
+      "11月",
+      "12月"
+    ];
+
+    this.dataList = [3, 2, 3, 8, 1, 2, 3, 4, 5, 6, 4, 2];
   },
   mounted() {
-    const qsArr = [];
-    for (var i = 0; i < this.dataLC.length - 1; i++) {
-      var num = this.dataLC[i + 1] - this.dataLC[i];
-      if (num <= 0) num = 0;
-      qsArr.push(num);
-    }
-    this.ChartDataLC_Add = qsArr;
-    this.dataTime_add = this.dataName.filter((item, index) => index > 0);
     this.doChart();
   }
 };

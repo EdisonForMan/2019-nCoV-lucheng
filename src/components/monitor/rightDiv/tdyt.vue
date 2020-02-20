@@ -9,9 +9,7 @@
 /* eslint-disable */
 export default {
   data() {
-    return {
-      dataTime: " "
-    };
+    return {};
   },
   methods: {
     doChart() {
@@ -20,94 +18,77 @@ export default {
         grid: {
           top: "14%"
         },
+        legend: {
+          orient: "vertical",
+          right: "5%",
+          align: "left",
+          top: "middle",
+          itemHeight: 15,
+          textStyle: {
+            fontSize: 15,
+            padding: [0, 0, 0, 5]
+          },
+          data: this.dataList
+        },
         series: [
           {
             type: "pie",
             minAngle: 2,
             radius: ["40%", "70%"],
-            center: ["50%", "50%"],
-            avoidLabelOverlap: false,
-            itemStyle: {
-              //图形样式
-              normal: {
-                borderColor: "#fff"
-                // borderWidth: 6
-              }
-            },
+            center: ["40%", "50%"],
+            clockwise: false,
             label: {
               normal: {
-                show: false,
-                position: "center",
-                formatter: "{text|{b}}\n{c} ({d}%)",
-                rich: {
-                  text: {
-                    color: "#666",
-                    fontSize: 14,
-                    align: "center",
-                    verticalAlign: "middle",
-                    padding: 8
-                  },
-                  value: {
-                    color: "#8693F3",
-                    fontSize: 24,
-                    align: "center",
-                    verticalAlign: "middle"
-                  }
-                }
-              },
-              emphasis: {
                 show: true,
+                position: "outter",
+                formatter: function(params) {
+                  console.log(params);
+                  return `${params.data.name} ${params.percent}%`;
+                },
                 textStyle: {
-                  fontSize: 24
+                  fontSize: 15
                 }
               }
             },
-            data: this.dataAge
-          }
-        ],
-        label: {
-          normal: {
-            show: true,
-            position: "inside",
-            textStyle: {
-              color: "#FFF"
+            labelLine: {
+              normal: {
+                length: 10,
+                length2: 20
+              }
             },
-            formatter: function(params) {
-              return params.value + this.dataAge[params.dataIndex];
-            }
+            data: this.dataList
           }
-        }
+        ]
       });
-    },
-    bqSelect: function(event) {
-      this.dataAge = this.dataHash[event.target.value];
-      this.$echarts.init(document.getElementById("tdytChart")).clear();
-      this.doChart();
     }
   },
   created() {
-    const {
-      dataAge,
-      YTdataAge,
-      ysblDate,
-      jzglDate,
-      glryDate,
-      mqzDate,
-      jjglDate,
-      hbhlDate
-    } = this.$window.nCov_luchengChart;
-    this.dataAge = dataAge;
-    this.YTdataAge = YTdataAge;
-
-    this.dataHash = {
-      qzbl: dataAge,
-      zzbl: ysblDate,
-      gld: jzglDate,
-      gld_list: glryDate,
-      mj: mqzDate,
-      jjgl: jjglDate,
-      hbhw: hbhlDate
-    };
+    this.dataList = [
+      {
+        value: 15,
+        name: "住宅",
+        itemStyle: { color: "#f7dc2b" },
+        textStyle: { color: "#f7dc2b" }
+      },
+      {
+        value: 10,
+        name: "商服",
+        itemStyle: { color: "#f67b28" },
+        textStyle: { color: "#f67b28" }
+      },
+      {
+        value: 45,
+        name: "商办",
+        itemStyle: { color: "#2ed8cb" },
+        textStyle: { color: "#2ed8cb" }
+      },
+      {
+        value: 30,
+        name: "医疗",
+        itemStyle: { color: "#31b2f6" },
+        textStyle: { color: "#31b2f6" }
+      }
+    ];
   },
   mounted() {
     this.doChart();

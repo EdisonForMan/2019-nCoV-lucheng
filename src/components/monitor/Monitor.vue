@@ -1,5 +1,12 @@
 <template>
   <div class="Com_content Monitor">
+    <div class="btnGroup">
+      <ul>
+        <li>企业复工</li>
+        <li>坐地地图</li>
+        <li>复产分析</li>
+      </ul>
+    </div>
     <div class="Com_map">
       <commonArcgis id="montorArcgis" ref="montorArcgis" :leftOptions="leftOptions" />
     </div>

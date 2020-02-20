@@ -1,5 +1,8 @@
 <template>
   <div class="Com_content Macroscopic">
+    <div class="toptab_time">
+      <p>截至日期：{{$window.nCov_luchengData.macroscopic.updateTime}}</p>
+    </div>
     <div class="Com_map">
       <commonArcgis id="macroArcgis" ref="macroArcgis" :leftOptions="leftOptions" />
     </div>

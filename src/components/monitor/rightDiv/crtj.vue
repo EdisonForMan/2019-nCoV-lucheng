@@ -17,9 +17,7 @@
 import util from "../util";
 export default {
   data() {
-    return {
-      dataTime: " "
-    };
+    return {};
   },
   methods: {
     doChart() {
@@ -135,9 +133,9 @@ export default {
     this.YTdataAge = YTdataAge;
 
     this.dataHash = {
-      qzbl: dataAge,
-      zzbl: ysblDate,
-      gld: jzglDate,
+      crdk: dataAge,
+      crje: ysblDate,
+      crmj: jzglDate,
       gld_list: glryDate,
       mj: mqzDate,
       jjgl: jjglDate,
@@ -146,17 +144,6 @@ export default {
   },
   mounted() {
     this.doChart();
-    //修改数值
-    const that = this;
-    util.$on("chartDataMod", function(newV) {
-      newV == 1
-        ? (that.dataAge = that.YTdataAge)
-        : (that.dataAge = that.dataAge);
-
-      document.getElementById("select").value = "qzbl";
-      that.$echarts.init(document.getElementById("crtjChart")).clear();
-      that.doChart();
-    });
   }
 };
 </script>

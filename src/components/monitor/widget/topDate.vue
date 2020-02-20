@@ -2,19 +2,37 @@
   <div id="topDateDiv">
     <ul>
       <li>
-        <h4>计划103宗</h4>
-        <p>出让地块</p>
-        <h3>累计103宗</h3>
+        <h4>
+          计划
+          <span style="color: #ff3229;">103</span> 宗
+        </h4>
+        <p style="color: #d793ff;">出让地块</p>
+        <h4>
+          累计
+          <span style="color: #6dff3d;">3</span> 宗
+        </h4>
       </li>
       <li>
-        <h4>计划10亿</h4>
-        <p>出让金额</p>
-        <h3>累计3亿</h3>
+        <h4>
+          计划
+          <span style="color: #ff3229;">10</span> 亿
+        </h4>
+        <p style="color: #ff8d4a;">出让金额</p>
+        <h4>
+          累计
+          <span style="color: #6dff3d;">103</span> 亿
+        </h4>
       </li>
       <li>
-        <h4>计划6803亩</h4>
-        <p>出让面积</p>
-        <h3>累计203亩</h3>
+        <h4>
+          计划
+          <span style="color: #ff3229;">103</span> 亩
+        </h4>
+        <p style="color: #eee72d;">出让面积</p>
+        <h4>
+          累计
+          <span style="color: #6dff3d;">103</span> 亩
+        </h4>
       </li>
     </ul>
   </div>
@@ -24,20 +42,29 @@
 export default {};
 </script>
 
-<style>
+<style lang="less" scoped>
 #topDateDiv {
   position: absolute;
   top: 90px;
   width: 100%;
-}
-#topDateDiv ul li {
-  width: 5%;
-  margin: auto;
-  display: inline-block;
-  background-color: #1b45a7;
-  border: 1px solid #07e2e8;
-  margin-left: 10px;
-  padding: 5px 9px;
-  color: #07e2e8;
+
+  ul li {
+    width: 5%;
+    margin: 0px 15px;
+    display: inline-block;
+    background-color: #1b45a7;
+    border: 1px solid #07e2e8;
+    padding: 5px 9px;
+    color: #07e2e8;
+
+    span {
+      font-size: 21px;
+    }
+
+    p {
+      font-weight: bolder;
+      margin: 5px;
+    }
+  }
 }
 </style>

@@ -41,20 +41,21 @@
 export default {};
 </script>
 
-<style>
+<style lang="less" scoped>
 #topDateDiv {
   position: absolute;
   top: 90px;
   width: 100%;
-}
-#topDateDiv ul li {
-  width: 5%;
-  margin: auto;
-  display: inline-block;
-  background-color: #1b45a7;
-  border: 1px solid #07e2e8;
-  margin-left: 10px;
-  padding: 5px 9px;
-  color: #07e2e8;
+
+  ul li {
+    width: 5%;
+    margin: auto;
+    display: inline-block;
+    background-color: #1b45a7;
+    border: 1px solid #07e2e8;
+    margin-left: 10px;
+    padding: 5px 9px;
+    color: #07e2e8;
+  }
 }
 </style>
