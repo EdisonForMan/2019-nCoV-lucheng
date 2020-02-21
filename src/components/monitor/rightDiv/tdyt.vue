@@ -28,32 +28,32 @@ export default {
         住宅用地: {
           value: 0,
           name: "住宅",
-          itemStyle: { color: "#f7dc2b" },
-          textStyle: { color: "#f7dc2b" }
-        },
-        商住用地: {
-          value: 0,
-          name: "商住",
-          itemStyle: { color: "#f67b28" },
-          textStyle: { color: "#f67b28" }
+          itemStyle: { color: "rgb(255, 255, 0)" },
+          textStyle: { color: "rgb(255, 255, 0)" }
         },
         商服用地: {
           value: 0,
           name: "商服",
-          itemStyle: { color: "#2ed8cb" },
-          textStyle: { color: "#2ed8cb" }
+          itemStyle: { color: "rgb(255, 0, 0)" },
+          textStyle: { color: "rgb(255, 0, 0)" }
+        },
+        商住用地: {
+          value: 0,
+          name: "商住",
+          itemStyle: { color: "rgb(255, 127, 0)" },
+          textStyle: { color: "rgb(255, 127, 0)" }
         },
         医疗卫生用地: {
           value: 0,
           name: "医疗",
-          itemStyle: { color: "#31b2f6" },
-          textStyle: { color: "#31b2f6" }
+          itemStyle: { color: "rgb(255, 191, 0)" },
+          textStyle: { color: "rgb(255, 191, 0)" }
         },
         教育用地: {
           value: 0,
           name: "教育",
-          itemStyle: { color: "#da2419" },
-          textStyle: { color: "#da2419" }
+          itemStyle: { color: "rgb(255, 159, 127)" },
+          textStyle: { color: "rgb(255, 159, 127)" }
         }
       };
 

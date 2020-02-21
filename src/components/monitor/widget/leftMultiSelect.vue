@@ -164,7 +164,6 @@ export default {
     },
     ShowResult(oitem, item) {
       this.$parent.$refs.montorArcgis.goloaction(oitem);
-      console.log("item", oitem);
 
       const name = oitem.name;
       const imgName = oitem.attributes.做地详情;

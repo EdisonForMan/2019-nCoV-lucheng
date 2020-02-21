@@ -117,7 +117,8 @@ export const lc_dkjbxx = async () => {
     "ZRRLXFS",
     "CRQK",
     "GLZD",
-    "ZDWCSX"
+    "ZDWCSX",
+    "CRCJSJ"
   ]
   const name = "lc_dkjbxxb";
   return await axios.post("/dw/ds", option_concat(name, params));

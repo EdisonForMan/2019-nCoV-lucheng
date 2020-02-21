@@ -147,6 +147,21 @@ export default {
               title: "五色风险评估",
               layer: chanyePlate
             });
+
+            // 地块标注图层
+            const dkImage = new MapImageLayer({
+              url:
+                "http://172.20.89.7:6082/arcgis/rest/services/lucheng/ZDDK/MapServer",
+              sublayers: [{ id: 0 }],
+              id: "dkImage",
+              opacity: 1
+            });
+
+            that.map.add(dkImage, 4);
+            that.legend.layerInfos.push({
+              title: "",
+              layer: dkImage
+            });
             resolve(true);
           }
         );
@@ -211,9 +226,6 @@ export default {
               });
               //  优先级置顶
               that.map.add(mapImg, 2);
-              // that.legend.layerInfos.push({
-              //   layer: mapImg
-              // });
               resolve(true);
             }
           );
@@ -237,7 +249,8 @@ export default {
             const option = {
               url: url + "/" + item.sublayers,
               id,
-              outFields: "*"
+              outFields: "*",
+              opacity: 0
             };
             if (tipHash[id] && Hash[tipHash[id]]) {
               const _hash_ = Hash[tipHash[id]];
@@ -261,12 +274,10 @@ export default {
             const feature = new FeatureLayer(option);
             that.map.add(feature, 2);
 
-            if (id != "wg" && id != "xq") {
-              that.legend.layerInfos.push({
-                title: "",
-                layer: feature
-              });
-            }
+            // that.legend.layerInfos.push({
+            //   title: "",
+            //   layer: feature
+            // });
 
             resolve(true);
           }
@@ -310,70 +321,6 @@ export default {
       }
 
       that.view.popup.visible = true;
-    },
-
-    // 添加图层
-    addFeatures(item, _id_) {
-      const id = _id_.replace(/yt_/g, "");
-      const that = this;
-      const { url } = item;
-      return new Promise((resolve, reject) => {
-        loadModules(
-          ["esri/layers/FeatureLayer", "esri/layers/MapImageLayer"],
-          OPTION
-        ).then(([FeatureLayer, MapImageLayer]) => {
-          const option = { url, id: _id_, outFields: "*" };
-          if (tipHash[id] && Hash[tipHash[id]]) {
-            const _hash_ = Hash[tipHash[id]];
-            option.popupTemplate = {
-              content: `
-              <div class="dkTitle">地块基本信息</div>
-              <table class="esri-widget__table" summary="属性和值列表"><tbody>
-                ${_hash_
-                  .map(k => {
-                    return `<tr>
-                        <th class="esri-feature__field-header">${k.label}</th>
-                        <td class="esri-feature__field-data">{${k.fieldName}}</td>
-                      </tr>`;
-                  })
-                  .join("")}
-              </tbody></table>
-              <div class="bottomBtn dk_btn" data-val="{GLZD}">查看详情</div>`
-            };
-          }
-
-          const _layers_ = item.isImg ? MapImageLayer : FeatureLayer;
-          if (item.sublayers) {
-            if (item.isImg) {
-              option.sublayers = [{ id: item.sublayers }];
-            } else {
-              option.url = option.url + "/" + item.sublayers;
-            }
-          }
-          if (item.definitionExpression) {
-            const d = [];
-            item.definitionExpression && d.push(item.definitionExpression);
-            if (item.isImg) {
-              d.length &&
-                (option.sublayers[0].definitionExpression = d.join(" and "));
-            } else {
-              d.length && (option.definitionExpression = d.join(" and "));
-            }
-          }
-
-          const feature = new _layers_(option);
-          that.map.add(feature);
-
-          // if (id != "wg" && id != "xq") {
-          //   that.legend.layerInfos.push({
-          //     title: "",
-          //     layer: feature
-          //   });
-          // }
-
-          resolve(true);
-        });
-      });
     }
   }
 };

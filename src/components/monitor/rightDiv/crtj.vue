@@ -1,7 +1,7 @@
 <template>
   <div id="crtjDiv">
     <div>
-      <span class="title">鹿城做地出让统计</span>
+      <span class="title">鹿城做地出让计划</span>
       <select id="select" @change="bqSelect($event)">
         <option value="crdk">出让地块</option>
         <option value="crje">出让金额</option>
@@ -56,22 +56,31 @@ export default {
       const crjeData = [];
       const crmjData = [];
 
-      this.dkxxList.map(({ CRQK, CJJ, TDMJ, SSJD }) => {
-        if (CRQK == "已出让") {
-          crdkObj[SSJD].value++;
-          crjeObj[SSJD].value =
-            Number(crjeObj[SSJD].value) + Number(CJJ) / 10000;
-          crmjObj[SSJD].value = Number(crmjObj[SSJD].value) + Number(TDMJ);
-        }
+      this.dkxxList.map(({ CRQK, CJJ, QSJ, TDMJ, SSJD }) => {
+        // if (CRQK == "已出让") {
+        crdkObj[SSJD].value++;
+        QSJ != "/" &&
+          (crjeObj[SSJD].value = Number(crjeObj[SSJD].value) + Number(QSJ));
+        TDMJ != "/" &&
+          (crmjObj[SSJD].value = Number(crmjObj[SSJD].value) + Number(TDMJ));
+        // }
       });
 
       for (let k in crdkObj) {
         crdkData.push(crdkObj[k]);
       }
 
+      Object.values(crjeObj).map(item => {
+        item.value = (Number(item.value) / 10000).toFixed(2);
+      });
+
       for (let k in crjeObj) {
         crjeData.push(crjeObj[k]);
       }
+
+      Object.values(crmjObj).map(item => {
+        item.value = Number(item.value).toFixed(2);
+      });
 
       for (let k in crmjObj) {
         crmjData.push(crmjObj[k]);
@@ -91,9 +100,11 @@ export default {
       const chart = this.$echarts.init(document.getElementById("crtjChart"));
       chart.setOption({
         grid: {
-          left: "8%",
-          right: "5%",
-          top: "14%"
+          left: "3%",
+          right: "6%",
+          top: "16%",
+          bottom: "3%",
+          containLabel: true
         },
         tooltip: {
           trigger: "axis"
@@ -140,10 +151,14 @@ export default {
         },
         series: [
           {
-            name: "出让数",
+            name:
+              this.index == "crdk"
+                ? "做地地块"
+                : this.index == "crje"
+                ? "地块货值"
+                : "地块面积",
             type: "bar",
             barWidth: "20px",
-            stack: "sum",
             label: {
               normal: {
                 show: true,
@@ -163,7 +178,6 @@ export default {
     bqSelect: function(event) {
       this.dataAge = this.dataHash[event.target.value];
       this.index = event.target.value;
-      console.log(this.index);
       this.$echarts.init(document.getElementById("crtjChart")).clear();
       this.doChart();
     }

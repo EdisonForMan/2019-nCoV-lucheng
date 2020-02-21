@@ -1,7 +1,12 @@
 <template>
   <div id="crjzDiv">
     <div>
-      <span class="title">做地完成时限统计</span>
+      <span class="title">鹿城做地出让累计</span>
+      <select id="select" @change="bqSelect($event)">
+        <option value="crdk">出让地块</option>
+        <option value="crje">出让金额</option>
+        <option value="crmj">出让面积</option>
+      </select>
     </div>
     <div id="crjzChart"></div>
   </div>
@@ -12,7 +17,9 @@
 import { mapState, mapActions } from "vuex";
 export default {
   data() {
-    return {};
+    return {
+      index: 0
+    };
   },
   computed: {
     ...mapState({
@@ -24,34 +31,60 @@ export default {
     fixdkxxList() {
       !this.dkxxList.length && this.fetchdkxxList();
 
+      // console.log("dkxx", this.dkxxList);
+
       const timeHash = {
-        "2019-10-01": { name: "2019年10月", value: 0 },
-        "2019-11-01": { name: "2019年11月", value: 0 },
-        "2019-12-01": { name: "2019年12月", value: 0 },
-        "2020-01-01": { name: "2020年1月", value: 0 },
-        "2020-02-01": { name: "2020年2月", value: 0 },
-        "2020-03-01": { name: "2020年3月", value: 0 },
-        "2020-04-01": { name: "2020年4月", value: 0 },
-        "2020-05-01": { name: "2020年5月", value: 0 },
-        "2020-06-01": { name: "2020年6月", value: 0 },
-        "2020-07-01": { name: "2020年7月", value: 0 },
-        "2020-08-01": { name: "2020年8月", value: 0 },
-        "2020-09-01": { name: "2020年9月", value: 0 }
+        "2020-01-01": { name: "2020年01月", value: 0 },
+        "2020-02-01": { name: "2020年02月", value: 0 }
       };
 
-      const zdsxObj = JSON.parse(JSON.stringify(timeHash));
+      const crdkObj = JSON.parse(JSON.stringify(timeHash));
+      const crjeObj = JSON.parse(JSON.stringify(timeHash));
+      const crmjObj = JSON.parse(JSON.stringify(timeHash));
 
-      const zdsxData = [];
+      const crdkData = [];
+      const crjeData = [];
+      const crmjData = [];
 
-      this.dkxxList.map(({ ZDWCSX }) => {
-        ZDWCSX != "0" && zdsxObj[ZDWCSX].value++;
+      this.dkxxList.map(({ CRQK, CJJ, QSJ, TDMJ, CRCJSJ }) => {
+        if (CRQK == "已出让" && CRCJSJ != "/") {
+          crdkObj[CRCJSJ.split(" ")[0]].value++;
+          CJJ != "/" &&
+            (crjeObj[CRCJSJ.split(" ")[0]].value =
+              Number(crjeObj[CRCJSJ.split(" ")[0]].value) + Number(CJJ));
+          TDMJ != "/" &&
+            (crmjObj[CRCJSJ.split(" ")[0]].value =
+              Number(crmjObj[CRCJSJ.split(" ")[0]].value) + Number(TDMJ));
+        }
       });
 
-      for (let k in zdsxObj) {
-        zdsxData.push(zdsxObj[k]);
+      for (let k in crdkObj) {
+        crdkData.push(crdkObj[k]);
       }
 
-      this.dataList = zdsxData;
+      Object.values(crjeObj).map(item => {
+        item.value = (Number(item.value) / 10000).toFixed(2);
+      });
+
+      for (let k in crjeObj) {
+        crjeData.push(crjeObj[k]);
+      }
+
+      Object.values(crmjObj).map(item => {
+        item.value = Number(item.value).toFixed(2);
+      });
+
+      for (let k in crmjObj) {
+        crmjData.push(crmjObj[k]);
+      }
+
+      this.dataList = crdkData;
+
+      this.dataHash = {
+        crdk: crdkData,
+        crje: crjeData,
+        crmj: crmjData
+      };
 
       this.doChart();
     },
@@ -70,8 +103,14 @@ export default {
         },
         xAxis: {
           type: "category",
-          boundaryGap: false,
-          data: this.dataList.map(item => item.name),
+          // boundaryGap: false,
+          data: this.dataList.map(({ name }) => {
+            return (
+              name.substr(0, name.indexOf("年") + 1) +
+              "\n" +
+              name.substr(name.indexOf("年") + 1)
+            );
+          }),
           axisLabel: {
             show: true,
             textStyle: {
@@ -89,6 +128,9 @@ export default {
         },
         yAxis: {
           type: "value",
+          name:
+            this.index == "crdk" ? "宗" : this.index == "crje" ? "亿元" : "亩",
+          minInterval: 1,
           axisLine: {
             onZero: false,
             lineStyle: {
@@ -113,7 +155,12 @@ export default {
         },
         series: [
           {
-            name: "完成数",
+            name:
+              this.index == "crdk"
+                ? "做地地块"
+                : this.index == "crje"
+                ? "地块货值"
+                : "地块面积",
             type: "line",
             smooth: true,
             itemStyle: {
@@ -135,6 +182,12 @@ export default {
           }
         ]
       });
+    },
+    bqSelect: function(event) {
+      this.dataList = this.dataHash[event.target.value];
+      this.index = event.target.value;
+      this.$echarts.init(document.getElementById("crjzChart")).clear();
+      this.doChart();
     }
   },
   created() {
@@ -184,6 +237,17 @@ export default {
       font-weight: 500;
       border-left: 5px solid;
       padding-left: 5px;
+    }
+
+    select {
+      position: relative;
+      float: right;
+      top: 12px;
+      right: 24px;
+      padding: 4px 9px;
+      background-color: #1b45a7;
+      border: 1px solid #61ebff;
+      color: #fff;
     }
   }
 

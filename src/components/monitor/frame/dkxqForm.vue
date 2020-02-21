@@ -105,8 +105,6 @@ export default {
 
       this.imgNum = imgList.length;
 
-      console.log("list", imgList);
-
       if (imgList.length) {
         imgList.map((item, index) => {
           $(".el-carousel__item")

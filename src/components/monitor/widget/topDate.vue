@@ -3,10 +3,10 @@
     <ul>
       <li>
         <h4>
-          计划
+          目标
           <span style="color: #ff3229;">{{ crdk_jh }}</span> 宗
         </h4>
-        <p style="color: #d793ff;">出让地块</p>
+        <p style="color: #d793ff;">做地地块</p>
         <h4>
           累计
           <span style="color: #6dff3d;">{{ crdk_lj }}</span> 宗
@@ -14,24 +14,24 @@
       </li>
       <li>
         <h4>
-          计划
-          <span style="color: #ff3229;">{{ crje_jh }}</span> 亿
+          目标
+          <span style="color: #ff3229;">{{ crmj_jh }}</span> 亩
         </h4>
-        <p style="color: #ff8d4a;">出让金额</p>
+        <p style="color: #eee72d;">地块面积</p>
         <h4>
           累计
-          <span style="color: #6dff3d;">{{ crje_lj }}</span> 亿
+          <span style="color: #6dff3d;">{{ crmj_lj }}</span> 亩
         </h4>
       </li>
       <li>
         <h4>
-          计划
-          <span style="color: #ff3229;">{{ crmj_jh }}</span> 亩
+          目标
+          <span style="color: #ff3229;">{{ crje_jh }}</span> 亿
         </h4>
-        <p style="color: #eee72d;">出让面积</p>
+        <p style="color: #ff8d4a;">地块货值</p>
         <h4>
           累计
-          <span style="color: #6dff3d;">{{ crmj_lj }}</span> 亩
+          <span style="color: #6dff3d;">{{ crje_lj }}</span> 亿
         </h4>
       </li>
     </ul>
@@ -71,11 +71,6 @@ export default {
 
       this.dkxxList.map(({ CRQK, CJJ, QSJ, TDMJ, SSJD }) => {
         if (CRQK == "已出让") {
-          // crdkObj[SSJD].value++;
-          // crjeObj[SSJD].value =
-          //   Number(crjeObj[SSJD].value) + Number(CJJ) / 10000;
-          // crmjObj[SSJD].value = Number(crjeObj[SSJD].value) + Number(TDMJ);
-
           crdk_lj++;
           CJJ != "/" && (crje_lj = Number(crje_lj) + Number(CJJ));
           TDMJ != "/" && (crmj_lj = Number(crmj_lj) + Number(TDMJ));
