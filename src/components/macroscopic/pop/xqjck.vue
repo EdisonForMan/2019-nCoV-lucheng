@@ -140,8 +140,7 @@ export default {
     0px 0px 44px 0px rgba(16, 146, 236, 0.3);
   border-radius: 5px;
   opacity: 0.95;
-  z-index: 25;
-  top: 0;
+  z-index: 31;
   margin: auto;
   left: 6%;
   top: 10%;

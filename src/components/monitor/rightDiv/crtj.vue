@@ -14,11 +14,79 @@
 
 <script>
 /* eslint-disable */
+import { mapState, mapActions } from "vuex";
 export default {
   data() {
-    return {};
+    return {
+      index: 0
+    };
+  },
+  computed: {
+    ...mapState({
+      dkxxList: state => state.dkxxList
+    })
   },
   methods: {
+    ...mapActions(["fetchdkxxList"]),
+    fixdkxxList() {
+      !this.dkxxList.length && this.fetchdkxxList();
+
+      const countryHash = {
+        滨江街道: { value: 0, name: "滨江街道" },
+        山福镇: { value: 0, name: "山福镇" },
+        藤桥镇: { value: 0, name: "藤桥镇" },
+        仰义街道: { value: 0, name: "仰义街道" },
+        南郊街道: { value: 0, name: "南郊街道" },
+        丰门街道: { value: 0, name: "丰门街道" },
+        南汇街道: { value: 0, name: "南汇街道" },
+        双屿街道: { value: 0, name: "双屿街道" },
+        五马街道: { value: 0, name: "五马街道" },
+        松台街道: { value: 0, name: "松台街道" },
+        七都街道: { value: 0, name: "七都街道" },
+        蒲鞋市街道: { value: 0, name: "蒲鞋市街道" },
+        广化街道: { value: 0, name: "广化街道" },
+        大南街道: { value: 0, name: "大南街道" }
+      };
+
+      const crdkObj = JSON.parse(JSON.stringify(countryHash));
+      const crjeObj = JSON.parse(JSON.stringify(countryHash));
+      const crmjObj = JSON.parse(JSON.stringify(countryHash));
+
+      const crdkData = [];
+      const crjeData = [];
+      const crmjData = [];
+
+      this.dkxxList.map(({ CRQK, CJJ, TDMJ, SSJD }) => {
+        if (CRQK == "已出让") {
+          crdkObj[SSJD].value++;
+          crjeObj[SSJD].value =
+            Number(crjeObj[SSJD].value) + Number(CJJ) / 10000;
+          crmjObj[SSJD].value = Number(crmjObj[SSJD].value) + Number(TDMJ);
+        }
+      });
+
+      for (let k in crdkObj) {
+        crdkData.push(crdkObj[k]);
+      }
+
+      for (let k in crjeObj) {
+        crjeData.push(crjeObj[k]);
+      }
+
+      for (let k in crmjObj) {
+        crmjData.push(crmjObj[k]);
+      }
+
+      this.dataAge = crdkData;
+
+      this.dataHash = {
+        crdk: crdkData,
+        crje: crjeData,
+        crmj: crmjData
+      };
+
+      this.doChart();
+    },
     doChart() {
       const chart = this.$echarts.init(document.getElementById("crtjChart"));
       chart.setOption({
@@ -51,11 +119,13 @@ export default {
           },
           data: this.dataAge
             .sort((a, b) => b.value - a.value)
-            .map(item => item.name)
+            .map(item => item.name.replace("镇", "").replace("街道", ""))
         },
         yAxis: {
           type: "value",
-          name: "",
+          name:
+            this.index == "crdk" ? "宗" : this.index == "crje" ? "亿元" : "亩",
+          minInterval: 1,
           axisLine: {
             lineStyle: {
               color: "#FFF"
@@ -70,79 +140,43 @@ export default {
         },
         series: [
           {
-            name: "合计确诊",
+            name: "出让数",
             type: "bar",
             barWidth: "20px",
-
             stack: "sum",
             label: {
               normal: {
                 show: true,
-                position: "inside",
+                position: "top",
                 color: "#fff",
-                fontSize: 14
+                fontSize: 12
               }
             },
             itemStyle: {
               color: "#f41e1e"
             },
             data: this.dataAge
-          },
-          {
-            name: "新增确诊",
-            type: "bar",
-            stack: "sum",
-            barWidth: "20px",
-            color: "#f9c401",
-            data: this.dataAge.map(item => item.xzdate)
           }
-        ],
-        label: {
-          normal: {
-            show: true,
-            position: "inside",
-            textStyle: {
-              color: "#FFF"
-            },
-            formatter: function(params) {
-              return params.value + this.dataAge[params.dataIndex];
-            }
-          }
-        }
+        ]
       });
     },
     bqSelect: function(event) {
       this.dataAge = this.dataHash[event.target.value];
+      this.index = event.target.value;
+      console.log(this.index);
       this.$echarts.init(document.getElementById("crtjChart")).clear();
       this.doChart();
     }
   },
-  created() {
-    const {
-      dataAge,
-      YTdataAge,
-      ysblDate,
-      jzglDate,
-      glryDate,
-      mqzDate,
-      jjglDate,
-      hbhlDate
-    } = this.$window.nCov_luchengChart;
-    this.dataAge = dataAge;
-    this.YTdataAge = YTdataAge;
-
-    this.dataHash = {
-      crdk: dataAge,
-      crje: ysblDate,
-      crmj: jzglDate,
-      gld_list: glryDate,
-      mj: mqzDate,
-      jjgl: jjglDate,
-      hbhw: hbhlDate
-    };
-  },
+  created() {},
   mounted() {
-    this.doChart();
+    !this.dkxxList.length && this.fetchdkxxList();
+    this.fixdkxxList();
+  },
+  watch: {
+    dkxxList(n) {
+      this.fixdkxxList();
+    }
   }
 };
 </script>

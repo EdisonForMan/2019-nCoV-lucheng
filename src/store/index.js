@@ -4,14 +4,20 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 import {
   lc_xqcrjl,
-  lc_xqryxx
+  lc_xqryxx,
+  lc_zdjzxx,
+  lc_dkjbxx
 } from "@/api/beans/fetch";
 export default new Vuex.Store({
   state: {
     // 出入记录
     crjlList: [],
     // 人员信息
-    ryxxList: []
+    ryxxList: [],
+    // 做地进展
+    zdjzList: [],
+    // 地块基本信息
+    dkxxList: []
   },
   mutations: {
     updatecrjlList(state, val) {
@@ -19,6 +25,12 @@ export default new Vuex.Store({
     },
     updateryxxList(state, val) {
       state.ryxxList = val;
+    },
+    updatezdjzList(state, val) {
+      state.zdjzList = val;
+    },
+    updatedkxxList(state, val) {
+      state.dkxxList = val;
     },
   },
   actions: {
@@ -39,6 +51,24 @@ export default new Vuex.Store({
         data
       } = await lc_xqryxx();
       commit('updateryxxList', data)
+    },
+    async fetchzdjzList({
+      state,
+      commit
+    }, option) {
+      const {
+        data
+      } = await lc_zdjzxx();
+      commit('updatezdjzList', data)
+    },
+    async fetchdkxxList({
+      state,
+      commit
+    }, option) {
+      const {
+        data
+      } = await lc_dkjbxx();
+      commit('updatedkxxList', data)
     }
   }
 });

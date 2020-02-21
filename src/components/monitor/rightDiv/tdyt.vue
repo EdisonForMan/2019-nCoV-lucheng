@@ -9,11 +9,70 @@
 
 <script>
 /* eslint-disable */
+import { mapState, mapActions } from "vuex";
 export default {
   data() {
     return {};
   },
+  computed: {
+    ...mapState({
+      dkxxList: state => state.dkxxList
+    })
+  },
   methods: {
+    ...mapActions(["fetchdkxxList"]),
+    fixdkxxList() {
+      !this.dkxxList.length && this.fetchdkxxList();
+
+      const ytHash = {
+        住宅用地: {
+          value: 0,
+          name: "住宅",
+          itemStyle: { color: "#f7dc2b" },
+          textStyle: { color: "#f7dc2b" }
+        },
+        商住用地: {
+          value: 0,
+          name: "商住",
+          itemStyle: { color: "#f67b28" },
+          textStyle: { color: "#f67b28" }
+        },
+        商服用地: {
+          value: 0,
+          name: "商服",
+          itemStyle: { color: "#2ed8cb" },
+          textStyle: { color: "#2ed8cb" }
+        },
+        医疗卫生用地: {
+          value: 0,
+          name: "医疗",
+          itemStyle: { color: "#31b2f6" },
+          textStyle: { color: "#31b2f6" }
+        },
+        教育用地: {
+          value: 0,
+          name: "教育",
+          itemStyle: { color: "#da2419" },
+          textStyle: { color: "#da2419" }
+        }
+      };
+
+      const tdytObj = JSON.parse(JSON.stringify(ytHash));
+
+      const tdytData = [];
+
+      this.dkxxList.map(({ TDYT }) => {
+        TDYT != null && tdytObj[TDYT] && tdytObj[TDYT].value++;
+      });
+
+      for (let k in tdytObj) {
+        tdytData.push(tdytObj[k]);
+      }
+
+      this.dataList = tdytData;
+
+      this.doChart();
+    },
     doChart() {
       const chart = this.$echarts.init(document.getElementById("tdytChart"));
       chart.setOption({
@@ -47,14 +106,14 @@ export default {
                   return `${params.data.name} ${params.percent}%`;
                 },
                 textStyle: {
-                  fontSize: 15
+                  fontSize: 13
                 }
               }
             },
             labelLine: {
               normal: {
                 length: 10,
-                length2: 20
+                length2: 7
               }
             },
             data: this.dataList
@@ -64,35 +123,45 @@ export default {
     }
   },
   created() {
-    this.dataList = [
+    /* this.dataList = [
       {
-        value: 15,
+        value: 1,
         name: "住宅",
         itemStyle: { color: "#f7dc2b" },
         textStyle: { color: "#f7dc2b" }
       },
       {
-        value: 10,
-        name: "商服",
+        value: 3,
+        name: "商住",
         itemStyle: { color: "#f67b28" },
         textStyle: { color: "#f67b28" }
       },
       {
-        value: 45,
+        value: 0,
         name: "商办",
         itemStyle: { color: "#2ed8cb" },
         textStyle: { color: "#2ed8cb" }
       },
       {
-        value: 30,
+        value: 0,
         name: "医疗",
         itemStyle: { color: "#31b2f6" },
         textStyle: { color: "#31b2f6" }
       }
-    ];
+    ]; */
   },
   mounted() {
-    this.doChart();
+    // this.doChart();
+    // !this.dkxxList.length && this.fetchdkxxList();
+    // console.log("dkxx", this.dkxxList);
+
+    !this.dkxxList.length && this.fetchdkxxList();
+    this.fixdkxxList();
+  },
+  watch: {
+    dkxxList(n) {
+      this.fixdkxxList();
+    }
   }
 };
 </script>

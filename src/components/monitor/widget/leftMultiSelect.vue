@@ -7,30 +7,23 @@
         <button @click="filterItem">搜索</button>
       </header>
       <div class="switch">
-        <span :class="{active:tabIndex == 0}" @click="()=>{tabIndex = 0}">街道专题</span>
+        <span :class="{active:tabIndex == 0}" @click="()=>{}">街道专题</span>
         <i>/</i>
-        <span :class="{active:tabIndex == 1}" @click="()=>{tabIndex = 1}">权属专题</span>
+        <span :class="{active:tabIndex == 1}" @click="()=>{}">权属专题</span>
       </div>
       <div class="selectFrame no_select">
         <div v-for="(item,index) in this.tree" :key="index">
-          <span @click="toggleTree(item.label,index)">
-            {{item.label}}
-            <i
-              :class="`iconfont ${item.show?`icon-angle-double-up`:`icon-angle-double-down`}`"
-            ></i>
-          </span>
+          <span @click="toggleTree(item.label,index)">{{ item.label }}</span>
           <ul v-show="item.show">
-            <li v-for="(oitem,oindex) in item.children" :key="oindex">
-              <input
-                type="checkbox"
-                v-if="!item.disabled"
-                v-model="oitem.check"
-                @change="changeTree(oitem)"
-                @click="ShowResult(oitem,item)"
-              />
-              <p
-                @click="ShowResult(oitem,item),changeTree(oitem)"
-              >{{tabIndex==1?(oitem.ytname||oitem.name) : oitem.name}}</p>
+            <li
+              v-for="(oitem,oindex) in item.children"
+              :key="oindex"
+              @click="ShowResult(oitem,item)"
+            >
+              <p>{{ oitem.name }}</p>
+              <span
+                :style="{ color: oitem.type == '做地中' ? '#D3382B' : oitem.type == '已出让' ? '#4AB73D' : '#FFC221' }"
+              >{{ oitem.type }}</span>
             </li>
           </ul>
         </div>
@@ -41,54 +34,106 @@
 
 <script>
 /* eslint-disable */
-import { WRT_config } from "@/components/common/Tmap";
+import { loadModules } from "esri-loader";
+import { WRT_config, OPTION } from "@/components/common/Tmap";
 import util from "./util";
-const { server } = WRT_config;
 export default {
   name: "leftMultiSelect",
   data() {
     return {
       icon_show: true,
       tree: [],
-      items: {},
-      server,
       tabIndex: 0,
       URL: null,
       text: ""
     };
   },
   components: {},
-  props: { leftOptions: Array, leftformdata: Object, imgUrl: String },
+  props: { leftOptions: Array, imgUrl: String },
   created() {
-    this.tree = this.leftOptions;
-    this.items = this.leftformdata;
+    loadModules(
+      ["esri/tasks/QueryTask", "esri/tasks/support/Query"],
+      OPTION
+    ).then(async ([QueryTask, Query]) => {
+      const queryTask = new QueryTask({
+        url: `http://172.20.89.7:6082/arcgis/rest/services/lucheng/ZDDK/MapServer/0`
+      });
+      const query = new Query();
+      query.outFields = ["*"];
+      query.returnGeometry = true;
+      query.where = `1 = 1`;
+      const { fields, features } = await queryTask.execute(query);
+      const fieldAliases = {};
+      fields.map(item => {
+        fieldAliases[item.name] = item.alias;
+      });
+      const list = features.map(item => {
+        item.fieldAliases = fieldAliases;
+        return item;
+      });
+
+      const sObj = {};
+      const sArr = [];
+
+      list.map(({ attributes, geometry, fieldAliases }) => {
+        const { GLZD, 所属街道, DKZT } = attributes;
+        if (!所属街道) return false;
+        if (!sObj[所属街道]) {
+          sObj[所属街道] = {
+            label: 所属街道,
+            count: 0,
+            children: [],
+            tabIndex: 0,
+            check: false,
+            show: false
+          };
+        }
+        sObj[所属街道].count++;
+        sObj[所属街道].children.push({
+          id: "zddk",
+          name: GLZD,
+          type: DKZT,
+          attributes,
+          geometry,
+          fieldAliases
+        });
+      });
+      for (let k in sObj) {
+        sArr.push(sObj[k]);
+      }
+
+      sArr.map(item => {
+        if (item.children.length) {
+          item.label = `${item.label} (${item.children.length}宗)`;
+        }
+      });
+
+      this.tree = sArr;
+
+      // this.tree = this.leftOptions;
+    });
   },
   methods: {
     // 搜索
     filterItem() {
-      const tag = this.text;
-      const match = [];
-
-      this.leftOptions.map(item => {
-        item.children &&
-          item.children.map(_item => {
-            if (~_item.name.indexOf(tag)) {
-              match.push(item.label);
-            }
-          });
-      });
-
-      const match_set = [...new Set(match)];
-
-      const _tree = [];
-
-      this.leftOptions.filter(item => {
-        if (~match_set.indexOf(item.label)) {
-          _tree.push(item);
-        }
-      });
-
-      this.tree = _tree;
+      // const tag = this.text;
+      // const match = [];
+      // this.leftOptions.map(item => {
+      //   item.children &&
+      //     item.children.map(_item => {
+      //       if (~_item.name.indexOf(tag)) {
+      //         match.push(item.label);
+      //       }
+      //     });
+      // });
+      // const match_set = [...new Set(match)];
+      // const _tree = [];
+      // this.leftOptions.filter(item => {
+      //   if (~match_set.indexOf(item.label)) {
+      //     _tree.push(item);
+      //   }
+      // });
+      // this.tree = _tree;
     },
     hidden() {
       this.icon_show = !this.icon_show;
@@ -118,10 +163,15 @@ export default {
       }
     },
     ShowResult(oitem, item) {
-      // if (!this.$parent || !oitem.id || oitem.isImg) return;
-      // this.$parent.$refs.table.getItem(oitem, item.label);
-      // this.$parent.$refs.sbxq.getItem(oitem, item.label);
-      // this.$parent.$refs.bqtj.getItem(oitem, item.label); //调用病例统计echart
+      this.$parent.$refs.montorArcgis.goloaction(oitem);
+      console.log("item", oitem);
+
+      const name = oitem.name;
+      const imgName = oitem.attributes.做地详情;
+
+      this.$parent.rightHidden();
+      this.$parent.$refs.dkxqForm.getItem(name, imgName);
+      this.$parent.dkxqShow = true;
     },
     intercept() {
       const _tree = this.$util.clone(this.tree);
@@ -224,7 +274,6 @@ export default {
         margin: 0px 10px;
         background-color: #495a94;
         border: 1px solid #2da4da;
-        // border-radius: 8px;
         padding: 7px 9px;
         color: #fff;
       }
@@ -288,19 +337,12 @@ export default {
           display: block;
           height: 52px;
           line-height: 54px;
-          height: 52px;
           background: #4691ed;
           box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
           border: 1px solid rgba(255, 255, 255, 0.2);
           padding-left: 12px;
           font-size: 18px;
           margin-bottom: 10px;
-          i {
-            cursor: pointer;
-            color: #fff;
-            float: right;
-            padding-right: 15px;
-          }
         }
         > ul:first-child {
           color: rgba(42, 255, 250, 1);
@@ -310,25 +352,6 @@ export default {
       ul {
         width: 100%;
         box-sizing: border-box;
-        .sub {
-          height: 30px;
-          line-height: 10px;
-          margin-left: 40px;
-          width: 70%;
-          float: right;
-          padding-left: 10px;
-          position: relative;
-          p {
-            font-size: 16px;
-            line-height: 22px;
-          }
-        }
-        .sub:before {
-          content: "|_";
-          position: absolute;
-          left: -20px;
-          top: 4px;
-        }
         li {
           height: 33px;
           line-height: 28px;
@@ -336,55 +359,30 @@ export default {
           background: rgba(120, 171, 246, 0.2);
           box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
           border: 1px solid rgba(255, 255, 255, 0.2);
-          padding: 4px;
-          padding-left: 22px;
+          padding: 4px 10px 4px 22px;
           margin-bottom: 10px;
           width: 90%;
 
           display: flex;
           align-items: center;
+          justify-content: space-between;
+
+          cursor: pointer;
 
           p {
             font-size: 18px;
-            cursor: pointer;
             line-height: 18px;
-            display: inline-block;
-            width: 100%;
-            position: relative;
-            img {
-              width: 24px;
-              height: 24px;
-              margin-right: 10px;
-              position: relative;
-              top: 6px;
-            }
-            span {
-              background: unset;
-              margin-bottom: unset;
-              display: unset;
-              box-shadow: none;
-            }
           }
 
-          input[type="checkbox"] {
-            top: 0px;
-            left: -8px;
+          span {
+            font-weight: bolder;
+            background: #f5f5f5;
+            padding: 2px 10px;
+            border-radius: 6px;
+            opacity: 0.9;
           }
         }
       }
-    }
-    .map_content {
-      height: 3%;
-      display: flex;
-    }
-    .map_content div {
-      width: 33%;
-      padding: 2%;
-    }
-    .map_content span {
-      color: #fff;
-      font-size: 13px;
-      margin-left: 5px;
     }
   }
 

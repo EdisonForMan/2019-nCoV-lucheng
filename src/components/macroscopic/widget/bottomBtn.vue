@@ -64,6 +64,7 @@ export default {
   position: absolute;
   bottom: 2%;
   right: 35%;
+  z-index: 20;
 
   > ul {
     > li {

@@ -6,7 +6,7 @@
     <div class="Com_map">
       <commonArcgis id="macroArcgis" ref="macroArcgis" :leftOptions="leftOptions" />
     </div>
-    <div class="Com_container" style="z-index: 10;">
+    <div class="Com_container">
       <div :class="`leftside animated ${icon_show_left?`slideOutLeft`:`slideInLeft`}`">
         <leftMultiSelect :leftOptions="leftOptions" ref="leftOptions" />
         <span @click="toggle(), legend()" class="hidden_button"></span>

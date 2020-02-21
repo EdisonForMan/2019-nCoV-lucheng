@@ -65,7 +65,7 @@ export default {
   background: #24386a;
   border: 1px solid #04ecff;
   border-radius: 6px;
-  z-index: 20;
+  z-index: 30;
   top: 18%;
   margin: auto;
   box-sizing: border-box;

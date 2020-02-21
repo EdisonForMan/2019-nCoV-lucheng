@@ -9,7 +9,7 @@ export const leftOptions = [{
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
         sublayers: "12",
         definitionExpression: `Name = '十里亭'`,
-        check: true
+        check: false
     }, {
         name: `黄龙商贸城 C-04`,
         id: "gh2",

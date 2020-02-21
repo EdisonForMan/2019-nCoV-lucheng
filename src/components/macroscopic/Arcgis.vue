@@ -258,7 +258,8 @@ export default {
         y = y_ / geometry.rings[0].length;
       }
       that.view.goTo({
-        center: [x, y + 0.04]
+        center: [x, y],
+        zoom: 13
       });
       that.view.popup = {
         title: "",

@@ -10,7 +10,7 @@
     <div class="Com_map">
       <commonArcgis id="montorArcgis" ref="montorArcgis" :leftOptions="leftOptions" />
     </div>
-    <div class="Com_container" style="z-index: 10;">
+    <div class="Com_container">
       <div :class="`leftside animated ${icon_show_left?`slideOutLeft`:`slideInLeft`}`">
         <leftMultiSelect :leftOptions="leftOptions" ref="leftOptions" />
         <span @click="toggle(), legend()" class="hidden_button"></span>
@@ -27,7 +27,7 @@
     <topDate />
     <xzDate />
     <bottomBtn />
-    <dkxqForm ref="dkxqForm" :style="{right:moveRight + 'px'}" />
+    <dkxqForm ref="dkxqForm" v-show="dkxqShow" :style="{right:moveRight + 'px'}" />
   </div>
 </template>
 
@@ -56,6 +56,8 @@ import dkxqForm from "./frame/dkxqForm";
 
 import { leftOptions } from "./config/enums";
 
+import { mapState, mapActions } from "vuex";
+
 export default {
   name: "monitor",
   data() {
@@ -64,7 +66,8 @@ export default {
       icon_show_right: false,
       leftOptions,
       moveLeft: "360",
-      moveRight: "500"
+      moveRight: "500",
+      dkxqShow: false
     };
   },
   components: {
@@ -88,9 +91,20 @@ export default {
     dkxqForm
   },
   created() {},
-  mounted() {},
-  computed: {},
+  mounted() {
+    !this.zdjzList.length && this.fetchzdjzList();
+    !this.dkxxList.length && this.fetchdkxxList();
+
+    // console.log("dkxx-mon", this.dkxxList);
+  },
+  computed: {
+    ...mapState({
+      zdjzList: state => state.zdjzList,
+      dkxxList: state => state.dkxxList
+    })
+  },
   methods: {
+    ...mapActions(["fetchzdjzList", "fetchdkxxList"]),
     toggle() {
       this.icon_show_left = !this.icon_show_left;
       this.moveLeft = !this.icon_show_left ? "360" : "20";

@@ -405,7 +405,7 @@ export default {
   height: 78%;
   background: #24386a;
   border: 1px solid #04ecff;
-  z-index: 20;
+  z-index: 31;
 
   .head {
     height: 7%;

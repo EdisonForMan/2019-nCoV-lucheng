@@ -1,7 +1,7 @@
 <template>
   <div id="crjzDiv">
     <div>
-      <span class="title">月度出让价值</span>
+      <span class="title">做地完成时限统计</span>
     </div>
     <div id="crjzChart"></div>
   </div>
@@ -9,11 +9,52 @@
 
 <script>
 /* eslint-disable */
+import { mapState, mapActions } from "vuex";
 export default {
   data() {
     return {};
   },
+  computed: {
+    ...mapState({
+      dkxxList: state => state.dkxxList
+    })
+  },
   methods: {
+    ...mapActions(["fetchdkxxList"]),
+    fixdkxxList() {
+      !this.dkxxList.length && this.fetchdkxxList();
+
+      const timeHash = {
+        "2019-10-01": { name: "2019年10月", value: 0 },
+        "2019-11-01": { name: "2019年11月", value: 0 },
+        "2019-12-01": { name: "2019年12月", value: 0 },
+        "2020-01-01": { name: "2020年1月", value: 0 },
+        "2020-02-01": { name: "2020年2月", value: 0 },
+        "2020-03-01": { name: "2020年3月", value: 0 },
+        "2020-04-01": { name: "2020年4月", value: 0 },
+        "2020-05-01": { name: "2020年5月", value: 0 },
+        "2020-06-01": { name: "2020年6月", value: 0 },
+        "2020-07-01": { name: "2020年7月", value: 0 },
+        "2020-08-01": { name: "2020年8月", value: 0 },
+        "2020-09-01": { name: "2020年9月", value: 0 }
+      };
+
+      const zdsxObj = JSON.parse(JSON.stringify(timeHash));
+
+      const zdsxData = [];
+
+      this.dkxxList.map(({ ZDWCSX }) => {
+        ZDWCSX != "0" && zdsxObj[ZDWCSX].value++;
+      });
+
+      for (let k in zdsxObj) {
+        zdsxData.push(zdsxObj[k]);
+      }
+
+      this.dataList = zdsxData;
+
+      this.doChart();
+    },
     doChart() {
       const chart = this.$echarts.init(document.getElementById("crjzChart"));
       chart.setOption({
@@ -30,7 +71,7 @@ export default {
         xAxis: {
           type: "category",
           boundaryGap: false,
-          data: this.timeList,
+          data: this.dataList.map(item => item.name),
           axisLabel: {
             show: true,
             textStyle: {
@@ -72,7 +113,7 @@ export default {
         },
         series: [
           {
-            name: "出让价值",
+            name: "完成数",
             type: "line",
             smooth: true,
             itemStyle: {
@@ -97,25 +138,29 @@ export default {
     }
   },
   created() {
-    this.timeList = [
-      "1月",
-      "2月",
-      "3月",
-      "4月",
-      "5月",
-      "6月",
-      "7月",
-      "8月",
-      "9月",
-      "10月",
-      "11月",
-      "12月"
-    ];
-
-    this.dataList = [3, 2, 3, 8, 1, 2, 3, 4, 5, 6, 4, 2];
+    /* this.dataList = [
+      { name: "3月", value: 0 },
+      { name: "4月", value: 0 },
+      { name: "5月", value: 0 },
+      { name: "6月", value: 0 },
+      { name: "7月", value: 0 },
+      { name: "8月", value: 0 },
+      { name: "9月", value: 0 },
+      { name: "10月", value: 0 },
+      { name: "11月", value: 0 },
+      { name: "12月", value: 4 },
+      { name: "1月", value: 0 },
+      { name: "2月", value: 0 }
+    ]; */
   },
   mounted() {
-    this.doChart();
+    !this.dkxxList.length && this.fetchdkxxList();
+    this.fixdkxxList();
+  },
+  watch: {
+    dkxxList(n) {
+      this.fixdkxxList();
+    }
   }
 };
 </script>

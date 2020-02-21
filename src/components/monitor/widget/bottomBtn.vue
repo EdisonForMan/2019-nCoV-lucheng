@@ -2,9 +2,10 @@
   <div id="btnDiv">
     <ul>
       <li @click="xzqh">五色风险评估</li>
+      <li @click="kgt">控规图</li>
       <li @click="yxt">影像图</li>
       <li @click="slt">矢量图</li>
-      <li @click="ygt">夜光图</li>
+      <!-- <li @click="ygt">夜光图</li> -->
       <!-- <li class="hover">
         空间查询
         <div>
@@ -42,6 +43,9 @@ export default {
     ygt() {
       this.$parent.$refs.montorArcgis.ygt();
     },
+    kgt() {
+      this.$parent.$refs.montorArcgis.kgt();
+    },
     clean() {
       this.$parent.$refs.leftOptions.clean();
       this.$parent.$refs.montorArcgis.view.popup.visible = false;
@@ -63,6 +67,7 @@ export default {
   position: absolute;
   bottom: 2%;
   right: 35%;
+  z-index: 20;
 
   > ul {
     > li {

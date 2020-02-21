@@ -163,7 +163,7 @@ export default {
   height: 400px;
   background: #24386a;
   border: 1px solid #04ecff;
-  z-index: 20;
+  z-index: 40;
   top: 0;
   margin: auto;
   left: 360px;

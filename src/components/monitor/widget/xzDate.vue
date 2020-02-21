@@ -57,7 +57,7 @@ export default {
   bottom: 2%;
   right: 28%;
   transition: all 1s;
-  z-index: 10;
+  z-index: 21;
 
   #xzDateTag {
     background-color: #1d449f;

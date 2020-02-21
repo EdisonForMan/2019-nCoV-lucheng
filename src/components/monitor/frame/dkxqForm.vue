@@ -1,11 +1,11 @@
 <template>
   <div id="dkxqForm">
-    <a>×</a>
+    <a @click="close">×</a>
     <div class="block block1">
       <span class="title">做地详情</span>
       <div class="carousel">
         <el-carousel height="200px" autoplay>
-          <el-carousel-item v-for="item in 4" :key="item"></el-carousel-item>
+          <el-carousel-item v-for="item in imgNum" :key="item"></el-carousel-item>
         </el-carousel>
       </div>
     </div>
@@ -43,14 +43,25 @@
 
 <script>
 /* eslint-disable */
+const server = "http://172.20.89.68:5001/s";
+import { mapState } from "vuex";
 
 export default {
   name: "dkxqForm",
   data() {
-    return {};
+    return {
+      server,
+      imgNum: 4,
+      qtable: []
+    };
   },
   components: {},
-  computed: {},
+  computed: {
+    ...mapState({
+      zdjzList: state => state.zdjzList,
+      dkxxList: state => state.dkxxList
+    })
+  },
   created() {
     this.qktable = [
       {
@@ -82,7 +93,121 @@ export default {
       { text: "审批到位", tf: "是", color: "rgba(58,209,75,0.3)" }
     ];
   },
-  methods: {}
+  mounted() {},
+  methods: {
+    close() {
+      this.$parent.dkxqShow = false;
+    },
+    getItem(name, imgName) {
+      const that = this;
+
+      const imgList = imgName == "/" ? [] : imgName.split(";");
+
+      this.imgNum = imgList.length;
+
+      console.log("list", imgList);
+
+      if (imgList.length) {
+        imgList.map((item, index) => {
+          $(".el-carousel__item")
+            .eq(index)
+            .css({
+              "background-image": `url("${server}/icon/做地/${item}")`
+            });
+        });
+      }
+
+      const list = this.zdjzList.filter(({ GLZD }) => name == GLZD);
+
+      if (list.length) {
+        const item = list[0];
+        that.qtable = [
+          {
+            text: "是否已审批到位",
+            tf: item.TDZSZJS1,
+            color:
+              item.TDZSZJS1 == "是"
+                ? "rgba(58,209,75,0.3)"
+                : "rgba(255,51,83,0.3)"
+          },
+          {
+            text: "土地使用权是否已收回",
+            tf: item.TDSYQ2,
+            color:
+              item.TDSYQ2 == "是"
+                ? "rgba(58,209,75,0.3)"
+                : "rgba(255,51,83,0.3)"
+          },
+          {
+            text: "建筑物是否已拆除",
+            tf: item.JZW3,
+            color:
+              item.JZW3 == "是" ? "rgba(58,209,75,0.3)" : "rgba(255,51,83,0.3)"
+          },
+          {
+            text: "土地证是否已注销",
+            tf: item.TDZ4,
+            color:
+              item.TDZ4 == "是" ? "rgba(58,209,75,0.3)" : "rgba(255,51,83,0.3)"
+          },
+          {
+            text: "管线是否已迁移",
+            tf: item.GX5,
+            color:
+              item.GX5 == "是" ? "rgba(58,209,75,0.3)" : "rgba(255,51,83,0.3)"
+          },
+          {
+            text: "地表附着物是否已清理",
+            tf: item.DBFZW6,
+            color:
+              item.DBFZW6 == "是"
+                ? "rgba(58,209,75,0.3)"
+                : "rgba(255,51,83,0.3)"
+          },
+          {
+            text: "土地污染是否已治理",
+            tf: item.TDWR7,
+            color:
+              item.TDWR7 == "是" ? "rgba(58,209,75,0.3)" : "rgba(255,51,83,0.3)"
+          },
+          {
+            text: "场地是否已平整",
+            tf: item.CD8,
+            color:
+              item.CD8 == "是" ? "rgba(58,209,75,0.3)" : "rgba(255,51,83,0.3)"
+          },
+          {
+            text: "水域占用是否已审批",
+            tf: item.SY9,
+            color:
+              item.SY9 == "是" ? "rgba(58,209,75,0.3)" : "rgba(255,51,83,0.3)"
+          },
+          {
+            text: "围墙放样地籍图是否完成",
+            tf: item.WQFY10,
+            color:
+              item.WQFY10 == "是"
+                ? "rgba(58,209,75,0.3)"
+                : "rgba(255,51,83,0.3)"
+          },
+          {
+            text: "土地是否收储",
+            tf: item.TDSC11,
+            color:
+              item.TDSC11 == "是"
+                ? "rgba(58,209,75,0.3)"
+                : "rgba(255,51,83,0.3)"
+          },
+          {
+            text: "是否挂牌",
+            tf: item.GP12,
+            color:
+              item.GP12 == "是" ? "rgba(58,209,75,0.3)" : "rgba(255,51,83,0.3)"
+          }
+        ];
+      }
+    }
+  }
 };
 </script>
 
@@ -95,7 +220,7 @@ export default {
   border-left: 1px solid #04ecff;
   border-right: 1px solid #04ecff;
   border-radius: 6px;
-  z-index: 20;
+  z-index: 30;
   top: 10%;
   margin: auto;
   box-sizing: border-box;
@@ -114,10 +239,9 @@ export default {
   .block {
     text-align: left;
     width: 100%;
-    height: 32%;
+    height: 31%;
     background: rgba(4, 30, 117, 0.5);
     border-bottom: 1px solid #4594ff;
-    margin-bottom: 8px;
     border-top: 1px solid #4594ff;
     .title {
       font-size: 20px;
@@ -143,14 +267,14 @@ export default {
 
       .el-carousel__item:nth-child(2n) {
         // background-color: #99a9bf;
-        background-image: url("../../common/image/dk/鹿城鞋艺小镇.png");
+        background-image: url("../../common/image/dk/B-04a现场照.jpg");
         background-repeat: no-repeat;
         background-size: 100% 100%;
       }
 
       .el-carousel__item:nth-child(2n + 1) {
         // background-color: #d3dce6;
-        background-image: url("../../common/image/dk/黄龙商贸城集新未来社区项目.png");
+        background-image: url("../../common/image/dk/现场图3.jpg");
         background-repeat: no-repeat;
         background-size: 100% 100%;
       }
@@ -182,7 +306,7 @@ export default {
 
   .block3 {
     div {
-      padding: 10px;
+      padding: 10px 0px;
       text-align: center;
       ul {
         width: 100%;
@@ -195,9 +319,13 @@ export default {
           padding: 5px;
           div {
             width: 100%;
-            height: 56px;
+            height: 46px;
             display: inline-block;
-            padding-top: 10px;
+            padding-top: 5px;
+
+            span {
+              font-size: 7px;
+            }
           }
         }
       }

@@ -11,8 +11,7 @@ import {
   OPTION,
   spatialReference,
   IMAGELAYER,
-  TDTIMAGE2017,
-  TDTDSJ
+  TDTIMAGE2017
 } from "@/components/common/Tmap";
 import { tipHash, Hash } from "./config/hash.js";
 
@@ -33,6 +32,8 @@ export default {
     // init map
     await this.createMap();
     await this.addChanyePlate();
+
+    this.addZDDKFeatures();
 
     this.$props.leftOptions &&
       this.$props.leftOptions.map(_item => {
@@ -121,13 +122,14 @@ export default {
       const context = this;
       //  地块详情
       $("body").on("click", ".dk_btn", function() {
-        const val = $(this).attr("data-val");
-        // addQZLinkFeature(context, val);
-        // mjChartUpdate(context, val);
+        const name = $(this).attr("data-val");
+        const imgName = $(this).attr("data-val2");
         context.$parent.rightHidden();
+        context.$parent.$refs.dkxqForm.getItem(name, imgName);
+        context.$parent.dkxqShow = true;
       });
     },
-    // 产业板块
+    // 五色图
     addChanyePlate() {
       const that = this;
       return new Promise((resolve, reject) => {
@@ -156,124 +158,6 @@ export default {
         "chanyePlate"
       ).visible;
     },
-    // 定位
-    goloaction({
-      id,
-      attributes,
-      geometry,
-      fieldAliases,
-      highWayList,
-      qzblList,
-      mjList
-    }) {
-      const that = this;
-      let x = geometry.x,
-        y = geometry.y;
-      if (geometry.rings) {
-        let x_ = 0,
-          y_ = 0;
-        geometry.rings[0].map(item => {
-          x_ += item[0];
-          y_ += item[1];
-        });
-        x = x_ / geometry.rings[0].length;
-        y = y_ / geometry.rings[0].length;
-      }
-      that.view.goTo({
-        center: [x, y]
-      });
-      that.view.popup = {
-        title: "",
-        content: `${
-          id == "xq"
-            ? xqDetail(false, attributes)
-            : `<table class="esri-widget__table" summary="属性和值列表"><tbody>
-            ${Object.keys(attributes)
-              .filter(k => {
-                if (id == "clinic_type_3" || id == "clinic_type_5") {
-                  return ~["SHORTNAME", "ADDRESS", "TYPE", "PHONE"].indexOf(k);
-                } else {
-                  return noShowFields.indexOf(k) < 0;
-                }
-              })
-              .map(k => {
-                return `<tr>
-                  <th class="esri-feature__field-header">${
-                    fieldAliases[k] == "Phone"
-                      ? "联系方式"
-                      : fieldAliases[k] == "Name"
-                      ? "名称"
-                      : fieldAliases[k] == "Country"
-                      ? "街道"
-                      : fieldAliases[k] == "Address"
-                      ? "地址"
-                      : fieldAliases[k]
-                  }</th>
-                  <td class="esri-feature__field-data">${attributes[k] ||
-                    ""}</td>
-                </tr>`;
-              })
-              .join("")}
-          </tbody></table>`
-        }
-          ${
-            id == "qzbl"
-              ? `<div class="bottomBtn mj_btn" data-val="${attributes.Name}">密切接触者分布</div>`
-              : ``
-          }
-          ${
-            id == "chanyePlate"
-              ? `<div class="bottomBtn cp_btn" data-val="${attributes.名称}">疫情信息分布</div>`
-              : ``
-          }
-          ${
-            id == "gld"
-              ? `<div class="bottomBtn gld_btn" data-val="${attributes.Name}" data-val2="${attributes.Bid}">观察点人员详情</div>`
-              : ``
-          }
-          ${
-            id == "glmd"
-              ? `<div class="bottomBtn gjmj_btn" data-val="${attributes.Name}">密切接触者分布</div>`
-              : ``
-          }
-          ${
-            // id == "xq"
-            //   ? `<div class="bottomBtn xq_btn" data-val="${attributes.name}">进出人员统计</div>`
-            //   : ``··
-            ``
-          }
-          ${
-            // 街镇病例额外添加
-            qzblList
-              ? qzblList
-                  .map(item => {
-                    return `<div><p>${
-                      item.attributes.Name
-                    }</p><table class="esri-widget__table" summary="值班表"><tbody>
-            ${Object.keys(item.attributes)
-              .filter(k => {
-                return ["Bid", "OBJECTID", "Name"].indexOf(k) < 0;
-              })
-              .map(k => {
-                return `<tr>
-                  <th class="esri-feature__field-header">${item.fieldAliases[
-                    k
-                  ] || k}</th>
-                  <td class="esri-feature__field-data">${item.attributes[k] ||
-                    "无"}</td>
-                </tr>`;
-              })
-              .join("")}
-            </tbody></table></div>`;
-                  })
-                  .join("")
-              : ``
-          }`,
-        location: [x, y]
-      };
-      that.view.popup.visible = true;
-    },
-
     // 影像图
     yxt() {
       const that = this;
@@ -309,34 +193,125 @@ export default {
         this.map.findLayerById("img").visible = false;
       }
     },
-    // 夜光图
-    ygt() {
+    // 控规图
+    kgt() {
       const that = this;
-      if (this.map.findLayerById("img")) {
-        this.map.findLayerById("img").visible = false;
-      }
-      if (this.map.findLayerById("dsj")) {
-        this.map.findLayerById("dsj").visible = !this.map.findLayerById("dsj")
+      if (this.map.findLayerById("kg")) {
+        this.map.findLayerById("kg").visible = !this.map.findLayerById("kg")
           .visible;
       } else {
         return new Promise((resolve, reject) => {
-          loadModules(["esri/layers/VectorTileLayer"], OPTION).then(
-            ([VectorTileLayer]) => {
-              const vecLayer = new VectorTileLayer({
-                url: TDTDSJ,
-                id: "dsj"
+          loadModules(["esri/layers/MapImageLayer"], OPTION).then(
+            ([MapImageLayer]) => {
+              const mapImg = new MapImageLayer({
+                url:
+                  "http://61.153.29.236:8111/arcgis/rest/services/wzztt/MapServer",
+                sublayers: [{ id: 2 }],
+                id: "kg"
               });
               //  优先级置顶
-              that.map.add(vecLayer, 1);
-              that.legend.layerInfos.push({
-                layer: vecLayer
-              });
+              that.map.add(mapImg, 2);
+              // that.legend.layerInfos.push({
+              //   layer: mapImg
+              // });
               resolve(true);
             }
           );
         });
       }
     },
+    addZDDKFeatures() {
+      const that = this;
+      const item = {
+        id: "zddk",
+        url:
+          "http://172.20.89.7:6082/arcgis/rest/services/lucheng/ZDDK/MapServer",
+        sublayers: "0"
+      };
+
+      const { url, id } = item;
+
+      return new Promise((resolve, reject) => {
+        loadModules(["esri/layers/FeatureLayer"], OPTION).then(
+          ([FeatureLayer]) => {
+            const option = {
+              url: url + "/" + item.sublayers,
+              id,
+              outFields: "*"
+            };
+            if (tipHash[id] && Hash[tipHash[id]]) {
+              const _hash_ = Hash[tipHash[id]];
+              option.popupTemplate = {
+                content: `
+                  <div class="dkTitle">地块基本信息</div>
+                  <table class="esri-widget__table" summary="属性和值列表"><tbody>
+                    ${_hash_
+                      .map(k => {
+                        return `<tr>
+                            <th class="esri-feature__field-header">${k.label}</th>
+                            <td class="esri-feature__field-data">{${k.fieldName}}</td>
+                          </tr>`;
+                      })
+                      .join("")}
+                  </tbody></table>
+                  <div class="bottomBtn dk_btn" data-val="{GLZD}" data-val2="{做地详情}">查看详情</div>`
+              };
+            }
+
+            const feature = new FeatureLayer(option);
+            that.map.add(feature, 2);
+
+            if (id != "wg" && id != "xq") {
+              that.legend.layerInfos.push({
+                title: "",
+                layer: feature
+              });
+            }
+
+            resolve(true);
+          }
+        );
+      });
+    },
+    // 定位
+    goloaction({ id, attributes, geometry, fieldAliases }) {
+      const that = this;
+
+      let x = geometry.centroid.x,
+        y = geometry.centroid.y;
+
+      that.view.goTo({
+        center: [x, y + 0.03],
+        zoom: 13
+      });
+      if (tipHash[id] && Hash[tipHash[id]]) {
+        const _hash_ = Hash[tipHash[id]];
+        that.view.popup = {
+          title: "",
+          content: `
+            <div class="dkTitle">地块基本信息</div>
+            <table class="esri-widget__table" summary="属性和值列表"><tbody>
+              ${_hash_
+                .map(k => {
+                  return `<tr>
+                    <th class="esri-feature__field-header">${k.label}</th>
+                    <td class="esri-feature__field-data">${attributes[
+                      k.fieldName
+                    ] || ""}</td>
+                  </tr>`;
+                })
+                .join("")}
+            </tbody></table>
+            <div class="bottomBtn dk_btn" data-val="${
+              attributes.GLZD
+            }" data-val2="${attributes.做地详情}">查看详情</div>`,
+          location: [x, y]
+        };
+      }
+
+      that.view.popup.visible = true;
+    },
+
     // 添加图层
     addFeatures(item, _id_) {
       const id = _id_.replace(/yt_/g, "");
@@ -363,7 +338,7 @@ export default {
                   })
                   .join("")}
               </tbody></table>
-              <div class="bottomBtn dk_btn" data-val="{名称}">查看详情</div>`
+              <div class="bottomBtn dk_btn" data-val="{GLZD}">查看详情</div>`
             };
           }
 
