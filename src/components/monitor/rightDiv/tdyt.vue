@@ -1,7 +1,7 @@
 <template>
   <div id="tdytDiv">
     <div>
-      <span class="title">计划出让土地用途</span>
+      <span class="title">2020年计划出让土地用途统计图</span>
     </div>
     <div id="tdytChart"></div>
   </div>

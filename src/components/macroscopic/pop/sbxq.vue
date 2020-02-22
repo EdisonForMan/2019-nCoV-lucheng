@@ -125,12 +125,17 @@ export default {
             return item;
           });
         }
-        this.forceData = list.sort((a, b) => {
-          return (
-            this.countryHash[b.attributes.Country] -
-            this.countryHash[a.attributes.Country]
-          );
-        });
+
+        if (id == "qzbl") {
+          this.forceData = list;
+        } else {
+          this.forceData = list.sort((a, b) => {
+            return (
+              this.countryHash[b.attributes.Country] -
+              this.countryHash[a.attributes.Country]
+            );
+          });
+        }
 
         this.fieldList =
           this.forceData[0] &&

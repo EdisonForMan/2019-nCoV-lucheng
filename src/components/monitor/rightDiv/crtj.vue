@@ -1,11 +1,11 @@
 <template>
   <div id="crtjDiv">
     <div>
-      <span class="title">鹿城做地出让计划</span>
+      <span class="title">做地目标按街道统计图</span>
       <select id="select" @change="bqSelect($event)">
-        <option value="crdk">出让地块</option>
-        <option value="crje">出让金额</option>
-        <option value="crmj">出让面积</option>
+        <option value="crdk">做地地块</option>
+        <option value="crje">地块货值</option>
+        <option value="crmj">地块面积</option>
       </select>
     </div>
     <div id="crtjChart"></div>
@@ -18,7 +18,7 @@ import { mapState, mapActions } from "vuex";
 export default {
   data() {
     return {
-      index: 0
+      index: "crdk"
     };
   },
   computed: {

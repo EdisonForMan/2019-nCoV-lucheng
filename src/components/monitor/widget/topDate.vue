@@ -6,7 +6,8 @@
           目标
           <span style="color: #ff3229;">{{ crdk_jh }}</span> 宗
         </h4>
-        <p style="color: #d793ff;">做地地块</p>
+        <!-- <p style="color: #d793ff;">做地地块</p> -->
+        <p>做地地块</p>
         <h4>
           累计
           <span style="color: #6dff3d;">{{ crdk_lj }}</span> 宗
@@ -17,7 +18,8 @@
           目标
           <span style="color: #ff3229;">{{ crmj_jh }}</span> 亩
         </h4>
-        <p style="color: #eee72d;">地块面积</p>
+        <!-- <p style="color: #eee72d;">地块面积</p> -->
+        <p>地块面积</p>
         <h4>
           累计
           <span style="color: #6dff3d;">{{ crmj_lj }}</span> 亩
@@ -28,7 +30,8 @@
           目标
           <span style="color: #ff3229;">{{ crje_jh }}</span> 亿
         </h4>
-        <p style="color: #ff8d4a;">地块货值</p>
+        <!-- <p style="color: #ff8d4a;">地块货值</p> -->
+        <p>地块货值</p>
         <h4>
           累计
           <span style="color: #6dff3d;">{{ crje_lj }}</span> 亿
@@ -109,21 +112,28 @@ export default {
   z-index: 20;
 
   ul li {
-    width: 130px;
+    width: 140px;
     margin: 0px 15px;
     display: inline-block;
     background-color: #1b45a7;
     border: 1px solid #07e2e8;
-    padding: 5px 9px;
+    // padding: 5px 9px;
     color: #07e2e8;
 
     span {
       font-size: 21px;
     }
 
+    h4 {
+      padding: 5px;
+    }
+
     p {
+      font-size: 18px;
       font-weight: bolder;
-      margin: 5px;
+      padding: 5px;
+      border-top: 1px solid #07e2e8;
+      border-bottom: 1px solid #07e2e8;
     }
   }
 }

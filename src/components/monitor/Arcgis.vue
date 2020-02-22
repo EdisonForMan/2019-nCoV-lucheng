@@ -31,7 +31,13 @@ export default {
     const that = this;
     // init map
     await this.createMap();
+
     await this.addChanyePlate();
+
+    // 添加图例标题
+    $(".esri-legend").prepend(
+      '<div class="esri-legend__message esri-mytitle">图例</div>'
+    );
 
     this.addZDDKFeatures();
 
@@ -42,6 +48,8 @@ export default {
         });
       });
     this.jQueryBind();
+
+    // this.addBlank("七都街道");
   },
   watch: {
     leftOptions: {
@@ -111,6 +119,7 @@ export default {
             label: "图例",
             view: that.view
           });
+
           that.view.ui.add(that.legend, "bottom-left");
           that.view.on("click", function(evt) {});
           resolve(true);
@@ -157,9 +166,9 @@ export default {
               opacity: 1
             });
 
-            that.map.add(dkImage, 4);
+            that.map.add(dkImage, 3);
             that.legend.layerInfos.push({
-              title: "",
+              title: "做地地块",
               layer: dkImage
             });
             resolve(true);
@@ -167,11 +176,26 @@ export default {
         );
       });
     },
-    // 移除产业板块
-    romoveChanyePlate() {
-      this.map.findLayerById("chanyePlate").visible = !this.map.findLayerById(
-        "chanyePlate"
-      ).visible;
+    // 五色图变化
+    changeChanyePlate() {
+      this.map.findLayerById("chanyePlate") &&
+        (this.$parent.$refs.bottomBtn.xzqhTag = this.map.findLayerById(
+          "chanyePlate"
+        ).visible = !this.map.findLayerById("chanyePlate").visible);
+
+      this.$parent.$refs.bottomBtn.xzqhTag;
+    },
+    // 做地地块
+    zddk() {
+      this.map.findLayerById("zddk") &&
+        (this.$parent.$refs.bottomBtn.zddkTag = this.map.findLayerById(
+          "zddk"
+        ).visible = !this.map.findLayerById("zddk").visible);
+
+      this.map.findLayerById("dkImage") &&
+        (this.map.findLayerById("dkImage").visible = !this.map.findLayerById(
+          "dkImage"
+        ).visible);
     },
     // 影像图
     yxt() {
@@ -212,26 +236,29 @@ export default {
     kgt() {
       const that = this;
       if (this.map.findLayerById("kg")) {
-        this.map.findLayerById("kg").visible = !this.map.findLayerById("kg")
-          .visible;
+        this.$parent.$refs.bottomBtn.kgtTag = this.map.findLayerById(
+          "kg"
+        ).visible = !this.map.findLayerById("kg").visible;
       } else {
         return new Promise((resolve, reject) => {
           loadModules(["esri/layers/MapImageLayer"], OPTION).then(
             ([MapImageLayer]) => {
               const mapImg = new MapImageLayer({
                 url:
-                  "http://61.153.29.236:8111/arcgis/rest/services/wzztt/MapServer",
-                sublayers: [{ id: 2 }],
+                  "http://172.20.89.7:6082/arcgis/rest/services/lucheng/LC_KONGGUI/MapServer",
+                sublayers: [{ id: 0 }],
                 id: "kg"
               });
               //  优先级置顶
               that.map.add(mapImg, 2);
+              that.$parent.$refs.bottomBtn.kgtTag = true;
               resolve(true);
             }
           );
         });
       }
     },
+    // 添加做地地块
     addZDDKFeatures() {
       const that = this;
       const item = {
@@ -272,7 +299,7 @@ export default {
             }
 
             const feature = new FeatureLayer(option);
-            that.map.add(feature, 2);
+            that.map.add(feature, 4);
 
             // that.legend.layerInfos.push({
             //   title: "",
@@ -292,7 +319,7 @@ export default {
         y = geometry.centroid.y;
 
       that.view.goTo({
-        center: [x, y + 0.03],
+        center: [x, y + 0.04],
         zoom: 13
       });
       if (tipHash[id] && Hash[tipHash[id]]) {
@@ -319,8 +346,55 @@ export default {
           location: [x, y]
         };
       }
-
+      that.view.popup.alignment = "top-center";
       that.view.popup.visible = true;
+    },
+    // 街道区划高亮
+    addBlank(label) {
+      if (!label) return;
+      this.view.graphics.removeAll();
+      const that = this;
+      loadModules(
+        ["esri/tasks/QueryTask", "esri/tasks/support/Query", "esri/Graphic"],
+        OPTION
+      ).then(([QueryTask, Query, Graphic]) => {
+        const queryTask = new QueryTask({
+          url:
+            "http://172.20.89.7:6082/arcgis/rest/services/lucheng/xzjd_ws/MapServer/0"
+        });
+        const query = new Query();
+        query.outFields = ["*"];
+        query.where = `${label ? `名称 = '${label}'` : `名称 = ''`}`;
+        query.returnGeometry = true;
+        queryTask.execute(query).then(response => {
+          if (response.features.length) {
+            const geometry = response.features[0].geometry;
+            const fillSymbol = {
+              type: "simple-fill",
+              color: [21, 249, 253, 0.3],
+              outline: {
+                color: [21, 249, 253],
+                width: 4
+              }
+            };
+            const polygonGraphic = new Graphic({
+              geometry,
+              symbol: fillSymbol
+            });
+            that.view.graphics.add(polygonGraphic);
+            that.view.goTo({
+              center: [geometry.centroid.x, geometry.centroid.y],
+              zoom: ~["蒲鞋市街道", "大南街道", "广化街道", "五马街道","南汇街道"].indexOf(
+                label
+              )
+                ? 16
+                : ~["藤桥镇"].indexOf(label)
+                ? 14
+                : 15
+            });
+          }
+        });
+      });
     }
   }
 };

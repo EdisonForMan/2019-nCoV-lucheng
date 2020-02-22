@@ -1,11 +1,11 @@
 <template>
   <div id="crjzDiv">
     <div>
-      <span class="title">鹿城做地出让累计</span>
+      <span class="title">做地累积按月统计图（2020年）</span>
       <select id="select" @change="bqSelect($event)">
-        <option value="crdk">出让地块</option>
-        <option value="crje">出让金额</option>
-        <option value="crmj">出让面积</option>
+        <option value="crdk">做地地块</option>
+        <option value="crje">地块货值</option>
+        <option value="crmj">地块面积</option>
       </select>
     </div>
     <div id="crjzChart"></div>
@@ -18,7 +18,7 @@ import { mapState, mapActions } from "vuex";
 export default {
   data() {
     return {
-      index: 0
+      index: "crdk"
     };
   },
   computed: {
@@ -34,8 +34,18 @@ export default {
       // console.log("dkxx", this.dkxxList);
 
       const timeHash = {
-        "2020-01-01": { name: "2020年01月", value: 0 },
-        "2020-02-01": { name: "2020年02月", value: 0 }
+        "2020-01-01": { name: "1月", value: 0 },
+        "2020-02-01": { name: "2月", value: 0 },
+        "2020-03-01": { name: "3月", value: 0 },
+        "2020-04-01": { name: "4月", value: 0 },
+        "2020-05-01": { name: "5月", value: 0 },
+        "2020-06-01": { name: "6月", value: 0 },
+        "2020-07-01": { name: "7月", value: 0 },
+        "2020-08-01": { name: "8月", value: 0 },
+        "2020-09-01": { name: "9月", value: 0 },
+        "2020-10-01": { name: "10月", value: 0 },
+        "2020-11-01": { name: "11月", value: 0 },
+        "2020-12-01": { name: "12月", value: 0 }
       };
 
       const crdkObj = JSON.parse(JSON.stringify(timeHash));
@@ -97,20 +107,21 @@ export default {
         grid: {
           left: "3%",
           right: "6%",
-          top: "16%",
+          top: "20%",
           bottom: "3%",
           containLabel: true
         },
         xAxis: {
           type: "category",
           // boundaryGap: false,
-          data: this.dataList.map(({ name }) => {
-            return (
-              name.substr(0, name.indexOf("年") + 1) +
-              "\n" +
-              name.substr(name.indexOf("年") + 1)
-            );
-          }),
+          // data: this.dataList.map(({ name }) => {
+          //   return (
+          //     name.substr(0, name.indexOf("年") + 1) +
+          //     "\n" +
+          //     name.substr(name.indexOf("年") + 1)
+          //   );
+          // }),
+          data: this.dataList.map(item => item.name),
           axisLabel: {
             show: true,
             textStyle: {
@@ -131,6 +142,7 @@ export default {
           name:
             this.index == "crdk" ? "宗" : this.index == "crje" ? "亿元" : "亩",
           minInterval: 1,
+          max: this.index == "crdk" ? 5 : null,
           axisLine: {
             onZero: false,
             lineStyle: {
@@ -175,10 +187,10 @@ export default {
               }
             },
             symbolSize: 5,
-            areaStyle: {
-              normal: {}
-            },
-            data: this.dataList
+            // areaStyle: {
+            //   normal: {}
+            // },
+            data: this.dataList.slice(0, 2)
           }
         ]
       });

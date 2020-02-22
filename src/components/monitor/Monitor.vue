@@ -26,7 +26,7 @@
     </div>
     <topDate />
     <xzDate />
-    <bottomBtn />
+    <bottomBtn ref="bottomBtn" />
     <dkxqForm ref="dkxqForm" v-show="dkxqShow" :style="{right:moveRight + 'px'}" />
   </div>
 </template>

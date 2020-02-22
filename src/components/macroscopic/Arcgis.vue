@@ -258,7 +258,7 @@ export default {
         y = y_ / geometry.rings[0].length;
       }
       that.view.goTo({
-        center: [x, y],
+        center: [x, y + 0.04],
         zoom: 13
       });
       that.view.popup = {
@@ -355,6 +355,7 @@ export default {
           }`,
         location: [x, y]
       };
+      that.view.popup.alignment = "top-center";
       that.view.popup.visible = true;
     },
     // 蒙白

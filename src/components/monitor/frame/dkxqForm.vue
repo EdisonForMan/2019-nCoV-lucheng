@@ -24,7 +24,7 @@
       <span class="title">问题清单</span>
       <div>
         <ul>
-          <li v-for="(item,index) in qtable" :key="index">
+          <li v-for="(item,index) in qtable" :key="index" @click="getReason(item)">
             <div :style="{background:item.color}">
               <span>{{item.text}}</span>
               <br />
@@ -32,6 +32,7 @@
             </div>
           </li>
         </ul>
+        <reasonForm ref="reasonForm" />
       </div>
     </div>
     <div class="bottom">
@@ -44,6 +45,7 @@
 <script>
 /* eslint-disable */
 const server = "http://172.20.89.68:5001/s";
+import reasonForm from "./reasonForm";
 import { mapState } from "vuex";
 
 export default {
@@ -55,7 +57,7 @@ export default {
       qtable: []
     };
   },
-  components: {},
+  components: { reasonForm },
   computed: {
     ...mapState({
       zdjzList: state => state.zdjzList,
@@ -101,6 +103,8 @@ export default {
     getItem(name, imgName) {
       const that = this;
 
+      this.$refs.reasonForm.showReason(null);
+
       const imgList = imgName == "/" ? [] : imgName.split(";");
 
       this.imgNum = imgList.length;
@@ -119,90 +123,103 @@ export default {
 
       if (list.length) {
         const item = list[0];
+
+        const colorHash = {
+          是: "rgba(58,209,75,0.3)",
+          否: "rgba(255,51,83,0.3)"
+        };
+
         that.qtable = [
           {
             text: "是否已审批到位",
             tf: item.TDZSZJS1,
-            color:
-              item.TDZSZJS1 == "是"
-                ? "rgba(58,209,75,0.3)"
-                : "rgba(255,51,83,0.3)"
+            jtyy: item.JTYY1,
+            zrr: item.ZRR1,
+            color: colorHash[item.TDZSZJS1]
           },
           {
             text: "土地使用权是否已收回",
             tf: item.TDSYQ2,
-            color:
-              item.TDSYQ2 == "是"
-                ? "rgba(58,209,75,0.3)"
-                : "rgba(255,51,83,0.3)"
+            jtyy: item.JTYY2,
+            zrr: item.ZRR2,
+            color: colorHash[item.TDSYQ2]
           },
           {
             text: "建筑物是否已拆除",
             tf: item.JZW3,
-            color:
-              item.JZW3 == "是" ? "rgba(58,209,75,0.3)" : "rgba(255,51,83,0.3)"
+            jtyy: item.JTYY3,
+            zrr: item.ZRR3,
+            color: colorHash[item.JZW3]
           },
           {
             text: "土地证是否已注销",
             tf: item.TDZ4,
-            color:
-              item.TDZ4 == "是" ? "rgba(58,209,75,0.3)" : "rgba(255,51,83,0.3)"
+            jtyy: item.JTYY4,
+            zrr: item.ZRR4,
+            color: colorHash[item.TDZ4]
           },
           {
             text: "管线是否已迁移",
             tf: item.GX5,
-            color:
-              item.GX5 == "是" ? "rgba(58,209,75,0.3)" : "rgba(255,51,83,0.3)"
+            jtyy: item.JTYY5,
+            zrr: item.ZRR5,
+            color: colorHash[item.GX5]
           },
           {
             text: "地表附着物是否已清理",
             tf: item.DBFZW6,
-            color:
-              item.DBFZW6 == "是"
-                ? "rgba(58,209,75,0.3)"
-                : "rgba(255,51,83,0.3)"
+            jtyy: item.JTYY6,
+            zrr: item.ZRR6,
+            color: colorHash[item.DBFZW6]
           },
           {
             text: "土地污染是否已治理",
             tf: item.TDWR7,
-            color:
-              item.TDWR7 == "是" ? "rgba(58,209,75,0.3)" : "rgba(255,51,83,0.3)"
+            jtyy: item.JTYY7,
+            zrr: item.ZRR7,
+            color: colorHash[item.TDWR7]
           },
           {
             text: "场地是否已平整",
             tf: item.CD8,
-            color:
-              item.CD8 == "是" ? "rgba(58,209,75,0.3)" : "rgba(255,51,83,0.3)"
+            jtyy: item.JTYY8,
+            zrr: item.ZRR8,
+            color: colorHash[item.CD8]
           },
           {
             text: "水域占用是否已审批",
             tf: item.SY9,
-            color:
-              item.SY9 == "是" ? "rgba(58,209,75,0.3)" : "rgba(255,51,83,0.3)"
+            jtyy: item.JTYY9,
+            zrr: item.ZRR9,
+            color: colorHash[item.SY9]
           },
           {
             text: "围墙放样地籍图是否完成",
             tf: item.WQFY10,
-            color:
-              item.WQFY10 == "是"
-                ? "rgba(58,209,75,0.3)"
-                : "rgba(255,51,83,0.3)"
+            jtyy: item.JTYY10,
+            zrr: item.ZRR10,
+            color: colorHash[item.WQFY10]
           },
           {
             text: "土地是否收储",
             tf: item.TDSC11,
-            color:
-              item.TDSC11 == "是"
-                ? "rgba(58,209,75,0.3)"
-                : "rgba(255,51,83,0.3)"
+            jtyy: item.JTYY11,
+            zrr: item.ZRR11,
+            color: colorHash[item.TDSC11]
           },
           {
             text: "是否挂牌",
             tf: item.GP12,
-            color:
-              item.GP12 == "是" ? "rgba(58,209,75,0.3)" : "rgba(255,51,83,0.3)"
+            jtyy: item.JTYY12,
+            zrr: item.ZRR12,
+            color: colorHash[item.GP12]
           }
         ];
+      }
+    },
+    getReason(item) {
+      if (item.tf != "是") {
+        this.$refs.reasonForm.showReason(item);
       }
     }
   }
@@ -251,7 +268,7 @@ export default {
       border-left: 5px solid;
       padding-left: 5px;
     }
-    div {
+    > div {
       width: 100%;
       height: 90%;
       box-sizing: border-box;
@@ -264,14 +281,12 @@ export default {
       padding: 15px 20px;
 
       .el-carousel__item:nth-child(2n) {
-        // background-color: #99a9bf;
         background-image: url("../../common/image/dk/B-04a现场照.jpg");
         background-repeat: no-repeat;
         background-size: 100% 100%;
       }
 
       .el-carousel__item:nth-child(2n + 1) {
-        // background-color: #d3dce6;
         background-image: url("../../common/image/dk/现场图3.jpg");
         background-repeat: no-repeat;
         background-size: 100% 100%;
@@ -280,7 +295,7 @@ export default {
   }
 
   .block2 {
-    div {
+    > div {
       padding: 17px 15px;
       ul {
         width: 100%;
@@ -291,21 +306,29 @@ export default {
           display: inline-block;
           width: 100%;
           box-sizing: border-box;
-          padding: 19px;
+          padding: 8px 15px 0px;
           p {
             font-size: 16px;
             color: rgba(211, 154, 69, 1);
             line-height: 22px;
           }
+          span {
+            font-size: 12px;
+          }
+        }
+
+        li:last-child {
+          padding-bottom: 8px;
         }
       }
     }
   }
 
   .block3 {
-    div {
+    > div {
       padding: 10px 0px;
       text-align: center;
+      position: relative;
       ul {
         width: 100%;
         height: 100%;
@@ -315,11 +338,11 @@ export default {
           display: inline-block;
           text-align: center;
           padding: 5px;
-          div {
+          cursor: pointer;
+          > div:last-child {
             width: 100%;
-            height: 46px;
             display: inline-block;
-            padding-top: 5px;
+            padding: 5px 0px;
 
             span {
               font-size: 7px;

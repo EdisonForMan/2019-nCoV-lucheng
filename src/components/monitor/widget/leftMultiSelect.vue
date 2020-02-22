@@ -13,17 +13,20 @@
       </div>
       <div class="selectFrame no_select">
         <div v-for="(item,index) in this.tree" :key="index">
-          <span @click="toggleTree(item.label,index)">{{ item.label }}</span>
+          <div @click="toggleTree(item.label,index)">
+            {{ item.label }}
+            <span @click="switchChar(item.label)">分布图</span>
+          </div>
           <ul v-show="item.show">
             <li
               v-for="(oitem,oindex) in item.children"
               :key="oindex"
               @click="ShowResult(oitem,item)"
             >
-              <p>{{ oitem.name }}</p>
+              <p>{{ ++oindex }}. {{ oitem.name }}</p>
               <span
                 :style="{ color: oitem.type == '做地中' ? '#D3382B' : oitem.type == '已出让' ? '#4AB73D' : '#FFC221' }"
-              >{{ oitem.type }}</span>
+              >{{ oitem.type=="做地中"?"未完成":oitem.type }}</span>
             </li>
           </ul>
         </div>
@@ -45,7 +48,8 @@ export default {
       tree: [],
       tabIndex: 0,
       URL: null,
-      text: ""
+      text: "",
+      tmpOptions: []
     };
   },
   components: {},
@@ -81,14 +85,12 @@ export default {
         if (!sObj[所属街道]) {
           sObj[所属街道] = {
             label: 所属街道,
-            count: 0,
             children: [],
             tabIndex: 0,
             check: false,
             show: false
           };
         }
-        sObj[所属街道].count++;
         sObj[所属街道].children.push({
           id: "zddk",
           name: GLZD,
@@ -110,30 +112,74 @@ export default {
 
       this.tree = sArr;
 
+      this.tmpOptions = sArr;
+
       // this.tree = this.leftOptions;
     });
   },
   methods: {
     // 搜索
     filterItem() {
-      // const tag = this.text;
-      // const match = [];
-      // this.leftOptions.map(item => {
-      //   item.children &&
-      //     item.children.map(_item => {
-      //       if (~_item.name.indexOf(tag)) {
-      //         match.push(item.label);
-      //       }
-      //     });
-      // });
-      // const match_set = [...new Set(match)];
-      // const _tree = [];
-      // this.leftOptions.filter(item => {
-      //   if (~match_set.indexOf(item.label)) {
-      //     _tree.push(item);
-      //   }
-      // });
-      // this.tree = _tree;
+      const tag = this.text;
+
+      if (tag == "") {
+        this.tree = this.tmpOptions;
+      } else {
+        const sObj = {};
+        const sArr = [];
+
+        const fieldsList = [
+          "GLZD",
+          "区块名称",
+          "所属街道",
+          "DKZT",
+          "土地用途",
+          "土地面积_亩",
+          "建筑面积_平方米",
+          "建筑用途",
+          "容积率",
+          "责任单位",
+          "是否做地完成",
+          "做地完成时间"
+        ];
+
+        this.tmpOptions.map(item => {
+          const childList = [];
+
+          item.children &&
+            item.children.map(_item => {
+              for (let i in fieldsList) {
+                const k = fieldsList[i];
+                if (_item.attributes[k] && ~_item.attributes[k].indexOf(tag)) {
+                  childList.push(_item);
+                  break;
+                }
+              }
+            });
+
+          if (childList.length) {
+            sObj[item.label] = {
+              label: item.label.split(" ")[0],
+              children: childList,
+              tabIndex: 0,
+              check: false,
+              show: false
+            };
+          }
+        });
+
+        for (let k in sObj) {
+          sArr.push(sObj[k]);
+        }
+
+        sArr.map(item => {
+          if (item.children.length) {
+            item.label = `${item.label} (${item.children.length}宗)`;
+          }
+        });
+
+        this.tree = sArr;
+      }
     },
     hidden() {
       this.icon_show = !this.icon_show;
@@ -162,6 +208,7 @@ export default {
         this.tree[index].children[i].check = c;
       }
     },
+    // 定位详情
     ShowResult(oitem, item) {
       this.$parent.$refs.montorArcgis.goloaction(oitem);
 
@@ -171,6 +218,11 @@ export default {
       this.$parent.rightHidden();
       this.$parent.$refs.dkxqForm.getItem(name, imgName);
       this.$parent.dkxqShow = true;
+    },
+    // 街道做地图
+    switchChar(label) {
+      const name = label.split(" ")[0];
+      this.$parent.$refs.montorArcgis.addBlank(name);
     },
     intercept() {
       const _tree = this.$util.clone(this.tree);
@@ -332,16 +384,27 @@ export default {
       text-align: left;
 
       > div {
-        > span {
-          display: block;
+        > div {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
           height: 52px;
-          line-height: 54px;
           background: #4691ed;
           box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
           border: 1px solid rgba(255, 255, 255, 0.2);
           padding-left: 12px;
+          padding-right: 12px;
           font-size: 18px;
           margin-bottom: 10px;
+          cursor: pointer;
+
+          span {
+            background: #162449;
+            padding: 7px 10px;
+            border-radius: 6px;
+            font-size: 15px;
+            opacity: 0.9;
+          }
         }
         > ul:first-child {
           color: rgba(42, 255, 250, 1);
@@ -358,10 +421,9 @@ export default {
           background: rgba(120, 171, 246, 0.2);
           box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
           border: 1px solid rgba(255, 255, 255, 0.2);
-          padding: 4px 10px 4px 22px;
+          padding: 4px 10px 4px 12px;
           margin-bottom: 10px;
           width: 90%;
-
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -374,9 +436,10 @@ export default {
           }
 
           span {
+            font-size: 13px;
             font-weight: bolder;
             background: #f5f5f5;
-            padding: 2px 10px;
+            padding: 0px 4px;
             border-radius: 6px;
             opacity: 0.9;
           }

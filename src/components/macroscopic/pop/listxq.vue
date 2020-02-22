@@ -298,35 +298,39 @@ export default {
           return count2 - count1;
         });
 
-        this.forceData = list.sort((a, b) => {
-          let country1 = (a.attributes.Country
-            ? a.attributes.Country.trim()
-            : "无"
-          )
-            .replace("街道", "")
-            .replace("镇", "");
-          let country2 = (b.attributes.Country
-            ? b.attributes.Country.trim()
-            : "无"
-          )
-            .replace("街道", "")
-            .replace("镇", "");
+        if (id == "qzbl") {
+          this.forceData = list;
+        } else {
+          this.forceData = list.sort((a, b) => {
+            let country1 = (a.attributes.Country
+              ? a.attributes.Country.trim()
+              : "无"
+            )
+              .replace("街道", "")
+              .replace("镇", "");
+            let country2 = (b.attributes.Country
+              ? b.attributes.Country.trim()
+              : "无"
+            )
+              .replace("街道", "")
+              .replace("镇", "");
 
-          country1 == "蒲鞋" ? (country1 = "蒲鞋市") : country1;
-          country2 == "蒲鞋" ? (country2 = "蒲鞋市") : country2;
+            country1 == "蒲鞋" ? (country1 = "蒲鞋市") : country1;
+            country2 == "蒲鞋" ? (country2 = "蒲鞋市") : country2;
 
-          const count1 = this.sObj[country1] ? this.sObj[country1].count : 0;
-          const count2 = this.sObj[country2] ? this.sObj[country2].count : 0;
+            const count1 = this.sObj[country1] ? this.sObj[country1].count : 0;
+            const count2 = this.sObj[country2] ? this.sObj[country2].count : 0;
 
-          if (count1 == count2) {
-            return (
-              this.countryHash[country2 ? country2.trim() : "无"] -
-              this.countryHash[country1 ? country1.trim() : "无"]
-            );
-          }
+            if (count1 == count2) {
+              return (
+                this.countryHash[country2 ? country2.trim() : "无"] -
+                this.countryHash[country1 ? country1.trim() : "无"]
+              );
+            }
 
-          return count2 - count1;
-        });
+            return count2 - count1;
+          });
+        }
 
         this.fieldList =
           this.forceData[0] &&
