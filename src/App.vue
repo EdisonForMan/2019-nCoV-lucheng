@@ -53,6 +53,7 @@ export default {
     };
   },
   mounted() {
+    this.setLoation();
     setInterval(() => {
       this.getTime();
     }, 1000);

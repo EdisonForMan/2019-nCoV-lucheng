@@ -55,8 +55,8 @@ const zddkHash = [{
     fieldName: "是否做地完成",
     label: "是否做地完成"
 }, {
-    fieldName: "做地完成时间",
-    label: "做地完成时间"
+    fieldName: "做地完成时限",
+    label: "做地完成时限"
 }]
 
 

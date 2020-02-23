@@ -60,8 +60,7 @@ export default {
   components: { reasonForm },
   computed: {
     ...mapState({
-      zdjzList: state => state.zdjzList,
-      dkxxList: state => state.dkxxList
+      zdjzList: state => state.zdjzList
     })
   },
   created() {
@@ -107,7 +106,7 @@ export default {
 
       const imgList = imgName == "/" ? [] : imgName.split(";");
 
-      this.imgNum = imgList.length;
+      this.imgNum = imgList.length || 1;
 
       if (imgList.length) {
         imgList.map((item, index) => {

@@ -51,6 +51,12 @@ export default {
     // await this.addQh();
     // await this.addmbk();
     await this.addChanyePlate();
+
+    // 添加图例标题
+    $(".esri-legend").prepend(
+      '<div class="esri-legend__message esri-mytitle">图例</div>'
+    );
+
     this.$props.leftOptions &&
       this.$props.leftOptions.map(_item => {
         _item.children.map(item => {

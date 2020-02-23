@@ -28,7 +28,7 @@
               @change="changeBox(item.check,index)"
               @click="stop($event)"
             />
-            <i :class="`iconfont ${item.show?`icon-angle-double-up`:`icon-angle-double-down`}`"></i>
+            <i :class="`iconfont ${item.show?`iconRectangleCopy7`:`iconRectangleCopy4`}`"></i>
           </span>
           <ul
             v-show="item.show"
@@ -248,6 +248,7 @@ export default {
 </script>
 <style scoped lang="less">
 // @import url("../css/style.less");
+@import url("../../common/_iconfont/iconfont.css");
 .leftMultiSelect {
   height: 100%;
   border-right: 1px solid;
@@ -326,6 +327,7 @@ export default {
             color: #fff;
             float: right;
             padding-right: 15px;
+            font-size: 40px;
           }
         }
         > ul:first-child {

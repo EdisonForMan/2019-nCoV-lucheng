@@ -7,15 +7,20 @@
         <button @click="filterItem">搜索</button>
       </header>
       <div class="switch">
-        <span :class="{active:tabIndex == 0}" @click="()=>{}">街道专题</span>
+        <span :class="{active:tabIndex == 0}" @click="()=>{ tabIndex = 0, changeTab(0) }">街道专题</span>
         <i>/</i>
-        <span :class="{active:tabIndex == 1}" @click="()=>{}">权属专题</span>
+        <span :class="{active:tabIndex == 1}" @click="()=>{ tabIndex = 1, changeTab(1) }">权属专题</span>
+        <i>/</i>
+        <span :class="{active:tabIndex == 2}" @click="()=>{ tabIndex = 2, changeTab(2) }">时限专题</span>
       </div>
       <div class="selectFrame no_select">
         <div v-for="(item,index) in this.tree" :key="index">
           <div @click="toggleTree(item.label,index)">
             {{ item.label }}
-            <span @click="switchChar(item.label)">分布图</span>
+            <div>
+              <i :class="`iconfont ${item.show?`iconRectangleCopy7`:`iconRectangleCopy4`}`"></i>
+              <span v-if="tabIndex == 0" @click="switchChar(item.label)">分布图</span>
+            </div>
           </div>
           <ul v-show="item.show">
             <li
@@ -24,9 +29,14 @@
               @click="ShowResult(oitem,item)"
             >
               <p>{{ ++oindex }}. {{ oitem.name }}</p>
-              <span
-                :style="{ color: oitem.type == '做地中' ? '#D3382B' : oitem.type == '已出让' ? '#4AB73D' : '#FFC221' }"
-              >{{ oitem.type=="做地中"?"未完成":oitem.type }}</span>
+              <div>
+                <span
+                  :style="{ color: oitem.yt == '住宅' ? '#ffff00' : oitem.yt == '商服' ? '#ff0000' : oitem.yt == '商住' ? '#ff7f00' : oitem.yt == '医疗卫生' ? '#ffbf00' : '#ff9f7f' }"
+                >{{ oitem.yt }}</span>
+                <span
+                  :style="{ color: oitem.type == '做地中' ? '#D3382B' : oitem.type == '已出让' ? '#4AB73D' : '#FFC221' }"
+                >{{ oitem.type=="做地中"?"未完成":oitem.type }}</span>
+              </div>
             </li>
           </ul>
         </div>
@@ -39,7 +49,6 @@
 /* eslint-disable */
 import { loadModules } from "esri-loader";
 import { WRT_config, OPTION } from "@/components/common/Tmap";
-import util from "./util";
 export default {
   name: "leftMultiSelect",
   data() {
@@ -49,10 +58,11 @@ export default {
       tabIndex: 0,
       URL: null,
       text: "",
-      tmpOptions: []
+      jdOptions: [],
+      qsOptions: [],
+      sxOptions: []
     };
   },
-  components: {},
   props: { leftOptions: Array, imgUrl: String },
   created() {
     loadModules(
@@ -76,14 +86,26 @@ export default {
         return item;
       });
 
-      const sObj = {};
-      const sArr = [];
+      const jdObj = {};
+      const qsObj = {};
+      const sxObj = {};
+
+      const jdArr = [];
+      const qsArr = [];
+      const sxArr = [];
 
       list.map(({ attributes, geometry, fieldAliases }) => {
-        const { GLZD, 所属街道, DKZT } = attributes;
+        const {
+          GLZD,
+          DKZT,
+          所属街道,
+          土地用途,
+          责任单位,
+          做地完成时限
+        } = attributes;
         if (!所属街道) return false;
-        if (!sObj[所属街道]) {
-          sObj[所属街道] = {
+        if (!jdObj[所属街道]) {
+          jdObj[所属街道] = {
             label: 所属街道,
             children: [],
             tabIndex: 0,
@@ -91,39 +113,138 @@ export default {
             show: false
           };
         }
-        sObj[所属街道].children.push({
+        jdObj[所属街道].children.push({
           id: "zddk",
           name: GLZD,
           type: DKZT,
+          yt: 土地用途 && 土地用途.replace("用地", ""),
+          attributes,
+          geometry,
+          fieldAliases
+        });
+
+        if (!责任单位) return false;
+        const zrdw = 责任单位.split("/")[0];
+        if (~zrdw.indexOf("街道") || ~zrdw.indexOf("镇")) return false;
+
+        if (!qsObj[zrdw]) {
+          qsObj[zrdw] = {
+            label: zrdw,
+            children: [],
+            tabIndex: 0,
+            check: false,
+            show: false
+          };
+        }
+
+        qsObj[zrdw].children.push({
+          id: "zddk",
+          name: GLZD,
+          type: DKZT,
+          yt: 土地用途 && 土地用途.replace("用地", ""),
+          attributes,
+          geometry,
+          fieldAliases
+        });
+
+        if (!做地完成时限) return false;
+        // const zrdw = 责任单位.split("/")[0];
+        // if (~zrdw.indexOf("街道") || ~zrdw.indexOf("镇")) return false;
+
+        if (!sxObj[做地完成时限]) {
+          sxObj[做地完成时限] = {
+            label: 做地完成时限,
+            children: [],
+            tabIndex: 0,
+            check: false,
+            show: false
+          };
+        }
+
+        sxObj[做地完成时限].children.push({
+          id: "zddk",
+          name: GLZD,
+          type: DKZT,
+          yt: 土地用途 && 土地用途.replace("用地", ""),
           attributes,
           geometry,
           fieldAliases
         });
       });
-      for (let k in sObj) {
-        sArr.push(sObj[k]);
+
+      for (let k in jdObj) {
+        jdArr.push(jdObj[k]);
       }
 
-      sArr.map(item => {
+      jdArr.map(item => {
         if (item.children.length) {
           item.label = `${item.label} (${item.children.length}宗)`;
         }
       });
 
-      this.tree = sArr;
+      for (let k in qsObj) {
+        qsArr.push(qsObj[k]);
+      }
 
-      this.tmpOptions = sArr;
+      qsArr.map(item => {
+        if (item.children.length) {
+          item.children.sort((a, b) => {
+            return a.name > b.name ? 1 : -1;
+          });
 
-      // this.tree = this.leftOptions;
+          item.label = `${item.label} (${item.children.length}宗)`;
+        }
+      });
+
+      for (let k in sxObj) {
+        sxArr.push(sxObj[k]);
+      }
+
+      sxArr.map(item => {
+        if (item.children.length) {
+          item.children.sort((a, b) => {
+            return a.name > b.name ? 1 : -1;
+          });
+
+          item.label = `${item.label.split(" ")[0]} (${
+            item.children.length
+          }宗)`;
+        }
+      });
+
+      this.tree = jdArr;
+
+      this.jdOptions = jdArr;
+
+      this.qsOptions = qsArr;
+
+      this.sxOptions = sxArr;
     });
   },
   methods: {
+    // 切换页
+    changeTab(index) {
+      this.tree =
+        index == 0
+          ? this.jdOptions
+          : index == 1
+          ? this.qsOptions
+          : this.sxOptions;
+    },
     // 搜索
     filterItem() {
       const tag = this.text;
+      const index = this.tabIndex;
+
+      const tagOptions =
+        index == 0
+          ? this.jdOptions
+          : index == 1
+          ? this.qsOptions
+          : this.sxOptions;
 
       if (tag == "") {
-        this.tree = this.tmpOptions;
+        this.tree = tagOptions;
       } else {
         const sObj = {};
         const sArr = [];
@@ -143,7 +264,7 @@ export default {
           "做地完成时间"
         ];
 
-        this.tmpOptions.map(item => {
+        tagOptions.map(item => {
           const childList = [];
 
           item.children &&
@@ -267,14 +388,15 @@ export default {
     },
     leftOptions(newV, oldV) {
       this.tree = newV;
-    },
-    tabIndex(newV, oldV) {
-      this.clean();
     }
+    // tabIndex(newV, oldV) {
+    //   this.clean();
+    // }
   }
 };
 </script>
 <style scoped lang="less">
+@import url("../../common/_iconfont/iconfont.css");
 .leftMultiSelect {
   height: 100%;
   border-right: 1px solid;
@@ -398,12 +520,24 @@ export default {
           margin-bottom: 10px;
           cursor: pointer;
 
-          span {
-            background: #162449;
-            padding: 7px 10px;
-            border-radius: 6px;
-            font-size: 15px;
-            opacity: 0.9;
+          div {
+            display: flex;
+            align-items: center;
+            i {
+              cursor: pointer;
+              color: #fff;
+              float: right;
+              padding-right: 15px;
+              font-size: 40px;
+            }
+
+            span {
+              background: #162449;
+              padding: 7px 10px;
+              border-radius: 6px;
+              font-size: 15px;
+              opacity: 0.9;
+            }
           }
         }
         > ul:first-child {
@@ -415,13 +549,13 @@ export default {
         width: 100%;
         box-sizing: border-box;
         li {
-          height: 33px;
-          line-height: 28px;
+          // height: 33px;
+          line-height: 33px;
           list-style: none;
           background: rgba(120, 171, 246, 0.2);
           box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
           border: 1px solid rgba(255, 255, 255, 0.2);
-          padding: 4px 10px 4px 12px;
+          padding: 10px 10px 10px 12px;
           margin-bottom: 10px;
           width: 90%;
           display: flex;
@@ -433,15 +567,24 @@ export default {
           p {
             font-size: 18px;
             line-height: 18px;
+            width: 60%;
           }
 
-          span {
-            font-size: 13px;
-            font-weight: bolder;
-            background: #f5f5f5;
-            padding: 0px 4px;
-            border-radius: 6px;
-            opacity: 0.9;
+          div {
+            span {
+              font-size: 12px;
+              font-weight: bolder;
+              background: #264582;
+              padding: 7px 5px;
+              border-radius: 6px;
+              opacity: 0.9;
+            }
+
+            span:last-child {
+              margin-left: 5px;
+              background: #f5f5f5;
+              padding: 7px 3px;
+            }
           }
         }
       }

@@ -48,8 +48,6 @@ export default {
         });
       });
     this.jQueryBind();
-
-    // this.addBlank("七都街道");
   },
   watch: {
     leftOptions: {
@@ -200,9 +198,6 @@ export default {
     // 影像图
     yxt() {
       const that = this;
-      if (this.map.findLayerById("dsj")) {
-        this.map.findLayerById("dsj").visible = false;
-      }
       if (this.map.findLayerById("img")) {
         this.map.findLayerById("img").visible = !this.map.findLayerById("img")
           .visible;
@@ -225,20 +220,18 @@ export default {
     },
     // 矢量图
     slt() {
-      if (this.map.findLayerById("dsj")) {
-        this.map.findLayerById("dsj").visible = false;
-      }
       if (this.map.findLayerById("img")) {
         this.map.findLayerById("img").visible = false;
       }
     },
     // 控规图
-    kgt() {
+    kgt(option) {
       const that = this;
       if (this.map.findLayerById("kg")) {
         this.$parent.$refs.bottomBtn.kgtTag = this.map.findLayerById(
           "kg"
-        ).visible = !this.map.findLayerById("kg").visible;
+        ).visible =
+          option == null ? !this.map.findLayerById("kg").visible : true;
       } else {
         return new Promise((resolve, reject) => {
           loadModules(["esri/layers/MapImageLayer"], OPTION).then(
@@ -319,8 +312,8 @@ export default {
         y = geometry.centroid.y;
 
       that.view.goTo({
-        center: [x, y + 0.04],
-        zoom: 13
+        center: [x, y + 0.0025],
+        zoom: 17
       });
       if (tipHash[id] && Hash[tipHash[id]]) {
         const _hash_ = Hash[tipHash[id]];
@@ -382,14 +375,43 @@ export default {
               symbol: fillSymbol
             });
             that.view.graphics.add(polygonGraphic);
+            that.kgt("show");
+            let _x = geometry.centroid.x;
+            let _y = geometry.centroid.y;
             that.view.goTo({
-              center: [geometry.centroid.x, geometry.centroid.y],
-              zoom: ~["蒲鞋市街道", "大南街道", "广化街道", "五马街道","南汇街道"].indexOf(
-                label
-              )
-                ? 16
+              center: ~["双屿街道"].indexOf(label)
+                ? [_x + 0.012, _y + 0.005]
+                : ~["五马街道"].indexOf(label)
+                ? [_x + 0.009, _y - 0.005]
+                : ~["南郊街道"].indexOf(label)
+                ? [_x + 0.002, _y + 0.003]
+                : ~["滨江街道"].indexOf(label)
+                ? [_x + 0.004, _y]
+                : ~["七都街道"].indexOf(label)
+                ? [_x - 0.003, _y + 0.003]
+                : ~["蒲鞋市街道"].indexOf(label)
+                ? [_x + 0.013, _y + 0.003]
+                : ~["仰义街道"].indexOf(label)
+                ? [_x - 0.012, _y - 0.004]
                 : ~["藤桥镇"].indexOf(label)
-                ? 14
+                ? [_x + 0.053, _y + 0.013]
+                : ~["南汇街道"].indexOf(label)
+                ? [_x - 0.009, _y - 0.003]
+                : [_x, _y],
+              zoom: ~[
+                "双屿街道",
+                "仰义街道",
+                "大南街道",
+                "五马街道",
+                "南郊街道",
+                "滨江街道",
+                "七都街道"
+              ].indexOf(label)
+                ? 16
+                : ~["广化街道", "松台街道", "蒲鞋市街道"].indexOf(label)
+                ? 17
+                : ~["藤桥镇", "南汇街道"].indexOf(label)
+                ? 18
                 : 15
             });
           }
