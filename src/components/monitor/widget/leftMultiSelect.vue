@@ -125,35 +125,37 @@ export default {
 
         if (!责任单位) return false;
         const zrdw = 责任单位.split("/")[0];
-        if (~zrdw.indexOf("街道") || ~zrdw.indexOf("镇")) return false;
+        if (!(~zrdw.indexOf("街道") || ~zrdw.indexOf("镇"))) {
+          if (!qsObj[zrdw]) {
+            qsObj[zrdw] = {
+              label: zrdw,
+              children: [],
+              tabIndex: 0,
+              check: false,
+              show: false
+            };
+          }
 
-        if (!qsObj[zrdw]) {
-          qsObj[zrdw] = {
-            label: zrdw,
-            children: [],
-            tabIndex: 0,
-            check: false,
-            show: false
-          };
+          qsObj[zrdw].children.push({
+            id: "zddk",
+            name: GLZD,
+            type: DKZT,
+            yt: 土地用途 && 土地用途.replace("用地", ""),
+            attributes,
+            geometry,
+            fieldAliases
+          });
         }
-
-        qsObj[zrdw].children.push({
-          id: "zddk",
-          name: GLZD,
-          type: DKZT,
-          yt: 土地用途 && 土地用途.replace("用地", ""),
-          attributes,
-          geometry,
-          fieldAliases
-        });
 
         if (!做地完成时限) return false;
-        // const zrdw = 责任单位.split("/")[0];
-        // if (~zrdw.indexOf("街道") || ~zrdw.indexOf("镇")) return false;
+        let wcsx = 做地完成时限;
+        if (wcsx == "2020年6月") {
+          wcsx = "2020-06-01 00:00:00";
+        }
 
-        if (!sxObj[做地完成时限]) {
-          sxObj[做地完成时限] = {
-            label: 做地完成时限,
+        if (!sxObj[wcsx]) {
+          sxObj[wcsx] = {
+            label: wcsx,
             children: [],
             tabIndex: 0,
             check: false,
@@ -161,7 +163,7 @@ export default {
           };
         }
 
-        sxObj[做地完成时限].children.push({
+        sxObj[wcsx].children.push({
           id: "zddk",
           name: GLZD,
           type: DKZT,
