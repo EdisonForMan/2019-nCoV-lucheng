@@ -61,6 +61,8 @@ export default {
       this.$parent.$refs.montorArcgis.view.graphics.removeAll();
       this.$parent.$refs.montorArcgis.view.popup.visible = false;
 
+      this.$parent.$refs.topDate.filterItem();
+
       this.zddkTag = false;
       this.xzqhTag = false;
       this.kgtTag = false;

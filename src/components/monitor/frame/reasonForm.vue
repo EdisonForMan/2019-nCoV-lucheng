@@ -5,16 +5,20 @@
     </div>
 
     <div class="content">
-      <ul>
-        <li>
-          <h4>责任人</h4>
-          <span>{{ zrr }}</span>
-        </li>
-        <li>
-          <h4>具体原因</h4>
-          <span>{{ jtyy }}</span>
-        </li>
-      </ul>
+      <table border="0" cellpadding="0" cellspacing="0">
+        <tr>
+          <td style="width: 30%;">责任人</td>
+          <td>{{ zrr }}</td>
+        </tr>
+        <tr>
+          <td>具体原因</td>
+          <td>{{ jtyy }}</td>
+        </tr>
+        <tr>
+          <td>时间节点</td>
+          <td>{{ sjjd }}</td>
+        </tr>
+      </table>
     </div>
   </div>
 </template>
@@ -27,6 +31,7 @@ export default {
     return {
       jtyy: null,
       zrr: null,
+      sjjd: null,
       options: null
     };
   },
@@ -38,6 +43,7 @@ export default {
       if (this.options != null) {
         this.jtyy = this.options.jtyy != "/" ? this.options.jtyy : "暂无数据";
         this.zrr = this.options.zrr != "/" ? this.options.zrr : "暂无数据";
+        this.sjjd = this.options.sjjd != "/" ? this.options.sjjd : "暂无数据";
       }
     }
   }
@@ -46,11 +52,11 @@ export default {
 
 <style lang="less" scoped>
 #reasonForm {
-  width: 80%;
-  height: 80%;
+  width: 88%;
+  height: 92%;
   position: absolute;
-  left: 10%;
-  bottom: 8%;
+  left: 6%;
+  bottom: 6%;
   z-index: 40;
   background: linear-gradient(
     180deg,
@@ -71,30 +77,29 @@ export default {
   }
 
   .content {
-    height: 70%;
-    padding: 8px 15px;
+    height: 80%;
+    padding: 0px 10px;
+    margin: 0px 5px;
+    overflow: auto;
 
-    ul {
-      text-align: left;
-      height: 100%;
-      overflow: auto;
-      li {
-        margin-bottom: 10px;
-        span {
-          font-size: 14px;
-          word-break: break-all;
-        }
+    table {
+      border: 1px solid #ccc;
+      width: 100%;
+
+      td {
+        border: 1px solid #ccc;
+        padding: 10px 5px;
       }
     }
   }
 
-  .content ul::-webkit-scrollbar {
+  .content::-webkit-scrollbar {
     display: block;
     width: 10px;
     background-color: #1a3561;
     border-radius: 10px;
   }
-  .content ul::-webkit-scrollbar-thumb {
+  .content::-webkit-scrollbar-thumb {
     width: 10px;
     background-color: #45cdff;
     border-radius: 10px;

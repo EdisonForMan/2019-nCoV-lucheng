@@ -125,27 +125,27 @@ export default {
 
         if (!责任单位) return false;
         const zrdw = 责任单位.split("/")[0];
-        if (!(~zrdw.indexOf("街道") || ~zrdw.indexOf("镇"))) {
-          if (!qsObj[zrdw]) {
-            qsObj[zrdw] = {
-              label: zrdw,
-              children: [],
-              tabIndex: 0,
-              check: false,
-              show: false
-            };
-          }
-
-          qsObj[zrdw].children.push({
-            id: "zddk",
-            name: GLZD,
-            type: DKZT,
-            yt: 土地用途 && 土地用途.replace("用地", ""),
-            attributes,
-            geometry,
-            fieldAliases
-          });
+        // if (!(~zrdw.indexOf("街道") || ~zrdw.indexOf("镇"))) {
+        if (!qsObj[zrdw]) {
+          qsObj[zrdw] = {
+            label: zrdw,
+            children: [],
+            tabIndex: 0,
+            check: false,
+            show: false
+          };
         }
+
+        qsObj[zrdw].children.push({
+          id: "zddk",
+          name: GLZD,
+          type: DKZT,
+          yt: 土地用途 && 土地用途.replace("用地", ""),
+          attributes,
+          geometry,
+          fieldAliases
+        });
+        // }
 
         if (!做地完成时限) return false;
         let wcsx = 做地完成时限;
@@ -188,15 +188,19 @@ export default {
         qsArr.push(qsObj[k]);
       }
 
-      qsArr.map(item => {
-        if (item.children.length) {
-          item.children.sort((a, b) => {
-            return a.name > b.name ? 1 : -1;
-          });
+      qsArr
+        .sort((a, b) => {
+          return ~b.label.indexOf("集团") ? 1 : -1;
+        })
+        .map(item => {
+          if (item.children.length) {
+            item.children.sort((a, b) => {
+              return a.name > b.name ? 1 : -1;
+            });
 
-          item.label = `${item.label} (${item.children.length}宗)`;
-        }
-      });
+            item.label = `${item.label} (${item.children.length}宗)`;
+          }
+        });
 
       for (let k in sxObj) {
         sxArr.push(sxObj[k]);
@@ -342,10 +346,11 @@ export default {
       this.$parent.$refs.dkxqForm.getItem(name, imgName);
       this.$parent.dkxqShow = true;
     },
-    // 街道做地图
+    // 街道做地分布图
     switchChar(label) {
       const name = label.split(" ")[0];
       this.$parent.$refs.montorArcgis.addBlank(name);
+      this.$parent.$refs.topDate.filterItem(name);
     },
     intercept() {
       const _tree = this.$util.clone(this.tree);

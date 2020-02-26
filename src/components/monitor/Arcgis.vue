@@ -127,13 +127,19 @@ export default {
     // 绑定事件
     jQueryBind() {
       const context = this;
-      //  地块详情
+      // 地块详情
       $("body").on("click", ".dk_btn", function() {
         const name = $(this).attr("data-val");
         const imgName = $(this).attr("data-val2");
         context.$parent.rightHidden();
         context.$parent.$refs.dkxqForm.getItem(name, imgName);
         context.$parent.dkxqShow = true;
+      });
+      // 做地出让方案
+      $("body").on("click", ".crfa_btn", function() {
+        const name = $(this).attr("data-val");
+        context.$parent.$refs.crfaForm.getItem(name);
+        context.$parent.crfaShow = true;
       });
     },
     // 五色图
@@ -287,7 +293,8 @@ export default {
                       })
                       .join("")}
                   </tbody></table>
-                  <div class="bottomBtn dk_btn" data-val="{GLZD}" data-val2="{做地详情}">查看详情</div>`
+                  <div class="bottomBtn2 dk_btn" data-val="{GLZD}" data-val2="{做地详情}">查看详情</div>
+                  <div class="bottomBtn3 crfa_btn" data-val="{GLZD}">做地方案</div>`
               };
             }
 
@@ -333,9 +340,12 @@ export default {
                 })
                 .join("")}
             </tbody></table>
-            <div class="bottomBtn dk_btn" data-val="${
+            <div class="bottomBtn2 dk_btn" data-val="${
               attributes.GLZD
-            }" data-val2="${attributes.做地详情}">查看详情</div>`,
+            }" data-val2="${attributes.做地详情}">查看详情</div>
+            <div class="bottomBtn3 crfa_btn" data-val="${
+              attributes.GLZD
+            }">做地方案</div>`,
           location: [x, y]
         };
       }

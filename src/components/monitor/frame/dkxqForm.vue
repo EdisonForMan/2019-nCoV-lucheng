@@ -60,7 +60,8 @@ export default {
   components: { reasonForm },
   computed: {
     ...mapState({
-      zdjzList: state => state.zdjzList
+      zdjzList: state => state.zdjzList,
+      dkxxList: state => state.dkxxList
     })
   },
   created() {
@@ -120,6 +121,17 @@ export default {
 
       const list = this.zdjzList.filter(({ GLZD }) => name == GLZD);
 
+      const dkxxObj = this.dkxxList.filter(({ GLZD }) => name == GLZD);
+
+      if (dkxxObj.length) {
+        this.qktable = [
+          {
+            title: "地块区位优势",
+            text: dkxxObj[0].QKYS == "/" ? "暂无数据" : dkxxObj[0].QKYS
+          }
+        ];
+      }
+
       if (list.length) {
         const item = list[0];
 
@@ -134,6 +146,7 @@ export default {
             tf: item.TDZSZJS1,
             jtyy: item.JTYY1,
             zrr: item.ZRR1,
+            sjjd: "/",
             color: colorHash[item.TDZSZJS1]
           },
           {
@@ -141,6 +154,7 @@ export default {
             tf: item.TDSYQ2,
             jtyy: item.JTYY2,
             zrr: item.ZRR2,
+            sjjd: "/",
             color: colorHash[item.TDSYQ2]
           },
           {
@@ -148,6 +162,7 @@ export default {
             tf: item.JZW3,
             jtyy: item.JTYY3,
             zrr: item.ZRR3,
+            sjjd: "/",
             color: colorHash[item.JZW3]
           },
           {
@@ -155,6 +170,7 @@ export default {
             tf: item.TDZ4,
             jtyy: item.JTYY4,
             zrr: item.ZRR4,
+            sjjd: "/",
             color: colorHash[item.TDZ4]
           },
           {
@@ -162,6 +178,7 @@ export default {
             tf: item.GX5,
             jtyy: item.JTYY5,
             zrr: item.ZRR5,
+            sjjd: "/",
             color: colorHash[item.GX5]
           },
           {
@@ -169,6 +186,7 @@ export default {
             tf: item.DBFZW6,
             jtyy: item.JTYY6,
             zrr: item.ZRR6,
+            sjjd: "/",
             color: colorHash[item.DBFZW6]
           },
           {
@@ -176,6 +194,7 @@ export default {
             tf: item.TDWR7,
             jtyy: item.JTYY7,
             zrr: item.ZRR7,
+            sjjd: "/",
             color: colorHash[item.TDWR7]
           },
           {
@@ -183,6 +202,7 @@ export default {
             tf: item.CD8,
             jtyy: item.JTYY8,
             zrr: item.ZRR8,
+            sjjd: "/",
             color: colorHash[item.CD8]
           },
           {
@@ -190,6 +210,7 @@ export default {
             tf: item.SY9,
             jtyy: item.JTYY9,
             zrr: item.ZRR9,
+            sjjd: "/",
             color: colorHash[item.SY9]
           },
           {
@@ -197,6 +218,7 @@ export default {
             tf: item.WQFY10,
             jtyy: item.JTYY10,
             zrr: item.ZRR10,
+            sjjd: "/",
             color: colorHash[item.WQFY10]
           },
           {
@@ -204,6 +226,7 @@ export default {
             tf: item.TDSC11,
             jtyy: item.JTYY11,
             zrr: item.ZRR11,
+            sjjd: "/",
             color: colorHash[item.TDSC11]
           },
           {
@@ -211,15 +234,16 @@ export default {
             tf: item.GP12,
             jtyy: item.JTYY12,
             zrr: item.ZRR12,
+            sjjd: "/",
             color: colorHash[item.GP12]
           }
         ];
       }
     },
     getReason(item) {
-      if (item.tf != "是") {
-        this.$refs.reasonForm.showReason(item);
-      }
+      // if (item.tf != "是") {
+      this.$refs.reasonForm.showReason(item);
+      // }
     }
   }
 };
@@ -228,7 +252,7 @@ export default {
 <style lang="less" scoped>
 #dkxqForm {
   position: absolute;
-  width: 450px;
+  width: 490px;
   height: 88%;
   background: rgba(4, 30, 117, 0.5);
   border-left: 1px solid #04ecff;
@@ -307,12 +331,12 @@ export default {
           box-sizing: border-box;
           padding: 8px 15px 0px;
           p {
-            font-size: 16px;
+            font-size: 17px;
             color: rgba(211, 154, 69, 1);
             line-height: 22px;
           }
           span {
-            font-size: 12px;
+            font-size: 14px;
           }
         }
 

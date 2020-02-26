@@ -1,10 +1,14 @@
 <template>
   <div class="Com_content Monitor">
+    <div class="subTitle">
+      <span>——</span>
+      做地出让指挥地图
+    </div>
     <div class="btnGroup">
       <ul>
         <li>企业复工</li>
         <li>做地地图</li>
-        <li>复产分析</li>
+        <li>营销分析</li>
       </ul>
     </div>
     <div class="Com_map">
@@ -24,10 +28,12 @@
         <span @click="toggle2" class="hidden_right_button"></span>
       </div>
     </div>
-    <topDate />
+    <topDate ref="topDate" />
     <xzDate />
     <bottomBtn ref="bottomBtn" />
     <dkxqForm ref="dkxqForm" v-show="dkxqShow" :style="{right:moveRight + 'px'}" />
+    <dkList v-show="listShow" />
+    <crfaForm ref="crfaForm" v-show="crfaShow" />
   </div>
 </template>
 
@@ -53,6 +59,12 @@ import tdyt from "./rightDiv/tdyt";
 
 // 地块详情
 import dkxqForm from "./frame/dkxqForm";
+// 地块列表
+import dkList from "./frame/dkList";
+// 出让方案
+import crfaForm from "./frame/crfaForm";
+// 放大图片
+// import bigImg from "./frame/bigImg";
 
 import { leftOptions } from "./config/enums";
 
@@ -67,7 +79,9 @@ export default {
       leftOptions,
       moveLeft: "360",
       moveRight: "500",
-      dkxqShow: false
+      dkxqShow: false,
+      listShow: false,
+      crfaShow: false
     };
   },
   components: {
@@ -88,14 +102,16 @@ export default {
     // 土地用途
     tdyt,
     // 地块详情
-    dkxqForm
+    dkxqForm,
+    // 地块列表
+    dkList,
+    // 出让方案
+    crfaForm
   },
   created() {},
   mounted() {
     !this.zdjzList.length && this.fetchzdjzList();
     !this.dkxxList.length && this.fetchdkxxList();
-
-    // console.log("dkxx-mon", this.dkxxList);
   },
   computed: {
     ...mapState({

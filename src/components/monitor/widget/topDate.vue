@@ -1,41 +1,62 @@
 <template>
   <div id="topDateDiv">
     <ul>
-      <li>
-        <h4>
-          目标
-          <span style="color: #ff3229;">{{ crdk_jh }}</span> 宗
-        </h4>
-        <!-- <p style="color: #d793ff;">做地地块</p> -->
-        <p>做地地块</p>
-        <h4>
-          累计
-          <span style="color: #6dff3d;">{{ crdk_lj }}</span> 宗
-        </h4>
+      <li style="cursor: pointer;" @click="showList">
+        <p>做地地块{{ country }}</p>
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <td>计划目标</td>
+            <td>
+              <span style="color: #ff3229;">{{ crdk_jh }}</span>
+            </td>
+            <td>宗</td>
+          </tr>
+          <tr>
+            <td>累计完成</td>
+            <td>
+              <span style="color: #6dff3d;">{{ crdk_lj }}</span>
+            </td>
+            <td>宗</td>
+          </tr>
+        </table>
       </li>
       <li>
-        <h4>
-          目标
-          <span style="color: #ff3229;">{{ crmj_jh }}</span> 亩
-        </h4>
-        <!-- <p style="color: #eee72d;">地块面积</p> -->
-        <p>地块面积</p>
-        <h4>
-          累计
-          <span style="color: #6dff3d;">{{ crmj_lj }}</span> 亩
-        </h4>
+        <p>地块面积{{ country }}</p>
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <td>计划目标</td>
+            <td>
+              <span style="color: #ff3229;">{{ crmj_jh }}</span>
+            </td>
+            <td>亩</td>
+          </tr>
+          <tr>
+            <td>累计完成</td>
+            <td>
+              <span style="color: #6dff3d;">{{ crmj_lj }}</span>
+            </td>
+            <td>亩</td>
+          </tr>
+        </table>
       </li>
       <li>
-        <h4>
-          目标
-          <span style="color: #ff3229;">{{ crje_jh }}</span> 亿
-        </h4>
-        <!-- <p style="color: #ff8d4a;">地块货值</p> -->
-        <p>地块货值</p>
-        <h4>
-          累计
-          <span style="color: #6dff3d;">{{ crje_lj }}</span> 亿
-        </h4>
+        <p>出让货值{{ country }}</p>
+        <table border="0" cellpadding="0" cellspacing="0">
+          <!-- <tr>
+            <td>计划目标</td>
+            <td>
+              <span style="color: #ff3229;">{{ crje_jh }}</span>
+            </td>
+            <td>亿</td>
+          </tr>-->
+          <tr>
+            <td>累计完成</td>
+            <td>
+              <span style="color: #6dff3d;">{{ crje_lj }}</span>
+            </td>
+            <td>亿</td>
+          </tr>
+        </table>
       </li>
     </ul>
   </div>
@@ -47,12 +68,15 @@ import { mapState, mapActions } from "vuex";
 export default {
   data() {
     return {
+      country: null,
       crdk_lj: 0,
       crje_lj: 0,
       crmj_lj: 0,
+      wcdk_lj: 0,
       crdk_jh: 0,
       crje_jh: 0,
-      crmj_jh: 0
+      crmj_jh: 0,
+      tmpData: null
     };
   },
   computed: {
@@ -68,6 +92,7 @@ export default {
       let crdk_lj = 0;
       let crje_lj = 0;
       let crmj_lj = 0;
+      let wcdk_lj = 0;
       let crdk_jh = 0;
       let crje_jh = 0;
       let crmj_jh = 0;
@@ -79,17 +104,85 @@ export default {
           TDMJ != "/" && (crmj_lj = Number(crmj_lj) + Number(TDMJ));
         }
 
+        CRQK != "做地中" && wcdk_lj++;
+
         crdk_jh++;
-        QSJ != "/" && (crje_jh = Number(crje_lj) + Number(QSJ));
-        TDMJ != "/" && (crmj_jh = Number(crmj_lj) + Number(TDMJ));
+        QSJ != "/" && (crje_jh = Number(crje_jh) + Number(QSJ));
+        TDMJ != "/" && (crmj_jh = Number(crmj_jh) + Number(TDMJ));
       });
 
       this.crdk_lj = crdk_lj;
       this.crje_lj = (crje_lj / 10000).toFixed(2);
       this.crmj_lj = crmj_lj.toFixed(2);
       this.crdk_jh = crdk_jh;
+      this.wcdk_lj = wcdk_lj;
       this.crje_jh = (crje_jh / 10000).toFixed(2);
       this.crmj_jh = crmj_jh.toFixed(2);
+
+      this.tmpData = {
+        crdk_lj: crdk_lj,
+        crje_lj: (crje_lj / 10000).toFixed(2),
+        crmj_lj: crmj_lj.toFixed(2),
+        wcdk_lj: wcdk_lj,
+        crdk_jh: crdk_jh,
+        crje_jh: (crje_jh / 10000).toFixed(2),
+        crmj_jh: crmj_jh.toFixed(2)
+      };
+    },
+    filterItem(country) {
+      !this.dkxxList.length && this.fetchdkxxList();
+
+      if (country == null) {
+        this.crdk_lj = this.tmpData["crdk_lj"];
+        this.crje_lj = this.tmpData["crje_lj"];
+        this.crmj_lj = this.tmpData["crmj_lj"];
+        this.wcdk_lj = this.tmpData["wcdk_lj"];
+        this.crdk_jh = this.tmpData["crdk_jh"];
+        this.crje_jh = this.tmpData["crje_jh"];
+        this.crmj_jh = this.tmpData["crmj_jh"];
+
+        this.country = null;
+      } else {
+        let crdk_lj = 0;
+        let crje_lj = 0;
+        let crmj_lj = 0;
+        let wcdk_lj = 0;
+        let crdk_jh = 0;
+        let crje_jh = 0;
+        let crmj_jh = 0;
+
+        this.dkxxList.map(({ CRQK, CJJ, QSJ, TDMJ, SSJD }) => {
+          if (SSJD == country) {
+            if (CRQK == "已出让") {
+              crdk_lj++;
+              CJJ != "/" && (crje_lj = Number(crje_lj) + Number(CJJ));
+              TDMJ != "/" && (crmj_lj = Number(crmj_lj) + Number(TDMJ));
+            }
+
+            if (CRQK != "做地中") {
+              wcdk_lj++;
+            }
+
+            crdk_jh++;
+            QSJ != "/" && (crje_jh = Number(crje_jh) + Number(QSJ));
+            TDMJ != "/" && (crmj_jh = Number(crmj_jh) + Number(TDMJ));
+          }
+        });
+
+        this.crdk_lj = crdk_lj;
+        this.crje_lj = (crje_lj / 10000).toFixed(2);
+        this.crmj_lj = crmj_lj.toFixed(2);
+        this.wcdk_lj = wcdk_lj;
+        this.crdk_jh = crdk_jh;
+        this.crje_jh = (crje_jh / 10000).toFixed(2);
+        this.crmj_jh = crmj_jh.toFixed(2);
+
+        this.country = ` (${country})`;
+      }
+    },
+    // 地块列表
+    showList() {
+      this.$parent.listShow = true;
     }
   },
   mounted() {
@@ -112,25 +205,41 @@ export default {
   z-index: 20;
 
   ul li {
-    width: 140px;
+    min-width: 230px;
     margin: 0px 15px;
     display: inline-block;
     background-color: #1b45a7;
     border: 1px solid #07e2e8;
-    // padding: 5px 9px;
     color: #07e2e8;
 
-    span {
-      font-size: 21px;
-    }
+    table {
+      height: 68px;
+      margin: 5px auto;
 
-    h4 {
-      padding: 5px;
+      tr {
+        td:first-child {
+          text-align: right;
+          font-weight: bolder;
+          letter-spacing: 2px;
+        }
+        td:last-child {
+          text-align: left;
+          font-weight: bolder;
+          letter-spacing: 2px;
+        }
+
+        span {
+          font-size: 29px;
+          font-weight: bolder;
+          margin: 0px 5px;
+        }
+      }
     }
 
     p {
-      font-size: 18px;
+      font-size: 19px;
       font-weight: bolder;
+      letter-spacing: 2px;
       padding: 5px;
       border-top: 1px solid #07e2e8;
       border-bottom: 1px solid #07e2e8;
