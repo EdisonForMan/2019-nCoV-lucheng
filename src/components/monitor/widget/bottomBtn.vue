@@ -1,6 +1,7 @@
 <template>
   <div id="btnDiv">
     <ul>
+      <!-- <li @click="warning">预警</li> -->
       <li :class="{active:zddkTag}" @click="zddk">做地地块</li>
       <li :class="{active:xzqhTag}" @click="xzqh">五色风险评估</li>
       <li :class="{active:kgtTag}" @click="kgt">控规图</li>
@@ -26,6 +27,9 @@ export default {
   mounted() {},
   computed: {},
   methods: {
+    warning() {
+      this.$parent.warnShow = true;
+    },
     zddk() {
       this.$parent.$refs.montorArcgis.zddk();
     },
@@ -79,13 +83,24 @@ export default {
   z-index: 20;
 
   > ul {
+    // > li:first-child {
+    //   color: #000;
+    //   background-color: #ffa901;
+    //   border: 1px solid #fff138;
+    //   padding: 0px 16px;
+    //   margin-right: 30px;
+    //   font-size: 18px;
+    //   font-weight: bolder;
+    // }
+
     > li {
-      height: 21px;
+      height: 43px;
+      line-height: 43px;
       list-style: none;
       float: left;
       background-color: #243968;
       border: 1px solid #05fff8;
-      padding: 10px 10px;
+      padding: 0px 10px;
       margin-left: 5px;
       cursor: pointer;
     }

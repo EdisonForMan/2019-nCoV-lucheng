@@ -81,7 +81,15 @@ export const sbFields = {
     // 在建工地
     zjgd: ["ProjectName", "JSDD", "JD", "JQZFGSJ", "CNSQD"],
     // 南郊企业
-    nj_qy: ["CompanyName", "Address", "MajorBusiness", "单位负责人", "单位负责人联系电话"]
+    nj_qy: ["CompanyName", "Address", "MajorBusiness", "单位负责人", "单位负责人联系电话"],
+    // 红码隔离点人员名单
+    hmgld_list: ["Name", "Sex", "Country", "Phone", "GLD"],
+    // 华侨隔离点人员名单
+    hqgld_list: ["Name", "Sex", "Country", "Phone", "GLD"],
+    // 红码隔离点
+    hmgld: ["Name", "Address", "Country", "Linkman", "Phone", "IsUsing"],
+    // 华侨隔离点
+    hqgld: ["Name", "Address", "Country", "Linkman", "Phone", "IsUsing"]
 }
 
 
@@ -137,5 +145,6 @@ export const noShowFields = [
     "形状",
     "DateUsource",
     "经度",
-    "纬度"
+    "纬度",
+    "总序号"
 ]

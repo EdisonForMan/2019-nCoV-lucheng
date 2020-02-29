@@ -1,7 +1,11 @@
 <template>
   <div id="tdytDiv">
     <div>
-      <span class="title">2020年计划出让土地用途统计图</span>
+      <span class="title">2020年计划出让土地用地性质统计图</span>
+      <select id="select" @change="bqSelect($event)">
+        <option value="tdyt">按宗数统计</option>
+        <option value="tdmj">按面积统计</option>
+      </select>
     </div>
     <div id="tdytChart"></div>
   </div>
@@ -9,10 +13,12 @@
 
 <script>
 /* eslint-disable */
-import { mapState, mapActions } from "vuex";
+import { mapState } from "vuex";
 export default {
   data() {
-    return {};
+    return {
+      index: "tdyt"
+    };
   },
   computed: {
     ...mapState({
@@ -20,10 +26,7 @@ export default {
     })
   },
   methods: {
-    ...mapActions(["fetchdkxxList"]),
     fixdkxxList() {
-      !this.dkxxList.length && this.fetchdkxxList();
-
       const ytHash = {
         住宅用地: {
           value: 0,
@@ -58,22 +61,41 @@ export default {
       };
 
       const tdytObj = JSON.parse(JSON.stringify(ytHash));
+      const tdmjObj = JSON.parse(JSON.stringify(ytHash));
 
       const tdytData = [];
+      const tdmjData = [];
 
-      this.dkxxList.map(({ TDYT }) => {
+      this.dkxxList.map(({ TDYT, TDMJ }) => {
         TDYT != null && tdytObj[TDYT] && tdytObj[TDYT].value++;
+        TDMJ != null &&
+          tdmjObj[TDYT] &&
+          (tdmjObj[TDYT].value = Number(tdmjObj[TDYT].value) + Number(TDMJ));
       });
 
       for (let k in tdytObj) {
         tdytData.push(tdytObj[k]);
       }
 
+      Object.values(tdmjObj).map(item => {
+        item.value = Number(item.value).toFixed(2);
+      });
+
+      for (let k in tdmjObj) {
+        tdmjData.push(tdmjObj[k]);
+      }
+
       this.dataList = tdytData;
+
+      this.dataHash = {
+        tdyt: tdytData,
+        tdmj: tdmjData
+      };
 
       this.doChart();
     },
     doChart() {
+      const that = this;
       const chart = this.$echarts.init(document.getElementById("tdytChart"));
       chart.setOption({
         grid: {
@@ -81,7 +103,7 @@ export default {
         },
         legend: {
           orient: "vertical",
-          right: "5%",
+          right: "2%",
           align: "left",
           top: "middle",
           itemHeight: 15,
@@ -95,67 +117,45 @@ export default {
           {
             type: "pie",
             minAngle: 2,
-            radius: ["40%", "70%"],
-            center: ["40%", "50%"],
+            radius: ["30%", "60%"],
+            center: ["40%", "57%"],
             clockwise: false,
             label: {
               normal: {
                 show: true,
                 position: "outter",
                 formatter: function(params) {
-                  return `${params.data.name} ${params.percent}%`;
+                  if (that.index == "tdyt") {
+                    return `${params.data.name}${params.data.value}宗\n(占比${params.percent}%)`;
+                  } else {
+                    return `${params.data.name}${params.data.value}亩\n(占比${params.percent}%)`;
+                  }
                 },
                 textStyle: {
-                  fontSize: 13
+                  fontSize: 18
                 }
               }
             },
             labelLine: {
               normal: {
-                length: 10,
-                length2: 7
+                length: 5,
+                length2: 5
               }
             },
             data: this.dataList
           }
         ]
       });
+    },
+    bqSelect: function(event) {
+      this.dataList = this.dataHash[event.target.value];
+      this.index = event.target.value;
+      this.$echarts.init(document.getElementById("tdytChart")).clear();
+      this.doChart();
     }
   },
-  created() {
-    /* this.dataList = [
-      {
-        value: 1,
-        name: "住宅",
-        itemStyle: { color: "#f7dc2b" },
-        textStyle: { color: "#f7dc2b" }
-      },
-      {
-        value: 3,
-        name: "商住",
-        itemStyle: { color: "#f67b28" },
-        textStyle: { color: "#f67b28" }
-      },
-      {
-        value: 0,
-        name: "商办",
-        itemStyle: { color: "#2ed8cb" },
-        textStyle: { color: "#2ed8cb" }
-      },
-      {
-        value: 0,
-        name: "医疗",
-        itemStyle: { color: "#31b2f6" },
-        textStyle: { color: "#31b2f6" }
-      }
-    ]; */
-  },
+  created() {},
   mounted() {
-    // this.doChart();
-    // !this.dkxxList.length && this.fetchdkxxList();
-    // console.log("dkxx", this.dkxxList);
-
-    !this.dkxxList.length && this.fetchdkxxList();
     this.fixdkxxList();
   },
   watch: {
@@ -185,6 +185,17 @@ export default {
       font-weight: 500;
       border-left: 5px solid;
       padding-left: 5px;
+    }
+
+    select {
+      position: relative;
+      float: right;
+      top: 12px;
+      right: 12px;
+      padding: 4px 2px;
+      background-color: #1b45a7;
+      border: 1px solid #61ebff;
+      color: #fff;
     }
   }
 

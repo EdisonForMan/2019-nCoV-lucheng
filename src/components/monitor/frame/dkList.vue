@@ -4,17 +4,19 @@
       <span>地块列表</span>
       <a @click="()=>{ this.$parent.listShow = false }">×</a>
     </div>
-    <div class="content">
-      <el-table :data="elList" height="100%" border @row-click="clickTr">
-        <el-table-column prop="index" label="序号" sortable></el-table-column>
-        <el-table-column prop="GLZD" label="地块名称" sortable></el-table-column>
-        <el-table-column prop="SSJD" label="所属街道" sortable></el-table-column>
-        <el-table-column prop="TDYT" label="土地用途" sortable></el-table-column>
-        <el-table-column prop="TDMJ" label="土地面积（亩）" sortable></el-table-column>
-        <el-table-column prop="CRQK" label="出让情况" sortable></el-table-column>
-        <el-table-column prop="ZDWCSX" label="做地完成时限" sortable></el-table-column>
-      </el-table>
-    </div>
+    <!-- <div class="content"> -->
+    <el-table :data="elList" height="90%" border @row-click="clickTr">
+      <el-table-column prop="index" label="序号" sortable width="80"></el-table-column>
+      <el-table-column prop="DKMC" label="地块名称" sortable></el-table-column>
+      <el-table-column prop="SSJD" label="所属街道" sortable width="110"></el-table-column>
+      <el-table-column prop="TDYT" label="土地用途" sortable width="160"></el-table-column>
+      <el-table-column prop="TDMJ" label="土地面积（亩）" sortable width="160"></el-table-column>
+      <el-table-column prop="JZMJ" label="建筑面积（平方米）" sortable width="190"></el-table-column>
+      <el-table-column prop="RJL" label="容积率" sortable width="110"></el-table-column>
+      <el-table-column prop="CRQK" label="出让情况" sortable width="110"></el-table-column>
+      <el-table-column prop="ZDWCSX" label="做地完成时限" sortable width="160"></el-table-column>
+    </el-table>
+    <!-- </div> -->
   </div>
 </template>
 
@@ -58,15 +60,29 @@ export default {
           return a.attributes.所属街道 > b.attributes.所属街道 ? 1 : -1;
         })
         .map(({ attributes, geometry, fieldAliases }, index) => {
+          let zdwcsx = null;
+
+          if (attributes.做地完成时限 != null) {
+            zdwcsx = attributes.做地完成时限.split(" ")[0];
+          }
+
+          const [zdwcsx_y, zdwcsx_m] =
+            zdwcsx == null ? [null, null] : zdwcsx.split("-");
+
           that.elList.push({
             id: "zddk",
             index: index + 1,
-            GLZD: attributes.GLZD,
+            DKMC: attributes.地块名称,
             SSJD: attributes.所属街道,
             TDYT: attributes.土地用途,
             TDMJ: attributes.土地面积_亩,
+            JZMJ: attributes.建筑面积_平方米,
+            RJL: attributes.容积率,
             CRQK: attributes.DKZT,
-            ZDWCSX: attributes.做地完成时限,
+            ZDWCSX:
+              zdwcsx == null
+                ? "/"
+                : `${Number(zdwcsx_y)}年${Number(zdwcsx_m)}月`,
             attributes,
             geometry,
             fieldAliases

@@ -153,7 +153,10 @@ export default {
           label: "序号"
         });
 
-        this.fieldList.length &&
+        console.log(this.forceData, this.fieldList);
+
+        this.fieldList &&
+          this.fieldList.length &&
           this.fieldList.map(k => {
             this.keyList.push({
               prop: k,
@@ -176,7 +179,9 @@ export default {
                 "居家隔离人员",
                 "湖北回鹿人员/信令",
                 "银泰员工",
-                "隔离名单"
+                "隔离名单",
+                "红码隔离点人员名单",
+                "华侨隔离点人员名单"
               ].indexOf(that.title)
             ) {
               obj[_item.prop] = `${item.attributes[_item.prop] &&

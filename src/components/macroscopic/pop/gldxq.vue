@@ -9,7 +9,7 @@
       <div>
         <ul>
           <li v-for="(item,index) in list" :key="index" @click="goLocation(item)">
-            <span>{{++index}}. {{ item.attributes.Name?`${item.attributes.Name.trim().substr(0,1)}*${item.attributes.Name.trim().substr(-1,1)}`:"无" }}, {{item.attributes.Address}}, {{item.attributes.StartIsolationTime}}</span>
+            <span>{{++index}}. {{ item.attributes.Name?`${item.attributes.Name.trim().substr(0,1)}*${item.attributes.Name.trim().substr(-1,1)}`:"无" }}, {{item.attributes.Address || item.attributes.Sex}}, {{item.attributes.StartIsolationTime || item.attributes.Phone}}</span>
           </li>
         </ul>
       </div>

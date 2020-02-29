@@ -3,9 +3,9 @@
     <div>
       <span class="title">做地目标按街道统计图</span>
       <select id="select" @change="bqSelect($event)">
-        <option value="crdk">做地地块</option>
-        <option value="crje">地块货值</option>
-        <option value="crmj">地块面积</option>
+        <option value="crdk">按宗数统计</option>
+        <option value="crje">按货值统计</option>
+        <option value="crmj">按面积统计</option>
       </select>
     </div>
     <div id="crtjChart"></div>
@@ -14,7 +14,7 @@
 
 <script>
 /* eslint-disable */
-import { mapState, mapActions } from "vuex";
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -27,10 +27,7 @@ export default {
     })
   },
   methods: {
-    ...mapActions(["fetchdkxxList"]),
     fixdkxxList() {
-      !this.dkxxList.length && this.fetchdkxxList();
-
       const countryHash = {
         滨江街道: { value: 0, name: "滨江街道" },
         山福镇: { value: 0, name: "山福镇" },
@@ -56,14 +53,12 @@ export default {
       const crjeData = [];
       const crmjData = [];
 
-      this.dkxxList.map(({ CRQK, CJJ, QSJ, TDMJ, SSJD }) => {
-        // if (CRQK == "已出让") {
+      this.dkxxList.map(({ QSJ, TDMJ, SSJD }) => {
         crdkObj[SSJD].value++;
         QSJ != "/" &&
           (crjeObj[SSJD].value = Number(crjeObj[SSJD].value) + Number(QSJ));
         TDMJ != "/" &&
           (crmjObj[SSJD].value = Number(crmjObj[SSJD].value) + Number(TDMJ));
-        // }
       });
 
       for (let k in crdkObj) {
@@ -101,7 +96,7 @@ export default {
       chart.setOption({
         grid: {
           left: "3%",
-          right: "6%",
+          right: "3%",
           top: "16%",
           bottom: "3%",
           containLabel: true
@@ -117,7 +112,7 @@ export default {
             show: false
           },
           axisLabel: {
-            fontSize: 15,
+            fontSize: 17,
             color: "#FFF",
             formatter: function(val) {
               return val.split("").join("\n");
@@ -144,6 +139,17 @@ export default {
           },
           axisTick: {
             show: false
+          },
+          axisLabel: {
+            show: true,
+            textStyle: {
+              color: "#fff",
+              fontSize: 17
+            }
+          },
+          nameTextStyle: {
+            color: "#fff",
+            fontSize: 17
           },
           splitLine: {
             show: false
@@ -184,7 +190,6 @@ export default {
   },
   created() {},
   mounted() {
-    !this.dkxxList.length && this.fetchdkxxList();
     this.fixdkxxList();
   },
   watch: {

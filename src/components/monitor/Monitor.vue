@@ -34,6 +34,7 @@
     <dkxqForm ref="dkxqForm" v-show="dkxqShow" :style="{right:moveRight + 'px'}" />
     <dkList v-show="listShow" />
     <crfaForm ref="crfaForm" v-show="crfaShow" />
+    <warning v-show="warnShow" />
   </div>
 </template>
 
@@ -66,6 +67,9 @@ import crfaForm from "./frame/crfaForm";
 // 放大图片
 // import bigImg from "./frame/bigImg";
 
+// 首屏预警
+import warning from "./frame/warning";
+
 import { leftOptions } from "./config/enums";
 
 import { mapState, mapActions } from "vuex";
@@ -81,7 +85,8 @@ export default {
       moveRight: "500",
       dkxqShow: false,
       listShow: false,
-      crfaShow: false
+      crfaShow: false,
+      warnShow: false
     };
   },
   components: {
@@ -106,7 +111,9 @@ export default {
     // 地块列表
     dkList,
     // 出让方案
-    crfaForm
+    crfaForm,
+    // 首屏预警
+    warning
   },
   created() {},
   mounted() {

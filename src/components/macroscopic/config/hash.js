@@ -45,7 +45,11 @@ export const tipHash = {
     qyfg: "qyfgHash",
     school: "schoolHash",
     zjgd: "zjgdHash",
-    nj_qy: "njqyHash"
+    nj_qy: "njqyHash",
+    hmgld_list: "hmgldListHash",
+    hqgld_list: "hmgldListHash",
+    hmgld: "hmgldHash",
+    hqgld: "hmgldHash"
 }
 
 // 隔离点人员名单
@@ -79,6 +83,139 @@ const gldListHash = [{
 }]
 
 
+// 红码、华侨隔离点人员名单
+const hmgldListHash = [{
+    fieldName: "Country",
+    label: "街镇"
+}, {
+    fieldName: "GLD",
+    label: "隔离点"
+}, {
+    fieldName: "Name",
+    label: "姓名"
+}, {
+    fieldName: "Sex",
+    label: "性别"
+}, {
+    fieldName: "Phone",
+    label: "联系电话"
+}, {
+    fieldName: "Code",
+    label: "身份证号码"
+}, {
+    fieldName: "HJDZ",
+    label: "户籍地址"
+}, {
+    fieldName: "ZWJZDZ",
+    label: "在温居住地址"
+}, {
+    fieldName: "DRSTZT",
+    label: "当日身体状态"
+}, {
+    fieldName: "DRSTZTBZ",
+    label: "当日身体状态备注"
+}, {
+    fieldName: "RYLX",
+    label: "人员类型"
+}, {
+    fieldName: "LYSS",
+    label: "来源省市"
+}, {
+    fieldName: "LY",
+    label: "来源"
+}, {
+    fieldName: "LYD",
+    label: "来源地"
+}, {
+    fieldName: "QWJZ",
+    label: "去往街镇"
+}, {
+    fieldName: "JZLXRY",
+    label: "街镇联系人员"
+}, {
+    fieldName: "LXHM",
+    label: "联系号码"
+}, {
+    fieldName: "ZJCGLRYSSFGZJD",
+    label: "在解除隔离人员时是否告知街镇"
+}, {
+    fieldName: "SFJE",
+    label: "收费金额"
+}, {
+    fieldName: "FJH",
+    label: "房间号"
+}, {
+    fieldName: "KSGLSJ",
+    label: "开始隔离时间"
+}, {
+    fieldName: "YJJCGLSJ",
+    label: "预计解除隔离时间"
+}, {
+    fieldName: "SJLKGLDSJ",
+    label: "实际离开隔离点时间"
+}, {
+    fieldName: "SFYFJCGL",
+    label: "是否依法解除隔离"
+}, {
+    fieldName: "SFZYSBL",
+    label: "是否转疑似病例"
+}, {
+    fieldName: "SFYQTSYLKGLD",
+    label: "是否因其他事由离开隔离点"
+}, {
+    fieldName: "Note",
+    label: "备注"
+}]
+
+// 红码、华侨隔离点
+const hmgldHash = [{
+    fieldName: "Country",
+    label: "街镇"
+}, {
+    fieldName: "Name",
+    label: "集中隔离点名称"
+}, {
+    fieldName: "Address",
+    label: "地点"
+}, {
+    fieldName: "Linkman",
+    label: "联络人"
+}, {
+    fieldName: "Phone",
+    label: "联络电话"
+}, {
+    fieldName: "Rooms",
+    label: "房间数"
+}, {
+    fieldName: "UseNumber",
+    label: "使用人数"
+}, {
+    fieldName: "RemainRooms",
+    label: "剩余可用房间数"
+}, {
+    fieldName: "Note",
+    label: "备注"
+}, {
+    fieldName: "IsUsing",
+    label: "是否启用"
+}, {
+    fieldName: "TerminateIsolationNumber",
+    label: "累计解除隔离人数"
+}, {
+    fieldName: "TerminateIsolationNumber_add",
+    label: "新增解除隔离人数"
+}, {
+    fieldName: "IsolationNumber_add",
+    label: "新增隔离人数"
+}, {
+    fieldName: "QZSDW",
+    label: "区直设单位"
+}, {
+    fieldName: "DXSHDQLFJ",
+    label: "未消杀或待清理房间"
+}]
+
+// 银泰员工
 const ytygHash = [{
     fieldName: "Name",
     label: "姓名"
@@ -110,6 +247,7 @@ const bwgHash = [{
     label: "问题"
 }]
 
+// 网格
 const wgHash = [{
     fieldName: "Name",
     label: "名称"
@@ -908,7 +1046,9 @@ export const Hash = {
     qyfgHash,
     schoolHash,
     zjgdHash,
-    njqyHash
+    njqyHash,
+    hmgldListHash,
+    hmgldHash
 }
 
 

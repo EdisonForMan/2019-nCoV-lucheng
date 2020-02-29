@@ -13,7 +13,12 @@ import {
   addQZLinkFeature_gj,
   mjChartUpdate_gj
 } from "./frame/mjArcgis";
-import { getGLDList, getNJQYList } from "./frame/gldArcgis";
+import {
+  getGLDList,
+  getHMGLDList,
+  getHQGLDList,
+  getNJQYList
+} from "./frame/gldArcgis";
 import { linkCPFeatures } from "./frame/streetArcgis";
 import {
   linkXQFeatures,
@@ -215,6 +220,24 @@ export default {
         context.$parent.leftHidden();
         context.$parent.legend();
       });
+      //  红码隔离点人员详情
+      $("body").on("click", ".hmgld_btn", function() {
+        const name = $(this).attr("data-val");
+        const bid = $(this).attr("data-val2");
+        console.log(name, bid);
+        getHMGLDList(context, name, bid);
+        context.$parent.leftHidden();
+        context.$parent.legend();
+      });
+      //  华侨隔离点人员详情
+      $("body").on("click", ".hqgld_btn", function() {
+        const name = $(this).attr("data-val");
+        const bid = $(this).attr("data-val2");
+        console.log(name, bid);
+        getHQGLDList(context, name, bid);
+        context.$parent.leftHidden();
+        context.$parent.legend();
+      });
       //  三返企业员工
       $("body").on("click", ".njqy_btn", function() {
         const val = $(this).attr("data-val");
@@ -292,6 +315,10 @@ export default {
                       ? "街道"
                       : fieldAliases[k] == "Address"
                       ? "地址"
+                      : fieldAliases[k] == "Note"
+                      ? "备注"
+                      : fieldAliases[k] == "GLD"
+                      ? "隔离点"
                       : fieldAliases[k]
                   }</th>
                   <td class="esri-feature__field-data">${attributes[k] ||
@@ -314,6 +341,16 @@ export default {
           ${
             id == "gld"
               ? `<div class="bottomBtn gld_btn" data-val="${attributes.Name}" data-val2="${attributes.Bid}">观察点人员详情</div>`
+              : ``
+          }
+          ${
+            id == "hmgld"
+              ? `<div class="bottomBtn hmgld_btn" data-val="${attributes.Name}" data-val2="${attributes.Bid}">观察点人员详情</div>`
+              : ``
+          }
+          ${
+            id == "hqgld"
+              ? `<div class="bottomBtn hqgld_btn" data-val="${attributes.Name}" data-val2="${attributes.Bid}">观察点人员详情</div>`
               : ``
           }
           ${
@@ -513,6 +550,16 @@ export default {
           ${
             id == "gld"
               ? `<div class="bottomBtn gld_btn" data-val="{Name}" data-val2="{Bid}">观察点人员详情</div>`
+              : ``
+          }
+          ${
+            id == "hmgld"
+              ? `<div class="bottomBtn hmgld_btn" data-val="{Name}" data-val2="{Bid}">观察点人员详情</div>`
+              : ``
+          }
+          ${
+            id == "hqgld"
+              ? `<div class="bottomBtn hqgld_btn" data-val="{Name}" data-val2="{Bid}">观察点人员详情</div>`
               : ``
           }
           ${

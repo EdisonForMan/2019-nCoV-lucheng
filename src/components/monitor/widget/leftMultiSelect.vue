@@ -32,7 +32,7 @@
               <div>
                 <span
                   :style="{ color: oitem.yt == '住宅' ? '#ffff00' : oitem.yt == '商服' ? '#ff0000' : oitem.yt == '商住' ? '#ff7f00' : oitem.yt == '医疗卫生' ? '#ffbf00' : '#ff9f7f' }"
-                >{{ oitem.yt }}</span>
+                >{{ oitem.yt=="医疗卫生"?"医疗":oitem.yt }}</span>
                 <span
                   :style="{ color: oitem.type == '做地中' ? '#D3382B' : oitem.type == '已出让' ? '#4AB73D' : '#FFC221' }"
                 >{{ oitem.type=="做地中"?"未完成":oitem.type }}</span>
@@ -180,6 +180,10 @@ export default {
 
       jdArr.map(item => {
         if (item.children.length) {
+          item.children.sort((a, b) => {
+            return a.name > b.name ? 1 : -1;
+          });
+
           item.label = `${item.label} (${item.children.length}宗)`;
         }
       });
@@ -206,17 +210,32 @@ export default {
         sxArr.push(sxObj[k]);
       }
 
-      sxArr.map(item => {
-        if (item.children.length) {
-          item.children.sort((a, b) => {
-            return a.name > b.name ? 1 : -1;
-          });
+      sxArr
+        .sort((a, b) => {
+          return a.label > b.label ? 1 : -1;
+        })
+        .map(item => {
+          if (item.children.length) {
+            item.children.sort((a, b) => {
+              return a.name > b.name ? 1 : -1;
+            });
 
-          item.label = `${item.label.split(" ")[0]} (${
-            item.children.length
-          }宗)`;
-        }
-      });
+            let zdwcsx = null;
+            if (item.label != null) {
+              zdwcsx = item.label.split(" ")[0];
+            }
+
+            const [zdwcsx_y, zdwcsx_m] =
+              zdwcsx == null ? [null, null] : zdwcsx.split("-");
+
+            item.label =
+              zdwcsx == null
+                ? "/"
+                : `${Number(zdwcsx_y)}年${Number(zdwcsx_m)}月 (${
+                    item.children.length
+                  }宗)`;
+          }
+        });
 
       this.tree = jdArr;
 
@@ -487,7 +506,7 @@ export default {
       line-height: 45px;
       text-align: left;
       padding-left: 15px;
-      font-size: 20px;
+      font-size: 22px;
       color: #4cd7ec;
       text-shadow: 0px 0px 4px rgba(76, 215, 236, 0.3);
 
@@ -523,7 +542,7 @@ export default {
           border: 1px solid rgba(255, 255, 255, 0.2);
           padding-left: 12px;
           padding-right: 12px;
-          font-size: 18px;
+          font-size: 21px;
           margin-bottom: 10px;
           cursor: pointer;
 

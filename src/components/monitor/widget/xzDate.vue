@@ -62,9 +62,10 @@ export default {
   #xzDateTag {
     background-color: #1d449f;
     border: 1px solid #04f2ff;
-    padding: 10px 12px;
+    padding: 0px 12px;
     cursor: pointer;
-    height: 21px;
+    height: 41px;
+    line-height: 41px;
   }
 
   #xzDateMain {

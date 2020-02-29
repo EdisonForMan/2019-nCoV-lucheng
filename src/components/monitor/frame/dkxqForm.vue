@@ -24,11 +24,21 @@
       <span class="title">问题清单</span>
       <div>
         <ul>
-          <li v-for="(item,index) in qtable" :key="index" @click="getReason(item)">
+          <!-- <li v-for="(item,index) in qtable" :key="index" @click="getReason(item)">
             <div :style="{background:item.color}">
               <span>{{item.text}}</span>
               <br />
               <span>{{item.tf}}</span>
+            </div>
+          </li>-->
+          <li v-for="k in qtable.length / 3" :key="k">
+            <div
+              v-for="(item,index) in qtable.slice((k - 1) * 3, (k - 1) * 3 + 3)"
+              :key="index"
+              @click="getReason(item)"
+              :class="{ complete: item.tf == '是', uncomplete: item.tf != '是' }"
+            >
+              <span>{{item.text}}</span>
             </div>
           </li>
         </ul>
@@ -54,6 +64,7 @@ export default {
     return {
       server,
       imgNum: 4,
+      title: "",
       qtable: []
     };
   },
@@ -103,6 +114,8 @@ export default {
     getItem(name, imgName) {
       const that = this;
 
+      this.title = name;
+
       this.$refs.reasonForm.showReason(null);
 
       const imgList = imgName == "/" ? [] : imgName.split(";");
@@ -117,7 +130,18 @@ export default {
               "background-image": `url("${server}/icon/做地/${item}")`
             });
         });
+      } else {
+        $(".el-carousel__item")
+          .eq(0)
+          .css({
+            "background-image": `url("${server}/icon/做地/临时/暂无图片.jpg")`
+          });
       }
+
+      $(".el-carousel__item").css({
+        cursor: "pointer"
+      });
+      $(".el-carousel__item").bind("click", this.locateVR);
 
       const list = this.zdjzList.filter(({ GLZD }) => name == GLZD);
 
@@ -142,7 +166,7 @@ export default {
 
         that.qtable = [
           {
-            text: "是否已审批到位",
+            text: "征地是否到位",
             tf: item.TDZSZJS1,
             jtyy: item.JTYY1,
             zrr: item.ZRR1,
@@ -244,6 +268,11 @@ export default {
       // if (item.tf != "是") {
       this.$refs.reasonForm.showReason(item);
       // }
+    },
+    locateVR() {
+      if (~this.title.indexOf("滨江")) {
+        window.open("https://720yun.com/t/aevkuy1q07l?scene_id=39682863");
+      }
     }
   }
 };
@@ -304,13 +333,13 @@ export default {
       padding: 15px 20px;
 
       .el-carousel__item:nth-child(2n) {
-        background-image: url("../../common/image/dk/B-04a现场照.jpg");
+        background-image: url("../../common/image/dk/暂无图片.jpg");
         background-repeat: no-repeat;
         background-size: 100% 100%;
       }
 
       .el-carousel__item:nth-child(2n + 1) {
-        background-image: url("../../common/image/dk/现场图3.jpg");
+        background-image: url("../../common/image/dk/暂无图片.jpg");
         background-repeat: no-repeat;
         background-size: 100% 100%;
       }
@@ -331,12 +360,12 @@ export default {
           box-sizing: border-box;
           padding: 8px 15px 0px;
           p {
-            font-size: 17px;
+            font-size: 18px;
             color: rgba(211, 154, 69, 1);
             line-height: 22px;
           }
           span {
-            font-size: 14px;
+            font-size: 17px;
           }
         }
 
@@ -356,22 +385,79 @@ export default {
         width: 100%;
         height: 100%;
         list-style: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
         li {
-          width: 30%;
-          display: inline-block;
-          text-align: center;
-          padding: 5px;
-          cursor: pointer;
-          > div:last-child {
-            width: 100%;
-            display: inline-block;
-            padding: 5px 0px;
+          width: 100%;
+          height: 23%;
+          display: flex;
+          // text-align: center;
+          justify-content: space-between;
+          box-sizing: border-box;
+          padding: 0px 5px;
+          // cursor: pointer;
+          div {
+            width: 32%;
+            height: 100%;
+            display: table;
+            cursor: pointer;
+            box-sizing: border-box;
+            padding: 0px 23px;
+
+            // background-image: url("../../common/image/已完成.png");
+            // background-repeat: no-repeat;
+            // background-size: 100% 100%;
 
             span {
-              font-size: 7px;
+              display: table-cell;
+              vertical-align: middle;
+              font-size: 15px;
+              font-weight: bolder;
+              color: #fff;
             }
           }
+
+          .complete {
+            background-image: url("../../common/image/已完成.png");
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+          }
+
+          .uncomplete {
+            background-image: url("../../common/image/未完成.png");
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+          }
+
+          // > div:last-child {
+          //   width: 100%;
+          //   display: inline-block;
+          //   padding: 5px 0px;
+
+          //   span {
+          //     font-size: 7px;
+          //   }
+          // }
         }
+
+        // li {
+        //   width: 30%;
+        //   display: inline-block;
+        //   text-align: center;
+        //   padding: 5px;
+        //   cursor: pointer;
+        //   > div:last-child {
+        //     width: 100%;
+        //     display: inline-block;
+        //     padding: 5px 0px;
+
+        //     span {
+        //       font-size: 7px;
+        //     }
+        //   }
+        // }
       }
     }
   }

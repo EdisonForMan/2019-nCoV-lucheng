@@ -211,7 +211,9 @@ export default {
         return new Promise((resolve, reject) => {
           loadModules(["esri/layers/TileLayer"], OPTION).then(([TileLayer]) => {
             const imgLayer = new TileLayer({
-              url: TDTIMAGE2017,
+              // url: TDTIMAGE2017,
+              url:
+                "https://services.wzmap.gov.cn/server/rest/services/TDT/YX_2019/MapServer",
               id: "img"
             });
             //  优先级置顶
@@ -374,7 +376,7 @@ export default {
             const geometry = response.features[0].geometry;
             const fillSymbol = {
               type: "simple-fill",
-              color: [21, 249, 253, 0.3],
+              color: [21, 249, 253, 0],
               outline: {
                 color: [21, 249, 253],
                 width: 4

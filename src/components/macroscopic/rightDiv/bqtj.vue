@@ -28,7 +28,12 @@ export default {
   },
   methods: {
     getItem(children, label) {
-      if (label == "疫情分布" && children.id !== "ytyg") {
+      if (
+        label == "疫情分布" &&
+        !~["ytyg", "hmgld", "hmgld_list", "hqgld", "hqgld_list"].indexOf(
+          children.id
+        )
+      ) {
         this.dataAge = this.dataHash[children.id];
         document.getElementById("select").value = children.id;
         this.$echarts.init(document.getElementById("bqtjChart")).clear();
@@ -161,17 +166,6 @@ export default {
   },
   mounted() {
     this.zqzb();
-    //修改数值
-    const that = this;
-    util.$on("chartDataMod", function(newV) {
-      newV == 1
-        ? (that.dataAge = that.YTdataAge)
-        : (that.dataAge = that.dataAge);
-
-      document.getElementById("select").value = "qzbl";
-      that.$echarts.init(document.getElementById("bqtjChart")).clear();
-      that.zqzb();
-    });
   }
 };
 </script>

@@ -57,6 +57,38 @@ export const leftOptions = [{
                 icon: "集聚区",
                 check: false
             }, {
+                name: `红码隔离点 (${lc.hmgld}个)`,
+                id: "hmgld",
+                ytname: -1,
+                url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer",
+                sublayers: "9",
+                icon: "治愈",
+                check: false
+            }, {
+                name: `红码隔离点人员名单 (${lc.hmgld_list}个)`,
+                id: "hmgld_list",
+                ytname: -1,
+                url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer",
+                sublayers: "7",
+                icon: "医院发热待查",
+                check: false
+            }, {
+                name: `华侨隔离点 (${lc.hqgld}个)`,
+                id: "hqgld",
+                ytname: -1,
+                url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer",
+                sublayers: "10",
+                icon: "治愈",
+                check: false
+            }, {
+                name: `华侨隔离点人员名单 (${lc.hqgld_list}个)`,
+                id: "hqgld_list",
+                ytname: -1,
+                url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer",
+                sublayers: "8",
+                icon: "社区发热待查",
+                check: false
+            }, {
                 name: `密切接触者 (${lc.mj}例)`,
                 ytname: -1,
                 // ytd: "IdentityType like '%银泰%'",

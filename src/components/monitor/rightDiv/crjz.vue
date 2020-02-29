@@ -3,9 +3,9 @@
     <div>
       <span class="title">做地累积按月统计图（2020年）</span>
       <select id="select" @change="bqSelect($event)">
-        <option value="crdk">做地地块</option>
-        <option value="crje">地块货值</option>
-        <option value="crmj">地块面积</option>
+        <option value="crdk">按宗数统计</option>
+        <option value="crje">按货值统计</option>
+        <option value="crmj">按面积统计</option>
       </select>
     </div>
     <div id="crjzChart"></div>
@@ -14,7 +14,7 @@
 
 <script>
 /* eslint-disable */
-import { mapState, mapActions } from "vuex";
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -27,12 +27,7 @@ export default {
     })
   },
   methods: {
-    ...mapActions(["fetchdkxxList"]),
     fixdkxxList() {
-      !this.dkxxList.length && this.fetchdkxxList();
-
-      // console.log("dkxx", this.dkxxList);
-
       const timeHash = {
         "2020-01-01": { name: "1月", value: 0 },
         "2020-02-01": { name: "2月", value: 0 },
@@ -57,7 +52,7 @@ export default {
       const crmjData = [];
 
       this.dkxxList.map(({ CRQK, CJJ, QSJ, TDMJ, CRCJSJ }) => {
-        if (CRQK == "已出让" && CRCJSJ != "/") {
+        if (CRQK != "做地中" && CRCJSJ != "/") {
           crdkObj[CRCJSJ.split(" ")[0]].value++;
           CJJ != "/" &&
             (crjeObj[CRCJSJ.split(" ")[0]].value =
@@ -106,27 +101,18 @@ export default {
         },
         grid: {
           left: "3%",
-          right: "6%",
+          right: "3%",
           top: "20%",
           bottom: "3%",
           containLabel: true
         },
         xAxis: {
           type: "category",
-          // boundaryGap: false,
-          // data: this.dataList.map(({ name }) => {
-          //   return (
-          //     name.substr(0, name.indexOf("年") + 1) +
-          //     "\n" +
-          //     name.substr(name.indexOf("年") + 1)
-          //   );
-          // }),
-          data: this.dataList.map(item => item.name),
           axisLabel: {
-            show: true,
-            textStyle: {
-              color: "#fff",
-              fontSize: 12
+            color: "#fff",
+            fontSize: 17,
+            formatter: function(val) {
+              return val.replace("月", "\n月");
             }
           },
           axisTick: false,
@@ -135,7 +121,8 @@ export default {
               color: "#9fdbfd",
               width: 2
             }
-          }
+          },
+          data: this.dataList.map(item => item.name)
         },
         yAxis: {
           type: "value",
@@ -154,8 +141,13 @@ export default {
           axisLabel: {
             show: true,
             textStyle: {
-              color: "#fff"
+              color: "#fff",
+              fontSize: 17
             }
+          },
+          nameTextStyle: {
+            color: "#fff",
+            fontSize: 17
           },
           splitLine: {
             show: true,
@@ -183,13 +175,10 @@ export default {
                   type: "solid",
                   color: "rgb(254,77,105)"
                 },
-                label: { show: true, color: "#fff" }
+                label: { show: true, color: "#fff", fontSize: 13 }
               }
             },
             symbolSize: 5,
-            // areaStyle: {
-            //   normal: {}
-            // },
             data: this.dataList.slice(0, 2)
           }
         ]
@@ -202,24 +191,8 @@ export default {
       this.doChart();
     }
   },
-  created() {
-    /* this.dataList = [
-      { name: "3月", value: 0 },
-      { name: "4月", value: 0 },
-      { name: "5月", value: 0 },
-      { name: "6月", value: 0 },
-      { name: "7月", value: 0 },
-      { name: "8月", value: 0 },
-      { name: "9月", value: 0 },
-      { name: "10月", value: 0 },
-      { name: "11月", value: 0 },
-      { name: "12月", value: 4 },
-      { name: "1月", value: 0 },
-      { name: "2月", value: 0 }
-    ]; */
-  },
+  created() {},
   mounted() {
-    !this.dkxxList.length && this.fetchdkxxList();
     this.fixdkxxList();
   },
   watch: {

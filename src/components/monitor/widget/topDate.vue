@@ -2,7 +2,10 @@
   <div id="topDateDiv">
     <ul>
       <li style="cursor: pointer;" @click="showList">
-        <p>做地地块{{ country }}</p>
+        <p>
+          做地地块
+          <span>{{ country }}</span>
+        </p>
         <table border="0" cellpadding="0" cellspacing="0">
           <tr>
             <td>计划目标</td>
@@ -21,7 +24,10 @@
         </table>
       </li>
       <li>
-        <p>地块面积{{ country }}</p>
+        <p>
+          地块面积
+          <span>{{ country }}</span>
+        </p>
         <table border="0" cellpadding="0" cellspacing="0">
           <tr>
             <td>计划目标</td>
@@ -40,17 +46,20 @@
         </table>
       </li>
       <li>
-        <p>出让货值{{ country }}</p>
+        <p>
+          出让金额
+          <span>{{ country }}</span>
+        </p>
         <table border="0" cellpadding="0" cellspacing="0">
-          <!-- <tr>
-            <td>计划目标</td>
-            <td>
-              <span style="color: #ff3229;">{{ crje_jh }}</span>
-            </td>
-            <td>亿</td>
-          </tr>-->
           <tr>
-            <td>累计完成</td>
+            <td>累计出让</td>
+            <td>
+              <span style="color: #ff3229;">{{ wcdk_lj }}</span>
+            </td>
+            <td>宗</td>
+          </tr>
+          <tr>
+            <td>累计金额</td>
             <td>
               <span style="color: #6dff3d;">{{ crje_lj }}</span>
             </td>
@@ -64,11 +73,11 @@
 
 <script>
 /* eslint-disable */
-import { mapState, mapActions } from "vuex";
+import { mapState } from "vuex";
 export default {
   data() {
     return {
-      country: null,
+      country: `(全区)`,
       crdk_lj: 0,
       crje_lj: 0,
       crmj_lj: 0,
@@ -85,10 +94,7 @@ export default {
     })
   },
   methods: {
-    ...mapActions(["fetchdkxxList"]),
     fixdkxxList() {
-      !this.dkxxList.length && this.fetchdkxxList();
-
       let crdk_lj = 0;
       let crje_lj = 0;
       let crmj_lj = 0;
@@ -98,13 +104,13 @@ export default {
       let crmj_jh = 0;
 
       this.dkxxList.map(({ CRQK, CJJ, QSJ, TDMJ, SSJD }) => {
-        if (CRQK == "已出让") {
+        if (CRQK != "做地中") {
           crdk_lj++;
           CJJ != "/" && (crje_lj = Number(crje_lj) + Number(CJJ));
           TDMJ != "/" && (crmj_lj = Number(crmj_lj) + Number(TDMJ));
         }
 
-        CRQK != "做地中" && wcdk_lj++;
+        CRQK == "已出让" && wcdk_lj++;
 
         crdk_jh++;
         QSJ != "/" && (crje_jh = Number(crje_jh) + Number(QSJ));
@@ -141,7 +147,7 @@ export default {
         this.crje_jh = this.tmpData["crje_jh"];
         this.crmj_jh = this.tmpData["crmj_jh"];
 
-        this.country = null;
+        this.country = `(全区)`;
       } else {
         let crdk_lj = 0;
         let crje_lj = 0;
@@ -153,15 +159,13 @@ export default {
 
         this.dkxxList.map(({ CRQK, CJJ, QSJ, TDMJ, SSJD }) => {
           if (SSJD == country) {
-            if (CRQK == "已出让") {
+            if (CRQK != "做地中") {
               crdk_lj++;
               CJJ != "/" && (crje_lj = Number(crje_lj) + Number(CJJ));
               TDMJ != "/" && (crmj_lj = Number(crmj_lj) + Number(TDMJ));
             }
 
-            if (CRQK != "做地中") {
-              wcdk_lj++;
-            }
+            CRQK == "已出让" && wcdk_lj++;
 
             crdk_jh++;
             QSJ != "/" && (crje_jh = Number(crje_jh) + Number(QSJ));
@@ -177,7 +181,7 @@ export default {
         this.crje_jh = (crje_jh / 10000).toFixed(2);
         this.crmj_jh = crmj_jh.toFixed(2);
 
-        this.country = ` (${country})`;
+        this.country = `(${country})`;
       }
     },
     // 地块列表
@@ -186,7 +190,6 @@ export default {
     }
   },
   mounted() {
-    !this.dkxxList.length && this.fetchdkxxList();
     this.fixdkxxList();
   },
   watch: {
@@ -243,6 +246,10 @@ export default {
       padding: 5px;
       border-top: 1px solid #07e2e8;
       border-bottom: 1px solid #07e2e8;
+
+      span {
+        color: #fff;
+      }
     }
   }
 }
