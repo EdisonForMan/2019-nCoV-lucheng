@@ -153,8 +153,6 @@ export default {
           label: "序号"
         });
 
-        console.log(this.forceData, this.fieldList);
-
         this.fieldList &&
           this.fieldList.length &&
           this.fieldList.map(k => {

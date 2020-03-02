@@ -93,7 +93,7 @@ export default {
   methods: {
     // 表格行点击事件
     clickTr(row, column, event) {
-      this.$parent.$refs.montorArcgis.goloaction(row);
+      this.$parent.$refs.monitorArcgis.goloaction(row);
 
       const name = row.GLZD;
       const imgName = row.attributes.做地详情;

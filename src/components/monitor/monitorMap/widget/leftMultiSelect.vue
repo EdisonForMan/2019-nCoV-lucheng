@@ -356,7 +356,7 @@ export default {
     },
     // 定位详情
     ShowResult(oitem, item) {
-      this.$parent.$refs.montorArcgis.goloaction(oitem);
+      this.$parent.$refs.monitorArcgis.goloaction(oitem);
 
       const name = oitem.name;
       const imgName = oitem.attributes.做地详情;
@@ -368,7 +368,7 @@ export default {
     // 街道做地分布图
     switchChar(label) {
       const name = label.split(" ")[0];
-      this.$parent.$refs.montorArcgis.addBlank(name);
+      this.$parent.$refs.monitorArcgis.addBlank(name);
       this.$parent.$refs.topDate.filterItem(name);
     },
     intercept() {
@@ -422,7 +422,7 @@ export default {
 };
 </script>
 <style scoped lang="less">
-@import url("../../common/_iconfont/iconfont.css");
+@import url("../../../common/_iconfont/iconfont.css");
 .leftMultiSelect {
   height: 100%;
   border-right: 1px solid;

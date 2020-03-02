@@ -58,6 +58,7 @@ export default {
     await this.addChanyePlate();
 
     // 添加图例标题
+    $(".esri-mytitle").remove();
     $(".esri-legend").prepend(
       '<div class="esri-legend__message esri-mytitle">图例</div>'
     );

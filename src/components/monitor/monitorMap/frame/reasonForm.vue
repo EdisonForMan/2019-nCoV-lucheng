@@ -89,6 +89,7 @@ export default {
       td {
         border: 1px solid #ccc;
         padding: 10px 5px;
+        text-align: justify;
       }
     }
   }

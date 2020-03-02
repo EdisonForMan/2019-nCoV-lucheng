@@ -1,7 +1,7 @@
 <template>
   <div id="btnDiv">
     <ul>
-      <!-- <li @click="warning">预警</li> -->
+      <li class="warning" @click="warning">预警</li>
       <li :class="{active:zddkTag}" @click="zddk">做地地块</li>
       <li :class="{active:xzqhTag}" @click="xzqh">五色风险评估</li>
       <li :class="{active:kgtTag}" @click="kgt">控规图</li>
@@ -31,39 +31,39 @@ export default {
       this.$parent.warnShow = true;
     },
     zddk() {
-      this.$parent.$refs.montorArcgis.zddk();
+      this.$parent.$refs.monitorArcgis.zddk();
     },
     xzqh() {
-      this.$parent.$refs.montorArcgis.changeChanyePlate();
+      this.$parent.$refs.monitorArcgis.changeChanyePlate();
     },
     yxt() {
-      this.$parent.$refs.montorArcgis.yxt();
+      this.$parent.$refs.monitorArcgis.yxt();
     },
     slt() {
-      this.$parent.$refs.montorArcgis.slt();
+      this.$parent.$refs.monitorArcgis.slt();
     },
     kgt() {
-      this.$parent.$refs.montorArcgis.kgt();
+      this.$parent.$refs.monitorArcgis.kgt();
     },
     clean() {
-      this.$parent.$refs.montorArcgis.map.findLayerById("chanyePlate") &&
-        (this.$parent.$refs.montorArcgis.map.findLayerById(
+      this.$parent.$refs.monitorArcgis.map.findLayerById("chanyePlate") &&
+        (this.$parent.$refs.monitorArcgis.map.findLayerById(
           "chanyePlate"
         ).visible = false);
-      this.$parent.$refs.montorArcgis.map.findLayerById("zddk") &&
-        (this.$parent.$refs.montorArcgis.map.findLayerById(
+      this.$parent.$refs.monitorArcgis.map.findLayerById("zddk") &&
+        (this.$parent.$refs.monitorArcgis.map.findLayerById(
           "zddk"
         ).visible = false);
-      this.$parent.$refs.montorArcgis.map.findLayerById("dkImage") &&
-        (this.$parent.$refs.montorArcgis.map.findLayerById(
+      this.$parent.$refs.monitorArcgis.map.findLayerById("dkImage") &&
+        (this.$parent.$refs.monitorArcgis.map.findLayerById(
           "dkImage"
         ).visible = false);
-      this.$parent.$refs.montorArcgis.map.findLayerById("kg") &&
-        (this.$parent.$refs.montorArcgis.map.findLayerById(
+      this.$parent.$refs.monitorArcgis.map.findLayerById("kg") &&
+        (this.$parent.$refs.monitorArcgis.map.findLayerById(
           "kg"
         ).visible = false);
-      this.$parent.$refs.montorArcgis.view.graphics.removeAll();
-      this.$parent.$refs.montorArcgis.view.popup.visible = false;
+      this.$parent.$refs.monitorArcgis.view.graphics.removeAll();
+      this.$parent.$refs.monitorArcgis.view.popup.visible = false;
 
       this.$parent.$refs.topDate.filterItem();
 
@@ -83,15 +83,19 @@ export default {
   z-index: 20;
 
   > ul {
-    // > li:first-child {
-    //   color: #000;
-    //   background-color: #ffa901;
-    //   border: 1px solid #fff138;
-    //   padding: 0px 16px;
-    //   margin-right: 30px;
-    //   font-size: 18px;
-    //   font-weight: bolder;
-    // }
+    .warning {
+      color: #000;
+      background-color: #ffa901;
+      border: 1px solid #fff138;
+      padding: 0px 16px;
+      margin-right: 30px;
+      font-size: 18px;
+      font-weight: bolder;
+      animation: spotChange 2s ease;
+      -webkit-animation-iteration-count: infinite;
+      -moz-animation-iteration-count: infinite;
+      animation-iteration-count: infinite;
+    }
 
     > li {
       height: 43px;
@@ -119,6 +123,24 @@ export default {
     .hover:hover {
       overflow: visible;
     }
+  }
+}
+
+// 预警闪烁动画
+@keyframes spotChange {
+  0% {
+    border: 1px solid #fff138;
+    box-shadow: 0 0 10px 5px rgba(255, 241, 56, 0.8);
+  }
+
+  50% {
+    border: 1px solid #fff;
+    box-shadow: 0 0 10px 5px rgba(255, 241, 56, 0.3);
+  }
+
+  100% {
+    border: 1px solid #fff138;
+    box-shadow: 0 0 10px 5px rgba(255, 241, 56, 0.8);
   }
 }
 </style>

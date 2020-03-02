@@ -11,6 +11,7 @@
     </div>
     <div class="block block2">
       <span class="title">区块优势</span>
+      <span class="detail">详情 >></span>
       <div>
         <ul>
           <li v-for="(item,index) in qktable" :key="index">
@@ -22,15 +23,9 @@
     </div>
     <div class="block block3">
       <span class="title">问题清单</span>
+      <span class="finishRate">完成率：{{ finishRate }} %</span>
       <div>
         <ul>
-          <!-- <li v-for="(item,index) in qtable" :key="index" @click="getReason(item)">
-            <div :style="{background:item.color}">
-              <span>{{item.text}}</span>
-              <br />
-              <span>{{item.tf}}</span>
-            </div>
-          </li>-->
           <li v-for="k in qtable.length / 3" :key="k">
             <div
               v-for="(item,index) in qtable.slice((k - 1) * 3, (k - 1) * 3 + 3)"
@@ -65,7 +60,8 @@ export default {
       server,
       imgNum: 4,
       title: "",
-      qtable: []
+      qtable: [],
+      finishRate: 100
     };
   },
   components: { reasonForm },
@@ -262,6 +258,15 @@ export default {
             color: colorHash[item.GP12]
           }
         ];
+
+        let finishNum = 0;
+
+        that.qtable.map(({ tf }) => {
+          if (tf == "是") finishNum++;
+        });
+
+        const finishRate = ((finishNum / that.qtable.length) * 100).toFixed(2);
+        that.finishRate = finishRate;
       }
     },
     getReason(item) {
@@ -316,7 +321,7 @@ export default {
       position: relative;
       top: 5px;
       left: 20px;
-      font-weight: 600;
+      font-weight: bolder;
       border-left: 5px solid;
       padding-left: 5px;
     }
@@ -333,13 +338,13 @@ export default {
       padding: 15px 20px;
 
       .el-carousel__item:nth-child(2n) {
-        background-image: url("../../common/image/dk/暂无图片.jpg");
+        background-image: url("../../../common/image/dk/暂无图片.jpg");
         background-repeat: no-repeat;
         background-size: 100% 100%;
       }
 
       .el-carousel__item:nth-child(2n + 1) {
-        background-image: url("../../common/image/dk/暂无图片.jpg");
+        background-image: url("../../../common/image/dk/暂无图片.jpg");
         background-repeat: no-repeat;
         background-size: 100% 100%;
       }
@@ -347,6 +352,15 @@ export default {
   }
 
   .block2 {
+    .detail {
+      position: relative;
+      float: right;
+      top: 5px;
+      right: 20px;
+      font-size: 20px;
+      font-weight: bolder;
+      cursor: pointer;
+    }
     > div {
       padding: 17px 15px;
       ul {
@@ -377,6 +391,15 @@ export default {
   }
 
   .block3 {
+    .finishRate {
+      position: relative;
+      float: right;
+      top: 5px;
+      right: 20px;
+      font-size: 20px;
+      font-weight: bolder;
+    }
+
     > div {
       padding: 10px 0px;
       text-align: center;
@@ -393,11 +416,9 @@ export default {
           width: 100%;
           height: 23%;
           display: flex;
-          // text-align: center;
           justify-content: space-between;
           box-sizing: border-box;
           padding: 0px 5px;
-          // cursor: pointer;
           div {
             width: 32%;
             height: 100%;
@@ -405,10 +426,6 @@ export default {
             cursor: pointer;
             box-sizing: border-box;
             padding: 0px 23px;
-
-            // background-image: url("../../common/image/已完成.png");
-            // background-repeat: no-repeat;
-            // background-size: 100% 100%;
 
             span {
               display: table-cell;
@@ -420,44 +437,17 @@ export default {
           }
 
           .complete {
-            background-image: url("../../common/image/已完成.png");
+            background-image: url("../../../common/image/已完成.png");
             background-repeat: no-repeat;
             background-size: 100% 100%;
           }
 
           .uncomplete {
-            background-image: url("../../common/image/未完成.png");
+            background-image: url("../../../common/image/未完成.png");
             background-repeat: no-repeat;
             background-size: 100% 100%;
           }
-
-          // > div:last-child {
-          //   width: 100%;
-          //   display: inline-block;
-          //   padding: 5px 0px;
-
-          //   span {
-          //     font-size: 7px;
-          //   }
-          // }
         }
-
-        // li {
-        //   width: 30%;
-        //   display: inline-block;
-        //   text-align: center;
-        //   padding: 5px;
-        //   cursor: pointer;
-        //   > div:last-child {
-        //     width: 100%;
-        //     display: inline-block;
-        //     padding: 5px 0px;
-
-        //     span {
-        //       font-size: 7px;
-        //     }
-        //   }
-        // }
       }
     }
   }

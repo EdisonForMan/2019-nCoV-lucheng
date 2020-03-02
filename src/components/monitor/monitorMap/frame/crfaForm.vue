@@ -15,7 +15,7 @@
 
 <script>
 /* eslint-disable */
-import { fishBone } from "../external/fishbone/fishBone2";
+import { fishBone } from "../../external/fishbone/fishBone2";
 export default {
   name: "crfaForm",
   data() {
@@ -78,7 +78,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import url("../external/fishbone/fishBone2.css");
+@import url("../../external/fishbone/fishBone2.css");
 #crfaForm {
   position: absolute;
   top: 21%;

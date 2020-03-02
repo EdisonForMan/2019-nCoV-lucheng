@@ -62,7 +62,7 @@ export const leftOptions = [{
                 ytname: -1,
                 url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer",
                 sublayers: "9",
-                icon: "治愈",
+                icon: "红码",
                 check: false
             }, {
                 name: `红码隔离点人员名单 (${lc.hmgld_list}个)`,
@@ -78,7 +78,7 @@ export const leftOptions = [{
                 ytname: -1,
                 url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer",
                 sublayers: "10",
-                icon: "治愈",
+                icon: "华侨",
                 check: false
             }, {
                 name: `华侨隔离点人员名单 (${lc.hqgld_list}个)`,

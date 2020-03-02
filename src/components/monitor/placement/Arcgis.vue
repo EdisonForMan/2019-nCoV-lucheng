@@ -16,7 +16,7 @@ import {
 import { tipHash, Hash } from "./config/hash.js";
 
 export default {
-  name: "MonitorArcgis",
+  name: "PlacementArcgis",
   data() {
     return {};
   },
@@ -35,11 +35,12 @@ export default {
     await this.addChanyePlate();
 
     // 添加图例标题
+    $(".esri-mytitle").remove();
     $(".esri-legend").prepend(
       '<div class="esri-legend__message esri-mytitle">图例</div>'
     );
 
-    this.addZDDKFeatures();
+    await this.addZDDKFeatures();
 
     this.$props.leftOptions &&
       this.$props.leftOptions.map(_item => {
@@ -132,14 +133,22 @@ export default {
         const name = $(this).attr("data-val");
         const imgName = $(this).attr("data-val2");
         context.$parent.rightHidden();
-        context.$parent.$refs.dkxqForm.getItem(name, imgName);
-        context.$parent.dkxqShow = true;
+        // 延时等待组件初始化
+        setTimeout(() => {
+          context.$parent.$refs.dkxqForm &&
+            context.$parent.$refs.dkxqForm.getItem(name, imgName);
+          context.$parent.dkxqShow = true;
+        }, 20);
       });
       // 做地出让方案
       $("body").on("click", ".crfa_btn", function() {
         const name = $(this).attr("data-val");
-        context.$parent.$refs.crfaForm.getItem(name);
-        context.$parent.crfaShow = true;
+        // 延时等待组件初始化
+        setTimeout(() => {
+          context.$parent.$refs.crfaForm &&
+            context.$parent.$refs.crfaForm.getItem(name);
+          context.$parent.crfaShow = true;
+        }, 20);
       });
     },
     // 五色图
