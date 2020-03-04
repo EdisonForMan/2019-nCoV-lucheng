@@ -11,7 +11,7 @@
     </div>
     <div class="block block2">
       <span class="title">区块优势</span>
-      <span class="detail">详情 >></span>
+      <span class="detail" @click="showDetail">详情 >></span>
       <div>
         <ul>
           <li v-for="(item,index) in qktable" :key="index">
@@ -278,6 +278,11 @@ export default {
       if (~this.title.indexOf("滨江")) {
         window.open("https://720yun.com/t/aevkuy1q07l?scene_id=39682863");
       }
+    },
+    showDetail() {
+      console.log("title", this.title);
+      this.$parent.jumpBlock({ name: this.title });
+      this.$parent.changName("Block");
     }
   }
 };

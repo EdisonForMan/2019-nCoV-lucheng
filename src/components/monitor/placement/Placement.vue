@@ -1,7 +1,7 @@
 <template>
-  <div class="monitorMap_container">
+  <div class="placement_container">
     <div class="Com_map">
-      <commonArcgis id="PlacementArcgis" ref="PlacementArcgis" :leftOptions="leftOptions" />
+      <commonArcgis id="placementArcgis" ref="placementArcgis" :leftOptions="leftOptions" />
     </div>
     <div class="Com_container">
       <div :class="`leftside animated ${icon_show_left?`slideOutLeft`:`slideInLeft`}`">
@@ -94,6 +94,7 @@ export default {
   mounted() {
     !this.zdjzList.length && this.fetchzdjzList();
     !this.dkxxList.length && this.fetchdkxxList();
+    console.log("placement");
   },
   computed: {
     ...mapState({

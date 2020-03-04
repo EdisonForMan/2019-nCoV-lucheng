@@ -194,7 +194,6 @@ export default {
   created() {},
   mounted() {
     this.fixdkxxList();
-    console.log("安置房");
   },
   watch: {
     dkxxList(n) {

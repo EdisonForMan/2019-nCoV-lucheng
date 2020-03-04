@@ -1,11 +1,14 @@
 <template>
   <div id="crtjDiv">
     <div>
-      <span class="title">做地目标按街道统计图</span>
+      <span class="title">安置房源按街道统计图</span>
       <select id="select" @change="bqSelect($event)">
-        <option value="crdk">按宗数统计</option>
-        <option value="crje">按货值统计</option>
-        <option value="crmj">按面积统计</option>
+        <option value="xqzs">小区总数</option>
+        <option value="zzts">住宅套数</option>
+        <option value="kzzzts">空置住宅套数</option>
+        <option value="syjs">商业间数</option>
+        <option value="kzsyjs">空置商业间数</option>
+        <option value="kzbgjs">空置办公间数</option>
       </select>
     </div>
     <div id="crtjChart2"></div>
@@ -14,17 +17,18 @@
 
 <script>
 /* eslint-disable */
-import { mapState } from "vuex";
+// import { mapState } from "vuex";
+import { tmpData2 } from "../config/chartData";
 export default {
   data() {
     return {
-      index: "crdk"
+      index: "xqzs"
     };
   },
   computed: {
-    ...mapState({
-      dkxxList: state => state.dkxxList
-    })
+    // ...mapState({
+    //   dkxxList: state => state.dkxxList
+    // })
   },
   methods: {
     fixdkxxList() {
@@ -45,53 +49,93 @@ export default {
         大南街道: { value: 0, name: "大南街道" }
       };
 
-      const crdkObj = JSON.parse(JSON.stringify(countryHash));
-      const crjeObj = JSON.parse(JSON.stringify(countryHash));
-      const crmjObj = JSON.parse(JSON.stringify(countryHash));
+      const xqzsObj = JSON.parse(JSON.stringify(countryHash));
+      const zztsObj = JSON.parse(JSON.stringify(countryHash));
+      const kzzztsObj = JSON.parse(JSON.stringify(countryHash));
+      const syjssObj = JSON.parse(JSON.stringify(countryHash));
+      const kzsyjsObj = JSON.parse(JSON.stringify(countryHash));
+      const kzbgjsObj = JSON.parse(JSON.stringify(countryHash));
 
-      const crdkData = [];
-      const crjeData = [];
-      const crmjData = [];
+      const xqzsData = [];
+      const zztsData = [];
+      const kzzztsData = [];
+      const syjsData = [];
+      const kzsyjsData = [];
+      const kzbgjsData = [];
 
-      this.dkxxList.map(({ QSJ, TDMJ, SSJD }) => {
-        crdkObj[SSJD].value++;
-        QSJ != "/" &&
-          (crjeObj[SSJD].value = Number(crjeObj[SSJD].value) + Number(QSJ));
-        TDMJ != "/" &&
-          (crmjObj[SSJD].value = Number(crmjObj[SSJD].value) + Number(TDMJ));
+      tmpData2.map(({ SSJD, XQZS, ZZTS, KZZZTS, SYJS, KZSYJS, KZBGJS }) => {
+        XQZS != null &&
+          (xqzsObj[SSJD].value = Number(xqzsObj[SSJD].value) + Number(XQZS));
+        ZZTS != null &&
+          (zztsObj[SSJD].value = Number(zztsObj[SSJD].value) + Number(ZZTS));
+        KZZZTS != null &&
+          (kzzztsObj[SSJD].value =
+            Number(kzzztsObj[SSJD].value) + Number(KZZZTS));
+        SYJS != null &&
+          (syjssObj[SSJD].value = Number(syjssObj[SSJD].value) + Number(SYJS));
+        KZSYJS != null &&
+          (kzsyjsObj[SSJD].value =
+            Number(kzsyjsObj[SSJD].value) + Number(KZSYJS));
+        KZBGJS != null &&
+          (kzbgjsObj[SSJD].value =
+            Number(kzbgjsObj[SSJD].value) + Number(KZBGJS));
       });
 
-      for (let k in crdkObj) {
-        crdkData.push(crdkObj[k]);
+      for (let k in xqzsObj) {
+        xqzsData.push(xqzsObj[k]);
       }
 
-      Object.values(crjeObj).map(item => {
-        item.value = (Number(item.value) / 10000).toFixed(2);
-      });
-
-      for (let k in crjeObj) {
-        crjeData.push(crjeObj[k]);
+      for (let k in zztsObj) {
+        zztsData.push(zztsObj[k]);
       }
 
-      Object.values(crmjObj).map(item => {
-        item.value = Number(item.value).toFixed(2);
-      });
-
-      for (let k in crmjObj) {
-        crmjData.push(crmjObj[k]);
+      for (let k in kzzztsObj) {
+        kzzztsData.push(kzzztsObj[k]);
       }
 
-      this.dataAge = crdkData;
+      for (let k in syjssObj) {
+        syjsData.push(syjssObj[k]);
+      }
+
+      for (let k in kzsyjsObj) {
+        kzsyjsData.push(kzsyjsObj[k]);
+      }
+
+      for (let k in kzbgjsObj) {
+        kzbgjsData.push(kzbgjsObj[k]);
+      }
+
+      // Object.values(crjeObj).map(item => {
+      //   item.value = (Number(item.value) / 10000).toFixed(2);
+      // });
+
+      // for (let k in crjeObj) {
+      //   crjeData.push(crjeObj[k]);
+      // }
+
+      // Object.values(crmjObj).map(item => {
+      //   item.value = Number(item.value).toFixed(2);
+      // });
+
+      // for (let k in crmjObj) {
+      //   crmjData.push(crmjObj[k]);
+      // }
+
+      this.dataAge = xqzsData;
 
       this.dataHash = {
-        crdk: crdkData,
-        crje: crjeData,
-        crmj: crmjData
+        xqzs: xqzsData,
+        zzts: zztsData,
+        kzzzts: kzzztsData,
+        syjs: syjsData,
+        kzsyjs: kzsyjsData,
+        kzbgjs: kzbgjsData
       };
 
       this.doChart();
     },
     doChart() {
+      const that = this;
       const chart = this.$echarts.init(document.getElementById("crtjChart2"));
       chart.setOption({
         grid: {
@@ -129,8 +173,11 @@ export default {
         },
         yAxis: {
           type: "value",
-          name:
-            this.index == "crdk" ? "宗" : this.index == "crje" ? "亿元" : "亩",
+          name: ~["xqzs"].indexOf(that.index)
+            ? "个"
+            : ~["zzts", "kzzzts"].indexOf(that.index)
+            ? "套"
+            : "间",
           minInterval: 1,
           axisLine: {
             lineStyle: {
@@ -158,11 +205,17 @@ export default {
         series: [
           {
             name:
-              this.index == "crdk"
-                ? "做地地块"
-                : this.index == "crje"
-                ? "地块货值"
-                : "地块面积",
+              that.index == "xqzs"
+                ? "小区总数"
+                : that.index == "zzts"
+                ? "住宅套数"
+                : that.index == "kzzzts"
+                ? "空置住宅套数"
+                : that.index == "syjs"
+                ? "商业间数"
+                : that.index == "kzsyjs"
+                ? "空置商业间数"
+                : "空置办公间数",
             type: "bar",
             barWidth: "20px",
             label: {

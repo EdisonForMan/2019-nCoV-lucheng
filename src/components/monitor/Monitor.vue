@@ -20,7 +20,7 @@
     <div class="page_container">
       <transition enter-class="fade-in-enter" enter-active-class="fade-in-active">
         <keep-alive include="MonitorMap">
-          <components :is="activeName" :item="item" :search="search" ref="StyleTool"></components>
+          <components :is="activeName" :items="item" :search="search" ref="StyleTool"></components>
         </keep-alive>
       </transition>
     </div>
@@ -56,6 +56,11 @@ export default {
     Marketing,
     Block,
     Placement
+  },
+  watch: {
+    item(newV, oldV) {
+      console.log("itemChange", newV, oldV);
+    }
   },
   created() {},
   mounted() {

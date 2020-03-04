@@ -1,10 +1,14 @@
 <template>
   <div id="tdytDiv">
     <div>
-      <span class="title">2020年计划出让土地用地性质统计图</span>
+      <span class="title">2020年安置房源分类统计图</span>
       <select id="select" @change="bqSelect($event)">
-        <option value="tdyt">按宗数统计</option>
-        <option value="tdmj">按面积统计</option>
+        <option value="zazfy">总安置房源</option>
+        <option value="zazmj">总安置面积</option>
+        <option value="yazfy">已安置房源</option>
+        <option value="yazmj">已安置面积</option>
+        <option value="syfy">剩余房源</option>
+        <option value="symj">剩余面积</option>
       </select>
     </div>
     <div id="tdytChart2"></div>
@@ -13,83 +17,117 @@
 
 <script>
 /* eslint-disable */
-import { mapState } from "vuex";
+// import { mapState } from "vuex";
+import { tmpData1 } from "../config/chartData";
 export default {
   data() {
     return {
-      index: "tdyt"
+      index: "zazfy"
     };
   },
   computed: {
-    ...mapState({
-      dkxxList: state => state.dkxxList
-    })
+    // ...mapState({
+    //   dkxxList: state => state.dkxxList
+    // })
   },
   methods: {
     fixdkxxList() {
       const ytHash = {
-        住宅用地: {
+        住宅: {
           value: 0,
           name: "住宅",
           itemStyle: { color: "rgb(255, 255, 0)" },
           textStyle: { color: "rgb(255, 255, 0)" }
         },
-        商服用地: {
+        商业用房: {
           value: 0,
-          name: "商服",
+          name: "商业用房",
           itemStyle: { color: "rgb(255, 0, 0)" },
           textStyle: { color: "rgb(255, 0, 0)" }
         },
-        商住用地: {
+        办公用房: {
           value: 0,
-          name: "商住",
-          itemStyle: { color: "rgb(255, 127, 0)" },
-          textStyle: { color: "rgb(255, 127, 0)" }
-        },
-        医疗卫生用地: {
-          value: 0,
-          name: "医疗",
+          name: "办公用房",
           itemStyle: { color: "rgb(255, 191, 0)" },
           textStyle: { color: "rgb(255, 191, 0)" }
         },
-        教育用地: {
+        其他: {
           value: 0,
-          name: "教育",
+          name: "其他",
           itemStyle: { color: "rgb(255, 159, 127)" },
           textStyle: { color: "rgb(255, 159, 127)" }
         }
       };
 
-      const tdytObj = JSON.parse(JSON.stringify(ytHash));
-      const tdmjObj = JSON.parse(JSON.stringify(ytHash));
+      const zazfyObj = JSON.parse(JSON.stringify(ytHash));
+      const zazmjObj = JSON.parse(JSON.stringify(ytHash));
+      const yazfyObj = JSON.parse(JSON.stringify(ytHash));
+      const yazmjObj = JSON.parse(JSON.stringify(ytHash));
+      const syfyObj = JSON.parse(JSON.stringify(ytHash));
+      const symjObj = JSON.parse(JSON.stringify(ytHash));
 
-      const tdytData = [];
-      const tdmjData = [];
+      const zazfyData = [];
+      const zazmjData = [];
+      const yazfyData = [];
+      const yazmjData = [];
+      const syfyData = [];
+      const symjData = [];
 
-      this.dkxxList.map(({ TDYT, TDMJ }) => {
-        TDYT != null && tdytObj[TDYT] && tdytObj[TDYT].value++;
-        TDMJ != null &&
-          tdmjObj[TDYT] &&
-          (tdmjObj[TDYT].value = Number(tdmjObj[TDYT].value) + Number(TDMJ));
+      tmpData1.map(({ FYYT, ZAZFY, ZAZMJ, YAZFY, YAZMJ, SYFY, SYMJ }) => {
+        if (FYYT != null) {
+          ZAZFY != null &&
+            zazfyObj[FYYT] &&
+            (zazfyObj[FYYT].value =
+              Number(zazfyObj[FYYT].value) + Number(ZAZFY));
+          ZAZMJ != null &&
+            zazmjObj[FYYT] &&
+            (zazmjObj[FYYT].value =
+              Number(zazmjObj[FYYT].value) + Number(ZAZMJ));
+          YAZFY != null &&
+            yazfyObj[FYYT] &&
+            (yazfyObj[FYYT].value =
+              Number(yazfyObj[FYYT].value) + Number(YAZFY));
+          YAZMJ != null &&
+            yazmjObj[FYYT] &&
+            (yazmjObj[FYYT].value =
+              Number(yazmjObj[FYYT].value) + Number(YAZMJ));
+          SYFY != null &&
+            syfyObj[FYYT] &&
+            (syfyObj[FYYT].value = Number(syfyObj[FYYT].value) + Number(SYFY));
+          SYMJ != null &&
+            symjObj[FYYT] &&
+            (symjObj[FYYT].value = Number(symjObj[FYYT].value) + Number(SYMJ));
+        }
       });
 
-      for (let k in tdytObj) {
-        tdytData.push(tdytObj[k]);
+      for (let k in zazfyObj) {
+        zazfyData.push(zazfyObj[k]);
+      }
+      for (let k in zazmjObj) {
+        zazmjData.push(zazmjObj[k]);
+      }
+      for (let k in yazfyObj) {
+        yazfyData.push(yazfyObj[k]);
+      }
+      for (let k in yazmjObj) {
+        yazmjData.push(yazmjObj[k]);
+      }
+      for (let k in syfyObj) {
+        syfyData.push(syfyObj[k]);
+      }
+      for (let k in symjObj) {
+        symjData.push(symjObj[k]);
       }
 
-      Object.values(tdmjObj).map(item => {
-        item.value = Number(item.value).toFixed(2);
-      });
-
-      for (let k in tdmjObj) {
-        tdmjData.push(tdmjObj[k]);
-      }
-
-      this.dataList = tdytData;
+      this.dataList = zazfyData;
 
       this.dataHash = {
-        tdyt: tdytData,
-        tdmj: tdmjData
+        zazfy: zazfyData,
+        zazmj: zazmjData,
+        yazfy: yazfyData,
+        yazmj: yazmjData,
+        syfy: syfyData,
+        symj: symjData
       };
 
       this.doChart();
@@ -125,20 +163,26 @@ export default {
                 show: true,
                 position: "outter",
                 formatter: function(params) {
-                  if (that.index == "tdyt") {
-                    return `${params.data.name}${params.data.value}宗\n(占比${params.percent}%)`;
-                  } else {
-                    return `${params.data.name}${params.data.value}亩\n(占比${params.percent}%)`;
-                  }
+                  return that.index == "zazfy"
+                    ? `${params.data.name}${params.data.value}套\n(占比${params.percent}%)`
+                    : that.index == "zazmj"
+                    ? `${params.data.name}${params.data.value}㎡\n(占比${params.percent}%)`
+                    : that.index == "yazfy"
+                    ? `${params.data.name}${params.data.value}套\n(占比${params.percent}%)`
+                    : that.index == "yazmj"
+                    ? `${params.data.name}${params.data.value}㎡\n(占比${params.percent}%)`
+                    : that.index == "syfy"
+                    ? `${params.data.name}${params.data.value}套\n(占比${params.percent}%)`
+                    : `${params.data.name}${params.data.value}㎡\n(占比${params.percent}%)`;
                 },
                 textStyle: {
-                  fontSize: 18
+                  fontSize: 15
                 }
               }
             },
             labelLine: {
               normal: {
-                length: 5,
+                length: 8,
                 length2: 5
               }
             },
@@ -159,9 +203,9 @@ export default {
     this.fixdkxxList();
   },
   watch: {
-    dkxxList(n) {
-      this.fixdkxxList();
-    }
+    // tmpData1(n) {
+    //   this.fixdkxxList();
+    // }
   }
 };
 </script>

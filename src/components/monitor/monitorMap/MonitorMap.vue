@@ -108,6 +108,10 @@ export default {
     !this.zdjzList.length && this.fetchzdjzList();
     !this.dkxxList.length && this.fetchdkxxList();
   },
+  activated() {
+    // keep alive 图例移动
+    this.legend();
+  },
   computed: {
     ...mapState({
       zdjzList: state => state.zdjzList,
@@ -138,6 +142,13 @@ export default {
       } else {
         $("body .esri-ui-bottom-left").css({ left: "20px" });
       }
+    },
+    changName(name) {
+      this.$parent.activeName = name;
+    },
+    jumpBlock(item) {
+      console.log("item1", item);
+      this.$parent.item = item;
     }
   }
 };

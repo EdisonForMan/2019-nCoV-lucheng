@@ -1,6 +1,7 @@
 <template>
   <div id="btnDiv">
     <ul>
+      <li :class="{active:azfyTag}">安置房源</li>
       <li :class="{active:zddkTag}" @click="zddk">做地地块</li>
       <li :class="{active:xzqhTag}" @click="xzqh">五色风险评估</li>
       <li :class="{active:kgtTag}" @click="kgt">控规图</li>
@@ -17,6 +18,7 @@ export default {
   name: "bottomBtn",
   data() {
     return {
+      azfyTag: true,
       zddkTag: true,
       xzqhTag: true,
       kgtTag: false
@@ -27,42 +29,43 @@ export default {
   computed: {},
   methods: {
     zddk() {
-      this.$parent.$refs.PlacementArcgis.zddk();
+      this.$parent.$refs.placementArcgis.zddk();
     },
     xzqh() {
-      this.$parent.$refs.PlacementArcgis.changeChanyePlate();
+      this.$parent.$refs.placementArcgis.changeChanyePlate();
     },
     yxt() {
-      this.$parent.$refs.PlacementArcgis.yxt();
+      this.$parent.$refs.placementArcgis.yxt();
     },
     slt() {
-      this.$parent.$refs.PlacementArcgis.slt();
+      this.$parent.$refs.placementArcgis.slt();
     },
     kgt() {
-      this.$parent.$refs.PlacementArcgis.kgt();
+      this.$parent.$refs.placementArcgis.kgt();
     },
     clean() {
-      this.$parent.$refs.PlacementArcgis.map.findLayerById("chanyePlate") &&
-        (this.$parent.$refs.PlacementArcgis.map.findLayerById(
+      this.$parent.$refs.placementArcgis.map.findLayerById("chanyePlate") &&
+        (this.$parent.$refs.placementArcgis.map.findLayerById(
           "chanyePlate"
         ).visible = false);
-      this.$parent.$refs.PlacementArcgis.map.findLayerById("zddk") &&
-        (this.$parent.$refs.PlacementArcgis.map.findLayerById(
+      this.$parent.$refs.placementArcgis.map.findLayerById("zddk") &&
+        (this.$parent.$refs.placementArcgis.map.findLayerById(
           "zddk"
         ).visible = false);
-      this.$parent.$refs.PlacementArcgis.map.findLayerById("dkImage") &&
-        (this.$parent.$refs.PlacementArcgis.map.findLayerById(
+      this.$parent.$refs.placementArcgis.map.findLayerById("dkImage") &&
+        (this.$parent.$refs.placementArcgis.map.findLayerById(
           "dkImage"
         ).visible = false);
-      this.$parent.$refs.PlacementArcgis.map.findLayerById("kg") &&
-        (this.$parent.$refs.PlacementArcgis.map.findLayerById(
+      this.$parent.$refs.placementArcgis.map.findLayerById("kg") &&
+        (this.$parent.$refs.placementArcgis.map.findLayerById(
           "kg"
         ).visible = false);
-      this.$parent.$refs.PlacementArcgis.view.graphics.removeAll();
-      this.$parent.$refs.PlacementArcgis.view.popup.visible = false;
+      this.$parent.$refs.placementArcgis.view.graphics.removeAll();
+      this.$parent.$refs.placementArcgis.view.popup.visible = false;
 
       this.$parent.$refs.topDate.filterItem();
 
+      this.azfyTag = false;
       this.zddkTag = false;
       this.xzqhTag = false;
       this.kgtTag = false;

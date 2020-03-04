@@ -16,7 +16,7 @@ import {
 import { tipHash, Hash } from "./config/hash.js";
 
 export default {
-  name: "placementArcgis",
+  name: "BlockArcgis",
   data() {
     return {};
   },

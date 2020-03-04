@@ -3,67 +3,43 @@
     <ul>
       <li style="cursor: pointer;" @click="showList">
         <p>
-          做地地块
+          安置小区
           <span>{{ country }}</span>
         </p>
         <table border="0" cellpadding="0" cellspacing="0">
           <tr>
-            <td>计划目标</td>
             <td>
-              <span style="color: #ff3229;">{{ crdk_jh }}</span>
+              <span style="color: #ff3229;">79</span>
             </td>
-            <td>宗</td>
-          </tr>
-          <tr>
-            <td>累计完成</td>
-            <td>
-              <span style="color: #6dff3d;">{{ crdk_lj }}</span>
-            </td>
-            <td>宗</td>
+            <td>个</td>
           </tr>
         </table>
       </li>
       <li>
         <p>
-          地块面积
+          已安置房源
           <span>{{ country }}</span>
         </p>
         <table border="0" cellpadding="0" cellspacing="0">
           <tr>
-            <td>计划目标</td>
             <td>
-              <span style="color: #ff3229;">{{ crmj_jh }}</span>
+              <span style="color: #ff3229;">130</span>
             </td>
-            <td>亩</td>
-          </tr>
-          <tr>
-            <td>累计完成</td>
-            <td>
-              <span style="color: #6dff3d;">{{ crmj_lj }}</span>
-            </td>
-            <td>亩</td>
+            <td>套</td>
           </tr>
         </table>
       </li>
       <li>
         <p>
-          出让金额
+          空置房源
           <span>{{ country }}</span>
         </p>
         <table border="0" cellpadding="0" cellspacing="0">
           <tr>
-            <td>累计出让</td>
             <td>
-              <span style="color: #ff3229;">{{ wcdk_lj }}</span>
+              <span style="color: #ff3229;">4140</span>
             </td>
-            <td>宗</td>
-          </tr>
-          <tr>
-            <td>累计金额</td>
-            <td>
-              <span style="color: #6dff3d;">{{ crje_lj }}</span>
-            </td>
-            <td>亿</td>
+            <td>套</td>
           </tr>
         </table>
       </li>
@@ -216,7 +192,7 @@ export default {
     color: #07e2e8;
 
     table {
-      height: 68px;
+      // height: 68px;
       margin: 5px auto;
 
       tr {
