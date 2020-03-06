@@ -1,7 +1,7 @@
 <template>
   <div class="block_container">
     <div class="Com_map">
-      <commonArcgis id="blockArcgis" ref="blockArcgis" />
+      <commonArcgis id="blockArcgis" ref="blockArcgis" :dkitem="dkitem" />
     </div>
   </div>
 </template>
@@ -22,7 +22,8 @@ export default {
     return {
       icon_show_left: true,
       moveLeft: "360",
-      getParam: null
+      getParam: null,
+      dkitem: null
     };
   },
   components: {
@@ -34,27 +35,31 @@ export default {
   watch: {
     items: {
       handler(newV, oldV) {
-        console.log("itemChange2", newV, oldV);
+        // console.log("itemChange2", newV, oldV);
         this.getParam = newV;
-        this.doFun(this.getParam);
+        this.dkitem = newV;
+        // this.doFun(this.getParam);
       },
-      deep: true,
-      immediate: true
+      // deep: true,
+      // immediate: true
     }
+  },
+  created() {
+    // console.log("c-list", this.$route);
   },
   mounted() {
     // 图例位置偏移
     setTimeout(() => {
       this.legend();
-      this.getParam && (this.getParam = null);
-      console.log("item2", this.getParam);
+      // this.getParam && (this.getParam = null);
+      // console.log("item2", this.getParam);
     }, 10);
   },
   destroyed() {
-    console.log("destroyed");
-    console.log("item3", this.getParam);
-    this.getParam && (this.getParam = null);
-    console.log("item3", this.getParam);
+    // console.log("destroyed");
+    // console.log("item3", this.getParam);
+    // this.getParam && (this.getParam = null);
+    // console.log("item3", this.getParam);
   },
   methods: {
     legend() {

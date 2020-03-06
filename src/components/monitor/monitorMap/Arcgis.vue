@@ -10,8 +10,7 @@ import { loadModules } from "esri-loader";
 import {
   OPTION,
   spatialReference,
-  IMAGELAYER,
-  TDTIMAGE2017
+  IMAGELAYER
 } from "@/components/common/Tmap";
 import { tipHash, Hash } from "./config/hash.js";
 
@@ -22,8 +21,7 @@ export default {
   },
   components: {},
   props: {
-    id: String,
-    leftOptions: Array
+    id: String
   },
 
   created() {},
@@ -41,46 +39,9 @@ export default {
     );
 
     await this.addZDDKFeatures();
-
-    this.$props.leftOptions &&
-      this.$props.leftOptions.map(_item => {
-        _item.children.map(item => {
-          item.id && that.doFun(item);
-        });
-      });
     this.jQueryBind();
   },
-  watch: {
-    leftOptions: {
-      handler(newVal, val) {
-        const that = this;
-        if (!that.map) return;
-        newVal.map(_item => {
-          _item.children.map(item => {
-            item.id && that.doFun(item);
-          });
-        });
-      },
-      deep: true
-    }
-  },
   methods: {
-    /**
-     * 数、组勾选触发图层寻找
-     * @param {Object} item 单个元素
-     */
-    doFun(item) {
-      const _id_ = item.id;
-      if (item.check) {
-        this.map && this.map.findLayerById(_id_)
-          ? (this.map.findLayerById(_id_).visible = true)
-          : this.addFeatures(item, _id_);
-      } else {
-        this.map && this.map.findLayerById(item.id)
-          ? (this.map.findLayerById(item.id).visible = false)
-          : null;
-      }
-    },
     /**
      * 初始化地图对象,带上底图
      * @param {Function} fn 回调函数
@@ -189,7 +150,7 @@ export default {
         );
       });
     },
-    // 五色图变化
+    // 五色图切换
     changeChanyePlate() {
       this.map.findLayerById("chanyePlate") &&
         (this.$parent.$refs.bottomBtn.xzqhTag = this.map.findLayerById(
@@ -210,6 +171,7 @@ export default {
           "dkImage"
         ).visible);
     },
+
     // 影像图
     yxt() {
       const that = this;
@@ -220,7 +182,6 @@ export default {
         return new Promise((resolve, reject) => {
           loadModules(["esri/layers/TileLayer"], OPTION).then(([TileLayer]) => {
             const imgLayer = new TileLayer({
-              // url: TDTIMAGE2017,
               url:
                 "https://services.wzmap.gov.cn/server/rest/services/TDT/YX_2019/MapServer",
               id: "img"
@@ -228,6 +189,7 @@ export default {
             //  优先级置顶
             that.map.add(imgLayer, 1);
             that.legend.layerInfos.push({
+              title: "2019年影像图",
               layer: imgLayer
             });
             resolve(true);
@@ -235,12 +197,13 @@ export default {
         });
       }
     },
+
     // 矢量图
     slt() {
-      if (this.map.findLayerById("img")) {
-        this.map.findLayerById("img").visible = false;
-      }
+      this.map.findLayerById("img") &&
+        (this.map.findLayerById("img").visible = false);
     },
+
     // 控规图
     kgt(option) {
       const that = this;
@@ -268,23 +231,21 @@ export default {
         });
       }
     },
+
     // 添加做地地块
     addZDDKFeatures() {
       const that = this;
-      const item = {
-        id: "zddk",
-        url:
-          "http://172.20.89.7:6082/arcgis/rest/services/lucheng/ZDDK/MapServer",
-        sublayers: "0"
-      };
 
-      const { url, id } = item;
+      const id = "zddk";
+      const url =
+        "http://172.20.89.7:6082/arcgis/rest/services/lucheng/ZDDK/MapServer";
+      const sublayers = "0";
 
       return new Promise((resolve, reject) => {
         loadModules(["esri/layers/FeatureLayer"], OPTION).then(
           ([FeatureLayer]) => {
             const option = {
-              url: url + "/" + item.sublayers,
+              url: url + "/" + sublayers,
               id,
               outFields: "*",
               opacity: 0
@@ -311,17 +272,12 @@ export default {
 
             const feature = new FeatureLayer(option);
             that.map.add(feature, 4);
-
-            // that.legend.layerInfos.push({
-            //   title: "",
-            //   layer: feature
-            // });
-
             resolve(true);
           }
         );
       });
     },
+
     // 定位
     goloaction({ id, attributes, geometry, fieldAliases }) {
       const that = this;
@@ -363,6 +319,7 @@ export default {
       that.view.popup.alignment = "top-center";
       that.view.popup.visible = true;
     },
+
     // 街道区划高亮
     addBlank(label) {
       if (!label) return;
@@ -378,7 +335,7 @@ export default {
         });
         const query = new Query();
         query.outFields = ["*"];
-        query.where = `${label ? `名称 = '${label}'` : `名称 = ''`}`;
+        query.where = `名称 = '${label}'`;
         query.returnGeometry = true;
         queryTask.execute(query).then(response => {
           if (response.features.length) {
@@ -399,6 +356,7 @@ export default {
             that.kgt("show");
             let _x = geometry.centroid.x;
             let _y = geometry.centroid.y;
+            // 特殊偏移
             that.view.goTo({
               center: ~["双屿街道"].indexOf(label)
                 ? [_x + 0.012, _y + 0.005]
@@ -437,6 +395,65 @@ export default {
             });
           }
         });
+      });
+    },
+
+    // 图层切换
+    layerToggle(option) {
+      if (this.map.findLayerById(option.id)) {
+        this.map.findLayerById(option.id).visible = !this.map.findLayerById(
+          option.id
+        ).visible;
+
+        option.tag &&
+          (this.$parent.$refs.bottomBtn[option.tag] = this.map.findLayerById(
+            option.id
+          ).visible);
+      } else {
+        this.addMapImageLayer(option);
+      }
+    },
+
+    // 新增mapImageLayer图层
+    addMapImageLayer(option) {
+      const that = this;
+
+      return new Promise((resolve, reject) => {
+        loadModules(["esri/layers/MapImageLayer"], OPTION).then(
+          ([MapImageLayer]) => {
+            const prop = { url: option.url };
+
+            // id
+            option.id && (prop.id = option.id);
+
+            // 子图层
+            option.sublayers &&
+              option.sublayers
+                .sort((a, b) => b - a)
+                .map(id => {
+                  Array.isArray(prop.sublayers)
+                    ? prop.sublayers.push({ id })
+                    : (prop.sublayers = [{ id }]);
+                });
+
+            const layer = new MapImageLayer(prop);
+            //  图层顺序
+            option.order
+              ? that.map.add(layer, option.order)
+              : that.map.add(layer);
+
+            // 图例
+            option.legend &&
+              that.legend.layerInfos.push({
+                title: option.legend,
+                layer
+              });
+
+            // 按钮控制
+            option.tag && (that.$parent.$refs.bottomBtn[option.tag] = true);
+            resolve(true);
+          }
+        );
       });
     }
   }

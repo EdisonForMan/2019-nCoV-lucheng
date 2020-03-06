@@ -1,12 +1,12 @@
 <template>
   <div class="monitorMap_container">
     <div class="Com_map">
-      <commonArcgis id="monitorArcgis" ref="monitorArcgis" :leftOptions="leftOptions" />
+      <commonArcgis id="monitorArcgis" ref="monitorArcgis" />
     </div>
     <div class="Com_container">
       <div :class="`leftside animated ${icon_show_left?`slideOutLeft`:`slideInLeft`}`">
-        <leftMultiSelect :leftOptions="leftOptions" ref="leftOptions" />
-        <span @click="toggle(), legend()" class="hidden_button"></span>
+        <leftMultiSelect ref="leftOptions" />
+        <span @click="leftToggle(), legend()" class="hidden_button"></span>
       </div>
       <div :class="`rightside animated ${icon_show_right?`slideOutRight`:`slideInRight`}`">
         <div id="rightFrame">
@@ -14,11 +14,10 @@
           <crjz ref="crjz" />
           <tdyt ref="tdyt" />
         </div>
-        <span @click="toggle2" class="hidden_right_button"></span>
+        <span @click="rightToggle" class="hidden_right_button"></span>
       </div>
     </div>
     <topDate ref="topDate" />
-    <xzDate />
     <bottomBtn ref="bottomBtn" />
     <dkxqForm ref="dkxqForm" v-show="dkxqShow" :style="{right:moveRight + 'px'}" />
     <dkList v-show="listShow" />
@@ -40,7 +39,6 @@ import commonArcgis from "./Arcgis";
 import leftMultiSelect from "./widget/leftMultiSelect";
 
 import topDate from "./widget/topDate";
-import xzDate from "./widget/xzDate";
 import bottomBtn from "./widget/bottomBtn";
 
 // chartTable
@@ -58,8 +56,6 @@ import crfaForm from "./frame/crfaForm";
 // 首屏预警
 import warning from "./frame/warning";
 
-import { leftOptions } from "./config/enums";
-
 import { mapState, mapActions } from "vuex";
 
 export default {
@@ -68,7 +64,6 @@ export default {
     return {
       icon_show_left: false,
       icon_show_right: false,
-      leftOptions,
       moveLeft: "360",
       moveRight: "500",
       dkxqShow: false,
@@ -83,8 +78,6 @@ export default {
 
     // 顶部数据
     topDate,
-    // 详情须知
-    xzDate,
     // 底部按钮
     bottomBtn,
 
@@ -120,11 +113,11 @@ export default {
   },
   methods: {
     ...mapActions(["fetchzdjzList", "fetchdkxxList"]),
-    toggle() {
+    leftToggle() {
       this.icon_show_left = !this.icon_show_left;
       this.moveLeft = !this.icon_show_left ? "360" : "20";
     },
-    toggle2() {
+    rightToggle() {
       this.icon_show_right = !this.icon_show_right;
       this.moveRight = !this.icon_show_right ? "500" : "20";
     },
@@ -143,11 +136,12 @@ export default {
         $("body .esri-ui-bottom-left").css({ left: "20px" });
       }
     },
+
     changName(name) {
       this.$parent.activeName = name;
     },
+    // 跳转至区位优势
     jumpBlock(item) {
-      console.log("item1", item);
       this.$parent.item = item;
     }
   }

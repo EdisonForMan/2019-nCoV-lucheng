@@ -3,56 +3,24 @@
     <a @click="close">×</a>
     <div class="block block1">
       <span class="title">做地详情</span>
-      <span class="name">{{ title }}</span>
       <div class="carousel">
-        <el-carousel height="160px" autoplay>
+        <el-carousel height="200px" autoplay>
           <el-carousel-item v-for="item in imgNum" :key="item"></el-carousel-item>
         </el-carousel>
       </div>
     </div>
-
     <div class="block block2">
-      <span class="title">专班人员</span>
+      <span class="title">区块优势</span>
+      <span class="detail" @click="showDetail">详情 >></span>
       <div>
-        <table border="0" cellpadding="0" cellspacing="0">
-          <thead>
-            <tr>
-              <td>类别</td>
-              <td>姓名</td>
-              <td>职位</td>
-              <td>联系方式</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>主要负责人</td>
-              <td>{{ zy_xm }}</td>
-              <td>{{ zy_zw }}</td>
-              <td>{{ zy_lxfs }}</td>
-            </tr>
-            <tr>
-              <td>分管负责人</td>
-              <td>{{ fg_xm }}</td>
-              <td>{{ fg_zw }}</td>
-              <td>{{ fg_lxfs }}</td>
-            </tr>
-            <tr>
-              <td>科室负责人</td>
-              <td>{{ ks_xm }}</td>
-              <td>{{ ks_zw }}</td>
-              <td>{{ ks_lxfs }}</td>
-            </tr>
-            <tr>
-              <td>地块经办人</td>
-              <td>{{ dk_xm }}</td>
-              <td>{{ dk_zw }}</td>
-              <td>{{ dk_lxfs }}</td>
-            </tr>
-          </tbody>
-        </table>
+        <ul>
+          <li v-for="(item,index) in qktable" :key="index">
+            <p>{{item.title}}</p>
+            <span>{{item.text}}</span>
+          </li>
+        </ul>
       </div>
     </div>
-
     <div class="block block3">
       <span class="title">问题清单</span>
       <span class="finishRate">完成率：{{ finishRate }} %</span>
@@ -62,7 +30,7 @@
             <div
               v-for="(item,index) in qtable.slice((k - 1) * 3, (k - 1) * 3 + 3)"
               :key="index"
-              @click="getReason(title, item)"
+              @click="getReason(item)"
               :class="{ complete: item.tf == '是', uncomplete: item.tf != '是' }"
             >
               <span>{{item.text}}</span>
@@ -72,17 +40,9 @@
         <reasonForm ref="reasonForm" />
       </div>
     </div>
-
-    <div class="block block4">
-      <span class="title">区块优势</span>
-      <span class="detail" @click="showDetail">详情 >></span>
-      <div>
-        <ul>
-          <li v-for="(item,index) in qktable" :key="index">
-            <span>{{item.text}}</span>
-          </li>
-        </ul>
-      </div>
+    <div class="bottom">
+      <span>负责人：李先生</span>
+      <span style="margin-left: 20px;">联系方式：0577-88030503</span>
     </div>
   </div>
 </template>
@@ -100,23 +60,10 @@ export default {
   data() {
     return {
       server,
-      title: "",
       imgNum: 4,
-      qktable: [],
+      title: "",
       qtable: [],
-      finishRate: 100,
-      zy_xm: "",
-      zy_zw: "",
-      zy_lxfs: "",
-      fg_xm: "",
-      fg_zw: "",
-      fg_lxfs: "",
-      ks_xm: "",
-      ks_zw: "",
-      ks_lxfs: "",
-      dk_xm: "",
-      dk_zw: "",
-      dk_lxfs: ""
+      finishRate: 100
     };
   },
   components: { reasonForm },
@@ -127,9 +74,35 @@ export default {
     })
   },
   created() {
-    // 专班数据
-    const duty_Data = this.$window.duty_Data;
-    this.duty_Data = duty_Data;
+    this.qktable = [
+      {
+        title: "项目区位优势",
+        text:
+          "本次规划项目位于温州市鹿城区，地理位置优越交通便利，翠微大道贯通南北；翠微山、黄龙山、景山三山环抱景观丰富；项目地块边界方整，周边商业、教育、医疗设备配套设施完善。"
+      },
+      {
+        title: "项目区位优势",
+        text:
+          "本次规划项目位于温州市鹿城区，地理位置优越交通便利，翠微大道贯通南北；翠微山、黄龙山、景山三山环抱景观丰富；项目地块边界方整，周边商业、教育、医疗设备配套设施完善。"
+      },
+      {
+        title: "项目区位优势",
+        text:
+          "本次规划项目位于温州市鹿城区，地理位置优越交通便利，翠微大道贯通南北；翠微山、黄龙山、景山三山环抱景观丰富；项目地块边界方整，周边商业、教育、医疗设备配套设施完善。"
+      }
+    ];
+
+    this.qtable = [
+      { text: "审批到位", tf: "是", color: "rgba(58,209,75,0.3)" },
+      { text: "审批到位", tf: "是", color: "rgba(255,51,83,0.3)" },
+      { text: "审批到位", tf: "是", color: "rgba(58,209,75,0.3)" },
+      { text: "审批到位", tf: "是", color: "rgba(255,51,83,0.3)" },
+      { text: "审批到位", tf: "是", color: "rgba(255,51,83,0.3)" },
+      { text: "审批到位", tf: "是", color: "rgba(58,209,75,0.3)" },
+      { text: "审批到位", tf: "是", color: "rgba(255,51,83,0.3)" },
+      { text: "审批到位", tf: "是", color: "rgba(255,51,83,0.3)" },
+      { text: "审批到位", tf: "是", color: "rgba(58,209,75,0.3)" }
+    ];
   },
   mounted() {},
   methods: {
@@ -141,10 +114,9 @@ export default {
 
       this.title = name;
 
-      const imgList =
-        imgName == "/" || imgName == null || imgName == "null"
-          ? []
-          : imgName.split(";");
+      this.$refs.reasonForm.showReason(null);
+
+      const imgList = imgName == "/" ? [] : imgName.split(";");
 
       this.imgNum = imgList.length || 1;
 
@@ -169,13 +141,14 @@ export default {
       });
       $(".el-carousel__item").bind("click", this.locateVR);
 
-      const list = this.zdjzList.filter(({ GLZD }) => GLZD == name);
+      const list = this.zdjzList.filter(({ GLZD }) => name == GLZD);
 
-      const dkxxObj = this.dkxxList.filter(({ GLZD }) => GLZD == name);
+      const dkxxObj = this.dkxxList.filter(({ GLZD }) => name == GLZD);
 
       if (dkxxObj.length) {
         this.qktable = [
           {
+            title: "地块区位优势",
             text: dkxxObj[0].QKYS == "/" ? "暂无数据" : dkxxObj[0].QKYS
           }
         ];
@@ -296,53 +269,14 @@ export default {
 
         const finishRate = ((finishNum / that.qtable.length) * 100).toFixed(2);
         that.finishRate = finishRate;
-
-        const name = list[0].GLZD;
-
-        if (that.duty_Data.hasOwnProperty(name)) {
-          that.zy_xm = duty_Data[name].zy_xm;
-          that.zy_zw = duty_Data[name].zy_zw;
-          that.zy_lxfs = duty_Data[name].zy_lxfs;
-
-          that.fg_xm = duty_Data[name].fg_xm;
-          that.fg_zw = duty_Data[name].fg_zw;
-          that.fg_lxfs = duty_Data[name].fg_lxfs;
-
-          that.ks_xm = duty_Data[name].ks_xm;
-          that.ks_zw = duty_Data[name].ks_zw;
-          that.ks_lxfs = duty_Data[name].ks_lxfs;
-
-          that.dk_xm = duty_Data[name].dk_xm;
-          that.dk_zw = duty_Data[name].dk_zw;
-          that.dk_lxfs = duty_Data[name].dk_lxfs;
-        } else {
-          that.zy_xm = "暂无数据";
-          that.zy_zw = "暂无数据";
-          that.zy_lxfs = "暂无数据";
-
-          that.fg_xm = "暂无数据";
-          that.fg_zw = "暂无数据";
-          that.fg_lxfs = "暂无数据";
-
-          that.ks_xm = "暂无数据";
-          that.ks_zw = "暂无数据";
-          that.ks_lxfs = "暂无数据";
-
-          that.dk_xm = "暂无数据";
-          that.dk_zw = "暂无数据";
-          that.dk_lxfs = "暂无数据";
-        }
       }
     },
-    getReason(name, item) {
-      this.$refs.reasonForm.showReason(name, item);
+    getReason(item) {
+      this.$refs.reasonForm.showReason(item);
     },
     locateVR() {
       if (~this.title.indexOf("滨江")) {
         window.open("https://720yun.com/t/aevkuy1q07l?scene_id=39682863");
-      }
-      if (~this.title.indexOf("广化")) {
-        window.open("https://720yun.com/t/0b0jvzeykn7?scene_id=20053605");
       }
     },
     showDetail() {
@@ -364,20 +298,10 @@ export default {
 
         const { fields, features } = await queryTask.execute(query);
 
-        const fieldAliases = {};
-        fields.map(item => {
-          fieldAliases[item.name] = item.alias;
-        });
-        const list = features.map(item => {
-          item.id = "zddk";
-          item.fieldAliases = fieldAliases;
-          return item;
-        });
-
         console.log("entry-IdentifyTaskFun");
-        console.log("res", list);
+        console.log("res", features);
 
-        that.$parent.jumpBlock(list[0]);
+        that.$parent.jumpBlock(features[0]);
       });
     }
   }
@@ -402,64 +326,40 @@ export default {
   flex-flow: column;
   justify-content: space-between;
 
-  > a {
+  a {
     position: absolute;
-    z-index: 32;
     top: 0px;
     right: 10px;
     font-size: 30px;
     cursor: pointer;
   }
-
-  > header {
-    font-size: 20px;
-    font-weight: bolder;
-    color: rgba(97, 235, 255, 1);
-    position: relative;
-    top: 5px;
-  }
-
   .block {
     text-align: left;
     width: 100%;
+    height: 31%;
     background: rgba(4, 30, 117, 0.5);
     border-bottom: 1px solid #4594ff;
     border-top: 1px solid #4594ff;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
     .title {
       font-size: 20px;
-      font-weight: bolder;
       color: rgba(97, 235, 255, 1);
       position: relative;
       top: 5px;
       left: 20px;
+      font-weight: bolder;
       border-left: 5px solid;
       padding-left: 5px;
     }
     > div {
       width: 100%;
-      height: calc(100% - 33px);
+      height: 90%;
       box-sizing: border-box;
     }
   }
 
   .block1 {
-    height: 26%;
-
-    .name {
-      position: absolute;
-      font-size: 22px;
-      font-weight: bolder;
-      color: rgba(97, 235, 255, 1);
-      top: 5px;
-      left: 50%;
-      transform: translate(-50%, 0);
-    }
-
     .carousel {
+      height: 100%;
       padding: 15px 20px;
 
       .el-carousel__item:nth-child(2n) {
@@ -477,24 +377,47 @@ export default {
   }
 
   .block2 {
-    height: 21%;
+    .detail {
+      position: relative;
+      float: right;
+      top: 5px;
+      right: 20px;
+      font-size: 20px;
+      font-weight: bolder;
+      cursor: pointer;
+    }
+    > div {
+      padding: 17px 15px;
+      ul {
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+        background: rgba(31, 54, 92, 0.5);
+        li {
+          display: inline-block;
+          width: 100%;
+          box-sizing: border-box;
+          padding: 8px 15px 0px;
+          p {
+            font-size: 18px;
+            color: rgba(211, 154, 69, 1);
+            line-height: 22px;
+          }
+          span {
+            font-size: 17px;
+          }
+        }
 
-    table {
-      width: 100%;
-      margin: 5px 0px;
-
-      td {
-        text-align: center;
-        padding: 3px 0px;
+        li:last-child {
+          padding-bottom: 8px;
+        }
       }
     }
   }
 
   .block3 {
-    height: 33%;
-
     .finishRate {
-      position: absolute;
+      position: relative;
       float: right;
       top: 5px;
       right: 20px;
@@ -503,7 +426,7 @@ export default {
     }
 
     > div {
-      padding: 5px 0px;
+      padding: 10px 0px;
       text-align: center;
       position: relative;
       ul {
@@ -554,55 +477,22 @@ export default {
     }
   }
 
-  .block4 {
-    height: 18%;
-
-    .detail {
-      position: absolute;
-      float: right;
-      top: 5px;
-      right: 20px;
-      font-size: 20px;
-      font-weight: bolder;
-      cursor: pointer;
-    }
-
-    > div {
-      padding: 10px 8px;
-      ul {
-        width: 100%;
-        height: 100%;
-        overflow-y: auto;
-        background: rgba(31, 54, 92, 0.5);
-        li {
-          display: inline-block;
-          width: 100%;
-          box-sizing: border-box;
-          padding: 8px 15px 0px;
-          p {
-            font-size: 18px;
-            color: rgba(211, 154, 69, 1);
-            line-height: 22px;
-          }
-          span {
-            font-size: 17px;
-          }
-        }
-
-        li:last-child {
-          padding-bottom: 8px;
-        }
-      }
-    }
+  .bottom {
+    width: 100%;
+    height: 28px;
+    line-height: 28px;
+    background: rgba(4, 30, 117, 0.5);
+    border-bottom: 1px solid #4594ff;
+    border-top: 1px solid #4594ff;
   }
 
-  .block4 ul::-webkit-scrollbar {
+  .block2 ul::-webkit-scrollbar {
     display: block;
     width: 10px;
     background-color: #1a3561;
     border-radius: 10px;
   }
-  .block4 ul::-webkit-scrollbar-thumb {
+  .block2 ul::-webkit-scrollbar-thumb {
     width: 10px;
     background-color: #45cdff;
     border-radius: 10px;
