@@ -7,11 +7,7 @@
 <script>
 /* eslint-disable */
 import { loadModules } from "esri-loader";
-import {
-  OPTION,
-  spatialReference,
-  IMAGELAYER
-} from "@/components/common/Tmap";
+import { OPTION, spatialReference, IMAGELAYER } from "@/components/common/Tmap";
 import { tipHash, Hash } from "./config/hash.js";
 
 export default {
@@ -97,7 +93,10 @@ export default {
         // 延时等待组件初始化
         setTimeout(() => {
           context.$parent.$refs.dkxqForm &&
-            context.$parent.$refs.dkxqForm.getItem(name, imgName);
+            context.$parent.$refs.dkxqForm.getItem({
+              GLZD: name,
+              做地详情: imgName
+            });
           context.$parent.dkxqShow = true;
         }, 20);
       });

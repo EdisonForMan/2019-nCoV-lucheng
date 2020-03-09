@@ -125,7 +125,6 @@ export default {
 
         if (!责任单位) return false;
         const zrdw = 责任单位.split("/")[0];
-        // if (!(~zrdw.indexOf("街道") || ~zrdw.indexOf("镇"))) {
         if (!qsObj[zrdw]) {
           qsObj[zrdw] = {
             label: zrdw,
@@ -145,10 +144,11 @@ export default {
           geometry,
           fieldAliases
         });
-        // }
 
         if (!做地完成时限) return false;
         let wcsx = 做地完成时限;
+
+        console.log("时限", wcsx);
         if (wcsx == "2020年6月") {
           wcsx = "2020-06-01 00:00:00";
         }
@@ -356,13 +356,10 @@ export default {
     },
     // 定位详情
     ShowResult(oitem, item) {
+      this.$parent.rightHidden();
       this.$parent.$refs.monitorArcgis.goloaction(oitem);
 
-      const name = oitem.name;
-      const imgName = oitem.attributes.做地详情;
-
-      this.$parent.rightHidden();
-      this.$parent.$refs.dkxqForm.getItem(name, imgName);
+      this.$parent.$refs.dkxqForm.getItem(oitem.attributes);
       this.$parent.dkxqShow = true;
     },
     // 街道做地分布图

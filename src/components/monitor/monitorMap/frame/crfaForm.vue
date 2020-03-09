@@ -23,50 +23,33 @@ export default {
       title: null
     };
   },
-  created() {},
+  created() {
+    // 做地方案
+    const plan_Data = this.$window.plan_Data;
+    this.plan_Data = plan_Data;
+  },
   mounted() {
     fishBone(window, jQuery);
   },
 
   methods: {
     getItem(name) {
+      const that = this;
       this.title = name;
 
-      if (name == "大南街道E-24a") {
+      if (that.plan_Data.hasOwnProperty(name)) {
+        const list = that.plan_Data[name];
         const option = {
-          data: [
-            {
-              label: `<span class="ks_label">责任科室：大南街道城建科</span>
-          <br />
-          <span class="nr_label">工作内容：围墙圈建及界桩放样</span>`,
-              date: "2020年<br />2月24号"
-            },
-            {
-              label: `<span class="ks_label">责任科室：大南街道城建科</span>
-          <br />
-          <span class="nr_label">工作内容：土地征收</span>`,
-              date: "2020年<br />2月24号"
-            },
-            {
-              label: `<span class="ks_label">责任科室：大南街道城建科</span>
-          <br />
-          <span class="nr_label">工作内容：拆迁清零</span>`,
-              date: "2020年<br />3月15号"
-            },
-            {
-              label: `<span class="ks_label">责任科室：大南街道城建科</span>
-          <br />
-          <span class="nr_label">工作内容：农行不动产变更登记办理</span>`,
-              date: "2020年<br />3月15号"
-            },
-            {
-              label: `<span class="ks_label">责任科室：大南街道城建科</span>
-          <br />
-          <span class="nr_label">工作内容：土地收储</span>`,
-              date: "2020年<br />3月15号"
-            }
-          ]
+          data: []
         };
+        list.map(({ zrks, gznr, date }) => {
+          option.data.push({
+            label: `<span class="ks_label">责任科室：${zrks}</span>
+              <br />
+              <span class="nr_label">工作内容：${gznr}</span>`,
+            date: `${date.replace("年", "年<br />")}`
+          });
+        });
 
         window.fishBone.init(".fish-bone", option);
       } else {

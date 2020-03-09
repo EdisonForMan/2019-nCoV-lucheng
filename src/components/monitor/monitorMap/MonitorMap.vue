@@ -69,7 +69,7 @@ export default {
       dkxqShow: false,
       listShow: false,
       crfaShow: false,
-      warnShow: false
+      warnShow: true
     };
   },
   components: {

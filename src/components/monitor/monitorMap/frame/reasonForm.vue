@@ -41,10 +41,19 @@ export default {
       this.options = options;
 
       if (this.options != null) {
-        this.jtyy = this.options.jtyy != "/" ? this.options.jtyy : "暂无数据";
-        this.zrr = this.options.zrr != "/" ? this.options.zrr : "暂无数据";
-        this.sjjd = this.options.sjjd != "/" ? this.options.sjjd : "暂无数据";
+        this.jtyy = this.isNotNull(this.options.jtyy)
+          ? this.options.jtyy
+          : "暂无数据";
+        this.zrr = this.isNotNull(this.options.zrr)
+          ? this.options.zrr
+          : "暂无数据";
+        this.sjjd = this.isNotNull(this.options.sjjd)
+          ? this.options.sjjd
+          : "暂无数据";
       }
+    },
+    isNotNull(item) {
+      return item != "/" && item != "" && item != " " && item != null;
     }
   }
 };

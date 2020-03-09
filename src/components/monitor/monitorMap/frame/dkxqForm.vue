@@ -62,7 +62,7 @@
             <div
               v-for="(item,index) in qtable.slice((k - 1) * 3, (k - 1) * 3 + 3)"
               :key="index"
-              @click="getReason(title, item)"
+              @click="getReason(item)"
               :class="{ complete: item.tf == '是', uncomplete: item.tf != '是' }"
             >
               <span>{{item.text}}</span>
@@ -136,8 +136,11 @@ export default {
     close() {
       this.$parent.dkxqShow = false;
     },
-    getItem(name, imgName) {
+    getItem({ GLZD, 做地详情 }) {
       const that = this;
+
+      const name = GLZD;
+      const imgName = 做地详情;
 
       this.title = name;
 
@@ -169,6 +172,8 @@ export default {
       });
       $(".el-carousel__item").bind("click", this.locateVR);
 
+      const time = this.zdjzList.map(item => item.SJJD1);
+
       const list = this.zdjzList.filter(({ GLZD }) => GLZD == name);
 
       const dkxxObj = this.dkxxList.filter(({ GLZD }) => GLZD == name);
@@ -195,7 +200,7 @@ export default {
             tf: item.TDZSZJS1,
             jtyy: item.JTYY1,
             zrr: item.ZRR1,
-            sjjd: "/",
+            sjjd: item.SJJD1,
             color: colorHash[item.TDZSZJS1]
           },
           {
@@ -203,7 +208,7 @@ export default {
             tf: item.TDSYQ2,
             jtyy: item.JTYY2,
             zrr: item.ZRR2,
-            sjjd: "/",
+            sjjd: item.SJJD2,
             color: colorHash[item.TDSYQ2]
           },
           {
@@ -211,7 +216,7 @@ export default {
             tf: item.JZW3,
             jtyy: item.JTYY3,
             zrr: item.ZRR3,
-            sjjd: "/",
+            sjjd: item.SJJD3,
             color: colorHash[item.JZW3]
           },
           {
@@ -219,7 +224,7 @@ export default {
             tf: item.TDZ4,
             jtyy: item.JTYY4,
             zrr: item.ZRR4,
-            sjjd: "/",
+            sjjd: item.SJJD4,
             color: colorHash[item.TDZ4]
           },
           {
@@ -227,7 +232,7 @@ export default {
             tf: item.GX5,
             jtyy: item.JTYY5,
             zrr: item.ZRR5,
-            sjjd: "/",
+            sjjd: item.SJJD5,
             color: colorHash[item.GX5]
           },
           {
@@ -235,7 +240,7 @@ export default {
             tf: item.DBFZW6,
             jtyy: item.JTYY6,
             zrr: item.ZRR6,
-            sjjd: "/",
+            sjjd: item.SJJD6,
             color: colorHash[item.DBFZW6]
           },
           {
@@ -243,7 +248,7 @@ export default {
             tf: item.TDWR7,
             jtyy: item.JTYY7,
             zrr: item.ZRR7,
-            sjjd: "/",
+            sjjd: item.SJJD7,
             color: colorHash[item.TDWR7]
           },
           {
@@ -251,7 +256,7 @@ export default {
             tf: item.CD8,
             jtyy: item.JTYY8,
             zrr: item.ZRR8,
-            sjjd: "/",
+            sjjd: item.SJJD8,
             color: colorHash[item.CD8]
           },
           {
@@ -259,7 +264,7 @@ export default {
             tf: item.SY9,
             jtyy: item.JTYY9,
             zrr: item.ZRR9,
-            sjjd: "/",
+            sjjd: item.SJJD9,
             color: colorHash[item.SY9]
           },
           {
@@ -267,7 +272,7 @@ export default {
             tf: item.WQFY10,
             jtyy: item.JTYY10,
             zrr: item.ZRR10,
-            sjjd: "/",
+            sjjd: item.SJJD10,
             color: colorHash[item.WQFY10]
           },
           {
@@ -275,7 +280,7 @@ export default {
             tf: item.TDSC11,
             jtyy: item.JTYY11,
             zrr: item.ZRR11,
-            sjjd: "/",
+            sjjd: item.SJJD11,
             color: colorHash[item.TDSC11]
           },
           {
@@ -283,7 +288,7 @@ export default {
             tf: item.GP12,
             jtyy: item.JTYY12,
             zrr: item.ZRR12,
-            sjjd: "/",
+            sjjd: item.SJJD12,
             color: colorHash[item.GP12]
           }
         ];
@@ -334,8 +339,8 @@ export default {
         }
       }
     },
-    getReason(name, item) {
-      this.$refs.reasonForm.showReason(name, item);
+    getReason(item) {
+      this.$refs.reasonForm.showReason(item);
     },
     locateVR() {
       if (~this.title.indexOf("滨江")) {
@@ -345,6 +350,8 @@ export default {
         window.open("https://720yun.com/t/0b0jvzeykn7?scene_id=20053605");
       }
     },
+
+    // 区位优势详情
     showDetail() {
       this.$parent.changName("Block");
       const name = this.title;
@@ -385,227 +392,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-#dkxqForm {
-  position: absolute;
-  width: 490px;
-  height: 88%;
-  background: rgba(4, 30, 117, 0.5);
-  border-left: 1px solid #04ecff;
-  border-right: 1px solid #04ecff;
-  border-radius: 6px;
-  z-index: 30;
-  top: 10%;
-  margin: auto;
-  box-sizing: border-box;
-  transition: all 1s;
-  display: flex;
-  flex-flow: column;
-  justify-content: space-between;
-
-  > a {
-    position: absolute;
-    z-index: 32;
-    top: 0px;
-    right: 10px;
-    font-size: 30px;
-    cursor: pointer;
-  }
-
-  > header {
-    font-size: 20px;
-    font-weight: bolder;
-    color: rgba(97, 235, 255, 1);
-    position: relative;
-    top: 5px;
-  }
-
-  .block {
-    text-align: left;
-    width: 100%;
-    background: rgba(4, 30, 117, 0.5);
-    border-bottom: 1px solid #4594ff;
-    border-top: 1px solid #4594ff;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    .title {
-      font-size: 20px;
-      font-weight: bolder;
-      color: rgba(97, 235, 255, 1);
-      position: relative;
-      top: 5px;
-      left: 20px;
-      border-left: 5px solid;
-      padding-left: 5px;
-    }
-    > div {
-      width: 100%;
-      height: calc(100% - 33px);
-      box-sizing: border-box;
-    }
-  }
-
-  .block1 {
-    height: 26%;
-
-    .name {
-      position: absolute;
-      font-size: 22px;
-      font-weight: bolder;
-      color: rgba(97, 235, 255, 1);
-      top: 5px;
-      left: 50%;
-      transform: translate(-50%, 0);
-    }
-
-    .carousel {
-      padding: 15px 20px;
-
-      .el-carousel__item:nth-child(2n) {
-        background-image: url("../../../common/image/dk/暂无图片.jpg");
-        background-repeat: no-repeat;
-        background-size: 100% 100%;
-      }
-
-      .el-carousel__item:nth-child(2n + 1) {
-        background-image: url("../../../common/image/dk/暂无图片.jpg");
-        background-repeat: no-repeat;
-        background-size: 100% 100%;
-      }
-    }
-  }
-
-  .block2 {
-    height: 21%;
-
-    table {
-      width: 100%;
-      margin: 5px 0px;
-
-      td {
-        text-align: center;
-        padding: 3px 0px;
-      }
-    }
-  }
-
-  .block3 {
-    height: 33%;
-
-    .finishRate {
-      position: absolute;
-      float: right;
-      top: 5px;
-      right: 20px;
-      font-size: 20px;
-      font-weight: bolder;
-    }
-
-    > div {
-      padding: 5px 0px;
-      text-align: center;
-      position: relative;
-      ul {
-        width: 100%;
-        height: 100%;
-        list-style: none;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-
-        li {
-          width: 100%;
-          height: 23%;
-          display: flex;
-          justify-content: space-between;
-          box-sizing: border-box;
-          padding: 0px 5px;
-          div {
-            width: 32%;
-            height: 100%;
-            display: table;
-            cursor: pointer;
-            box-sizing: border-box;
-            padding: 0px 23px;
-
-            span {
-              display: table-cell;
-              vertical-align: middle;
-              font-size: 15px;
-              font-weight: bolder;
-              color: #fff;
-            }
-          }
-
-          .complete {
-            background-image: url("../../../common/image/已完成.png");
-            background-repeat: no-repeat;
-            background-size: 100% 100%;
-          }
-
-          .uncomplete {
-            background-image: url("../../../common/image/未完成.png");
-            background-repeat: no-repeat;
-            background-size: 100% 100%;
-          }
-        }
-      }
-    }
-  }
-
-  .block4 {
-    height: 18%;
-
-    .detail {
-      position: absolute;
-      float: right;
-      top: 5px;
-      right: 20px;
-      font-size: 20px;
-      font-weight: bolder;
-      cursor: pointer;
-    }
-
-    > div {
-      padding: 10px 8px;
-      ul {
-        width: 100%;
-        height: 100%;
-        overflow-y: auto;
-        background: rgba(31, 54, 92, 0.5);
-        li {
-          display: inline-block;
-          width: 100%;
-          box-sizing: border-box;
-          padding: 8px 15px 0px;
-          p {
-            font-size: 18px;
-            color: rgba(211, 154, 69, 1);
-            line-height: 22px;
-          }
-          span {
-            font-size: 17px;
-          }
-        }
-
-        li:last-child {
-          padding-bottom: 8px;
-        }
-      }
-    }
-  }
-
-  .block4 ul::-webkit-scrollbar {
-    display: block;
-    width: 10px;
-    background-color: #1a3561;
-    border-radius: 10px;
-  }
-  .block4 ul::-webkit-scrollbar-thumb {
-    width: 10px;
-    background-color: #45cdff;
-    border-radius: 10px;
-  }
-}
+@import url("./dkxqForm.less");
 </style>

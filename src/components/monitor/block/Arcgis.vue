@@ -342,7 +342,7 @@ export default {
         y = geometry.centroid.y;
 
       that.view.goTo({
-        center: [x, y + 0.0025],
+        center: [x, y + 0.0015],
         zoom: 17
       });
       if (tipHash[id] && Hash[tipHash[id]]) {
