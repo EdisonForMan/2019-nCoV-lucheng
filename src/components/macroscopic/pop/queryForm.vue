@@ -35,7 +35,7 @@
 
 <script>
 /* eslint-disable */
-const server = "http://172.20.89.68:5001/s";
+const server = "http://172.20.89.88:5001/s";
 import { imgHash } from "../config/hash";
 export default {
   name: "queryForm",
@@ -50,7 +50,6 @@ export default {
   mounted() {},
   methods: {
     goLocation(item) {
-      // console.log(item);
       item.geometry && this.$parent.$refs.macroArcgis.goloaction(item);
     }
   }

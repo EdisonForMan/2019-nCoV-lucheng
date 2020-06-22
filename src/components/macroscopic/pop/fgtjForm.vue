@@ -19,6 +19,8 @@
 /* eslint-disable */
 import { loadModules } from "esri-loader";
 import { OPTION } from "@/components/common/Tmap";
+import "echarts/lib/chart/bar";
+import "echarts/lib/component/tooltip";
 
 export default {
   name: "fgtjForm",

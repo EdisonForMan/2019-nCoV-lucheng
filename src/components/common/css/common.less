@@ -42,12 +42,10 @@ body {
   }
 
   .app_toptab_outside {
-    // background-image: url("../image/bg_outside.png");
     background-size: 100% 100%;
   }
 
   .app_toptab_normal {
-    // background-image: url("../image/headDefault1.png");
     background-size: 100% 100%;
   }
 
@@ -55,85 +53,9 @@ body {
     width: 100%;
     padding-top: 8px;
 
-    >div {
-      height: 100%;
-    }
-
-    .line {
-      position: relative;
-      top: 11px;
-      height: 2px;
-      width: 500px;
-      margin: auto;
-      // background    : linear-gradient(-90deg, rgba(21, 249, 253, 0) 10%, rgb(255, 255, 255) 50%, rgba(21, 249, 253, 0) 90%);
-      background-repeat: no-repeat;
-      background-size: 100% 100%;
-
-      .circle {
-        position: absolute;
-        margin-left: 7px;
-        top: -4px;
-        transition: all 0.8s;
-        width: 10px;
-        height: 10px;
-        background: linear-gradient(180deg, rgba(144, 255, 234, 1) 0%, rgba(80, 227, 194, 1) 100%);
-        border-radius: 50%;
-      }
-
-      .spot {
-        position: absolute;
-        top: -10px;
-        transition: all 0.8s;
-        width: 24px;
-        height: 24px;
-        animation: spotChange 2s ease;
-        -webkit-animation-iteration-count: infinite;
-        -moz-animation-iteration-count: infinite;
-        animation-iteration-count: infinite;
-
-        div {
-          position: absolute;
-          width: 8px;
-          height: 8px;
-          border-width: 1.5px;
-          border-color: #F5931F;
-          border-radius: 25%;
-        }
-
-        .top-left {
-          border-style: none solid solid none;
-          left: 0;
-        }
-
-        .top-right {
-          border-style: none none solid solid;
-          right: 0;
-        }
-
-        .bottom-left {
-          border-style: solid solid none none;
-          left: 0;
-          bottom: 0;
-        }
-
-        .bottom-right {
-          border-style: solid none none solid;
-          right: 0;
-          bottom: 0;
-        }
-      }
-
-      .lightspot {
-        position: absolute;
-        top: -22px;
-        left: 50px;
-        transition: all 0.8s;
-        animation: spotMove 6s linear;
-        -webkit-animation-iteration-count: infinite;
-        -moz-animation-iteration-count: infinite;
-        animation-iteration-count: infinite;
-      }
-    }
+    // >div {
+    //   height: 100%;
+    // }
 
     .app_toptab {
       list-style: none;
@@ -147,6 +69,7 @@ body {
         font-weight: bolder;
         // color: #FFC649;
         background-image: -webkit-gradient(linear, 0 0, 0 bottom, from(#514ef3), to(#d2d5ff));
+        background-clip: text;
         /*必需加前缀 -webkit- 才支持这个text值 */
         -webkit-background-clip: text;
         /*text-fill-color会覆盖color所定义的字体颜色： */
@@ -202,6 +125,23 @@ body {
       margin-left: 30px;
     }
 
+    .tip {
+      position: absolute;
+      right: 60px;
+      top: 15px;
+    }
+
+    .userBtn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      cursor: pointer;
+
+
+
+
+    }
+
 
   }
 
@@ -254,6 +194,26 @@ body {
 }
 
 
+.app_container {
+  height: 100%;
+}
+
+.user_list {
+  li {
+    list-style: none;
+    text-align: center;
+
+    a {
+      color: #29d3f0;
+      cursor: pointer;
+    }
+  }
+
+  li:last-child {
+    padding-top: 5px;
+  }
+}
+
 
 
 
@@ -290,8 +250,7 @@ body {
       border-radius: 4px;
       max-height: 340px !important;
 
-      .esri-mytitle,
-      .esri-mytitle2 {
+      .esri-mytitle {
         // background-color: #5ebef0;
         background-image: linear-gradient(#4691ed, rgba(0, 0, 0, 0));
         margin-bottom: 5px;
@@ -583,7 +542,7 @@ body {
 }
 
 .el-table .timeout-row {
-  color: #ff0000 !important;
+  color: #ee4d4d !important;
   font-weight: bolder !important;
 }
 
@@ -595,4 +554,86 @@ body {
 .el-timeline-item__timestamp {
   color: #fff !important;
   font-size: 18px !important;
+}
+
+// 弹出框
+.el-popover {
+  min-width: 0px !important;
+}
+
+.drop-active {
+  color: #0ff !important;
+  font-weight: bolder;
+  background: #243968;
+  box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.4),
+    0px 0px 44px 0px rgba(16, 146, 236, 0.3);
+}
+
+#dropClass {
+  .el-button {
+    font-size: 16px;
+    padding: 12px;
+  }
+}
+
+.menuClass {
+  background-color: #409eff !important;
+  border: 1px solid #409eff !important;
+
+  li {
+    color: #fff;
+  }
+
+  li:hover {
+    color: #000;
+  }
+}
+
+#warning #table {
+
+  .el-table thead,
+  .el-table tbody {
+    color: #fff !important;
+    font-size: 18px;
+  }
+
+  .el-table td {
+    border-bottom: 1px solid #17035A;
+  }
+
+  .el-table th {
+    background-color: #1A1364 !important;
+  }
+
+  .el-table th.is-leaf {
+    border-bottom: none !important;
+  }
+
+  .el-table tr {
+    background-color: #264C97 !important;
+  }
+
+  .el-table__body-wrapper::-webkit-scrollbar {
+    display: block;
+    width: 10px;
+    background-color: #1a3561;
+  }
+
+  .el-table__body-wrapper::-webkit-scrollbar-thumb {
+    width: 10px;
+    background-color: #45cdff;
+    border-radius: 10px;
+  }
+
+  .el-table th>.cell {
+    color: #09CADD;
+  }
+
+  .el-table__body {
+    width: 100% !important;
+  }
+
+  .el-table::before {
+    background-color: #264c97;
+  }
 }

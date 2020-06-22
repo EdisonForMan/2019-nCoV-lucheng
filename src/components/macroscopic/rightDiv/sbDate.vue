@@ -7,16 +7,16 @@
       <ul>
         <li v-for="(item,index) in forceData" :key="index" @click="goLocation(item)">
           <span
-            v-if="item.label == '疫情分布' && ['gld','gld_list','mj','mj2','hbhw','ytyg','glmd','hmgld','hqgld','hmgld_list','hqgld_list'].indexOf(item.id) < 0"
+            v-if="item.label == '疫情分布' && ['gld','gld_list','mj','mj2','hbhw','ytyg','glmd','hmgld','hqgld','kfgld','hmgld_list','hqgld_list','kfgld_list'].indexOf(item.id) < 0"
           >{{++index}}. 患者：{{item.attributes.Name?`${item.attributes.Name.trim().substr(0,1)}*${item.attributes.Name.trim().substr(-1,1)}`:'**'}}, {{item.attributes.Sex}}, {{item.attributes.Address}}, {{item.attributes.Age}}</span>
           <span
             v-if="~['mj','mj2','gjmj'].indexOf(item.id)"
           >{{++index}}. {{item.attributes.NAME?`${item.attributes.NAME.trim().substr(0,1)}*${item.attributes.NAME.trim().substr(-1,1)}`:'**'}}, {{item.attributes.Sex}}, {{item.attributes.Address_Department}}</span>
           <span
-            v-if="~['gld','hmgld','hqgld'].indexOf(item.id)"
+            v-if="~['gld','hmgld','hqgld','kfgld'].indexOf(item.id)"
           >{{++index}}. {{item.attributes.Name}}, {{item.attributes.Address}}</span>
           <span
-            v-if="~['gld_list','ytyg','glmd','hbhw','hmgld_list','hqgld_list'].indexOf(item.id)"
+            v-if="~['gld_list','ytyg','glmd','hbhw','hmgld_list','hqgld_list','kfgld_list'].indexOf(item.id)"
           >{{++index}}. {{item.attributes.Name?`${item.attributes.Name.trim().substr(0,1)}*${item.attributes.Name.trim().substr(-1,1)}`:'**'}}, {{item.attributes.Address || item.attributes.Sex}}</span>
           <span v-if="item.label == '医疗资源'">{{++index}}.{{item.attributes.NAME}}</span>
           <span

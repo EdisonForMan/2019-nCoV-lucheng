@@ -14,6 +14,8 @@
 
 <script>
 /* eslint-disable */
+import "echarts/lib/chart/graph";
+import "echarts/lib/component/tooltip";
 export default {
   name: "relation",
   data() {

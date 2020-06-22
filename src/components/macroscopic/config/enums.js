@@ -89,6 +89,22 @@ export const leftOptions = [{
                 icon: "社区发热待查",
                 check: false
             }, {
+                name: `康复隔离点 (${lc.kfgld}个)`,
+                id: "kfgld",
+                ytname: -1,
+                url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer",
+                sublayers: "11",
+                icon: "康复隔离点",
+                check: false
+            }, {
+                name: `康复隔离点人员名单 (${lc.kfgld_list}个)`,
+                id: "kfgld_list",
+                ytname: -1,
+                url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/paiban/MapServer",
+                sublayers: "12",
+                icon: "康复人员",
+                check: false
+            }, {
                 name: `密切接触者 (${lc.mj}例)`,
                 ytname: -1,
                 // ytd: "IdentityType like '%银泰%'",

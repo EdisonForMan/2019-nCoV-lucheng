@@ -1,7 +1,7 @@
 import { tipHash, Hash } from "../config/hash.js";
 import { loadModules } from "esri-loader";
 import { OPTION } from "@/components/common/Tmap";
-const server = "http://172.20.89.68:5001/s";
+const server = "http://172.20.89.88:5001/s";
 const qzblUrl = "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/0";
 const zzblUrl = "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/1";
 const mjUrl = "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/5";

@@ -6,7 +6,9 @@ import {
   lc_xqcrjl,
   lc_xqryxx,
   lc_zdjzxx,
-  lc_dkjbxx
+  lc_dkjbxx,
+  lc_zdzbsj,
+  lc_zdfasj
 } from "@/api/beans/fetch";
 export default new Vuex.Store({
   state: {
@@ -17,7 +19,11 @@ export default new Vuex.Store({
     // 做地进展
     zdjzList: [],
     // 地块基本信息
-    dkxxList: []
+    dkxxList: [],
+    // 做地专班数据
+    zdzbList: [],
+    // 做地方案数据
+    zdfaList: []
   },
   mutations: {
     updatecrjlList(state, val) {
@@ -31,6 +37,12 @@ export default new Vuex.Store({
     },
     updatedkxxList(state, val) {
       state.dkxxList = val;
+    },
+    updatezdzbList(state, val) {
+      state.zdzbList = val;
+    },
+    updatezdfaList(state, val) {
+      state.zdfaList = val;
     },
   },
   actions: {
@@ -69,6 +81,24 @@ export default new Vuex.Store({
         data
       } = await lc_dkjbxx();
       commit('updatedkxxList', data)
+    },
+    async fetchzdzbList({
+      state,
+      commit
+    }, option) {
+      const {
+        data
+      } = await lc_zdzbsj();
+      commit('updatezdzbList', data)
+    },
+    async fetchzdfaList({
+      state,
+      commit
+    }, option) {
+      const {
+        data
+      } = await lc_zdfasj();
+      commit('updatezdfaList', data)
     }
   }
 });

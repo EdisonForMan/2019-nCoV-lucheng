@@ -15,6 +15,8 @@
 
 <script>
 /* eslint-disable */
+import "echarts/lib/chart/pie";
+import "echarts/lib/component/tooltip";
 export default {
   data() {
     return {
@@ -121,7 +123,7 @@ export default {
         tooltip: {
           trigger: "item",
           formatter: function(parms) {
-            console.log(parms);
+            // console.log(parms);
             var str =
               // parms.name +
               // "</br>" +

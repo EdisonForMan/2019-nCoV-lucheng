@@ -18,6 +18,8 @@
 
 <script>
 /* eslint-disable */
+import "echarts/lib/chart/bar";
+import "echarts/lib/component/tooltip";
 import util from "../widget/util";
 export default {
   data() {
@@ -30,9 +32,15 @@ export default {
     getItem(children, label) {
       if (
         label == "疫情分布" &&
-        !~["ytyg", "hmgld", "hmgld_list", "hqgld", "hqgld_list"].indexOf(
-          children.id
-        )
+        !~[
+          "ytyg",
+          "hmgld",
+          "hmgld_list",
+          "hqgld",
+          "hqgld_list",
+          "kfgld",
+          "kfgld_list"
+        ].indexOf(children.id)
       ) {
         this.dataAge = this.dataHash[children.id];
         document.getElementById("select").value = children.id;

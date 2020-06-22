@@ -57,7 +57,7 @@
     width: 109px;
     text-align: center;
     color: #fff;
-    background: #2da4da;
+    background: #1b45a7;
 }
 
 .ks_label {
@@ -68,4 +68,14 @@
 
 .nr_label {
     font-weight: bolder;
+}
+
+.cs_label {
+    font-weight: bolder;
+    color: #ff3229;
+}
+
+.yj_label {
+    font-weight: bolder;
+    color: #ffa901;
 }

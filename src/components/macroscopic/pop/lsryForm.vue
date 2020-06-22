@@ -28,6 +28,8 @@
 <script>
 /* eslint-disable */
 import Calendar from "vue-calendar-component";
+import "echarts/lib/chart/line";
+import "echarts/lib/component/tooltip";
 
 import { mapState } from "vuex";
 
@@ -73,8 +75,6 @@ export default {
       const datetime = this.dateFormat("YYYY-mm-dd", new Date());
       this.time = `截至 ${datetime}`;
       this.title = `小区出入情况历史统计`;
-
-      // console.log("getitem", this.crjlList);
 
       const obj = {};
 

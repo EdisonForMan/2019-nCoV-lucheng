@@ -86,10 +86,14 @@ export const sbFields = {
     hmgld_list: ["Name", "Sex", "Country", "Phone", "GLD"],
     // 华侨隔离点人员名单
     hqgld_list: ["Name", "Sex", "Country", "Phone", "GLD"],
+    // 康复隔离点人员名单
+    kfgld_list: ["Name", "Sex", "Country", "Phone", "GLD"],
     // 红码隔离点
     hmgld: ["Name", "Address", "Country", "Linkman", "Phone", "IsUsing"],
     // 华侨隔离点
-    hqgld: ["Name", "Address", "Country", "Linkman", "Phone", "IsUsing"]
+    hqgld: ["Name", "Address", "Country", "Linkman", "Phone", "IsUsing"],
+    // 康复隔离点
+    kfgld: ["Name", "Address", "Country", "Linkman", "Phone", "IsUsing"]
 }
 
 
@@ -146,5 +150,6 @@ export const noShowFields = [
     "DateUsource",
     "经度",
     "纬度",
-    "总序号"
+    "总序号",
+    "康复隔离__总序号"
 ]

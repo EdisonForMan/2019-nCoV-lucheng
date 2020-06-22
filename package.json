@@ -15,7 +15,6 @@
     "element-ui": "^2.13.0",
     "esri-loader": "^2.9.2",
     "jquery": "^3.4.1",
-    "mint-ui": "^2.2.13",
     "qs": "^6.8.0",
     "vue": "^2.6.10",
     "vue-calendar-component": "^2.8.2",
@@ -28,6 +27,7 @@
     "@vue/cli-service": "^3.8.0",
     "axios": "^0.19.0",
     "babel-eslint": "^10.0.1",
+    "babel-plugin-component": "^1.1.1",
     "babel-plugin-transform-remove-strict-mode": "^0.0.2",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
@@ -38,7 +38,8 @@
     "sass": "^1.25.0",
     "sass-loader": "^8.0.2",
     "vue-select": "^3.2.0",
-    "vue-template-compiler": "^2.6.10"
+    "vue-template-compiler": "^2.6.10",
+    "webpack-bundle-analyzer": "^3.8.0"
   },
   "eslintConfig": {
     "root": true,

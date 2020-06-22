@@ -10,22 +10,33 @@
             :class="{top_active:index==current}"
             @click="$goRoute(item.route),selected(index)"
           >{{item.label}}</li>
-          <!-- 2020/2/12 固定第二个页面 -->
-          <!-- <li
-            v-for="(item,index) in toptab"
-            :class="{top_active:index==1}"
-            :key="index"
-          >{{item.label}}</li>-->
         </ul>
-        <!-- <p>截至日期：{{$window.nCov_luchengData.macroscopic.updateTime}}</p> -->
-        <p style="position: absolute;right: 15px;top: 15px;">温州设计集团勘测院</p>
-        <p style="position: absolute;right: 15px;top: 40px;">{{time}}</p>
+        <div class="tip">
+          <p>温州设计集团勘测院</p>
+          <p>{{ time }}</p>
+        </div>
+
+        <el-popover placement="bottom-end" width="70" trigger="hover">
+          <ul class="user_list">
+            <li>{{ au_username }}</li>
+            <li>
+              <a @click="updatePassport">修改密码</a>
+            </li>
+            <li>
+              <a @click="Exit">安全退出</a>
+            </li>
+          </ul>
+          <div class="userBtn" slot="reference">
+            <el-avatar size="small" src="libs/img/userAvatar.png"></el-avatar>
+          </div>
+        </el-popover>
       </div>
     </header>
     <div class="app_container">
       <router-view ref="router" />
       <transition name="frame"></transition>
     </div>
+    <Passport v-if="showPassport" />
   </div>
 </template>
 
@@ -34,6 +45,7 @@
 import router from "@/router";
 import { OPTION, GET_ARCGIS_TOKEN, WRT_config } from "./components/common/Tmap";
 import { fixMenuList } from "./components/common/user/menuHash";
+import Passport from "./components/common/user/Passport";
 
 export default {
   name: "app",
@@ -43,12 +55,20 @@ export default {
         // { label: "宏观管控", route: "control" },
         { label: "宏观管控" },
         { label: "防疫布控", route: "macroscopic" },
-        { label: "复工复产", route: "monitor" }
+        { label: "做地出让", route: "monitor" }
       ],
       current: 1,
       time: " ",
-      showHeader: true // 显示头部
+      showHeader: true, // 显示头部
+      au_username: window.user.au_username,
+      showPassport: false
     };
+  },
+  components: { Passport },
+  async created() {
+    //  isOutside对外版本样式会有区别
+    // this.isOutside = this.$env == "outside";
+    // await this.shallLogin();
   },
   mounted() {
     this.setLoation();
@@ -76,19 +96,6 @@ export default {
       if (index != 0) {
         this.current = index;
       }
-    },
-    doRegisterToken(token) {
-      const that = this;
-      that.$arcgisToken = token;
-      loadModules(["esri/identity/IdentityManager"], OPTION).then(
-        ([IdentityManager]) => {
-          //  token注册
-          IdentityManager.registerToken({
-            server: GET_ARCGIS_TOKEN,
-            token
-          });
-        }
-      );
     },
     //获取当前时间
     getTime() {
@@ -132,6 +139,18 @@ export default {
         second;
       this.time = currentdate;
       //return currentdate;
+    },
+    userOpt() {
+      console.log("用户操作");
+    },
+    updatePassport() {
+      this.showPassport = true;
+    },
+
+    Exit() {
+      this.$util.removeStorage("access_token");
+      // window.location.href = `http://localhost:8081/index.html#/`;
+      window.location.href = `http://172.20.89.88:5001/2019-nCoV-login/index.html#/`;
     }
   }
 };
@@ -139,7 +158,7 @@ export default {
 
 <style lang="less">
 @import url("components/common/css/common.less");
-@import url("components/common/css/style.less");
+// @import url("components/common/css/style.less");
 @import url("components/common/css/animate.css");
 @import url("components/common/css/frame.less");
 @import url("components/common/css/arcgis.css");

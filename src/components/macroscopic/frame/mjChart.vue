@@ -29,6 +29,9 @@
 /* eslint-disable */
 
 import { qzTableUpdate } from "./mjArcgis";
+import "echarts/lib/chart/bar";
+import "echarts/lib/chart/graph";
+import "echarts/lib/component/tooltip";
 export default {
   name: "mjChart",
   data() {

@@ -48,8 +48,10 @@ export const tipHash = {
     nj_qy: "njqyHash",
     hmgld_list: "hmgldListHash",
     hqgld_list: "hmgldListHash",
+    kfgld_list: "kfgldListHash",
     hmgld: "hmgldHash",
-    hqgld: "hmgldHash"
+    hqgld: "hmgldHash",
+    kfgld: "hmgldHash"
 }
 
 // 隔离点人员名单
@@ -165,6 +167,78 @@ const hmgldListHash = [{
 }, {
     fieldName: "Note",
     label: "备注"
+}]
+
+// 康复隔离点人员名单
+const kfgldListHash = [{
+    fieldName: "Country",
+    label: "街镇"
+}, {
+    fieldName: "GLD",
+    label: "隔离点"
+}, {
+    fieldName: "Name",
+    label: "姓名"
+}, {
+    fieldName: "Sex",
+    label: "性别"
+}, {
+    fieldName: "Phone",
+    label: "联系电话"
+}, {
+    fieldName: "PhoneCheck",
+    label: "联系电话核对"
+}, {
+    fieldName: "PhoneNote",
+    label: "联系电话备注"
+}, {
+    fieldName: "Code",
+    label: "身份证号码"
+}, {
+    fieldName: "DRSTZT",
+    label: "当下日身体状态"
+}, {
+    fieldName: "DRSTZTBZ",
+    label: "当日身体状态备注"
+}, {
+    fieldName: "Address",
+    label: "家庭住址"
+}, {
+    fieldName: "LY",
+    label: "来源"
+}, {
+    fieldName: "LYD",
+    label: "来源地"
+}, {
+    fieldName: "SFFDDWJMQJCZ",
+    label: "是否湖北_重点为武汉及周边_返温人员及其密切接触者"
+}, {
+    fieldName: "FJH",
+    label: "房间号"
+}, {
+    fieldName: "KSGLSJ",
+    label: "开始隔离时间"
+}, {
+    fieldName: "YJJCGLSJ",
+    label: "预计解除隔离时间"
+}, {
+    fieldName: "SJLKGLDSJ",
+    label: "实际离开隔离点时间"
+}, {
+    fieldName: "SFYFJCGL",
+    label: "是否依法解除隔离"
+}, {
+    fieldName: "SFZYSBL",
+    label: "是否转疑似病例"
+}, {
+    fieldName: "SFYQTSYLKGLD",
+    label: "是否因其他事由离开隔离点"
+}, {
+    fieldName: "Note1",
+    label: "备注1"
+}, {
+    fieldName: "Note2",
+    label: "备注2"
 }]
 
 // 红码、华侨隔离点
@@ -1048,7 +1122,8 @@ export const Hash = {
     zjgdHash,
     njqyHash,
     hmgldListHash,
-    hmgldHash
+    hmgldHash,
+    kfgldListHash
 }
 
 

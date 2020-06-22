@@ -8,7 +8,7 @@ import {
 import {
   OPTION
 } from "@/components/common/Tmap";
-const server = "http://172.20.89.68:5001/s";
+const server = "http://172.20.89.88:5001/s";
 
 export const mjChartUpdate = (context, name) => {
   const nameFix = name.slice(0, 1) + "*" + name.slice(2);
@@ -35,9 +35,13 @@ export const mjChartUpdate = (context, name) => {
       item.fieldAliases = fieldAliases;
       return item;
     });
-    context.$parent.$refs.mjChart.list = [...list];
-    context.$parent.$refs.mjChart.title = name;
-    context.$parent.$refs.queryForm.list = [];
+
+    setTimeout(() => {
+      context.$parent.$refs.mjChart.list = [...list];
+      context.$parent.$refs.mjChart.title = name;
+      context.$parent.$refs.queryForm.list = [];
+    }, 20)
+
   });
 };
 export const addQZLinkFeature = (context, name) => {
@@ -109,9 +113,12 @@ export const mjChartUpdate_gj = (context, name) => {
       item.fieldAliases = fieldAliases;
       return item;
     });
-    context.$parent.$refs.mjChart.list = [...list];
-    context.$parent.$refs.mjChart.title = name;
-    context.$parent.$refs.queryForm.list = [];
+
+    setTimeout(() => {
+      context.$parent.$refs.mjChart.list = [...list];
+      context.$parent.$refs.mjChart.title = name;
+      context.$parent.$refs.queryForm.list = [];
+    }, 20)
   });
 };
 export const addQZLinkFeature_gj = (context, name) => {

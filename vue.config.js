@@ -10,11 +10,23 @@ module.exports = {
     proxy: {
       //配置跨域
       "/api": {
-        target: "http://lysb.lucheng.gov.cn/api",
+        target: "http://172.20.89.88:5001/api",
         changOrigin: true,
         pathRewrite: {
           "^/api": ""
         }
+      }
+    }
+  },
+  chainWebpack: (config) => {
+    /* 添加分析工具*/
+    if (process.env.NODE_ENV === 'production') {
+      if (process.env.npm_config_report) {
+        config
+          .plugin('webpack-bundle-analyzer')
+          .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
+          .end();
+        config.plugins.delete('prefetch')
       }
     }
   }

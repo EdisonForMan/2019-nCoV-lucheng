@@ -8,7 +8,7 @@ import {
 import {
     OPTION
 } from "@/components/common/Tmap";
-const server = "http://172.20.89.68:5001/s";
+const server = "http://172.20.89.88:5001/s";
 const xqUrl = "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/14"
 const qzblUrl = "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/0";
 const zzblUrl = "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer/1";

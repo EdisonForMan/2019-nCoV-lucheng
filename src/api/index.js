@@ -5,7 +5,9 @@
  */
 
 import axios from "axios";
-import { WRT_config } from "@/components/common/Tmap";
+import {
+  WRT_config
+} from "@/components/common/Tmap";
 
 let defaultAxios = null;
 
@@ -24,7 +26,7 @@ function getAxiosInstance() {
   const instance = axios.create();
   // instance.defaults.baseURL =
   //   window.env == "dev" ? "/api" : `${WRT_config.serverCompatible}/api`;
-  instance.defaults.baseURL = `/api`;
+  instance.defaults.baseURL = `http://172.20.89.88:5001/api`;
   instance.defaults.headers.post["Content-Type"] = "multipart/form-data";
   instance.interceptors.request.use(
     config => {
@@ -43,16 +45,11 @@ function getAxiosInstance() {
        * env = dev || outside  => outside@token_access
        * env = prod  => token_access
        */
-      if (config.data && config.data.noToken) {
-      } else {
-        const token = window.shallLogin
-          ? localStorage.getItem("auto@access_token")
-          : localStorage.getItem("access_token");
-        if (token) {
-          config.headers["Authorization"] = token;
-        } else if (config.headers["Authorization"]) {
-          delete config.headers["Authorization"];
-        }
+      const token = window.shallLogin ? localStorage.getItem("auto@access_token") : localStorage.getItem("access_token");
+      if (token && !/token$/.test(config.url)) {
+        config.headers["Authorization"] = token;
+      } else if (config.headers["Authorization"]) {
+        delete config.headers["Authorization"];
       }
       return config;
     },
@@ -83,8 +80,10 @@ function getAxiosInstance() {
               err.message = "未授权，请重新登录(401)";
               console.log(`[unavailable acount] return to Login Page`);
               if (!window.shallLogin) {
-                window.location = `${WRT_config.login ||
-                  WRT_config.serverCompatible}/index.html`;
+                // window.location = `${WRT_config.login ||
+                //   WRT_config.serverCompatible}/index.html`;
+                // window.location = `http://localhost:8081`;
+                window.location.href = `http://172.20.89.88:5001/2019-nCoV-login/index.html#/`;
               }
               break;
             case 403:

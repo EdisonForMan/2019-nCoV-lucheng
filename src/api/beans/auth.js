@@ -8,6 +8,7 @@ const {
   serverCompatible,
   login
 } = WRT_config;
+
 /**
  * 自主登录接口
  * 使用低权限账号保证对外界面可以访问2.0后台数据接口
@@ -20,7 +21,7 @@ export async function auth_token(username = "admin", axios) {
     data
   } = await axios.post("/au/token", {
     username,
-    password: "123",
+    password: "wzsjjt123!@#",
     noToken: true
   });
   //    对外招商token
@@ -45,7 +46,8 @@ export async function auth_token_info(params, axios) {
   } catch (err) {
     console.log(`[unavailable acount] return to Login Page`);
     if (!window.shallLogin) {
-      window.location = `${login || serverCompatible}/index.html`;
+      // window.location = `http://172.20.89.88:5001/2019-nCoV-login/index.html#/`;
+      window.location = `${login || serverCompatible}/2019-nCoV-login/index.html#/`;
     }
   }
   return data;

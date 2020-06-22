@@ -6,7 +6,7 @@
 
 <script>
 /* eslint-disable */
-const server = "http://172.20.89.68:5001/s";
+const server = "http://172.20.89.88:5001/s";
 import {
   addQZLinkFeature,
   mjChartUpdate,
@@ -17,6 +17,7 @@ import {
   getGLDList,
   getHMGLDList,
   getHQGLDList,
+  getKFGLDList,
   getNJQYList
 } from "./frame/gldArcgis";
 import { linkCPFeatures } from "./frame/streetArcgis";
@@ -225,7 +226,7 @@ export default {
       $("body").on("click", ".hmgld_btn", function() {
         const name = $(this).attr("data-val");
         const bid = $(this).attr("data-val2");
-        console.log(name, bid);
+        // console.log(name, bid);
         getHMGLDList(context, name, bid);
         context.$parent.leftHidden();
         context.$parent.legend();
@@ -234,8 +235,17 @@ export default {
       $("body").on("click", ".hqgld_btn", function() {
         const name = $(this).attr("data-val");
         const bid = $(this).attr("data-val2");
-        console.log(name, bid);
+        // console.log(name, bid);
         getHQGLDList(context, name, bid);
+        context.$parent.leftHidden();
+        context.$parent.legend();
+      });
+      //  康复隔离点人员详情
+      $("body").on("click", ".kfgld_btn", function() {
+        const name = $(this).attr("data-val");
+        const bid = $(this).attr("data-val2");
+        // console.log(name, bid);
+        getKFGLDList(context, name, bid);
         context.$parent.leftHidden();
         context.$parent.legend();
       });
@@ -352,6 +362,11 @@ export default {
           ${
             id == "hqgld"
               ? `<div class="bottomBtn hqgld_btn" data-val="${attributes.Name}" data-val2="${attributes.Bid}">观察点人员详情</div>`
+              : ``
+          }
+          ${
+            id == "kfgld"
+              ? `<div class="bottomBtn kfgld_btn" data-val="${attributes.Name}" data-val2="${attributes.Bid}">观察点人员详情</div>`
               : ``
           }
           ${
@@ -561,6 +576,11 @@ export default {
           ${
             id == "hqgld"
               ? `<div class="bottomBtn hqgld_btn" data-val="{Name}" data-val2="{Bid}">观察点人员详情</div>`
+              : ``
+          }
+          ${
+            id == "kfgld"
+              ? `<div class="bottomBtn kfgld_btn" data-val="{Name}" data-val2="{Bid}">观察点人员详情</div>`
               : ``
           }
           ${
@@ -876,7 +896,8 @@ export default {
     },
     // 清除空间查询图层
     cleanQuery() {
-      this.map.findLayerById("spaceLayer").removeAll();
+      this.map.findLayerById("spaceLayer") &&
+        this.map.findLayerById("spaceLayer").removeAll();
     },
     // 查询全部
     queryAll(spaceGraphicsLayer, graphic) {

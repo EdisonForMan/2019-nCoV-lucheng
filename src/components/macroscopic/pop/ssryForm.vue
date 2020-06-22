@@ -23,7 +23,7 @@
 
 <script>
 /* eslint-disable */
-const server = "http://172.20.89.68:5001/s";
+const server = "http://172.20.89.88:5001/s";
 import { loadModules } from "esri-loader";
 import { OPTION } from "@/components/common/Tmap";
 
@@ -68,8 +68,6 @@ export default {
 
       this.title = `小区出入实时情况`;
       const datetime = this.dateFormat("YYYY-mm-dd", new Date());
-
-      // console.log(this.crjlList, this.ryxxList);
 
       const obj = {};
 

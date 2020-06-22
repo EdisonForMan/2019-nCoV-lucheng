@@ -97,7 +97,7 @@ export default {
   },
   created() {},
   mounted() {
-    this.getItem(leftOptions[0].children[0], leftOptions[0].label);
+    // this.getItem(leftOptions[0].children[0], leftOptions[0].label);
   },
   components: { relation },
   watch: {
@@ -301,35 +301,45 @@ export default {
         if (id == "qzbl") {
           this.forceData = list;
         } else {
-          this.forceData = list.sort((a, b) => {
-            let country1 = (a.attributes.Country
-              ? a.attributes.Country.trim()
-              : "无"
-            )
-              .replace("街道", "")
-              .replace("镇", "");
-            let country2 = (b.attributes.Country
-              ? b.attributes.Country.trim()
-              : "无"
-            )
-              .replace("街道", "")
-              .replace("镇", "");
+          const itemId = id;
+          this.forceData = list
+            .sort((a, b) => {
+              let country1 = (a.attributes.Country
+                ? a.attributes.Country.trim()
+                : "无"
+              )
+                .replace("街道", "")
+                .replace("镇", "");
+              let country2 = (b.attributes.Country
+                ? b.attributes.Country.trim()
+                : "无"
+              )
+                .replace("街道", "")
+                .replace("镇", "");
 
-            country1 == "蒲鞋" ? (country1 = "蒲鞋市") : country1;
-            country2 == "蒲鞋" ? (country2 = "蒲鞋市") : country2;
+              country1 == "蒲鞋" ? (country1 = "蒲鞋市") : country1;
+              country2 == "蒲鞋" ? (country2 = "蒲鞋市") : country2;
 
-            const count1 = this.sObj[country1] ? this.sObj[country1].count : 0;
-            const count2 = this.sObj[country2] ? this.sObj[country2].count : 0;
+              const count1 = this.sObj[country1]
+                ? this.sObj[country1].count
+                : 0;
+              const count2 = this.sObj[country2]
+                ? this.sObj[country2].count
+                : 0;
 
-            if (count1 == count2) {
-              return (
-                this.countryHash[country2 ? country2.trim() : "无"] -
-                this.countryHash[country1 ? country1.trim() : "无"]
-              );
-            }
+              if (count1 == count2) {
+                return (
+                  this.countryHash[country2 ? country2.trim() : "无"] -
+                  this.countryHash[country1 ? country1.trim() : "无"]
+                );
+              }
 
-            return count2 - count1;
-          });
+              return count2 - count1;
+            })
+            .map(item => {
+              item.id = itemId;
+              return item;
+            });
         }
 
         this.fieldList =
@@ -385,12 +395,12 @@ export default {
     clickTr(row, column, event) {
       if (event.target.innerText != "详情") {
         const item = this.forceData[row.index - 1];
-        item["id"] =
+        item.id =
           this.title == "确诊病例"
             ? "qzbl"
             : this.title == "集中医学观察点"
             ? "gld"
-            : null;
+            : item.id;
 
         this.$parent.$refs.macroArcgis.goloaction(item);
         this.$parent.listShow = false;

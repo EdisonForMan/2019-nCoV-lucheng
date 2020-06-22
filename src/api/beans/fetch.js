@@ -79,6 +79,10 @@ export const lc_zdjzxx = async () => {
     "JTYY12",
     "ZRR12",
     "SJJD12",
+    "QT",
+    "JTYY13",
+    "ZRR13",
+    "SJJD13",
     "SFZDWC",
     "ZDWCSJ",
     "ZYCZWT",
@@ -130,12 +134,32 @@ export const lc_dkjbxx = async () => {
     "CRQK",
     "GLZD",
     "ZDWCSX",
-    "CRCJSJ"
+    "CRCJSJ",
+    "SSQY"
   ]
   const name = "lc_dkjbxxb";
   return await axios.post("/dw/ds", option_concat(name, params));
 }
 
+/**
+ * [lc_zdzbsj]做地专班数据
+ */
+export const lc_zdzbsj = async () => {
+  const axios = getDefaultAxios();
+  const params = ["id", "dkmc", "zy_xm", "zy_zw", "zy_lxfs", "fg_xm", "fg_zw", "fg_lxfs", "ks_xm", "ks_zw", "ks_lxfs", "dk_xm", "dk_zw", "dk_lxfs", "glzd"]
+  const name = "lc_zdzbsjb";
+  return await axios.post("/dw/ds", option_concat(name, params));
+}
+
+/**
+ * [lc_zdfasj]做地方案数据
+ */
+export const lc_zdfasj = async () => {
+  const axios = getDefaultAxios();
+  const params = ["id", "dkmc", "gznr1", "zrks1", "date1", "gznr2", "zrks2", "date2", "gznr3", "zrks3", "date3", "gznr4", "zrks4", "date4", "gznr5", "zrks5", "date5", "wczt1", "sjwcsj1", "wczt2", "sjwcsj2", "wczt3", "sjwcsj3", "wczt4", "sjwcsj4", "wczt5", "sjwcsj5", "glzd"]
+  const name = "lc_zdfasjb";
+  return await axios.post("/dw/ds", option_concat(name, params));
+}
 
 /**
  * 配置

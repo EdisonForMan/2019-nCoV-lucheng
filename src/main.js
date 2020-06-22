@@ -5,18 +5,36 @@ import router from "./router";
 import store from "./store";
 import "./components/common/_iconfont/iconfont.js";
 import "./components/common/_iconfont/iconfont.css";
-import echarts from "echarts";
+import echarts from "echarts/lib/echarts";
 import {
   auth_token,
   auth_token_info
 } from "./api/beans/auth";
-import Mint from 'mint-ui';
-import 'mint-ui/lib/style.css'
-Vue.use(Mint);
 
-import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
-Vue.use(Element)
+
+import {
+  Button,
+  Table,
+  TableColumn,
+  DropdownMenu,
+  DropdownItem,
+  Dropdown,
+  Carousel,
+  CarouselItem,
+  Popover,
+  Avatar
+} from 'element-ui';
+Vue.use(Button)
+Vue.use(Table)
+Vue.use(TableColumn)
+Vue.use(Dropdown)
+Vue.use(DropdownMenu)
+Vue.use(Carousel)
+Vue.use(CarouselItem)
+Vue.use(DropdownItem)
+Vue.use(Popover)
+Vue.use(Avatar)
 
 // filter production infos
 Vue.prototype.$echarts = echarts;
@@ -60,7 +78,33 @@ const app = async fn => {
     sessionStorage.setItem("shallRefresh", true);
     location.reload();
   }
-  await auth_token("admin");
+  window.shallLogin && await auth_token();
+
+
+  const [{
+    au_username,
+    group,
+    style,
+    au_userid
+  }] = await auth_token_info();
+  window.user = {
+    au_username,
+    group,
+    au_userid,
+    rland: false,
+    rquota: false,
+    style: location.host.includes("lysb.lucheng.gov.cn") ||
+      location.host.includes("localhost") ?
+      util.getStorage("@style") || [{
+        chooseStyle: "app",
+        id: 1,
+        mapStyle: "simpleStyle",
+        userDepart: "亩均论英雄",
+        userName: "admin"
+      }] : style
+  };
+
+
   fn && fn();
 };
 app(() => {

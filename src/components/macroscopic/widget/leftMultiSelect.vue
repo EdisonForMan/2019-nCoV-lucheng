@@ -77,7 +77,7 @@
 
 <script>
 /* eslint-disable */
-import ToggleSwitch from "../../common/selectRadioFrame/Switch";
+import ToggleSwitch from "./Switch";
 import { WRT_config } from "@/components/common/Tmap";
 import util from "./util";
 const { server } = WRT_config;
@@ -304,7 +304,7 @@ export default {
       display: none;
     }
     .selectFrame {
-      height: 806px;
+      height: calc(100% - 40px);
       overflow-y: auto;
       box-sizing: border-box;
       padding: 10px;
