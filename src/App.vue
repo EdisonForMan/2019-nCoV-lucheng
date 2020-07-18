@@ -1,16 +1,17 @@
 <template>
   <div id="app">
     <header :class="`app_header `" v-if="showHeader">
-      <div class="app_icon">鹿城区新冠肺炎防控指挥地图</div>
+      <div class="app_icon">{{ titleHash[current] }}</div>
       <div class="app_toptab_position app_toptab_normal">
         <ul class="app_toptab">
           <li
             v-for="(item,index) in toptab"
             :key="index"
-            :class="{top_active:index==current}"
-            @click="$goRoute(item.route),selected(index)"
+            :class="{top_active:index == current}"
+            @click="$goRoute(item.route, menuFlag), selected(index)"
           >{{item.label}}</li>
         </ul>
+
         <div class="tip">
           <p>温州设计集团勘测院</p>
           <p>{{ time }}</p>
@@ -32,10 +33,12 @@
         </el-popover>
       </div>
     </header>
+
     <div class="app_container">
       <router-view ref="router" />
       <transition name="frame"></transition>
     </div>
+
     <Passport v-if="showPassport" />
   </div>
 </template>
@@ -43,9 +46,10 @@
 <script>
 /* eslint-disable */
 import router from "@/router";
-import { OPTION, GET_ARCGIS_TOKEN, WRT_config } from "./components/common/Tmap";
-import { fixMenuList } from "./components/common/user/menuHash";
-import Passport from "./components/common/user/Passport";
+import { OPTION, GET_ARCGIS_TOKEN, WRT_config } from "@/components/common/Tmap";
+import { fixMenuList } from "@/components/common/user/menuHash";
+import Passport from "@/components/common/user/Passport";
+import { countryList } from "@/components/city/config/hash.js";
 
 export default {
   name: "app",
@@ -53,22 +57,29 @@ export default {
     return {
       toptab: [
         // { label: "宏观管控", route: "control" },
-        { label: "宏观管控" },
         { label: "防疫布控", route: "macroscopic" },
-        { label: "做地出让", route: "monitor" }
+        { label: "做地出让", route: "monitor" },
+        { label: "文明城市", route: "city" }
       ],
-      current: 1,
+      titleHash: {
+        0: "鹿城区新冠肺炎防控指挥地图",
+        1: "鹿城区做地出让指挥地图",
+        2: "鹿城区文明城市建设指挥地图"
+      },
+      current: 0,
       time: " ",
       showHeader: true, // 显示头部
       au_username: window.user.au_username,
-      showPassport: false
+      showPassport: false,
+      countryName: "",
+      menuFlag: true
     };
   },
   components: { Passport },
   async created() {
     //  isOutside对外版本样式会有区别
     // this.isOutside = this.$env == "outside";
-    // await this.shallLogin();
+    await this.shallLogin();
   },
   mounted() {
     this.setLoation();
@@ -80,7 +91,31 @@ export default {
     shallLogin() {
       const that = this;
       return new Promise(async (resolve, reject) => {
-        that.tabs = window.user.au_username ? fixMenuList(that.toptab) : [];
+        const that = this;
+        if (window.user.group.length) {
+          const group = window.user.group;
+          const groups = [];
+          group.map(({ au_groupname }) => {
+            if (~countryList.indexOf(au_groupname)) {
+              that.countryName = au_groupname;
+              return;
+            }
+          });
+        }
+
+        if (that.countryName != "") {
+          that.current = 2;
+          that.menuFlag = false;
+          that.$router.push({
+            name: "city",
+            params: {
+              Jump: false
+            }
+          });
+        }
+
+        window.countryName = that.countryName;
+
         resolve(true);
       });
     },
@@ -88,14 +123,13 @@ export default {
       const { name } = this.$router.history.current;
       this.toptab.map((item, index) => {
         if (item.route === name) {
-          this.current = index;
+          // console.log(this.countryName);
+          this.current = this.countryName != "" ? 2 : index;
         }
       });
     },
     selected(index) {
-      if (index != 0) {
-        this.current = index;
-      }
+      this.current = this.countryName != "" ? 2 : index;
     },
     //获取当前时间
     getTime() {
@@ -138,10 +172,6 @@ export default {
         seperator2 +
         second;
       this.time = currentdate;
-      //return currentdate;
-    },
-    userOpt() {
-      console.log("用户操作");
     },
     updatePassport() {
       this.showPassport = true;
@@ -149,7 +179,6 @@ export default {
 
     Exit() {
       this.$util.removeStorage("access_token");
-      // window.location.href = `http://localhost:8081/index.html#/`;
       window.location.href = `http://172.20.89.88:5001/2019-nCoV-login/index.html#/`;
     }
   }
@@ -158,7 +187,6 @@ export default {
 
 <style lang="less">
 @import url("components/common/css/common.less");
-// @import url("components/common/css/style.less");
 @import url("components/common/css/animate.css");
 @import url("components/common/css/frame.less");
 @import url("components/common/css/arcgis.css");

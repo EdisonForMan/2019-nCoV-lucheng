@@ -1,26 +1,10 @@
 <template>
   <div class="leftMultiSelect">
     <div class="topic">
-      <header>
-        <span :class="{active:tabIndex == 0}" @click="()=>{tabIndex = 0,filterItem(0)}">全区</span>
-        <i>/</i>
-        <span :class="{active:tabIndex == 1}" @click="()=>{tabIndex = 1,filterItem(0)}">专题</span>
-        <i>/</i>
-        <span :class="{active:tabIndex == 2}" @click="()=>{tabIndex = 2,filterItem(0)}">三返</span>
-        <i>/</i>
-        <span :class="{active:tabIndex == 3}" @click="()=>{tabIndex = 3,filterItem(0)}">复工复产</span>
-      </header>
       <div class="selectFrame no_select">
-        <div v-for="(item,index) in this.tree" :key="index">
-          <!-- <span
-            @click="toggleTree(item.label,index)"
-            v-if="!((tabIndex==2&&item.sflabel==-1) || (tabIndex!=2&&item.label==-1))"
-          >-->
-          <span
-            @click="toggleTree(item.label,index)"
-            v-if="!((tabIndex==3&&item.fglabel==-1) || (tabIndex==2&&item.sflabel==-1) || (tabIndex==1&&item.dqlabel==-1) || (tabIndex==0&&item.label==-1))"
-          >
-            {{tabIndex==3?item.fglabel:tabIndex==2?item.sflabel:tabIndex==1?item.dqlabel:item.label}}
+        <div v-for="(item,index) in tree" :key="index">
+          <span @click="toggleTree(item.label,index)">
+            {{ item.label }}
             <input
               v-if="!item.disabled"
               type="checkbox"
@@ -30,36 +14,20 @@
             />
             <i :class="`iconfont ${item.show?`iconRectangleCopy7`:`iconRectangleCopy4`}`"></i>
           </span>
-          <ul
-            v-show="item.show"
-            v-if="!((tabIndex==3&&item.fglabel==-1) || (tabIndex==2&&item.sflabel==-1) || (tabIndex==1&&item.dqlabel==-1)|| (tabIndex==0&&item.label==-1))"
-          >
-            <li
-              v-for="(oitem,oindex) in item.children"
-              :key="oindex"
-              v-if="!((tabIndex==1 && oitem.ytname == -1) || (tabIndex!=1 && oitem.name == -1))"
-            >
+          <ul v-show="item.show">
+            <li v-for="(oitem,oindex) in item.children" :key="oindex">
               <input
                 type="checkbox"
                 v-if="!item.disabled"
                 v-model="oitem.check"
                 @change="changeTree(oitem)"
-                @click="ShowResult(oitem,item)"
               />
-              <p
-                @click="ShowResult(oitem,item),changeTree(oitem)"
-              >{{tabIndex==1?(oitem.ytname||oitem.name) : oitem.name}}</p>
-              <ToggleSwitch
-                v-if="oitem.id == 'jjgl' || oitem.id == 'hbhw'"
-                @change="change(oitem.id)"
-              />
+              <p @click="changeTree(oitem)">{{ oitem.name }}</p>
               <span
                 id="xq"
-                v-if="item.label=='疫情分布' || oitem.id=='glmd' || oitem.id=='gjmj'"
-                @click="ShowListxq(oitem,item)"
+                v-if="!~['chanyePlate', 'wg', 'xq'].indexOf(oitem.id)"
+                @click="ShowListXQ(oitem)"
               >详情</span>
-              <span id="ssry" v-if="oitem.id=='xq'" @click="ShowListssry(oitem,item)">实时人员</span>
-              <span id="fgxq" v-if="oitem.id=='zjgd'" @click="ShowListfgxq(oitem,item)">返工详情</span>
             </li>
           </ul>
         </div>
@@ -77,9 +45,9 @@
 
 <script>
 /* eslint-disable */
-import ToggleSwitch from "./Switch";
-import { WRT_config } from "@/components/common/Tmap";
-import util from "./util";
+import { loadModules } from "esri-loader";
+import { WRT_config, OPTION } from "@/components/common/Tmap";
+import { csSortHash, csMap } from "../config/hash";
 const { server } = WRT_config;
 export default {
   name: "leftMultiSelect",
@@ -87,24 +55,98 @@ export default {
     return {
       icon_show: true,
       tree: [],
-      items: {},
-      server,
-      tabIndex: 0,
-      URL: null,
-      check1: false,
-      check2: false
+      server
     };
   },
-  components: { ToggleSwitch },
-  props: { leftOptions: Array, leftformdata: Object, imgUrl: String },
+  props: { leftOptions: Array },
   created() {
     this.tree = this.leftOptions;
-    this.items = this.leftformdata;
+    // this.listLoading();
   },
   methods: {
-    filterItem(index) {
-      // this.$parent.$refs.bqtj.filterItem(0);
+    listLoading() {
+      loadModules(
+        ["esri/tasks/QueryTask", "esri/tasks/support/Query"],
+        OPTION
+      ).then(async ([QueryTask, Query]) => {
+        const queryTask = new QueryTask({
+          url: `http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer/1`
+        });
+        const query = new Query();
+        query.outFields = ["*"];
+        query.returnGeometry = true;
+        query.where = `1 = 1`;
+        const { features } = await queryTask.execute(query);
+
+        // console.log("fe", features);
+
+        const list = features;
+
+        const sObj = {};
+        const sArr = [];
+
+        list.map(({ attributes, geometry }) => {
+          const { NAME, TYPE } = attributes;
+
+          if (!NAME && !TYPE) return false;
+
+          if (!csMap.hasOwnProperty(TYPE)) return false;
+
+          const fixType = csMap[TYPE].name;
+
+          if (!sObj[fixType]) {
+            sObj[fixType] = {
+              name: fixType,
+              id: csMap[TYPE].id,
+              url:
+                "http://172.20.89.7:6082/arcgis/rest/services/lucheng/nanjiao_wmcs/MapServer",
+              sublayers: "1",
+              definitionExpression: `TYPE = ${TYPE}`,
+              icon: true,
+              check: false,
+              children: []
+            };
+          }
+
+          sObj[fixType].children.push({
+            name: NAME,
+            type: fixType,
+            attributes,
+            geometry
+          });
+        });
+
+        // this.tree.map(({ children }) => {
+        //   console.log(children);
+
+        //   // if(){}
+
+        //   children;
+
+        //   children.name = `${children.name}(1个)`;
+        // });
+
+        this.tree[0].children.map(({ name }) => {
+          console.log("name", name);
+          name = name+'1个';
+        });
+
+        for (let k in sObj) {
+          sArr.push(sObj[k]);
+        }
+
+        sArr.sort((a, b) => csSortHash[a.label] - csSortHash[b.label]);
+
+        console.log("sarr", sArr, sObj, this.tree);
+      });
     },
+
+    ShowListXQ(obj) {
+      console.log("obj", obj);
+      this.$parent.listShow = true;
+      this.$parent.$refs.listxq.getItem(obj);
+    },
+
     hidden() {
       this.icon_show = !this.icon_show;
     },
@@ -119,9 +161,6 @@ export default {
     //触发父元素
     changeTree(item, event) {
       this.intercept();
-      this.$parent &&
-        this.$parent.Listcontact &&
-        this.$parent.Listcontact(item);
     },
     stop(e) {
       e.stopPropagation();
@@ -131,30 +170,6 @@ export default {
       for (let i in this.tree[index].children) {
         this.tree[index].children[i].check = c;
       }
-    },
-    ShowResult(oitem, item) {
-      if (!this.$parent || !oitem.id || oitem.isImg) return;
-      this.$parent.$refs.table.getItem(oitem, item.label);
-      this.$parent.$refs.sbxq.getItem(oitem, item.label);
-      this.$parent.$refs.bqtj.getItem(oitem, item.label); //调用病例统计echart
-    },
-    ShowListxq(oitem, item) {
-      this.$parent.listShow = true;
-      this.$parent.$refs.listxq.getItem(oitem, item.label);
-    },
-    ShowListssry(oitem, item) {
-      this.$parent.leftHidden();
-      this.$parent.rightHidden();
-      this.$parent.legend();
-      this.$parent.$refs.ssryForm.getItem();
-      this.$parent.$refs.lsryForm.getItem();
-    },
-    ShowListfgxq(oitem, item) {
-      this.$parent.leftHidden();
-      this.$parent.rightHidden();
-      this.$parent.legend();
-      this.$parent.$refs.fgxqForm.getItem();
-      this.$parent.$refs.fgtjForm.getItem();
     },
     intercept() {
       const _tree = this.$util.clone(this.tree);
@@ -171,7 +186,6 @@ export default {
       }
       this.tree = _tree;
       this.$parent.leftOptions = this.tree;
-      console.log(this.$parent.leftOptions);
     },
     clean() {
       const _tree = this.$util.clone(this.tree);
@@ -185,46 +199,6 @@ export default {
       }
       this.tree = _tree;
       this.$parent.leftOptions = this.tree;
-      // 清除热力图
-      this.$parent.$refs.macroArcgis.removeHeat();
-      // 清除空间查询
-      this.$parent.$refs.macroArcgis.cleanQuery();
-      // 关闭密接面板
-      this.$parent.$refs.mjChart.list = [];
-
-      // 关闭隔离点面板
-      this.$parent.$refs.gldxq.list = [];
-
-      // 关闭小区面板
-      this.$parent.$refs.ssryForm.list = [];
-      this.$parent.$refs.lsryForm.sArr = [];
-
-      // 清除小区点
-      this.$parent.$refs.macroArcgis.map &&
-        this.$parent.$refs.macroArcgis.map.findLayerById("xqd") &&
-        this.$parent.$refs.macroArcgis.map.remove(
-          this.$parent.$refs.macroArcgis.map.findLayerById("xqd")
-        );
-
-      // 关闭工地返工面板
-      this.$parent.$refs.fgxqForm.list = [];
-      this.$parent.$refs.fgtjForm.list = [];
-
-      // 关闭员工面板
-      this.$parent.$refs.njqyForm.list = [];
-    },
-    change(id) {
-      const that = this;
-
-      let checked;
-
-      if (id == "jjgl") {
-        checked = this.check1 = !this.check1;
-      } else if (id == "hbhw") {
-        checked = this.check2 = !this.check2;
-      }
-
-      this.$parent.$refs.macroArcgis.changeHeat(id, checked);
     }
   },
   watch: {
@@ -232,17 +206,8 @@ export default {
       handler: function() {},
       deep: true
     },
-    imgUrl: {
-      handler(newVal, val) {
-        this.URL = newVal;
-      },
-      immediate: true
-    },
     leftOptions(newV, oldV) {
       this.tree = newV;
-    },
-    tabIndex(newV, oldV) {
-      this.clean();
     }
   }
 };
@@ -305,7 +270,7 @@ export default {
       display: none;
     }
     .selectFrame {
-      height: calc(100% - 40px);
+      height: 100%;
       overflow-y: auto;
       box-sizing: border-box;
       padding: 10px;
@@ -332,7 +297,9 @@ export default {
           }
         }
         > ul:first-child {
+          // p {
           color: rgba(42, 255, 250, 1);
+          // }
         }
       }
 
@@ -380,7 +347,7 @@ export default {
             cursor: pointer;
             line-height: 18px;
             display: inline-block;
-            width: 158px;
+            width: 70%;
             position: relative;
             // top: 5px;
             img {

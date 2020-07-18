@@ -610,7 +610,7 @@ export default {
               option.url = option.url + "/" + item.sublayers;
             }
           }
-          if (item.definitionExpression || shallYT) {
+          /* if (item.definitionExpression || shallYT) {
             const d = [];
             item.definitionExpression && d.push(item.definitionExpression);
             shallYT && item.ytd && d.push(item.ytd);
@@ -620,7 +620,7 @@ export default {
             } else {
               d.length && (option.definitionExpression = d.join(" and "));
             }
-          }
+          } */
 
           if (id == "people_type_9") {
             option.definitionExpression = `IsOpening = '是'`;

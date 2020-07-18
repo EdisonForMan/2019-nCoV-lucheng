@@ -1,15 +1,8 @@
 <template>
   <div class="Com_content Monitor">
-    <div class="subTitle">
+    <!-- <div class="subTitle">
       <span>——</span>
       做地出让指挥地图
-    </div>
-    <!-- <div class="btnGroup">
-      <ul>
-        <li>企业复工</li>
-        <li>做地地图</li>
-        <li>营销分析</li>
-      </ul>
     </div>-->
     <div class="Com_map">
       <commonArcgis id="monitorArcgis" ref="monitorArcgis" :leftOptions="leftOptions" />

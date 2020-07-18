@@ -15,6 +15,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 
 import {
   Button,
+  Select,
   Table,
   TableColumn,
   DropdownMenu,
@@ -23,9 +24,11 @@ import {
   Carousel,
   CarouselItem,
   Popover,
+  Option,
   Avatar
 } from 'element-ui';
 Vue.use(Button)
+Vue.use(Select)
 Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Dropdown)
@@ -34,6 +37,7 @@ Vue.use(Carousel)
 Vue.use(CarouselItem)
 Vue.use(DropdownItem)
 Vue.use(Popover)
+Vue.use(Option)
 Vue.use(Avatar)
 
 // filter production infos
@@ -44,13 +48,16 @@ Vue.prototype.$ajax = $.ajax;
 Vue.prototype.$window = window;
 
 //路由跳转
-Vue.prototype.$goRoute = function (index) {
-  this.$router.push({
-    name: index,
-    params: {
-      Jump: false
-    }
-  });
+Vue.prototype.$goRoute = function (index, flag) {
+  if (flag) {
+    this.$router.push({
+      name: index,
+      params: {
+        Jump: false
+      }
+    });
+  }
+
 };
 
 /**

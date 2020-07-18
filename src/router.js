@@ -5,9 +5,10 @@
 import Vue from "vue";
 import Router from "vue-router";
 // pages modules
-import Macroscopic from "./components/macroscopic/Macroscopic.vue";
-import Control from "./components/control/Control.vue";
-import Monitor from "./components/monitor/Monitor.vue";
+import Macroscopic from "@/components/macroscopic/Macroscopic.vue";
+import Control from "@/components/control/Control.vue";
+import Monitor from "@/components/monitor/Monitor.vue";
+import City from "@/components/city/City.vue";
 Vue.use(Router);
 
 export default new Router({
@@ -17,14 +18,14 @@ export default new Router({
       name: "macroscopic",
       component: Macroscopic
     }, {
-      path: "/control",
-      name: "control",
-      component: Control
-    },
-    {
       path: "/monitor",
       name: "monitor",
       component: Monitor
+    },
+    {
+      path: "/city",
+      name: "city",
+      component: City
     }
   ]
 });
