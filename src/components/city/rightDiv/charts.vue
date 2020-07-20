@@ -3,6 +3,10 @@
     <div class="rDiv1">
       <span class="title">街道选择</span>
       <div class="chart-bg">
+        <span class="row1"></span>
+        <span class="row2"></span>
+        <span class="col2"></span>
+        <span class="col1"></span>
         <topSelect ref="topSelect" />
       </div>
     </div>
@@ -10,6 +14,10 @@
     <div class="rDiv2">
       <span class="title">红白旗占比</span>
       <div class="chart-bg">
+        <span class="row1"></span>
+        <span class="row2"></span>
+        <span class="col2"></span>
+        <span class="col1"></span>
         <div id="chart1"></div>
       </div>
     </div>
@@ -17,6 +25,10 @@
     <div class="rDiv3">
       <span class="title">考察场所明细表</span>
       <div class="chart-bg">
+        <span class="row1"></span>
+        <span class="row2"></span>
+        <span class="col2"></span>
+        <span class="col1"></span>
         <div class="table-out">
           <table border="1" cellspacing="0" cellpadding="0">
             <tr v-for="k in tbData1.length / 4" :key="k">
@@ -39,6 +51,10 @@
     <div class="rDiv4">
       <span class="title">各个街道红白旗占比</span>
       <div class="chart-bg">
+        <span class="row1"></span>
+        <span class="row2"></span>
+        <span class="col2"></span>
+        <span class="col1"></span>
         <div class="chart-out">
           <div id="chart2"></div>
         </div>
@@ -430,7 +446,7 @@ export default {
     padding-left: 7px;
   }
 
-  .chart-bg {
+  /* .chart-bg {
     margin: 0 15px;
     padding: 10px;
 
@@ -442,16 +458,87 @@ export default {
       linear-gradient(to bottom, #fff, #fff) left bottom no-repeat,
       linear-gradient(to left, #fff, #fff) right bottom no-repeat,
       linear-gradient(to left, #fff, #fff) right bottom no-repeat;
-    /*设置大小*/
     background-size: 0.2rem 0.65rem, 0.65rem 0.2rem, 0.2rem 0.65rem,
       0.65rem 0.2rem;
+  } */
 
-    /* background-image: url("~@/components/common/image/box_bg.png");
-    background-repeat: no-repeat;
-    background-size: 100% 100%; */
+  .chart-bg {
+    position: relative;
+    margin: 0 15px;
+    padding: 10px;
+    border: 1px solid #2249ab;
+
+    > span {
+      position: absolute;
+      padding: 5px;
+      border-style: solid;
+      border-color: #fff;
+    }
+
+    .row1 {
+      border-width: 0.2rem 0 0 0.2rem;
+      top: -0.2rem;
+      left: -0.2rem;
+    }
+
+    .row2 {
+      border-width: 0.2rem 0.2rem 0 0;
+      top: -0.2rem;
+      right: -0.2rem;
+    }
+
+    .col1 {
+      border-width: 0 0 0.2rem 0.2rem;
+      bottom: -0.2rem;
+      left: -0.2rem;
+    }
+
+    .col2 {
+      border-width: 0 0.2rem 0.2rem 0;
+      bottom: -0.2rem;
+      right: -0.2rem;
+    }
   }
 
   .rDiv1 {
+    .chart-bg1 {
+      position: relative;
+      margin: 0 15px;
+      padding: 10px;
+      border: 1px solid #2249ab;
+
+      span {
+        position: absolute;
+        padding: 5px;
+        border-style: solid;
+        border-color: #fff;
+      }
+
+      .row1 {
+        border-width: 0.2rem 0 0 0.2rem;
+        top: -0.2rem;
+        left: -0.2rem;
+      }
+
+      .row2 {
+        border-width: 0.2rem 0.2rem 0 0;
+        top: -0.2rem;
+        right: -0.2rem;
+      }
+
+      .col1 {
+        border-width: 0 0 0.2rem 0.2rem;
+        bottom: -0.2rem;
+        left: -0.2rem;
+      }
+
+      .col2 {
+        border-width: 0 0.2rem 0.2rem 0;
+        bottom: -0.2rem;
+        right: -0.2rem;
+      }
+    }
+
     /* .chart-bg {
       margin: 0 15px;
       padding: 10px;
