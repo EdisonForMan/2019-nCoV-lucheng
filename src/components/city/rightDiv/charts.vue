@@ -2,34 +2,46 @@
   <div class="charts">
     <div class="rDiv1">
       <span class="title">街道选择</span>
-      <topSelect ref="topSelect" />
+      <div class="chart-bg">
+        <topSelect ref="topSelect" />
+      </div>
     </div>
 
     <div class="rDiv2">
       <span class="title">红白旗占比</span>
-      <div id="chart1"></div>
+      <div class="chart-bg">
+        <div id="chart1"></div>
+      </div>
     </div>
 
     <div class="rDiv3">
       <span class="title">考察场所明细表</span>
-      <div>
-        <table>
-          <tr v-for="k in tbData1.length / 4" :key="k">
-            <td v-for="(item,index) in tbData1.slice((k - 1) * 4, (k - 1) * 4 + 4)" :key="index">
-              <div class="cell">
-                <span>{{ item.name }}</span>
-                <span>{{ item.value }}</span>
-              </div>
-            </td>
-          </tr>
-        </table>
+      <div class="chart-bg">
+        <div class="table-out">
+          <table border="1" cellspacing="0" cellpadding="0">
+            <tr v-for="k in tbData1.length / 4" :key="k">
+              <td v-for="(item,index) in tbData1.slice((k - 1) * 4, (k - 1) * 4 + 4)" :key="index">
+                <div
+                  class="cell"
+                  :class="{ active: ~activeList.indexOf(item.name) }"
+                  @click="checkType(item)"
+                >
+                  <span>{{ item.name }}</span>
+                  <span>{{ item.value }}</span>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
       </div>
     </div>
 
     <div class="rDiv4">
       <span class="title">各个街道红白旗占比</span>
-      <div class="chartout">
-        <div id="chart2"></div>
+      <div class="chart-bg">
+        <div class="chart-out">
+          <div id="chart2"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -191,7 +203,8 @@ export default {
           name: "建筑工地",
           value: 171
         }
-      ]
+      ],
+      activeList: []
     };
   },
   components: { topSelect },
@@ -200,12 +213,14 @@ export default {
     this.chartInit();
   },
   methods: {
+    // 初始化图表
     chartInit() {
       const that = this;
 
       that.chart1 = this.$echarts.init(document.getElementById("chart1"));
 
       that.chart1.setOption({
+        backgroundColor: "#2249ab",
         grid: {
           left: "3%",
           right: "3%",
@@ -232,6 +247,7 @@ export default {
           {
             type: "pie",
             radius: ["50%", "80%"],
+            // center: ["30%", "50%"],
             startAngle: 60,
             itemStyle: {
               normal: {
@@ -249,6 +265,7 @@ export default {
           {
             type: "pie",
             radius: ["50%", "80%"],
+            // center: ["30%", "50%"],
             startAngle: 60,
             /* itemStyle: {
               normal: {
@@ -259,6 +276,7 @@ export default {
             label: {
               fontSize: 14,
               formatter: "{b} {c}个",
+              color: "#fff"
               // backgroundColor: "#0e3b9a"
             },
             data: that.chartData1
@@ -269,6 +287,7 @@ export default {
       that.chart2 = this.$echarts.init(document.getElementById("chart2"));
 
       that.chart2.setOption({
+        backgroundColor: "#2248ab",
         grid: {
           left: "5%",
           right: "15%",
@@ -378,6 +397,16 @@ export default {
           }
         ]
       });
+    },
+
+    // 选择类型
+    checkType(item) {
+      if (~this.activeList.indexOf(item.name)) {
+        const index = this.activeList.indexOf(item.name);
+        this.activeList.splice(index, 1);
+      } else {
+        this.activeList.push(item.name);
+      }
     }
   }
 };
@@ -391,26 +420,67 @@ export default {
 
   .title {
     display: inline-block;
+    font-family: PingFang SC;
     font-size: 18px;
     font-weight: 500;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
     color: #fff;
-    border-left: 5px solid #f4cf67;
-    margin: 17px 15px 10px;
-    padding-left: 5px;
+    border-left: 4px solid #fff;
+    margin: 13px 15px 10px;
+    padding-left: 7px;
+  }
+
+  .chart-bg {
+    margin: 0 15px;
+    padding: 10px;
+
+    background: linear-gradient(to left, #fff, #fff) left top no-repeat,
+      linear-gradient(to bottom, #fff, #fff) left top no-repeat,
+      linear-gradient(to left, #fff, #fff) right top no-repeat,
+      linear-gradient(to bottom, #fff, #fff) right top no-repeat,
+      linear-gradient(to left, #fff, #fff) left bottom no-repeat,
+      linear-gradient(to bottom, #fff, #fff) left bottom no-repeat,
+      linear-gradient(to left, #fff, #fff) right bottom no-repeat,
+      linear-gradient(to left, #fff, #fff) right bottom no-repeat;
+    /*设置大小*/
+    background-size: 0.2rem 0.65rem, 0.65rem 0.2rem, 0.2rem 0.65rem,
+      0.65rem 0.2rem;
+
+    /* background-image: url("~@/components/common/image/box_bg.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%; */
+  }
+
+  .rDiv1 {
+    /* .chart-bg {
+      margin: 0 15px;
+      padding: 10px;
+
+      background-image: url("~@/components/common/image/box_bg.png");
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+    } */
   }
 
   .rDiv2 {
     // height: 253px;
+
     #chart1 {
       height: 160px;
+      border-radius: 50%;
     }
   }
 
   .rDiv3 {
+    .table-out {
+      background-color: #0d3b99;
+      padding: 1px;
+    }
+
     table {
-      width: 85%;
+      width: 100%;
       margin: auto;
+      border: 1px solid #95bbf1;
       td {
         width: 25%;
       }
@@ -419,8 +489,9 @@ export default {
         display: flex;
         flex-flow: column;
         justify-content: space-between;
-        border: 1px solid #fff;
-        height: 55px;
+        // border: 1px solid #fff;
+        height: 58px;
+        cursor: pointer;
 
         span:first-child {
           display: block;
@@ -434,31 +505,62 @@ export default {
           text-align: center;
         }
       }
+
+      .active {
+        background: linear-gradient(
+          0deg,
+          rgba(249, 120, 34, 1),
+          rgba(241, 199, 99, 1)
+        );
+        border: 1px solid rgba(255, 241, 0, 1);
+        box-shadow: 0px 2px 2px 0px rgba(54, 98, 193, 0.4),
+          0px 1px 1px 0px rgba(155, 234, 246, 0.8),
+          0px -1px 0px 0px rgba(29, 74, 166, 0.5);
+        box-sizing: border-box;
+
+        span:first-child {
+          // display: block;
+          // font-size: 12px;
+          color: #fff;
+          font-weight: bold;
+          // padding: 2px 3px 0;
+        }
+        // span:last-child {
+        //   display: block;
+        //   font-size: 18px;
+        //   text-align: center;
+        // }
+      }
+
+      .cell:first-child {
+        // background-color: orange;
+      }
     }
   }
 
   .rDiv4 {
-    .chartout {
-      height: 200px;
+    .chart-out {
+      height: 120px;
       overflow-x: hidden;
       overflow-y: auto;
+      padding-right: 7px;
 
       #chart2 {
         height: 450px;
       }
     }
 
-    .chartout::-webkit-scrollbar {
+    .chart-out::-webkit-scrollbar {
       display: block;
       width: 10px;
-      background-color: #1a3561;
+      background-color: transparent;
       border-radius: 10px;
     }
 
-    .chartout::-webkit-scrollbar-thumb {
-      width: 10px;
-      background-color: #45cdff;
-      border-radius: 10px;
+    .chart-out::-webkit-scrollbar-thumb {
+      width: 7px;
+      background-color: #19409e;
+      border-radius: 7px;
     }
   }
 }

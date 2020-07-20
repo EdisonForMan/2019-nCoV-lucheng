@@ -1,7 +1,13 @@
 <template>
   <div id="topSelect">
-    <el-select v-model="selectVal" @change="selectHandle" placeholder="请选择">
+    <el-select
+      v-model="selectVal"
+      @change="selectHandle"
+      placeholder="请选择"
+      popper-class="select-option"
+    >
       <el-option
+        class="top-select-option"
         v-for="item in options"
         :key="item.value"
         :label="item.label"
@@ -70,6 +76,14 @@ export default {
     });
 
     that.selectVal = countryName == "" ? "全区" : countryName;
+
+    /* $(".top-select-option")
+      .parent("el-select-dropdown")
+      .css({
+        color: "gray"
+      }); */
+
+    // console.log($("el-select-dropdown").css());
   },
   methods: {
     filterItem() {
@@ -81,15 +95,35 @@ export default {
       layers.map(item => {
         if (~this.ids.indexOf(item.id)) {
           if (!this.defineHash[item.id]) {
-            this.defineHash[item.id] = item.definitionExpression;
+            if (item.sublayers) {
+              this.defineHash[item.id] =
+                item.sublayers.items[0].definitionExpression;
+            } else {
+              this.defineHash[item.id] = item.definitionExpression;
+            }
           }
 
           if (this.selectVal == "全区") {
-            item.definitionExpression = this.defineHash[item.id];
+            // item.definitionExpression = this.defineHash[item.id];
+            if (item.sublayers) {
+              item.sublayers.items[0].definitionExpression = this.defineHash[
+                item.id
+              ];
+            } else {
+              item.definitionExpression = this.defineHash[item.id];
+            }
             // this.$parent.fixOpt("");
           } else {
-            item.definitionExpression =
-              this.defineHash[item.id] + ` and District = '${this.selectVal}'`;
+            if (item.sublayers) {
+              item.sublayers.items[0].definitionExpression =
+                this.defineHash[item.id] +
+                ` and District = '${this.selectVal}'`;
+            } else {
+              item.definitionExpression =
+                this.defineHash[item.id] +
+                ` and District = '${this.selectVal}'`;
+            }
+
             // this.$parent.fixOpt(this.selectVal);
           }
         }
@@ -101,7 +135,7 @@ export default {
         this.$parent.$parent.$parent.updateleftOptions(this.selectVal);
       }
 
-      console.log(layers);
+      // console.log(layers);
     },
     selectHandle(val) {
       this.filterItem();
@@ -112,12 +146,24 @@ export default {
 
 <style lang="less" scoped>
 #topSelect {
-  width: 90%;
+  width: 100%;
   margin: auto;
 
   .el-select {
     width: 100%;
+
+    /deep/ input {
+      background-color: #1b45a7;
+      border: 1px solid #1b45a7;
+      color: #fff;
+    }
+
+    /deep/ i {
+      font-size: 16px;
+      color: #fff;
+    }
   }
+
   /* position: fixed;
   top: 16px;
   right: 255px;

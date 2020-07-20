@@ -352,9 +352,9 @@ export default {
               id: "zgd_line",
               sublayers: [
                 {
-                  id: 0,
-                  definitionExpression: `TYPE = '主干道' and ${
-                    countryName != "" ? `District = '${countryName}'` : "1 = 1"
+                  id: 4,
+                  definitionExpression: `TYPE = '主干道'${
+                    countryName != "" ? ` and District = '${countryName}'` : ""
                   }`
                 }
               ]
@@ -367,9 +367,9 @@ export default {
               id: "cgd_line",
               sublayers: [
                 {
-                  id: 0,
-                  definitionExpression: `TYPE = '次干道' and ${
-                    countryName != "" ? `District = '${countryName}'` : "1 = 1"
+                  id: 4,
+                  definitionExpression: `TYPE = '次干道'${
+                    countryName != "" ? ` and District = '${countryName}'` : ""
                   }`
                 }
               ]
@@ -382,15 +382,17 @@ export default {
               id: "jzgd_polygon",
               sublayers: [
                 {
-                  id: 0,
-                  definitionExpression: `TYPE = '建筑工地' and ${
-                    countryName != "" ? `District = '${countryName}'` : "1 = 1"
+                  id: 2,
+                  definitionExpression: `TYPE = '建筑工地'${
+                    countryName != "" ? ` and District = '${countryName}'` : ""
                   }`
                 }
               ]
             });
             that.map.add(polygon, 4);
           }
+
+          // console.log(that.map);
 
           // console.log(this.$parent);
 

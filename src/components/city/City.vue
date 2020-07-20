@@ -35,13 +35,7 @@
 </template>
 
 <script>
-/**
- * 为避免传值紊乱,建议用ref直接传值或调用触发更新
- * [例] this.$parent.ref.macroArcgis.goLocation(item) 可以直接在<RightDiv>跨模块调用(从列表模块到父模块,再到地图模块)
- * 使用场景:
- * 1.点击勾选左侧,右侧列表Object[]的替换
- * 2.点击列表<RightDiv>,地图<commonArcgis>定位并显示内容
- */
+/* eslint-disable */
 import commonArcgis from "./Arcgis";
 import leftMultiSelect from "./widget/leftMultiSelect";
 
@@ -58,7 +52,7 @@ import listxq from "./frame/listxq";
 import detail from "./rightDiv/detail";
 import detailForm from "./frame/detailForm";
 
-// import { leftOptions } from "./config/enums";
+import { leftOptions } from "./config/enums";
 
 import { loadModules } from "esri-loader";
 import { WRT_config, OPTION } from "@/components/common/Tmap";
@@ -69,7 +63,7 @@ export default {
     return {
       icon_show_left: false,
       icon_show_right: false,
-      leftOptions: [],
+      leftOptions,
       moveLeft: "360",
       moveRight: "500",
       listShow: false,
@@ -88,7 +82,7 @@ export default {
     // detailForm
   },
   created() {
-    this.fixOpt();
+    // this.fixOpt();
   },
   methods: {
     fixOpt() {
@@ -206,7 +200,7 @@ export default {
         OPTION
       ).then(async ([QueryTask, Query]) => {
         const queryTask = new QueryTask({
-          url: `http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer/1`
+          url: `http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer/0`
         });
         const query = new Query();
         query.outFields = ["*"];
@@ -252,7 +246,7 @@ export default {
 
         this.leftOptions[0].children.map(item => {
           const name = item.name.split(" ")[0];
-          item.name = `${name} (${sObj[name].count}个)`;
+          // item.name = `${name} (${sObj[name].count}个)`;
         });
       });
     },

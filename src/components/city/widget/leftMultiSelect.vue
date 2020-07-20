@@ -33,13 +33,6 @@
         </div>
       </div>
     </div>
-    <div class="blueBorder">
-      <p></p>
-      <p></p>
-      <p></p>
-      <p></p>
-    </div>
-    <div class="mapOption"></div>
   </div>
 </template>
 
