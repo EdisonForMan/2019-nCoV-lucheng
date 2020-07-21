@@ -13,18 +13,13 @@
           <transition-group name="fade" mode="out-in">
             <!-- <jdtj ref="jdtj" v-if="detailShow" key="save" />
             <lxtj ref="lxtj" v-else key="edit" />-->
-            <charts ref="charts" v-show="!detailShow" key="charts" />
-            <detail ref="detail" v-show="detailShow" key="detail" />
+            <charts ref="charts" v-show="rightCheckIndex == 0" key="charts" />
+            <detail ref="detail" v-show="rightCheckIndex == 1" key="detail" />
+            <report ref="report" v-show="rightCheckIndex == 2" key="report" />
           </transition-group>
         </div>
         <span @click="toggle2" class="hidden_right_button"></span>
       </div>
-
-      <!-- <div id="detailForm">
-        <a @click="close">×</a>
-        <jdtj ref="jdtj" />
-        <detail ref="detail" />
-      </div>-->
     </div>
     <listxq ref="listxq" v-show="listShow" />
     <!-- <detailForm v-show="detailShow" :style="{right:moveRight + 'px'}" /> -->
@@ -47,9 +42,11 @@ import jdtj from "./rightDiv/jdtj";
 import lxtj from "./rightDiv/lxtj";
 
 import charts from "./rightDiv/charts";
+import detail from "./rightDiv/detail";
+import report from "./rightDiv/report";
 
 import listxq from "./frame/listxq";
-import detail from "./rightDiv/detail";
+
 import detailForm from "./frame/detailForm";
 
 import { leftOptions } from "./config/enums";
@@ -67,7 +64,7 @@ export default {
       moveLeft: "360",
       moveRight: "500",
       listShow: false,
-      detailShow: false
+      rightCheckIndex: 0
     };
   },
   components: {
@@ -78,7 +75,8 @@ export default {
     bottomBtn,
     listxq,
     charts,
-    detail
+    detail,
+    report
     // detailForm
   },
   created() {

@@ -13,7 +13,7 @@
         </ul>
 
         <div class="tip">
-          <p>温州设计集团勘测院</p>
+          <div>温州设计集团 <img src="@/components/common/image/group_logo.png"></div>
           <p>{{ time }}</p>
         </div>
 

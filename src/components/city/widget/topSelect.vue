@@ -1,20 +1,32 @@
 <template>
   <div id="topSelect">
-    <el-select
-      v-model="selectVal"
-      @change="selectHandle"
-      placeholder="请选择"
-      popper-class="select-option"
+    <el-popover
+      placement="bottom-end"
+      width="170"
+      trigger="manual"
+      v-model="visible"
+      popper-class="select-pop"
     >
-      <el-option
-        class="top-select-option"
-        v-for="item in options"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value"
-        :disabled="item.disabled"
-      ></el-option>
-    </el-select>
+      <ul>
+        <li
+          v-for="item in options"
+          :key="item.value"
+          :class="{ selected: item.value == input }"
+          @click="selected(item.value)"
+        >
+          <span>{{ item.label }}</span>
+        </li>
+      </ul>
+      <el-input slot="reference" placeholder="请选择" readonly="readonly" v-model="input">
+        <i slot="prefix" class="el-input__icon input-prefix"></i>
+        <i
+          slot="suffix"
+          class="el-input__icon input-suffix"
+          :class="{ active: visible }"
+          @click="() => { visible = !visible }"
+        ></i>
+      </el-input>
+    </el-popover>
   </div>
 </template>
 
@@ -42,6 +54,9 @@ export default {
         "滨江街道",
         "七都街道"
       ],
+      readonly: true,
+      visible: false,
+      input: "南郊街道",
       selectVal: "南郊街道",
       defineHash: {}
     };
@@ -53,12 +68,6 @@ export default {
     list.map(item => {
       this.ids.push(item.id, `${item.id}_2`);
     });
-  },
-  watch: {
-    /* selectVal(n, o) {
-      console.log(n, o);
-      this.filterItem();
-    } */
   },
   mounted() {
     const that = this;
@@ -75,7 +84,7 @@ export default {
       });
     });
 
-    that.selectVal = countryName == "" ? "全区" : countryName;
+    that.input = countryName == "" ? "全区" : countryName;
 
     /* $(".top-select-option")
       .parent("el-select-dropdown")
@@ -103,7 +112,7 @@ export default {
             }
           }
 
-          if (this.selectVal == "全区") {
+          if (this.input == "全区") {
             // item.definitionExpression = this.defineHash[item.id];
             if (item.sublayers) {
               item.sublayers.items[0].definitionExpression = this.defineHash[
@@ -117,11 +126,11 @@ export default {
             if (item.sublayers) {
               item.sublayers.items[0].definitionExpression =
                 this.defineHash[item.id] +
-                ` and District = '${this.selectVal}'`;
+                ` and District = '${this.input}'`;
             } else {
               item.definitionExpression =
                 this.defineHash[item.id] +
-                ` and District = '${this.selectVal}'`;
+                ` and District = '${this.input}'`;
             }
 
             // this.$parent.fixOpt(this.selectVal);
@@ -129,15 +138,21 @@ export default {
         }
       });
 
-      if (this.selectVal == "全区") {
+      if (this.input == "全区") {
         this.$parent.$parent.$parent.updateleftOptions("");
       } else {
-        this.$parent.$parent.$parent.updateleftOptions(this.selectVal);
+        this.$parent.$parent.$parent.updateleftOptions(this.input);
       }
 
       // console.log(layers);
     },
     selectHandle(val) {
+      this.filterItem();
+    },
+
+    selected(value) {
+      this.input = value;
+      this.visible = false;
       this.filterItem();
     }
   }
@@ -148,6 +163,63 @@ export default {
 #topSelect {
   width: 100%;
   margin: auto;
+
+  .el-input {
+    /deep/ input {
+      background-color: #1b45a7;
+      border: 1px solid #1b45a7;
+      color: #fff;
+      cursor: pointer;
+      height: 50px;
+      font-size: 19px;
+      font-family: PingFang SC;
+      font-weight: bold;
+      padding-left: 50px;
+      padding-right: 50px;
+    }
+
+    /deep/ i {
+      font-size: 16px;
+      color: #fff;
+    }
+
+    .input-prefix::before {
+      content: "";
+      position: absolute;
+      width: 18px;
+      height: 22px;
+      top: 50%;
+      transform: translate(0, -50%);
+      background-image: url("~@/components/common/image/input_prefix.png");
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      cursor: pointer;
+    }
+
+    /deep/ .el-input__prefix {
+      left: 15px;
+    }
+
+    /deep/ .el-input__suffix {
+      right: 45px;
+    }
+
+    .input-suffix {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      top: 50%;
+      transform: translate(0, -50%);
+      background-image: url("~@/components/common/image/input_suffix.png");
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      cursor: pointer;
+    }
+
+    .active {
+      background-image: url("~@/components/common/image/input_suffix_checked.png");
+    }
+  }
 
   .el-select {
     width: 100%;

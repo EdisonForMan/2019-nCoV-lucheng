@@ -64,8 +64,9 @@
 </template>
 
 <script>
-/* eslint-disable */
-
+/* eslint-disable */
+import { loadModules } from "esri-loader";
+import { OPTION, spatialReference, IMAGELAYER } from "@/components/common/Tmap";
 import topSelect from "../widget/topSelect";
 
 import "echarts/lib/chart/bar";
@@ -76,22 +77,7 @@ export default {
     return {
       chart1: null,
       chart2: null,
-      chartData1: [
-        {
-          name: "红旗",
-          value: 31,
-          itemStyle: {
-            color: "#fc1a1b"
-          }
-        },
-        {
-          name: "白旗",
-          value: 0,
-          itemStyle: {
-            color: "#fff"
-          }
-        }
-      ],
+      chartData1: [],
       chartData2: [
         {
           name: "南郊街道",
@@ -224,14 +210,67 @@ export default {
     };
   },
   components: { topSelect },
-  created() {},
+  // async created() {
+  //   await this.countItems();
+  // },
   mounted() {
+    this.chartData1 = [
+      {
+        name: "红旗",
+        value: 31,
+        itemStyle: {
+          color: "#fc1a1b"
+        }
+      },
+      {
+        name: "白旗",
+        value: 1925,
+        itemStyle: {
+          color: "#fff"
+        }
+      }
+    ];
     this.chartInit();
   },
   methods: {
+    countItems() {
+      loadModules(
+        ["esri/tasks/QueryTask", "esri/tasks/support/Query", "esri/Graphic"],
+        OPTION
+      ).then(([QueryTask, Query, Graphic]) => {
+        const queryTask = new QueryTask({
+          url:
+            "http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer/0"
+        });
+        const query = new Query();
+        query.outFields = ["*"];
+        query.where = `1 = 1`;
+        queryTask.execute(query).then(res => {
+          if (res.features.length) {
+            this.taskSum = res.features.length;
+
+            const ds = res.features;
+
+            let redNum = 0;
+            let whiteNum = 0;
+
+            ds.map(({ attributes }) => {
+              if (attributes.FLAG == 1) redNum++;
+              else whiteNum++;
+            });
+
+            this.redNum = redNum;
+            this.whiteNum = whiteNum;
+          }
+        });
+      });
+    },
+
     // 初始化图表
     chartInit() {
       const that = this;
+
+      console.log(this.chartData1);
 
       that.chart1 = this.$echarts.init(document.getElementById("chart1"));
 
@@ -260,11 +299,40 @@ export default {
           formatter: "{b} : {c} ({d}%)"
         },
         series: [
+          /* {
+            type: "pie",
+            zlevel: 1,
+            silent: true,
+            radius: ["86%", "87%"],
+            center: ["50%", "50%"],
+            hoverAnimation: false,
+            color: "#7eb3fb",
+            label: {
+              normal: {
+                show: false
+              }
+            },
+            labelLine: {
+              normal: {
+                show: false
+              }
+            },
+            data: [
+              {
+                value: 1,
+                itemStyle: {
+                  normal: {
+                    color: "#99c3fc"
+                  }
+                }
+              }
+            ]
+          }, */
           {
             type: "pie",
             radius: ["50%", "80%"],
             // center: ["30%", "50%"],
-            startAngle: 60,
+            startAngle: 30,
             itemStyle: {
               normal: {
                 borderColor: "#3c60a5",
@@ -272,6 +340,7 @@ export default {
               }
             },
             label: {
+              show: false,
               fontSize: 14,
               position: "inside",
               formatter: "{d}%"
@@ -282,7 +351,7 @@ export default {
             type: "pie",
             radius: ["50%", "80%"],
             // center: ["30%", "50%"],
-            startAngle: 60,
+            startAngle: 30,
             /* itemStyle: {
               normal: {
                 borderColor: "#3c60a5",
@@ -291,7 +360,7 @@ export default {
             }, */
             label: {
               fontSize: 14,
-              formatter: "{b} {c}个",
+              formatter: "{b} {c}个\n{d}%",
               color: "#fff"
               // backgroundColor: "#0e3b9a"
             },
@@ -305,8 +374,8 @@ export default {
       that.chart2.setOption({
         backgroundColor: "#2248ab",
         grid: {
-          left: "5%",
-          right: "15%",
+          left: "3%",
+          right: "10%",
           top: "-4%",
           bottom: "0%",
           containLabel: true
@@ -437,36 +506,33 @@ export default {
   .title {
     display: inline-block;
     font-family: PingFang SC;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 500;
     letter-spacing: 0.06em;
-    color: #fff;
-    border-left: 4px solid #fff;
+    color: #ffe048;
+    // border-left: 4px solid #ffe048;
     margin: 13px 15px 10px;
     padding-left: 7px;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: -2px;
+      transform: translate(0, -50%);
+      margin-right: 15px;
+      height: 13px;
+      width: 3px;
+      background-color: #ffe048;
+    }
   }
-
-  /* .chart-bg {
-    margin: 0 15px;
-    padding: 10px;
-
-    background: linear-gradient(to left, #fff, #fff) left top no-repeat,
-      linear-gradient(to bottom, #fff, #fff) left top no-repeat,
-      linear-gradient(to left, #fff, #fff) right top no-repeat,
-      linear-gradient(to bottom, #fff, #fff) right top no-repeat,
-      linear-gradient(to left, #fff, #fff) left bottom no-repeat,
-      linear-gradient(to bottom, #fff, #fff) left bottom no-repeat,
-      linear-gradient(to left, #fff, #fff) right bottom no-repeat,
-      linear-gradient(to left, #fff, #fff) right bottom no-repeat;
-    background-size: 0.2rem 0.65rem, 0.65rem 0.2rem, 0.2rem 0.65rem,
-      0.65rem 0.2rem;
-  } */
 
   .chart-bg {
     position: relative;
     margin: 0 15px;
-    padding: 10px;
-    border: 1px solid #2249ab;
+    padding: 7px;
+    border: 1px solid #3659a5;
 
     > span {
       position: absolute;
@@ -501,44 +567,6 @@ export default {
   }
 
   .rDiv1 {
-    .chart-bg1 {
-      position: relative;
-      margin: 0 15px;
-      padding: 10px;
-      border: 1px solid #2249ab;
-
-      span {
-        position: absolute;
-        padding: 5px;
-        border-style: solid;
-        border-color: #fff;
-      }
-
-      .row1 {
-        border-width: 0.2rem 0 0 0.2rem;
-        top: -0.2rem;
-        left: -0.2rem;
-      }
-
-      .row2 {
-        border-width: 0.2rem 0.2rem 0 0;
-        top: -0.2rem;
-        right: -0.2rem;
-      }
-
-      .col1 {
-        border-width: 0 0 0.2rem 0.2rem;
-        bottom: -0.2rem;
-        left: -0.2rem;
-      }
-
-      .col2 {
-        border-width: 0 0.2rem 0.2rem 0;
-        bottom: -0.2rem;
-        right: -0.2rem;
-      }
-    }
-
     /* .chart-bg {
       margin: 0 15px;
       padding: 10px;
@@ -588,7 +616,8 @@ export default {
         }
         span:last-child {
           display: block;
-          font-size: 18px;
+          font-size: 20px;
+          font-weight: bolder;
           text-align: center;
         }
       }
@@ -627,7 +656,7 @@ export default {
 
   .rDiv4 {
     .chart-out {
-      height: 120px;
+      height: 140px;
       overflow-x: hidden;
       overflow-y: auto;
       padding-right: 7px;

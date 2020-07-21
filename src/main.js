@@ -25,7 +25,8 @@ import {
   CarouselItem,
   Popover,
   Option,
-  Avatar
+  Avatar,
+  Input
 } from 'element-ui';
 Vue.use(Button)
 Vue.use(Select)
@@ -39,6 +40,7 @@ Vue.use(DropdownItem)
 Vue.use(Popover)
 Vue.use(Option)
 Vue.use(Avatar)
+Vue.use(Input)
 
 // filter production infos
 Vue.prototype.$echarts = echarts;

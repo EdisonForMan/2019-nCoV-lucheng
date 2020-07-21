@@ -1,22 +1,16 @@
 <template>
-  <div id="topDateDiv">
+  <div class="topDiv">
     <img class="topImg" src="libs/img/topImg.png" />
     <img class="leftImg" src="libs/img/sideImg.png" />
     <img class="rightImg" src="libs/img/sideImg.png" />
     <ul>
-      <li style="cursor: pointer;" @click="showList">
+      <li>
         <div>
+          <p>红旗数量</p>
           <p>
-            红旗数量
-            <span>{{ country }}</span>
+            <img src="@/components/common/image/flag_red.png" />
+            <span class="number flag-num">{{ redNum }}</span>
           </p>
-          <table border="0" cellpadding="0" cellspacing="0">
-            <tr class="last-tr">
-              <td>
-                <span>31</span>
-              </td>
-            </tr>
-          </table>
         </div>
       </li>
       <li>
@@ -24,17 +18,10 @@
       </li>
       <li>
         <div>
+          <p>文明城市任务点</p>
           <p>
-            文明城市任务点
-            <span>{{ country }}</span>
+            <span class="number">{{ taskSum }}</span>
           </p>
-          <table border="0" cellpadding="0" cellspacing="0">
-            <tr>
-              <td>
-                <span>597</span>
-              </td>
-            </tr>
-          </table>
         </div>
       </li>
       <li>
@@ -42,17 +29,11 @@
       </li>
       <li>
         <div>
+          <p>白旗数量</p>
           <p>
-            白旗数量
-            <span>{{ country }}</span>
+            <img src="@/components/common/image/flag_white.png" />
+            <span class="number flag-num">{{ whiteNum }}</span>
           </p>
-          <table border="0" cellpadding="0" cellspacing="0">
-            <tr>
-              <td>
-                <span>0</span>
-              </td>
-            </tr>
-          </table>
         </div>
       </li>
     </ul>
@@ -60,8 +41,9 @@
 </template>
 
 <script>
-/* eslint-disable */
-import { mapState } from "vuex";
+/* eslint-disable */
+import { loadModules } from "esri-loader";
+import { OPTION, spatialReference, IMAGELAYER } from "@/components/common/Tmap";
 export default {
   data() {
     return {
@@ -73,15 +55,54 @@ export default {
       crdk_jh: 0,
       crje_jh: 0,
       crmj_jh: 0,
-      tmpData: null
+      tmpData: null,
+      taskSum: 0,
+      redNum: 0,
+      whiteNum: 0
     };
   },
-  computed: {
+  /* computed: {
     ...mapState({
       dkxxList: state => state.dkxxList
     })
+  }, */
+  created() {
+    this.countItems();
   },
   methods: {
+    countItems() {
+      loadModules(
+        ["esri/tasks/QueryTask", "esri/tasks/support/Query", "esri/Graphic"],
+        OPTION
+      ).then(([QueryTask, Query, Graphic]) => {
+        const queryTask = new QueryTask({
+          url:
+            "http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer/0"
+        });
+        const query = new Query();
+        query.outFields = ["*"];
+        query.where = `1 = 1`;
+        queryTask.execute(query).then(res => {
+          if (res.features.length) {
+            this.taskSum = res.features.length;
+
+            const ds = res.features;
+
+            let redNum = 0;
+            let whiteNum = 0;
+
+            ds.map(({ attributes }) => {
+              if (attributes.FLAG == 1) redNum++;
+              else whiteNum++;
+            });
+
+            this.redNum = redNum;
+            this.whiteNum = whiteNum;
+          }
+        });
+      });
+    },
+
     fixdkxxList() {
       let crdk_lj = 0;
       let crje_lj = 0;
@@ -182,19 +203,19 @@ export default {
     }
   },
   mounted() {
-    this.fixdkxxList();
+    // this.fixdkxxList();
   },
   watch: {
-    dkxxList(n) {
-      this.fixdkxxList();
-    }
+    // dkxxList(n) {
+    //   this.fixdkxxList();
+    // }
   }
 };
 </script>
 
 <style lang="less" scoped>
-#topDateDiv {
-  position: absolute;
+.topDiv {
+  position: fixed;
   top: 60px;
   left: 50%;
   transform: translate(-50%, 0);
@@ -234,10 +255,22 @@ export default {
 
       p {
         text-align: center;
+        font-family: PingFang SC;
         font-size: 18px;
-        font-family: Helvetica Neue;
         font-weight: 500;
         color: #fff;
+      }
+
+      p:last-child {
+        margin-top: 10px;
+      }
+
+      .number {
+        font-size: 34px;
+      }
+      .flag-num {
+        display: inline-block;
+        width: 100px;
       }
 
       table {
@@ -309,8 +342,7 @@ export default {
     }
   }
 
-  li:nth-child(2) div,
-  li:nth-child(4) div {
+  li:nth-child(even) div {
     width: 0px;
     height: 72px;
     position: relative;

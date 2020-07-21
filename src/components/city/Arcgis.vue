@@ -166,7 +166,7 @@ export default {
         // console.log("glzd", glzd);
         // 延时等待组件初始化
         setTimeout(() => {
-          context.$parent.detailShow = true;
+          context.$parent.rightCheckIndex = 1;
           context.$parent.$refs.detail.getItem(glzd);
         }, 20);
       });
@@ -303,8 +303,8 @@ export default {
                   url: `${server}/icon/旗子/黑旗-${
                     item.name.split(" ")[0]
                   }.png`,
-                  width: "30px",
-                  height: "32px"
+                  width: "18px",
+                  height: "30px"
                 },
                 label: `${item.name.split(" ")[0]}`
               });
