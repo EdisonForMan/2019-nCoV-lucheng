@@ -38,27 +38,31 @@
     <div class="rDiv3">
       <span class="title">点位监控</span>
       <span class="analyze">周边分析</span>
-      <Border>
-        <video muted="muted" controls="controls" loop="loop"></video>
-      </Border>
+      <div>
+        <Border>
+          <video muted="muted" controls="controls" loop="loop"></video>
+        </Border>
+      </div>
     </div>
 
     <div class="rDiv4">
       <span class="title">展示模块</span>
-      <Border>
-        <div class="moduleList">
-          <div
-            v-for="(item, index) in moduleList"
-            :key="index"
-            :style="{ background: item.background }"
-            class="module"
-          >
-            <span class="finish-tag">{{ item.isFinish ? `已完成` : `未完成` }}</span>
-            <p class="module-label">{{ item.label }}</p>
-            <p class="module-enlabel">{{ item.enLabel }}</p>
+      <div>
+        <Border>
+          <div class="moduleList">
+            <div
+              v-for="(item, index) in moduleList"
+              :key="index"
+              :style="{ background: item.background }"
+              class="module"
+            >
+              <span class="finish-tag">{{ item.isFinish ? `已完成` : `未完成` }}</span>
+              <p class="module-label">{{ item.label }}</p>
+              <p class="module-enlabel">{{ item.enLabel }}</p>
+            </div>
           </div>
-        </div>
-      </Border>
+        </Border>
+      </div>
     </div>
   </div>
 </template>
@@ -284,8 +288,19 @@ export default {
     }
   }
 
+  .rDiv2 {
+    > div {
+      padding: 0 15px;
+    }
+  }
+
   .rDiv3 {
     position: relative;
+
+    > div {
+      padding: 0 15px;
+    }
+
     .analyze {
       display: inline-block;
       font-family: PingFang SC;
@@ -311,6 +326,10 @@ export default {
   }
 
   .rDiv4 {
+    > div {
+      padding: 0 15px;
+    }
+
     .moduleList {
       padding: 7px;
       background-color: #2049ab;

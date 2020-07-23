@@ -9,7 +9,7 @@ export const leftOptions = [{
     check: false,
     show: true,
     children: [{
-        name: `街道办事处(建成区内)`,
+        name: `街道办事处`,
         id: "jdbsc",
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer",
         sublayers: "0",
@@ -34,7 +34,7 @@ export const leftOptions = [{
         check: false
     }, {
         name: `社区综合文化服务中心`,
-        id: "sqfwzx",
+        id: "sqzhfw",
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer",
         sublayers: "0",
         definitionExpression: `TAG = 4`,
@@ -57,7 +57,7 @@ export const leftOptions = [{
         icon: true,
         check: false
     }, {
-        name: `建成区外乡镇或街道办事处(乡镇综合文化站)`,
+        name: `乡镇综合文化站`,
         id: "yey",
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer",
         sublayers: "0",
@@ -65,7 +65,7 @@ export const leftOptions = [{
         icon: true,
         check: false
     }, {
-        name: `建成区外的行政村或社区`,
+        name: `建成区外社区`,
         id: "xzc",
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer",
         sublayers: "0",
@@ -73,7 +73,7 @@ export const leftOptions = [{
         icon: true,
         check: false
     }, {
-        name: `主次干道、商业大街`,
+        name: `主次干道`,
         id: "sydj",
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer",
         sublayers: "0",
@@ -129,7 +129,7 @@ export const leftOptions = [{
         icon: true,
         check: false
     }, {
-        name: `饭店、三星级及以上宾馆`,
+        name: `饭店、宾馆`,
         id: "fd",
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer",
         sublayers: "0",
@@ -137,7 +137,7 @@ export const leftOptions = [{
         icon: true,
         check: false
     }, {
-        name: `农贸市场(专业市场)`,
+        name: `农贸市场`,
         id: "nmsc",
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer",
         sublayers: "0",
@@ -169,7 +169,7 @@ export const leftOptions = [{
         icon: true,
         check: false
     }, {
-        name: `交通路口、主要交通路口、示范样板路`,
+        name: `交通路口`,
         id: "jtlk",
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer",
         sublayers: "0",
@@ -201,7 +201,7 @@ export const leftOptions = [{
         icon: true,
         check: false
     }, {
-        name: `学校周边环境(中学、小学、幼儿园)`,
+        name: `学校周边环境`,
         id: "xxzb",
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer",
         sublayers: "0",
@@ -209,7 +209,7 @@ export const leftOptions = [{
         icon: true,
         check: false
     }, {
-        name: `学校校内(中学、小学、幼儿园)`,
+        name: `学校校内`,
         id: "xxxn",
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer",
         sublayers: "0",
@@ -217,7 +217,7 @@ export const leftOptions = [{
         icon: true,
         check: false
     }, {
-        name: `校外教育、校外培训机构`,
+        name: `校外培训机构`,
         id: "pxjg",
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer",
         sublayers: "0",
@@ -225,7 +225,7 @@ export const leftOptions = [{
         icon: true,
         check: false
     }, {
-        name: `未成年人心理健康指导中心(辅导站)`,
+        name: `辅导站`,
         id: "fdz",
         url: "http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer",
         sublayers: "0",

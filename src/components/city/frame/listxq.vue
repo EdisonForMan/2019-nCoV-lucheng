@@ -1,47 +1,29 @@
 <template>
-  <div id="listxq">
-    <div class="head">
-      <span>[ {{title}} ] - 详情列表</span>
+  <div id="detailList">
+    <div class="detail_header">
+      <span>【 {{ title }} 】 - 详情</span>
       <a @click="()=>{ this.$parent.listShow = false }">×</a>
     </div>
-    <!-- <div class="search" v-if="sArr.length && sArr[0].Country">
-      <select id="select" @change="selectCountry($event)" v-if="sArr.length && sArr[0].Country">
-        <option value="0">全部</option>
-        <option
-          v-for="(citem,cindex) in sArr"
-          :key="cindex"
-          :value="citem.Country"
-        >{{ citem.Country }}</option>
-      </select>
-      <input type="text" v-model="text" placeholder="请输入查询" />
-      <button @click="filteItem">查询</button>
-    </div>-->
-
-    <el-table :data="elList" max-height="510" border @row-click="clickTr">
-      <el-table-column type="index" width="60"></el-table-column>
-      <el-table-column prop="name" label="名称"></el-table-column>
-      <el-table-column prop="type" label="类型" width="300"></el-table-column>
-      <el-table-column prop="district" label="所属街道"></el-table-column>
-      <!-- <el-table-column prop="zrr_type" label="责任人类型" width="190"></el-table-column>
-      <el-table-column prop="zrr_name" label="责任人姓名" width="150"></el-table-column>
-      <el-table-column prop="zrr_phone" label="责任人联系方式" width="150"></el-table-column>-->
-    </el-table>
-    <!-- <div class="content">
-      <table border="0" cellpadding="0" cellspacing="0" v-if="sArr.length && sArr[0].Country">
-        <thead>
-          <tr>
-            <th>街道</th>
-            <th v-for="(citem,cindex) in sArr" :key="cindex">{{citem.Country}}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>合计</td>
-            <td v-for="(citem,cindex) in sArr" :key="cindex">{{citem.count}}例</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>-->
+    <div class="detail_body">
+      <Border>
+        <div class="tb_out">
+          <div class="tb_header">
+            <span>序号</span>
+            <span>名称</span>
+            <span>类型</span>
+            <span>所属街道</span>
+          </div>
+          <div class="tb_body">
+            <div v-for="(item, index) in elList" :key="index">
+              <span>{{ ++index }}</span>
+              <span>{{ item.name }}</span>
+              <span>{{ item.type }}</span>
+              <span>{{ item.district }}</span>
+            </div>
+          </div>
+        </div>
+      </Border>
+    </div>
   </div>
 </template>
 
@@ -50,6 +32,7 @@
 import { loadModules } from "esri-loader";
 import { OPTION } from "@/components/common/Tmap";
 import { csSortHash, csMap, countryList } from "../config/hash";
+import Border from "@/components/common/widget/border";
 // import { leftOptions } from "../config/enums";
 
 // import relation from "./relation";
@@ -90,106 +73,28 @@ export default {
       }
     };
   },
+  components: { Border },
   created() {},
   mounted() {
     // this.getItem(leftOptions[0].children[0], leftOptions[0].label);
   },
   // components: { relation },
-  watch: {
-    /* forceData(newV, oldV) {
-      const that = this;
-
-      this.keyList = [];
-      this.elList = [];
-
-      if (this.forceData.length) {
-        this.keyList.push({
-          prop: "index",
-          label: "序号"
-        });
-
-        this.fieldList.length &&
-          this.fieldList.map(k => {
-            this.keyList.push({
-              prop: k,
-              label: that.forceData[0].fieldAliases[k]
-            });
-          });
-
-        this.forceData.map((item, index) => {
-          const obj = {};
-          that.keyList.map((_item, i) => {
-            if (_item.prop == "index") {
-              obj[_item.prop] = index + 1;
-            } else if (
-              ~["Name", "NAME"].indexOf(_item.prop) &&
-              ~[
-                "确诊病例",
-                "疑似病例",
-                "集中医学观察点人员名单",
-                "密切接触者",
-                "居家隔离人员",
-                "湖北回鹿人员/信令",
-                "银泰员工",
-                "隔离名单"
-              ].indexOf(that.title)
-            ) {
-              obj[_item.prop] = `${item.attributes[_item.prop] &&
-                item.attributes[_item.prop].trim().substr(0, 1)}*${item
-                .attributes[_item.prop] &&
-                item.attributes[_item.prop].trim().substr(-1, 1)}`;
-            } else {
-              obj[_item.prop] = item.attributes[_item.prop];
-            }
-          });
-
-          that.elList.push(obj);
-        });
-      }
-    } */
-  },
+  watch: {},
   methods: {
-    filteItem() {
-      const data = this.data;
-      const forceData = [];
-      data.map(item => {
-        const { attributes } = item;
-
-        const cTag = attributes.Country || attributes.Community;
-
-        const cv = this.selectValue != 0 ? this.selectValue : "";
-
-        const ntag =
-          attributes.name ||
-          attributes.Name ||
-          attributes.NAME ||
-          attributes.Address ||
-          attributes.short_name ||
-          attributes.姓名;
-
-        ntag &&
-          ~ntag.indexOf(this.text) &&
-          cTag &&
-          ~cTag.indexOf(cv) &&
-          forceData.push(item);
-      });
-      this.forceData = forceData;
+    filterItem(country) {
+      // console.log(country);
+      if (this.items.hasOwnProperty(country)) {
+        this.elList = this.items[country];
+      } else {
+        const list = this.elList;
+        // console.log(country);
+      }
     },
-    selectCountry(event) {
-      this.selectValue = event.target.value;
-      const data = this.data;
-      const forceData = [];
-      data.map(item => {
-        const { attributes } = item;
 
-        const cTag = attributes.Country;
-        const cv = this.selectValue != 0 ? this.selectValue : "";
-        cTag && ~cTag.indexOf(cv) && forceData.push(item);
-      });
-      this.forceData = forceData;
-    },
     getItem({ url, sublayers, id, name, definitionExpression }) {
       this.title = name.split(" ")[0];
+      // const countryName = window.countryName;
+      // console.log()
       if (this.items.hasOwnProperty(id)) {
         this.elList = this.items[id];
       } else {
@@ -220,16 +125,16 @@ export default {
 
           let countryName = "";
 
-          if (window.user.group.length) {
-            const group = window.user.group;
-            const groups = [];
-            group.map(({ au_groupname }) => {
-              if (~countryList.indexOf(au_groupname)) {
-                countryName = au_groupname;
-                return;
-              }
-            });
-          }
+          // if (window.user.group.length) {
+          //   const group = window.user.group;
+          //   const groups = [];
+          //   group.map(({ au_groupname }) => {
+          //     if (~countryList.indexOf(au_groupname)) {
+          //       countryName = au_groupname;
+          //       return;
+          //     }
+          //   });
+          // }
 
           if (countryName != "") {
             list.map(({ attributes, geometry }) => {
@@ -238,10 +143,7 @@ export default {
                   name: attributes.NAME,
                   address: attributes.ADDRESS,
                   district: attributes.District,
-                  type: attributes.TYPE,
-                  zrr_type: attributes.ZRR_TYPE,
-                  zrr_name: attributes.ZRR_NAME,
-                  zrr_phone: attributes.ZRR_PHONE
+                  type: attributes.TYPE
                 });
               }
             });
@@ -251,10 +153,7 @@ export default {
                 name: attributes.NAME,
                 address: attributes.ADDRESS,
                 district: attributes.District,
-                type: attributes.TYPE,
-                zrr_type: attributes.ZRR_TYPE,
-                zrr_name: attributes.ZRR_NAME,
-                zrr_phone: attributes.ZRR_PHONE
+                type: attributes.TYPE
               });
             });
           }
@@ -293,87 +192,143 @@ export default {
 </script>
 
 <style lang="less" scoped>
-#listxq {
-  position: absolute;
-  top: 10%;
-  left: 6%;
-  width: 88%;
-  height: 78%;
-  background: #24386a;
-  border: 1px solid #04ecff;
+#detailList {
+  position: fixed;
+  top: 15%;
+  left: 20%;
+  width: 750px;
+  height: 520px;
+  background: rgba(38, 74, 160, 0.8);
+  border: 1px solid #526aa2;
   z-index: 31;
 
-  .head {
-    height: 7%;
+  .detail_header {
     margin-top: 1%;
+    text-align: left;
+    padding: 5px 10px;
+    padding-left: 20px;
 
     span {
-      font-size: 30px;
+      font-family: PingFang SC;
+      font-size: 20px;
+      position: relative;
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: -2px;
+        transform: translate(0, -50%);
+        margin-right: 15px;
+        height: 16px;
+        width: 3px;
+        background-color: #fff;
+      }
     }
 
     a {
       position: absolute;
-      top: 5px;
+      top: 0px;
       right: 10px;
       font-size: 40px;
       cursor: pointer;
     }
   }
 
-  .search {
-    height: 60px;
-    select {
-      background-color: #0c7cd2;
-      border: none;
-      color: #fff;
-      padding: 7px 7px;
-      margin-right: 5px;
-    }
-
-    input {
-      width: 15%;
-      margin-top: 10px;
-      margin-right: 5px;
-      background-color: #162449;
-      border: 1px solid #75c8f4;
-      border-radius: 8px;
-      padding: 8px 9px;
-      color: #fff;
-    }
-
-    button {
-      background-color: #162449;
-      border: 1px solid #75c8f4;
-      border-radius: 8px;
-      padding: 7px 9px;
-      color: #fff;
-      margin-right: 4px;
-    }
+  .detail_body {
+    margin-top: 10px;
+    padding: 5px 15px;
   }
 
-  // element-table
-  .el-table {
-    width: 96%;
-    margin: auto;
-    background-color: #24386a;
-  }
+  .tb_out {
+    max-height: 400px;
+    background-color: #123790;
+    border-radius: 4px;
+    padding: 8px 13px;
 
-  .el-button--text {
-    font-size: 16px;
-  }
+    overflow-y: auto;
 
-  .content {
-    height: 90px;
+    &::-webkit-scrollbar {
+      display: block;
+      width: 7px;
+      background-color: #11368f;
+      position: absolute;
+      right: 30px;
+    }
 
-    table {
-      border: 1px solid #ccc;
-      width: 96%;
-      margin: 0% 2%;
+    &::-webkit-scrollbar-thumb {
+      width: 7px;
+      background-color: #fff;
+      border-radius: 4px;
+    }
 
-      th,
-      td {
-        border-bottom: 1px solid #ccc;
-        padding: 10px 5px;
+    .tb_header {
+      > span {
+        display: inline-block;
+        font-family: PingFang SC;
+        font-size: 16px;
+        font-weight: 600;
+        color: #60d6fb;
+
+        &:nth-child(1) {
+          width: 10%;
+          text-align: left;
+        }
+        &:nth-child(2) {
+          width: 50%;
+        }
+        &:nth-child(3) {
+          width: 20%;
+        }
+        &:nth-child(4) {
+          width: 20%;
+        }
+      }
+    }
+
+    .tb_body {
+      > div {
+        background-color: #274a9a;
+        margin: 8px 0px;
+        padding: 10px 0px;
+
+        span {
+          display: inline-block;
+          font-family: PingFang SC;
+          font-size: 15px;
+          position: relative;
+
+          &:nth-child(1) {
+            width: 10%;
+            font-size: 16px;
+            font-weight: 600;
+          }
+          &:nth-child(2) {
+            width: calc(50% - 0px);
+          }
+          &:nth-child(3) {
+            width: 20%;
+          }
+          &:nth-child(4) {
+            width: 20%;
+          }
+
+          &:first-child::before {
+            width: 0px;
+          }
+
+          &::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: -2px;
+            transform: translate(0, -50%);
+            margin-right: 15px;
+            height: 16px;
+            width: 1px;
+            background-color: #fff;
+          }
+        }
       }
     }
   }

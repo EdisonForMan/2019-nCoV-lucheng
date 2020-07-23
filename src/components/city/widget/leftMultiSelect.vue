@@ -54,86 +54,8 @@ export default {
   props: { leftOptions: Array },
   created() {
     this.tree = this.leftOptions;
-    // this.listLoading();
   },
   methods: {
-    listLoading() {
-      loadModules(
-        ["esri/tasks/QueryTask", "esri/tasks/support/Query"],
-        OPTION
-      ).then(async ([QueryTask, Query]) => {
-        const queryTask = new QueryTask({
-          url: `http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer/1`
-        });
-        const query = new Query();
-        query.outFields = ["*"];
-        query.returnGeometry = true;
-        query.where = `1 = 1`;
-        const { features } = await queryTask.execute(query);
-
-        // console.log("fe", features);
-
-        const list = features;
-
-        const sObj = {};
-        const sArr = [];
-
-        list.map(({ attributes, geometry }) => {
-          const { NAME, TYPE } = attributes;
-
-          if (!NAME && !TYPE) return false;
-
-          if (!csMap.hasOwnProperty(TYPE)) return false;
-
-          const fixType = csMap[TYPE].name;
-
-          if (!sObj[fixType]) {
-            sObj[fixType] = {
-              name: fixType,
-              id: csMap[TYPE].id,
-              url:
-                "http://172.20.89.7:6082/arcgis/rest/services/lucheng/nanjiao_wmcs/MapServer",
-              sublayers: "1",
-              definitionExpression: `TYPE = ${TYPE}`,
-              icon: true,
-              check: false,
-              children: []
-            };
-          }
-
-          sObj[fixType].children.push({
-            name: NAME,
-            type: fixType,
-            attributes,
-            geometry
-          });
-        });
-
-        // this.tree.map(({ children }) => {
-        //   console.log(children);
-
-        //   // if(){}
-
-        //   children;
-
-        //   children.name = `${children.name}(1个)`;
-        // });
-
-        this.tree[0].children.map(({ name }) => {
-          // console.log("name", name);
-          name = name+'1个';
-        });
-
-        for (let k in sObj) {
-          sArr.push(sObj[k]);
-        }
-
-        sArr.sort((a, b) => csSortHash[a.label] - csSortHash[b.label]);
-
-        // console.log("sarr", sArr, sObj, this.tree);
-      });
-    },
-
     ShowListXQ(obj) {
       // console.log("obj", obj);
       this.$parent.listShow = true;
@@ -160,18 +82,25 @@ export default {
     },
     changeBox(item, index) {
       const c = this.tree[index].check;
+      const list = [];
       for (let i in this.tree[index].children) {
         this.tree[index].children[i].check = c;
+        if (c == true) list.push(this.tree[index].children[i].name);
       }
+
+      this.$parent.$refs.charts.activeList = list;
     },
     intercept() {
       const _tree = this.$util.clone(this.tree);
+      const list = [];
       for (let i = 0; i < _tree.length; i++) {
         let shall = true;
         _tree[i].children.length
           ? _tree[i].children.map(item => {
               if (!item.check) {
                 shall = false;
+              } else {
+                list.push(item.name);
               }
             })
           : (shall = false);
@@ -179,6 +108,8 @@ export default {
       }
       this.tree = _tree;
       this.$parent.leftOptions = this.tree;
+
+      this.$parent.$refs.charts.activeList = list;
     },
     clean() {
       const _tree = this.$util.clone(this.tree);

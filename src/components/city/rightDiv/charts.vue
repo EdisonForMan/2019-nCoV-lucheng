@@ -2,47 +2,45 @@
   <div class="charts">
     <div class="rDiv1">
       <span class="title">街道选择</span>
-      <Border>
-        <TopSelect ref="TopSelect" />
-      </Border>
+      <div>
+        <Border>
+          <TopSelect ref="TopSelect" />
+        </Border>
+      </div>
     </div>
 
-    <!-- <div class="rDiv2">
-      <span class="title">红白旗占比</span>
-      <Border>
-        <div id="chart1"></div>
-      </Border>
-    </div> -->
+    <div class="rDiv2">
+      <span class="title">考察场所明细表</span>
+      <div>
+        <Border>
+          <div class="table-out">
+            <table border="1" cellspacing="0" cellpadding="0">
+              <tr v-for="k in Math.ceil(tbData2.length / 5)" :key="k">
+                <td
+                  v-for="(item, index) in tbData2.slice((k - 1) * 5, (k - 1) * 5 + 5)"
+                  :key="index"
+                >
+                  <div class="cell" :class="{ active: ~activeList.indexOf(item.name) }">
+                    <span>{{ item.name }}</span>
+                    <span>{{ item.value }}</span>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </Border>
+      </div>
+    </div>
 
     <div class="rDiv3">
-      <span class="title">考察场所明细表</span>
-      <Border>
-        <div class="table-out">
-          <table border="1" cellspacing="0" cellpadding="0">
-            <tr v-for="k in tbData1.length / 4" :key="k">
-              <td v-for="(item,index) in tbData1.slice((k - 1) * 4, (k - 1) * 4 + 4)" :key="index">
-                <div
-                  class="cell"
-                  :class="{ active: ~activeList.indexOf(item.name) }"
-                  @click="checkType(item)"
-                >
-                  <span>{{ item.name }}</span>
-                  <span>{{ item.value }}</span>
-                </div>
-              </td>
-            </tr>
-          </table>
-        </div>
-      </Border>
-    </div>
-
-    <div class="rDiv4">
       <span class="title">各个街道红白旗占比</span>
-      <Border>
-        <div class="chart-out">
-          <div id="chart2"></div>
-        </div>
-      </Border>
+      <div>
+        <Border>
+          <div class="chart-out">
+            <div id="chart2"></div>
+          </div>
+        </Border>
+      </div>
     </div>
   </div>
 </template>
@@ -52,6 +50,8 @@
 import { loadModules } from "esri-loader";
 import { OPTION, spatialReference, IMAGELAYER } from "@/components/common/Tmap";
 import TopSelect from "../widget/topSelect";
+
+import { TypeHash } from "../config/hash";
 
 import Border from "@/components/common/widget/border";
 
@@ -190,9 +190,15 @@ export default {
         {
           name: "建筑工地",
           value: 171
+        },
+        {
+          name: "建筑工地",
+          value: 171
         }
       ],
-      activeList: []
+      activeList: [],
+      tbData2: [],
+      tmpMap: {}
     };
   },
   components: { TopSelect, Border },
@@ -217,6 +223,8 @@ export default {
       }
     ]; */
     this.chartInit();
+
+    this.fixData();
   },
   methods: {
     countItems() {
@@ -480,8 +488,7 @@ export default {
       }
     },
 
-    // 更新表格
-    updateTbale(country){
+    fixData() {
       loadModules(
         ["esri/tasks/QueryTask", "esri/tasks/support/Query", "esri/Graphic"],
         OPTION
@@ -492,32 +499,92 @@ export default {
         });
         const query = new Query();
         query.outFields = ["*"];
-        query.where = `District = '${country}'`;
+        query.where = `1 = 1`;
         queryTask.execute(query).then(res => {
           if (res.features.length) {
             const ds = res.features;
 
-            let redNum = 0;
-            let whiteNum = 0;
+            // console.log("ds", ds);
+
+            const sObj = {};
+            const sArr = [];
 
             ds.map(({ attributes }) => {
-              if (attributes.FLAG == 1) redNum++;
-              else whiteNum++;
+              const tag = attributes.TAG;
+              if (!sObj[tag]) sObj[tag] = 0;
+              sObj[tag]++;
             });
 
-            this.redNum = redNum;
-            this.whiteNum = whiteNum;
+            // console.log("obj", sObj);
+
+            this.tbData2 = [];
+
+            for (let k in TypeHash) {
+              this.tbData2.push({
+                name: k,
+                value: ~~sObj[TypeHash[k]]
+              });
+            }
+
+            this.tmp = [...this.tbData2];
+
+            // console.log("arr", this.tbData2);
           }
         });
       });
+    },
 
+    // 更新表格
+    updateTbale(country) {
+      if (country == "") {
+        this.tbData2 = this.tmp;
+        return;
+      } else if (this.tmpMap[country]) {
+        this.tbData2 = this.tmpMap[country];
+      } else {
+        loadModules(
+          ["esri/tasks/QueryTask", "esri/tasks/support/Query", "esri/Graphic"],
+          OPTION
+        ).then(([QueryTask, Query, Graphic]) => {
+          const queryTask = new QueryTask({
+            url:
+              "http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer/0"
+          });
+          const query = new Query();
+          query.outFields = ["*"];
+          query.where = `District = '${country}'`;
+          queryTask.execute(query).then(res => {
+            if (res.features.length) {
+              const ds = res.features;
 
+              // console.log("ds", ds);
 
+              const sObj = {};
+              const sArr = [];
 
+              ds.map(({ attributes }) => {
+                const tag = attributes.TAG;
+                if (!sObj[tag]) sObj[tag] = 0;
+                sObj[tag]++;
+              });
+
+              // console.log("obj", sObj);
+
+              this.tbData2 = [];
+
+              for (let k in TypeHash) {
+                this.tbData2.push({
+                  name: k,
+                  value: ~~sObj[TypeHash[k]]
+                });
+              }
+
+              this.tmpMap[country] = this.tbData2;
+            }
+          });
+        });
+      }
     }
-
-
-
   }
 };
 </script>
@@ -554,26 +621,16 @@ export default {
   }
 
   .rDiv1 {
-    /* .chart-bg {
-      margin: 0 15px;
-      padding: 10px;
-
-      background-image: url("~@/components/common/image/box_bg.png");
-      background-repeat: no-repeat;
-      background-size: 100% 100%;
-    } */
-  }
-
-  .rDiv2 {
-    // height: 253px;
-
-    #chart1 {
-      height: 160px;
-      border-radius: 50%;
+    > div {
+      padding: 0 15px;
     }
   }
 
-  .rDiv3 {
+  .rDiv2 {
+    > div {
+      padding: 0 15px;
+    }
+
     .table-out {
       background-color: #0d3b99;
       padding: 1px;
@@ -584,7 +641,7 @@ export default {
       margin: auto;
       border: 1px solid #95bbf1;
       td {
-        width: 25%;
+        width: 20%;
       }
 
       .cell {
@@ -592,7 +649,7 @@ export default {
         flex-flow: column;
         justify-content: space-between;
         // border: 1px solid #fff;
-        height: 60px;
+        height: 68px;
         cursor: pointer;
 
         span:first-child {
@@ -603,7 +660,7 @@ export default {
         }
         span:last-child {
           display: block;
-          font-size: 20px;
+          font-size: 18px;
           font-weight: bolder;
           text-align: center;
         }
@@ -641,9 +698,13 @@ export default {
     }
   }
 
-  .rDiv4 {
+  .rDiv3 {
+    > div {
+      padding: 0 15px;
+    }
+
     .chart-out {
-      height: 220px;
+      height: 140px;
       overflow-x: hidden;
       overflow-y: auto;
       padding-right: 7px;

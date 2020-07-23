@@ -16,7 +16,6 @@ export default {};
 <style lang="less" scoped>
 .border {
   position: relative;
-  margin: 0 15px;
   padding: 7px;
   border: 1px solid #3659a5;
 

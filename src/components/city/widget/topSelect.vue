@@ -70,7 +70,7 @@ export default {
       "jdbsc",
       "jdwhz",
       "sq",
-      "sqfwzx",
+      "sqzhfw",
       "xqd",
       "cxjhb",
       "yey",
@@ -133,7 +133,19 @@ export default {
       const layers = this.$parent.$parent.$parent.$refs.cityArcgis.map.layers
         .items;
 
-      console.log(layers);
+      // console.log(layers);
+
+      this.$parent.$parent.$parent.$refs.topDate.filterItems(this.input);
+
+      if (this.input == "全区") {
+        this.$parent.$parent.$parent.updateleftOptions("");
+        this.$parent.$parent.$parent.$refs.charts.updateTbale("");
+        this.$parent.$parent.$parent.$refs.listxq.filterItem("");
+      } else {
+        this.$parent.$parent.$parent.updateleftOptions(this.input);
+        this.$parent.$parent.$parent.$refs.charts.updateTbale(this.input);
+        this.$parent.$parent.$parent.$refs.listxq.filterItem(this.input);
+      }
 
       layers.map(item => {
         if (~this.ids.indexOf(item.id)) {
@@ -170,14 +182,6 @@ export default {
         }
       });
 
-      this.$parent.$parent.$parent.$refs.topDate.filterItems(this.input);
-
-      if (this.input == "全区") {
-        this.$parent.$parent.$parent.updateleftOptions("");
-      } else {
-        this.$parent.$parent.$parent.updateleftOptions(this.input);
-      }
-
       // console.log(layers);
     },
     selectHandle(val) {
@@ -204,8 +208,8 @@ export default {
       border: 1px solid #1b45a7;
       color: #fff;
       cursor: pointer;
-      height: 50px;
-      font-size: 19px;
+      height: 40px;
+      font-size: 16px;
       font-family: PingFang SC;
       font-weight: bold;
       padding-left: 50px;
@@ -220,8 +224,8 @@ export default {
     .input-prefix::before {
       content: "";
       position: absolute;
-      width: 18px;
-      height: 22px;
+      width: 16px;
+      height: 20px;
       top: 50%;
       transform: translate(0, -50%);
       background-image: url("~@/components/common/image/input_prefix.png");
@@ -235,13 +239,13 @@ export default {
     }
 
     /deep/ .el-input__suffix {
-      right: 45px;
+      right: 35px;
     }
 
     .input-suffix {
       position: absolute;
-      width: 40px;
-      height: 40px;
+      width: 32px;
+      height: 32px;
       top: 50%;
       transform: translate(0, -50%);
       background-image: url("~@/components/common/image/input_suffix.png");

@@ -29,11 +29,43 @@ export default {
 
   created() {
     // 组装 id 数组
-    this.ids = ["zgd_line", "cgd_line", "jzgd_polygon"];
-    const list = Object.values(csMap);
-    list.map(item => {
-      this.ids.push(item.id, `${item.id}_2`);
-    });
+    this.ids = [
+      "zgd_line",
+      "cgd_line",
+      "jzgd_polygon",
+      "jdbsc",
+      "jdwhz",
+      "sq",
+      "xqd",
+      "cxjhb",
+      "yey",
+      "xzc",
+      "sydj",
+      "bjxx",
+      "gy",
+      "gc",
+      "ggwhss",
+      "jq",
+      "stsd",
+      "fd",
+      "nmsc",
+      "cg",
+      "ckdw",
+      "cs",
+      "jtlk",
+      "dyy",
+      "jzgd",
+      "hd",
+      "xxzb",
+      "xxxn",
+      "pxjg",
+      "fdz",
+      "wb"
+    ];
+    // const list = Object.values(csMap);
+    // list.map(item => {
+    //   this.ids.push(item.id, `${item.id}_2`);
+    // });
   },
   async mounted() {
     const that = this;
