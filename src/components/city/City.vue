@@ -75,6 +75,9 @@ import { leftOptions } from "./config/enums";
 import { loadModules } from "esri-loader";
 import { WRT_config, OPTION } from "@/components/common/Tmap";
 import { csSortHash, csMap, countryList } from "./config/hash";
+
+import { mapState, mapActions } from "vuex";
+
 export default {
   name: "city",
   data() {
@@ -85,7 +88,7 @@ export default {
       moveLeft: "360",
       moveRight: "500",
       listShow: false,
-      rightCheckIndex: 0
+      rightCheckIndex: 0,
     };
   },
   components: {
@@ -96,20 +99,29 @@ export default {
     listxq,
     charts,
     detail,
-    report
+    report,
     // detailForm
   },
   created() {
     // this.fixOpt();
   },
+  mounted() {
+    this.fetchlcwmxxList();
+  },
+  computed: {
+    ...mapState({
+      lcwmxxList: (state) => state.lcwmxxList,
+    }),
+  },
   methods: {
+    ...mapActions(["fetchlcwmxxList"]),
     fixOpt() {
       loadModules(
         ["esri/tasks/QueryTask", "esri/tasks/support/Query"],
         OPTION
       ).then(async ([QueryTask, Query]) => {
         const queryTask = new QueryTask({
-          url: `http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer/1`
+          url: `http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer/1`,
         });
         const query = new Query();
         query.outFields = ["*"];
@@ -144,7 +156,7 @@ export default {
               icon: true,
               check: false,
               count: 0,
-              children: []
+              children: [],
             };
           }
 
@@ -163,7 +175,7 @@ export default {
 
         sArr
           .sort((a, b) => csSortHash[a.name] - csSortHash[b.name])
-          .map(item => {
+          .map((item) => {
             // console.log("item", item.name, item.count);
             item.name = `${item.name} (${item.count}个)`;
           });
@@ -173,7 +185,7 @@ export default {
             label: "考察场所",
             check: false,
             show: true,
-            children: sArr
+            children: sArr,
           },
           {
             label: "网格管理",
@@ -187,7 +199,7 @@ export default {
                 isImg: true,
                 url:
                   "http://172.20.89.59/server/rest/services/lcjjdt/qhmb/MapServer",
-                check: true
+                check: true,
               },
               {
                 name: "社区网格",
@@ -195,7 +207,7 @@ export default {
                 sublayers: "12",
                 url:
                   "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
-                check: false
+                check: false,
               },
               {
                 name: "小区、大厦",
@@ -203,10 +215,10 @@ export default {
                 sublayers: "14",
                 url:
                   "http://172.20.89.7:6082/arcgis/rest/services/lucheng/fangkong/MapServer",
-                check: false
-              }
-            ]
-          }
+                check: false,
+              },
+            ],
+          },
         ];
       });
     },
@@ -218,7 +230,7 @@ export default {
         OPTION
       ).then(async ([QueryTask, Query]) => {
         const queryTask = new QueryTask({
-          url: `http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer/0`
+          url: `http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer/0`,
         });
         const query = new Query();
         query.outFields = ["*"];
@@ -247,7 +259,7 @@ export default {
 
           if (!sObj[fixType]) {
             sObj[fixType] = {
-              count: 0
+              count: 0,
             };
           }
 
@@ -262,7 +274,7 @@ export default {
 
         // console.log(sObj);
 
-        this.leftOptions[0].children.map(item => {
+        this.leftOptions[0].children.map((item) => {
           const name = item.name.split(" ")[0];
           // item.name = `${name} (${sObj[name].count}个)`;
         });
@@ -290,8 +302,8 @@ export default {
       } else {
         $("body .esri-ui-bottom-left").css({ left: "20px" });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped lang="less">

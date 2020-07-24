@@ -30,7 +30,7 @@ export default {
   created() {
     // 组装 id 数组
     this.ids = [
-      "zgd_line",
+      "sydj_line",
       "cgd_line",
       "jzgd_polygon",
       "jdbsc",
@@ -119,7 +119,7 @@ export default {
         this.map.findLayerById(`${_id_}_2`) &&
           (this.map.findLayerById(`${_id_}_2`).visible = true);
 
-        if (~["zgd", "cgd"].indexOf(_id_)) {
+        if (~["sydj", "cgd"].indexOf(_id_)) {
           this.map &&
             this.map.findLayerById(`${_id_}_line`) &&
             (this.map.findLayerById(`${_id_}_line`).visible = true);
@@ -138,7 +138,7 @@ export default {
         this.map.findLayerById(`${_id_}_2`) &&
           (this.map.findLayerById(`${_id_}_2`).visible = false);
 
-        if (~["zgd", "cgd"].indexOf(_id_)) {
+        if (~["sydj", "cgd"].indexOf(_id_)) {
           this.map &&
             this.map.findLayerById(`${_id_}_line`) &&
             (this.map.findLayerById(`${_id_}_line`).visible = false);
@@ -304,72 +304,11 @@ export default {
             }
 
             item.definitionExpression && d.push(item.definitionExpression);
-
-            // const _d = [...d];
-
-            // d.push(`FLAG = 1`);
             d.length && (option.definitionExpression = d.join(" and "));
-
-            // item.icon &&
-            //   (option.renderer = {
-            //     type: "simple",
-            //     symbol: {
-            //       type: "picture-marker",
-            //       url: `${server}/icon/旗子/红旗-${
-            //         item.name.split(" ")[0]
-            //       }.png`,
-            //       width: "30px",
-            //       height: "32px"
-            //     },
-            //     label: `${item.name.split(" ")[0]}`
-            //   });
-
-            // console.log("op", option);
 
             const feature = new _layers_(option);
             that.map.add(feature, 8);
 
-            // _d.push(`FLAG = 0`);
-            // _d.length && (option.definitionExpression = _d.join(" and "));
-
-            // option.id = `${option.id}_2`;
-
-            // item.icon &&
-            //   (option.renderer = {
-            //     type: "simple",
-            //     symbol: {
-            //       type: "picture-marker",
-            //       url: `${server}/icon/旗子/黑旗-${
-            //         item.name.split(" ")[0]
-            //       }.png`,
-            //       width: "18px",
-            //       height: "30px"
-            //     },
-            //     label: `${item.name.split(" ")[0]}`
-            //   });
-
-            // const feature2 = new _layers_(option);
-            // that.map.add(feature2, 8);
-
-            // console.log(that.legend.layerInfos);
-
-            // if (
-            //   !that.legend.layerInfos[1] ||
-            //   !~that.ids.indexOf[that.legend.layerInfos[1].layer.id]
-            // ) {
-            //   that.legend.layerInfos.push(
-            //     {
-            //       title: "",
-            //       layer: feature
-            //     }
-            //     // {
-            //     //   title: "",
-            //     //   layer: feature2
-            //     // }
-            //   );
-            // }
-
-            // console.log(that.legend.layerInfos);
           } else {
             if (item.definitionExpression) {
               const d = [];
@@ -393,15 +332,15 @@ export default {
             that.map.add(feature, 8);
           }
 
-          if (id == "zgd") {
+          if (id == "sydj") {
             const line = new MapImageLayer({
               url:
                 "http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer",
-              id: "zgd_line",
+              id: "sydj_line",
               sublayers: [
                 {
                   id: 4,
-                  definitionExpression: `TYPE = '主干道'${
+                  definitionExpression: `TYPE IN ('主干道', '次干道')${
                     countryName != "" ? ` and District = '${countryName}'` : ""
                   }`
                 }

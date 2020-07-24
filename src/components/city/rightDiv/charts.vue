@@ -37,7 +37,7 @@
       <div>
         <Border>
           <div class="chart-out">
-            <div id="chart2"></div>
+            <div id="chart1"></div>
           </div>
         </Border>
       </div>
@@ -55,6 +55,8 @@ import { TypeHash } from "../config/hash";
 
 import Border from "@/components/common/widget/border";
 
+import { mapState, mapActions } from "vuex";
+
 import "echarts/lib/chart/bar";
 import "echarts/lib/chart/pie";
 import "echarts/lib/component/tooltip";
@@ -64,473 +66,181 @@ export default {
       chart1: null,
       chart2: null,
       chartData1: [],
-      chartData2: [
-        {
-          name: "南郊街道",
-          value: 100
-        },
-        {
-          name: "南汇街道",
-          value: 0
-        },
-        {
-          name: "五马街道",
-          value: 0
-        },
-        {
-          name: "松台街道",
-          value: 0
-        },
-        {
-          name: "山福镇",
-          value: 0
-        },
-        {
-          name: "藤桥镇",
-          value: 0
-        },
-        {
-          name: "仰义街道",
-          value: 0
-        },
-        {
-          name: "丰门街道",
-          value: 0
-        },
-        {
-          name: "双屿街道",
-          value: 0
-        },
-        {
-          name: "广化街道",
-          value: 0
-        },
-        {
-          name: "松台街道",
-          value: 0
-        },
-        {
-          name: "大南街道",
-          value: 0
-        },
-        {
-          name: "蒲鞋市街道",
-          value: 0
-        },
-        {
-          name: "滨江街道",
-          value: 0
-        },
-        {
-          name: "七都街道",
-          value: 0
-        }
-      ],
-      tbData1: [
-        {
-          name: "街道办事处",
-          value: 10
-        },
-        {
-          name: "街道综合文化站",
-          value: 11
-        },
-        {
-          name: "社区",
-          value: 7
-        },
-        {
-          name: "社区综合文化服务中心",
-          value: 41
-        },
-        {
-          name: "主干道",
-          value: 15
-        },
-        {
-          name: "次干道",
-          value: 22
-        },
-        {
-          name: "幼儿园",
-          value: 151
-        },
-        {
-          name: "中学",
-          value: 43
-        },
-        {
-          name: "长途汽车客运站(码头)",
-          value: 31
-        },
-        {
-          name: "政务大厅(行政服务中心)",
-          value: 6
-        },
-        {
-          name: "农贸(集贸)市场",
-          value: 44
-        },
-        {
-          name: "银行网点",
-          value: 399
-        },
-        {
-          name: "医院",
-          value: 50
-        },
-        {
-          name: "主要交通路口",
-          value: 45
-        },
-        {
-          name: "电影院",
-          value: 1
-        },
-        {
-          name: "建筑工地",
-          value: 171
-        },
-        {
-          name: "建筑工地",
-          value: 171
-        }
-      ],
+      chartData2: [],
+      tbData1: [],
       activeList: [],
       tbData2: [],
-      tmpMap: {}
+      tmpMap: {},
     };
   },
   components: { TopSelect, Border },
-  // async created() {
-  //   await this.countItems();
-  // },
-  mounted() {
-    /* this.chartData1 = [
-      {
-        name: "红旗",
-        value: 31,
-        itemStyle: {
-          color: "#fc1a1b"
-        }
-      },
-      {
-        name: "白旗",
-        value: 1925,
-        itemStyle: {
-          color: "#fff"
-        }
-      }
-    ]; */
-    this.chartInit();
-
-    this.fixData();
+  computed: {
+    ...mapState({
+      lcwmxxList: (state) => state.lcwmxxList,
+    }),
+  },
+  async mounted() {
+    await this.fetchlcwmxxList();
+    await this.fixChartData();
+    await this.initChart();
+    await this.initTable();
   },
   methods: {
-    countItems() {
-      loadModules(
-        ["esri/tasks/QueryTask", "esri/tasks/support/Query", "esri/Graphic"],
-        OPTION
-      ).then(([QueryTask, Query, Graphic]) => {
-        const queryTask = new QueryTask({
-          url:
-            "http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer/0"
-        });
-        const query = new Query();
-        query.outFields = ["*"];
-        query.where = `1 = 1`;
-        queryTask.execute(query).then(res => {
-          if (res.features.length) {
-            this.taskSum = res.features.length;
-
-            const ds = res.features;
-
-            let redNum = 0;
-            let whiteNum = 0;
-
-            ds.map(({ attributes }) => {
-              if (attributes.FLAG == 1) redNum++;
-              else whiteNum++;
-            });
-
-            this.redNum = redNum;
-            this.whiteNum = whiteNum;
-          }
-        });
-      });
-    },
+    ...mapActions(["fetchlcwmxxList"]),
 
     // 初始化图表
-    chartInit() {
+    initChart() {
       const that = this;
-
-      // console.log(this.chartData1);
-
-      // that.chart1 = this.$echarts.init(document.getElementById("chart1"));
-
-      // that.chart1.setOption({
-      //   backgroundColor: "#2249ab",
-      //   grid: {
-      //     left: "3%",
-      //     right: "3%",
-      //     top: "16%",
-      //     bottom: "3%",
-      //     containLabel: true
-      //   },
-      //   /* legend: {
-      //     icon: "rect",
-      //     orient: "vertical",
-      //     left: "10%",
-      //     top: "10%",
-      //     align: "left",
-      //     textStyle: {
-      //       color: "#fff"
-      //     }
-      //   }, */
-      //   tooltip: {
-      //     show: false,
-      //     trigger: "item",
-      //     formatter: "{b} : {c} ({d}%)"
-      //   },
-      //   series: [
-      //     /* {
-      //       type: "pie",
-      //       zlevel: 1,
-      //       silent: true,
-      //       radius: ["86%", "87%"],
-      //       center: ["50%", "50%"],
-      //       hoverAnimation: false,
-      //       color: "#7eb3fb",
-      //       label: {
-      //         normal: {
-      //           show: false
-      //         }
-      //       },
-      //       labelLine: {
-      //         normal: {
-      //           show: false
-      //         }
-      //       },
-      //       data: [
-      //         {
-      //           value: 1,
-      //           itemStyle: {
-      //             normal: {
-      //               color: "#99c3fc"
-      //             }
-      //           }
-      //         }
-      //       ]
-      //     }, */
-      //     {
-      //       type: "pie",
-      //       radius: ["50%", "80%"],
-      //       // center: ["30%", "50%"],
-      //       startAngle: 30,
-      //       itemStyle: {
-      //         normal: {
-      //           borderColor: "#3c60a5",
-      //           borderWidth: 2
-      //         }
-      //       },
-      //       label: {
-      //         show: false,
-      //         fontSize: 14,
-      //         position: "inside",
-      //         formatter: "{d}%"
-      //       },
-      //       data: that.chartData1
-      //     },
-      //     {
-      //       type: "pie",
-      //       radius: ["50%", "80%"],
-      //       // center: ["30%", "50%"],
-      //       startAngle: 30,
-      //       /* itemStyle: {
-      //         normal: {
-      //           borderColor: "#3c60a5",
-      //           borderWidth: 2
-      //         }
-      //       }, */
-      //       label: {
-      //         fontSize: 14,
-      //         formatter: "{b} {c}个\n{d}%",
-      //         color: "#fff"
-      //         // backgroundColor: "#0e3b9a"
-      //       },
-      //       data: that.chartData1
-      //     }
-      //   ]
-      // });
-
-      that.chart2 = this.$echarts.init(document.getElementById("chart2"));
-
-      that.chart2.setOption({
-        backgroundColor: "#2248ab",
-        grid: {
-          left: "3%",
-          right: "10%",
-          top: "-4%",
-          bottom: "0%",
-          containLabel: true
-        },
-        legend: {
-          show: false
-        },
-        tooltip: {
-          trigger: "axis",
-          axisPointer: {
-            type: "shadow"
+      return new Promise((resolve, reject) => {
+        this.chart1 = this.$echarts.init(document.getElementById("chart1"));
+        this.chart1.setOption({
+          backgroundColor: "#2248ab",
+          grid: {
+            left: "3%",
+            right: "10%",
+            top: "-4%",
+            bottom: "0%",
+            containLabel: true,
           },
-          formatter: "{b} : {c}%"
-        },
-        xAxis: {
-          type: "value",
-          show: false,
-          position: "top"
-          // axisTick: {
-          //   show: false
-          // },
-          // axisLine: {
-          //   show: false,
-          //   lineStyle: {
-          //     color: "#fff"
-          //   }
-          // },
-          // splitLine: {
-          //   show: false
-          // }
-        },
-        yAxis: [
-          {
-            type: "category",
-            axisTick: {
-              show: false
-            },
-            splitLine: {
-              show: false
-            },
-            inverse: "true", //排序
-            axisLine: {
-              show: false,
-              lineStyle: {
-                color: "#fff"
-              }
-            },
-            axisLabel: {
-              fontSize: 16
-            },
-            data: that.chartData2.map(item => {
-              return item.name;
-            })
-          }
-        ],
-        series: [
-          {
-            type: "bar",
-            barWidth: 17,
-            label: {
-              show: false,
-              //   fontSize: 14,
-              position: "insideRight"
-            },
-            itemStyle: {
-              barBorderRadius: 70,
-              color: "#fc1a1b"
-            },
-            data: that.chartData2
+          legend: {
+            show: false,
           },
-          {
-            name: "底色",
-            type: "bar",
-            barGap: "-100%",
-            data: [
-              100,
-              100,
-              100,
-              100,
-              100,
-              100,
-              100,
-              100,
-              100,
-              100,
-              100,
-              100,
-              100,
-              100,
-              100
-            ],
-            barWidth: 17,
-            label: {
-              show: false,
-              position: "right"
+          tooltip: {
+            trigger: "axis",
+            axisPointer: {
+              type: "shadow",
             },
-            itemStyle: {
-              normal: {
-                color: "#fff",
-                barBorderRadius: 70
-              }
+            formatter: "{b} : {c}",
+          },
+          xAxis: {
+            type: "value",
+            show: false,
+            position: "top",
+          },
+          yAxis: [
+            {
+              type: "category",
+              axisTick: {
+                show: false,
+              },
+              splitLine: {
+                show: false,
+              },
+              inverse: "true",
+              axisLine: {
+                show: false,
+                lineStyle: {
+                  color: "#fff",
+                },
+              },
+              axisLabel: {
+                fontSize: 16,
+              },
+              data: that.chartData1.map((item) => {
+                return item.name;
+              }),
             },
-            z: 0
-          }
-        ]
+          ],
+          series: [
+            {
+              type: "bar",
+              barWidth: 17,
+              itemStyle: {
+                barBorderRadius: 70,
+                color: "#fc1a1b",
+              },
+              data: that.chartData1.map((item) => {
+                return item.redNum;
+              }),
+            },
+            {
+              name: "底色",
+              type: "bar",
+              barGap: "-100%",
+              barWidth: 17,
+              label: {
+                show: true,
+                position: "right",
+              },
+              itemStyle: {
+                normal: {
+                  color: "#fff",
+                  barBorderRadius: 70,
+                },
+              },
+              z: 0,
+              data: that.chartData1.map((item) => {
+                return item.taskNum;
+              }),
+            },
+          ],
+        });
+
+        resolve(true);
       });
     },
 
-    // 选择类型
-    checkType(item) {
-      if (~this.activeList.indexOf(item.name)) {
-        const index = this.activeList.indexOf(item.name);
-        this.activeList.splice(index, 1);
-      } else {
-        this.activeList.push(item.name);
-      }
+    // 初始化表格
+    initTable() {
+      return new Promise((resolve, reject) => {
+        const ds = this.lcwmxxList;
+
+        const sObj = {};
+        const sArr = [];
+
+        ds.map(({ TAG }) => {
+          if (!sObj[TAG]) sObj[TAG] = 0;
+          sObj[TAG]++;
+        });
+
+        this.tbData2 = [];
+
+        for (let k in TypeHash) {
+          this.tbData2.push({
+            name: k,
+            value: ~~sObj[TypeHash[k]],
+          });
+        }
+
+        this.tmp = [...this.tbData2];
+
+        resolve(true);
+      });
     },
 
-    fixData() {
-      loadModules(
-        ["esri/tasks/QueryTask", "esri/tasks/support/Query", "esri/Graphic"],
-        OPTION
-      ).then(([QueryTask, Query, Graphic]) => {
-        const queryTask = new QueryTask({
-          url:
-            "http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer/0"
+    // 组装图表数据
+    fixChartData() {
+      return new Promise((resolve, reject) => {
+        const list = this.lcwmxxList;
+
+        const sObj = {};
+        const sArr = [];
+
+        list.map(({ District, FLAG }) => {
+          if (!sObj[District]) sObj[District] = { redNum: 0, taskNum: 0 };
+          if (FLAG == 1) sObj[District].redNum++;
+          sObj[District].taskNum++;
         });
-        const query = new Query();
-        query.outFields = ["*"];
-        query.where = `1 = 1`;
-        queryTask.execute(query).then(res => {
-          if (res.features.length) {
-            const ds = res.features;
 
-            // console.log("ds", ds);
+        for (let k in sObj) {
+          this.chartData1.push({
+            name: k,
+            redNum: sObj[k].redNum,
+            taskNum: sObj[k].taskNum,
+          });
+        }
 
-            const sObj = {};
-            const sArr = [];
+        this.chartData1
+          .sort((a, b) => {
+            return b.taskNum - a.taskNum;
+          })
+          .sort((a, b) => {
+            return b.redNum / b.taskNum - a.redNum / a.taskNum;
+          });
 
-            ds.map(({ attributes }) => {
-              const tag = attributes.TAG;
-              if (!sObj[tag]) sObj[tag] = 0;
-              sObj[tag]++;
-            });
+        this.chartData2 = [...this.chartData1];
 
-            // console.log("obj", sObj);
-
-            this.tbData2 = [];
-
-            for (let k in TypeHash) {
-              this.tbData2.push({
-                name: k,
-                value: ~~sObj[TypeHash[k]]
-              });
-            }
-
-            this.tmp = [...this.tbData2];
-
-            // console.log("arr", this.tbData2);
-          }
-        });
+        resolve(true);
       });
     },
 
@@ -541,51 +251,93 @@ export default {
         return;
       } else if (this.tmpMap[country]) {
         this.tbData2 = this.tmpMap[country];
+        return;
       } else {
-        loadModules(
-          ["esri/tasks/QueryTask", "esri/tasks/support/Query", "esri/Graphic"],
-          OPTION
-        ).then(([QueryTask, Query, Graphic]) => {
-          const queryTask = new QueryTask({
-            url:
-              "http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer/0"
+        return new Promise((resolve, reject) => {
+          const ds = this.lcwmxxList;
+
+          const sObj = {};
+          const sArr = [];
+
+          ds.map(({ TAG }) => {
+            if (!sObj[TAG]) sObj[TAG] = 0;
+            sObj[TAG]++;
           });
-          const query = new Query();
-          query.outFields = ["*"];
-          query.where = `District = '${country}'`;
-          queryTask.execute(query).then(res => {
-            if (res.features.length) {
-              const ds = res.features;
 
-              // console.log("ds", ds);
+          this.tbData2 = [];
 
-              const sObj = {};
-              const sArr = [];
+          for (let k in TypeHash) {
+            this.tbData2.push({
+              name: k,
+              value: ~~sObj[TypeHash[k]],
+            });
+          }
 
-              ds.map(({ attributes }) => {
-                const tag = attributes.TAG;
-                if (!sObj[tag]) sObj[tag] = 0;
-                sObj[tag]++;
-              });
+          this.tmpMap[country] = this.tbData2;
 
-              // console.log("obj", sObj);
-
-              this.tbData2 = [];
-
-              for (let k in TypeHash) {
-                this.tbData2.push({
-                  name: k,
-                  value: ~~sObj[TypeHash[k]]
-                });
-              }
-
-              this.tmpMap[country] = this.tbData2;
-            }
-          });
+          resolve(true);
         });
       }
-    }
-  }
+    },
+
+    // 更新图表
+    updateChart(tags) {
+      if (tags.length == 0) {
+        this.chartData1 = this.chartData2;
+        return;
+      }
+      const that = this;
+      return new Promise((resolve, reject) => {
+        const list = this.lcwmxxList;
+
+        const sObj = {};
+        const sArr = [];
+
+        list.map(({ District, FLAG, TAG }) => {
+          if (!sObj[District]) sObj[District] = { redNum: 0, taskNum: 0 };
+          if (~tags.indexOf(TAG)) {
+            if (FLAG == 1) sObj[District].redNum++;
+            sObj[District].taskNum++;
+          }
+        });
+
+        this.chartData1 = [];
+
+        for (let k in sObj) {
+          this.chartData1.push({
+            name: k,
+            redNum: sObj[k].redNum,
+            taskNum: sObj[k].taskNum,
+          });
+        }
+
+        this.chartData1
+          .sort((a, b) => {
+            return b.taskNum - a.taskNum;
+          })
+          .sort((a, b) => {
+            return b.redNum / b.taskNum - a.redNum / a.taskNum;
+          });
+
+        this.chart1.setOption({
+          series: [
+            {
+              data: that.chartData1.map((item) => {
+                return item.redNum;
+              }),
+            },
+            {
+              data: that.chartData1.map((item) => {
+                return item.taskNum;
+              }),
+            },
+          ],
+        });
+
+        resolve(true);
+      });
+    },
+  },
 };
 </script>
 
@@ -634,6 +386,22 @@ export default {
     .table-out {
       background-color: #0d3b99;
       padding: 1px;
+      height: 300px;
+      overflow-x: hidden;
+      overflow-y: auto;
+
+      &::-webkit-scrollbar {
+        display: block;
+        width: 10px;
+        background-color: transparent;
+        border-radius: 10px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        width: 7px;
+        background-color: #fff;
+        border-radius: 7px;
+      }
     }
 
     table {
@@ -704,12 +472,12 @@ export default {
     }
 
     .chart-out {
-      height: 140px;
+      height: 260px;
       overflow-x: hidden;
       overflow-y: auto;
       padding-right: 7px;
 
-      #chart2 {
+      #chart1 {
         height: 450px;
       }
     }

@@ -2,6 +2,7 @@ import {
   getDefaultAxios
 } from "@/api/index.js";
 const RES = "sql_wzxgfy";
+const RES2 = "sql_lcwm";
 
 /**
  * [lc_xqcrjl]小区出入记录
@@ -161,6 +162,29 @@ export const lc_zdfasj = async () => {
   return await axios.post("/dw/ds", option_concat(name, params));
 }
 
+
+/**
+ * [LCWM_P_597]鹿城文明城市基本信息
+ */
+export const lcwm_jbxx = async () => {
+  const axios = getDefaultAxios();
+  const params = ["NAME", "GLZD", "FLAG", "TAG", "District"]
+  const name = "LCWM_P_597";
+  return await axios.post("/dw/ds", option_concat2(name, params));
+}
+
+
+/**
+ * [LCWM_KCB]鹿城文明城市考察表
+ */
+export const lcwm_kcb = async () => {
+  const axios = getDefaultAxios();
+  const params = ["TAG", "KC_TAG", "KCNR", "KCBZ"]
+  const name = "LCWM_KCB";
+  return await axios.post("/dw/ds", option_concat2(name, params));
+}
+
+
 /**
  * 配置
  * @param {*} name 
@@ -188,6 +212,33 @@ const option_concat = (name, cols, where = "", count) => {
         }
       }),
       module: RES,
+      where,
+    }
+  };
+  count && (option.count = count);
+  return option;
+}
+
+const option_concat2 = (name, cols, where = "", count) => {
+  const option = {
+    module: "dwbean",
+    action: "001",
+    res: RES2,
+    ds: {
+      buffers: [],
+      tables: [{
+        alias: "f",
+        orm: "",
+        name,
+        updateflag: 1
+      }],
+      cols: cols.map(item => {
+        return {
+          name: item,
+          raw: `f.${item}`
+        }
+      }),
+      module: RES2,
       where,
     }
   };

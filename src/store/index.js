@@ -8,7 +8,10 @@ import {
   lc_zdjzxx,
   lc_dkjbxx,
   lc_zdzbsj,
-  lc_zdfasj
+  lc_zdfasj,
+
+  lcwm_jbxx,
+  lcwm_kcb
 } from "@/api/beans/fetch";
 export default new Vuex.Store({
   state: {
@@ -23,7 +26,14 @@ export default new Vuex.Store({
     // 做地专班数据
     zdzbList: [],
     // 做地方案数据
-    zdfaList: []
+    zdfaList: [],
+
+
+    // 鹿城文明城市
+    // 基本信息
+    lcwmxxList: [],
+    // 考察表
+    lcwmkcbList: []
   },
   mutations: {
     updatecrjlList(state, val) {
@@ -43,6 +53,14 @@ export default new Vuex.Store({
     },
     updatezdfaList(state, val) {
       state.zdfaList = val;
+    },
+
+
+    updatelcwmxxList(state, val) {
+      state.lcwmxxList = val;
+    },
+    updatelcwmkcbList(state, val) {
+      state.lcwmkcbList = val;
     },
   },
   actions: {
@@ -99,6 +117,25 @@ export default new Vuex.Store({
         data
       } = await lc_zdfasj();
       commit('updatezdfaList', data)
+    },
+
+    async fetchlcwmxxList({
+      state,
+      commit
+    }, option) {
+      const {
+        data
+      } = await lcwm_jbxx();
+      commit('updatelcwmxxList', data)
+    },
+    async fetchlcwmkcbList({
+      state,
+      commit
+    }, option) {
+      const {
+        data
+      } = await lcwm_kcb();
+      commit('updatelcwmkcbList', data)
     }
   }
 });

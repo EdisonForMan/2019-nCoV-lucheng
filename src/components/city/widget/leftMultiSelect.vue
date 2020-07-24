@@ -40,7 +40,7 @@
 /* eslint-disable */
 import { loadModules } from "esri-loader";
 import { WRT_config, OPTION } from "@/components/common/Tmap";
-import { csSortHash, csMap } from "../config/hash";
+import { csSortHash, csMap, TypeHash } from "../config/hash";
 const { server } = WRT_config;
 export default {
   name: "leftMultiSelect",
@@ -48,7 +48,7 @@ export default {
     return {
       icon_show: true,
       tree: [],
-      server
+      server,
     };
   },
   props: { leftOptions: Array },
@@ -83,24 +83,31 @@ export default {
     changeBox(item, index) {
       const c = this.tree[index].check;
       const list = [];
+      const tags = [];
       for (let i in this.tree[index].children) {
         this.tree[index].children[i].check = c;
-        if (c == true) list.push(this.tree[index].children[i].name);
+        if (c == true) {
+          list.push(this.tree[index].children[i].name);
+          tags.push(String(TypeHash[this.tree[index].children[i].name]));
+        }
       }
 
+      this.$parent.$refs.charts.updateChart(tags);
       this.$parent.$refs.charts.activeList = list;
     },
     intercept() {
       const _tree = this.$util.clone(this.tree);
       const list = [];
+      const tags = [];
       for (let i = 0; i < _tree.length; i++) {
         let shall = true;
         _tree[i].children.length
-          ? _tree[i].children.map(item => {
+          ? _tree[i].children.map((item) => {
               if (!item.check) {
                 shall = false;
-              } else {
+              } else if (i != 1) {
                 list.push(item.name);
+                tags.push(String(TypeHash[item.name]));
               }
             })
           : (shall = false);
@@ -109,13 +116,14 @@ export default {
       this.tree = _tree;
       this.$parent.leftOptions = this.tree;
 
+      this.$parent.$refs.charts.updateChart(tags);
       this.$parent.$refs.charts.activeList = list;
     },
     clean() {
       const _tree = this.$util.clone(this.tree);
       for (let i = 0; i < _tree.length; i++) {
         _tree[i].children.length
-          ? _tree[i].children.map(item => {
+          ? _tree[i].children.map((item) => {
               item.check = false;
             })
           : null;
@@ -123,17 +131,17 @@ export default {
       }
       this.tree = _tree;
       this.$parent.leftOptions = this.tree;
-    }
+    },
   },
   watch: {
     tree: {
-      handler: function() {},
-      deep: true
+      handler: function () {},
+      deep: true,
     },
     leftOptions(newV, oldV) {
       this.tree = newV;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped lang="less">

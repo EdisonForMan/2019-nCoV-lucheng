@@ -40,7 +40,23 @@
       <span class="analyze">周边分析</span>
       <div>
         <Border>
-          <video muted="muted" controls="controls" loop="loop"></video>
+          <div>
+            <video
+              id="myVideo"
+              class="video-js vjs-default-skin vjs-big-play-centered"
+              muted
+              controls
+              preload="auto"
+              data-setup="{}"
+              style="width: 100%;height: auto"
+            >
+              <source
+                id="source"
+                src="http://video-surveillance.ousutec.com.cn:6713/mag/hls/90fdea47347c4426bb4990c8dabcf933/1/live.m3u8"
+                type="application/x-mpegURL"
+              />
+            </video>
+          </div>
         </Border>
       </div>
     </div>
@@ -72,69 +88,85 @@
 import { loadModules } from "esri-loader";
 import { OPTION, spatialReference, IMAGELAYER } from "@/components/common/Tmap";
 import Border from "@/components/common/widget/border";
+
+import { mapState, mapActions } from "vuex";
+
 export default {
   data() {
     return {
+      myVideo: null,
       option: {
         name: "南郊街道办事处",
         type: "街道办事处",
         relation: [
           {
             name: "南郊街道—厉震",
-            phone: "13505777057"
-          }
-        ]
+            phone: "13505777057",
+          },
+        ],
       },
       moduleList: [
         {
           label: "公益宣传",
           enLabel: "GongYiXuanChuan",
           isFinish: true,
-          background: `linear-gradient(90deg, rgba(64, 124, 246, 1), rgba(132, 234, 252, 1))`
+          background: `linear-gradient(90deg, rgba(64, 124, 246, 1), rgba(132, 234, 252, 1))`,
         },
         {
           label: "环境秩序",
           enLabel: "HuanJingZhiXu",
           isFinish: true,
-          background: `linear-gradient(90deg, rgba(89, 135, 245, 1), rgba(239, 130, 255, 1))`
+          background: `linear-gradient(90deg, rgba(89, 135, 245, 1), rgba(239, 130, 255, 1))`,
         },
         {
           label: "垃圾分类",
           enLabel: "LaJiFenLei",
           isFinish: false,
-          background: `linear-gradient(90deg, rgba(255, 139, 41, 1), rgba(255, 192, 30, 1))`
+          background: `linear-gradient(90deg, rgba(255, 139, 41, 1), rgba(255, 192, 30, 1))`,
         },
         {
           label: "消防安全",
           enLabel: "XiaoFangAnQuan",
           isFinish: false,
-          background: `linear-gradient(90deg, rgba(242, 71, 168, 1), rgba(239, 149, 81, 1))`
+          background: `linear-gradient(90deg, rgba(242, 71, 168, 1), rgba(239, 149, 81, 1))`,
         },
         {
           label: "公厕管理",
           enLabel: "GongCeGuanLi",
           isFinish: false,
-          background: `linear-gradient(90deg, rgba(255, 88, 110, 1), rgba(255, 158, 68, 1))`
+          background: `linear-gradient(90deg, rgba(255, 88, 110, 1), rgba(255, 158, 68, 1))`,
         },
         {
           label: "基础设施",
           enLabel: "JiChuSheShi",
           isFinish: false,
-          background: `linear-gradient(90deg, rgba(64, 124, 246, 1), rgba(132, 234, 252, 1))`
+          background: `linear-gradient(90deg, rgba(64, 124, 246, 1), rgba(132, 234, 252, 1))`,
         },
         {
           label: "优质服务",
           enLabel: "YouZhiFuWu",
           isFinish: false,
-          background: `linear-gradient(90deg, rgba(89, 135, 245, 1), rgba(239, 130, 255, 1))`
-        }
-      ]
+          background: `linear-gradient(90deg, rgba(89, 135, 245, 1), rgba(239, 130, 255, 1))`,
+        },
+      ],
     };
   },
   components: { Border },
+  computed: {
+    ...mapState({
+      lcwmkcbList: (state) => state.lcwmkcbList,
+    }),
+  },
+  async mounted() {
+    await this.fetchlcwmkcbList();
+    await this.initModule();
+
+    await this.initVideo();
+  },
   methods: {
+    ...mapActions(["fetchlcwmkcbList"]),
+
     back() {
-      // console.log(this.$parent);
       this.$parent.$parent.rightCheckIndex = 0;
     },
     report() {
@@ -143,7 +175,7 @@ export default {
     getItem(glzd) {
       if (!glzd) return;
 
-      console.log("n", glzd);
+      // console.log("n", glzd);
       const that = this;
 
       loadModules(
@@ -152,13 +184,13 @@ export default {
       ).then(([QueryTask, Query, Graphic]) => {
         const queryTask = new QueryTask({
           url:
-            "http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer/5"
+            "http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer/5",
         });
         const query = new Query();
         query.outFields = ["*"];
         query.where = `GLZD = '${glzd}'`;
         // query.returnGeometry = true;
-        queryTask.execute(query).then(res => {
+        queryTask.execute(query).then((res) => {
           if (res.features.length) {
             // console.log(res.features);
 
@@ -167,13 +199,13 @@ export default {
             that.option = {
               name: ds[0].attributes.名称,
               type: ds[0].attributes.类型,
-              relation: []
+              relation: [],
             };
 
             ds.map(({ attributes }) => {
               that.option.relation.push({
                 name: attributes.联系人,
-                phone: attributes.联系方式
+                phone: attributes.联系方式,
               });
             });
 
@@ -198,8 +230,43 @@ export default {
           }
         });
       });
-    }
-  }
+    },
+
+    // 初始化视频
+    initVideo() {
+      return new Promise((resolve, reject) => {
+        this.myVideo = this.$video("myVideo", {
+          bigPlayButton: true,
+          textTrackDisplay: false,
+          posterImage: false,
+          errorDisplay: false,
+        });
+        this.myVideo.play();
+        resolve(true);
+      });
+    },
+
+    // 初始化模块
+    initModule() {
+      return new Promise((resolve, reject) => {
+        // console.log("obj", this.lcwmkcbList);
+
+        const list = this.lcwmkcbList;
+
+        const sObj = {};
+        const sArr = [];
+
+        list.map(({ KCNR }) => {
+          if (!sObj[KCNR]) sObj[KCNR] = 0;
+          sObj[KCNR]++;
+        });
+
+        // console.log("sobj", sObj);
+
+        resolve(true);
+      });
+    },
+  },
 };
 </script>
 
@@ -322,6 +389,10 @@ export default {
     video {
       width: 100%;
       height: 153px;
+    }
+
+    .video-js .vjs-tech {
+      position: relative !important;
     }
   }
 

@@ -42,6 +42,11 @@ Vue.use(Option)
 Vue.use(Avatar)
 Vue.use(Input)
 
+import Video from 'video.js'
+import 'video.js/dist/video-js.css'
+
+Vue.prototype.$video = Video
+
 // filter production infos
 Vue.prototype.$echarts = echarts;
 Vue.config.productionTip = false;

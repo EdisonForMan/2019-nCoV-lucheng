@@ -114,16 +114,16 @@ export default {
       ks_lxfs: "暂无数据",
       dk_xm: "暂无数据",
       dk_zw: "暂无数据",
-      dk_lxfs: "暂无数据"
+      dk_lxfs: "暂无数据",
     };
   },
   components: { reasonForm },
   computed: {
     ...mapState({
-      zdjzList: state => state.zdjzList,
-      dkxxList: state => state.dkxxList,
-      zdzbList: state => state.zdzbList
-    })
+      zdjzList: (state) => state.zdjzList,
+      dkxxList: (state) => state.dkxxList,
+      zdzbList: (state) => state.zdzbList,
+    }),
   },
   created() {},
   mounted() {},
@@ -150,13 +150,13 @@ export default {
             $(".el-carousel__item")
               .eq(index)
               .css({
-                "background-image": `url("${server2}/${item}")`
+                "background-image": `url("${server2}/${item}")`,
               });
           } else {
             $(".el-carousel__item")
               .eq(index)
               .css({
-                "background-image": `url("${server}/icon/wzzdtp/${item}")`
+                "background-image": `url("${server}/icon/wzzdtp/${item}")`,
               });
           }
         });
@@ -164,14 +164,16 @@ export default {
         $(".el-carousel__item")
           .eq(0)
           .css({
-            "background-image": `url("${server}/icon/wzzdtp/临时/暂无图片.jpg")`
+            "background-image": `url("${server}/icon/wzzdtp/临时/暂无图片.jpg")`,
           });
       }
 
       $(".el-carousel__item").css({
-        cursor: "pointer"
+        cursor: "pointer",
       });
       $(".el-carousel__item").bind("click", this.locateVR);
+
+      // console.log("list", this.zdjzList);
 
       const list = this.zdjzList.filter(({ GLZD }) => GLZD == match_glzd);
 
@@ -180,8 +182,8 @@ export default {
       if (dkxxObj.length) {
         this.qktable = [
           {
-            text: dkxxObj[0].QKYS == "/" ? "暂无数据" : dkxxObj[0].QKYS
-          }
+            text: dkxxObj[0].QKYS == "/" ? "暂无数据" : dkxxObj[0].QKYS,
+          },
         ];
       }
 
@@ -190,7 +192,7 @@ export default {
 
         const colorHash = {
           是: "rgba(58,209,75,0.3)",
-          否: "rgba(255,51,83,0.3)"
+          否: "rgba(255,51,83,0.3)",
         };
 
         that.qtable = [
@@ -200,7 +202,7 @@ export default {
             jtyy: item.JTYY1,
             zrr: item.ZRR1,
             sjjd: item.SJJD1,
-            color: colorHash[item.TDZSZJS1]
+            color: colorHash[item.TDZSZJS1],
           },
           {
             text: "土地使用权是否已收回",
@@ -208,7 +210,7 @@ export default {
             jtyy: item.JTYY2,
             zrr: item.ZRR2,
             sjjd: item.SJJD2,
-            color: colorHash[item.TDSYQ2]
+            color: colorHash[item.TDSYQ2],
           },
           {
             text: "建筑物是否已拆除",
@@ -216,7 +218,7 @@ export default {
             jtyy: item.JTYY3,
             zrr: item.ZRR3,
             sjjd: item.SJJD3,
-            color: colorHash[item.JZW3]
+            color: colorHash[item.JZW3],
           },
           {
             text: "土地证是否已注销",
@@ -224,7 +226,7 @@ export default {
             jtyy: item.JTYY4,
             zrr: item.ZRR4,
             sjjd: item.SJJD4,
-            color: colorHash[item.TDZ4]
+            color: colorHash[item.TDZ4],
           },
           {
             text: "管线是否已迁移",
@@ -232,7 +234,7 @@ export default {
             jtyy: item.JTYY5,
             zrr: item.ZRR5,
             sjjd: item.SJJD5,
-            color: colorHash[item.GX5]
+            color: colorHash[item.GX5],
           },
           {
             text: "地表附着物是否已清理",
@@ -240,7 +242,7 @@ export default {
             jtyy: item.JTYY6,
             zrr: item.ZRR6,
             sjjd: item.SJJD6,
-            color: colorHash[item.DBFZW6]
+            color: colorHash[item.DBFZW6],
           },
           {
             text: "土地污染是否已治理",
@@ -248,7 +250,7 @@ export default {
             jtyy: item.JTYY7,
             zrr: item.ZRR7,
             sjjd: item.SJJD7,
-            color: colorHash[item.TDWR7]
+            color: colorHash[item.TDWR7],
           },
           {
             text: "场地是否已平整",
@@ -256,7 +258,7 @@ export default {
             jtyy: item.JTYY8,
             zrr: item.ZRR8,
             sjjd: item.SJJD8,
-            color: colorHash[item.CD8]
+            color: colorHash[item.CD8],
           },
           {
             text: "水域占用是否已审批",
@@ -264,7 +266,7 @@ export default {
             jtyy: item.JTYY9,
             zrr: item.ZRR9,
             sjjd: item.SJJD9,
-            color: colorHash[item.SY9]
+            color: colorHash[item.SY9],
           },
           {
             text: "围墙放样地籍图是否完成",
@@ -272,7 +274,7 @@ export default {
             jtyy: item.JTYY10,
             zrr: item.ZRR10,
             sjjd: item.SJJD10,
-            color: colorHash[item.WQFY10]
+            color: colorHash[item.WQFY10],
           },
           {
             text: "土地是否收储",
@@ -280,7 +282,7 @@ export default {
             jtyy: item.JTYY11,
             zrr: item.ZRR11,
             sjjd: item.SJJD11,
-            color: colorHash[item.TDSC11]
+            color: colorHash[item.TDSC11],
           },
           {
             text: "是否挂牌",
@@ -288,8 +290,8 @@ export default {
             jtyy: item.JTYY12,
             zrr: item.ZRR12,
             sjjd: item.SJJD12,
-            color: colorHash[item.GP12]
-          }
+            color: colorHash[item.GP12],
+          },
         ];
 
         // const name = list[0].GLZD;
@@ -326,8 +328,8 @@ export default {
       if (~this.title.indexOf("广化")) {
         window.open("https://720yun.com/t/0b0jvzeykn7?scene_id=20053605");
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

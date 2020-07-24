@@ -64,7 +64,7 @@ export default {
   created() {
     // 组装 id 数组
     this.ids = [
-      "zgd_line",
+      "sydj_line",
       "cgd_line",
       "jzgd_polygon",
       "jdbsc",

@@ -16,6 +16,7 @@
     "esri-loader": "^2.9.2",
     "jquery": "^3.4.1",
     "qs": "^6.8.0",
+    "video.js": "^7.8.4",
     "vue": "^2.6.10",
     "vue-calendar-component": "^2.8.2",
     "vue-router": "^3.0.7",
