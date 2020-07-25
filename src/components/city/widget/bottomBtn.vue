@@ -7,7 +7,7 @@
       <button type="button" class="btnClass" :class="{active:cgdkTag}" @click="cgdk">拆改地块</button>
       <button type="button" class="btnClass" :class="{active:zddkTag}" @click="zddk">做地地块</button>
       <button type="button" class="btnClass" :class="{active:xzqhTag}" @click="xzqh">五色风险评估</button>-->
-      <button type="button" class="btnClass">双随机</button>
+      <button type="button" class="btnClass" @click="doubleRandom">双随机</button>
       <button type="button" class="btnClass" :class="{active:kgtTag}" @click="kgt">控规图</button>
       <button type="button" class="btnClass" :class="{active:yxtTag}" @click="yxt">影像图</button>
       <button type="button" class="btnClass" :class="{active:sltTag}" @click="slt">矢量图</button>
@@ -45,7 +45,7 @@ export default {
       yxtTag: false,
       sltTag: true,
       dsjTag: false,
-      cgdkTag: false
+      cgdkTag: false,
     };
   },
   created() {},
@@ -92,6 +92,9 @@ export default {
     kgt() {
       this.$parent.$refs.cityArcgis.kgt();
     },
+    doubleRandom() {
+      // this.$parent.randomShow = true;
+    },
 
     // 清除
     clean() {
@@ -109,7 +112,7 @@ export default {
     // 隐藏多个图层
     hideLayerMany(arr) {
       if (Array.isArray(arr)) {
-        arr.map(id => {
+        arr.map((id) => {
           this.$parent.$refs.cityArcgis.map &&
             this.$parent.$refs.cityArcgis.map.findLayerById(id) &&
             (this.$parent.$refs.cityArcgis.map.findLayerById(
@@ -117,8 +120,8 @@ export default {
             ).visible = false);
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -184,10 +184,10 @@ export default {
             url: IMAGELAYER
           });
           this.map.add(layer);
-          this.legend = new Legend({
+          /* this.legend = new Legend({
             label: "图例",
             view: this.view
-          });
+          }); */
 
           this.view.ui.add(this.legend, "bottom-left");
           this.view.on("click", function(evt) {});
@@ -201,8 +201,8 @@ export default {
       const context = this;
       // 详情
       $("body").on("click", ".point_btn", function() {
-        const glzd = $(this).attr("data-val");
-        // console.log("glzd", glzd);
+        const glzd = $(this).attr("summary");
+        console.log("glzd", glzd);
         // 延时等待组件初始化
         setTimeout(() => {
           context.$parent.rightCheckIndex = 1;
@@ -228,10 +228,10 @@ export default {
 
           //  优先级置顶
           this.map.add(chanyePlate, 2);
-          this.legend.layerInfos.push({
+          /* this.legend.layerInfos.push({
             title: "",
             layer: ""
-          });
+          }); */
 
           resolve(true);
         });
@@ -276,7 +276,7 @@ export default {
                       })
                       .join("")}
                   </tbody></table>
-                  <div class="bottomBtn point_btn" data-val="{GLZD}">查看详情</div>`
+                  <div class="bottomBtn point_btn" summary="{GLZD}">查看详情</div>`
             };
           }
 
@@ -537,11 +537,11 @@ export default {
               : that.map.add(layer, 6);
 
             // 图例
-            option.legend &&
+            /* option.legend &&
               that.legend.layerInfos.push({
                 title: option.legend,
                 layer
-              });
+              }); */
 
             // 按钮控制
             option.tag && (that.$parent.$refs.bottomBtn[option.tag] = true);

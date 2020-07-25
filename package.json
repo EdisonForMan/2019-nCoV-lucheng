@@ -52,7 +52,8 @@
       "eslint:recommended"
     ],
     "rules": {
-      "no-unused-vars": 0
+      "no-unused-vars": 0,
+      "comma-dangle": [2, "never"]
     },
     "parserOptions": {
       "parser": "babel-eslint"

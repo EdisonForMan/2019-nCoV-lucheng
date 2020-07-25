@@ -44,10 +44,10 @@
       </div>
     </div>
     <listxq ref="listxq" v-show="listShow" />
-    <!-- <detailForm v-show="detailShow" :style="{right:moveRight + 'px'}" /> -->
     <topDate ref="topDate" />
-    <!-- <topSelect ref="topSelect" /> -->
     <bottomBtn ref="bottomBtn" />
+    <Legend ref="Legend" :class="`animated`" :style="{ left: moveLeft + 'px' }" />
+    <!-- <DoubleRandom ref="DoubleRandom" v-show="randomShow" /> -->
   </div>
 </template>
 
@@ -58,6 +58,9 @@ import leftMultiSelect from "./widget/leftMultiSelect";
 
 import topDate from "./widget/topDate";
 import bottomBtn from "./widget/bottomBtn";
+
+import Legend from "./widget/legend";
+import DoubleRandom from "./widget/doubleRandom";
 
 import jdtj from "./rightDiv/jdtj";
 import lxtj from "./rightDiv/lxtj";
@@ -88,6 +91,7 @@ export default {
       moveLeft: "360",
       moveRight: "500",
       listShow: false,
+      randomShow: true,
       rightCheckIndex: 0,
     };
   },
@@ -100,13 +104,15 @@ export default {
     charts,
     detail,
     report,
+    Legend,
+    DoubleRandom,
     // detailForm
   },
   created() {
     // this.fixOpt();
   },
   mounted() {
-    this.fetchlcwmxxList();
+    // this.fetchlcwmxxList();
   },
   computed: {
     ...mapState({
@@ -114,7 +120,7 @@ export default {
     }),
   },
   methods: {
-    ...mapActions(["fetchlcwmxxList"]),
+    // ...mapActions(["fetchlcwmxxList"]),
     fixOpt() {
       loadModules(
         ["esri/tasks/QueryTask", "esri/tasks/support/Query"],

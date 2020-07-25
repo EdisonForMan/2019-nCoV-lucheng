@@ -284,6 +284,20 @@ export default {
     updateChart(tags) {
       if (tags.length == 0) {
         this.chartData1 = this.chartData2;
+        this.chart1.setOption({
+          series: [
+            {
+              data: this.chartData1.map((item) => {
+                return item.redNum;
+              }),
+            },
+            {
+              data: this.chartData1.map((item) => {
+                return item.taskNum;
+              }),
+            },
+          ],
+        });
         return;
       }
       const that = this;
@@ -322,12 +336,12 @@ export default {
         this.chart1.setOption({
           series: [
             {
-              data: that.chartData1.map((item) => {
+              data: this.chartData1.map((item) => {
                 return item.redNum;
               }),
             },
             {
-              data: that.chartData1.map((item) => {
+              data: this.chartData1.map((item) => {
                 return item.taskNum;
               }),
             },
@@ -354,7 +368,6 @@ export default {
     font-weight: 500;
     letter-spacing: 0.06em;
     color: #ffe048;
-    // border-left: 4px solid #ffe048;
     margin: 13px 15px 10px;
     padding-left: 7px;
     position: relative;

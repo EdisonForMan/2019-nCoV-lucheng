@@ -16,12 +16,12 @@ export default {
   data() {
     return {
       yjdkList: [],
-      csdkList: []
+      csdkList: [],
     };
   },
   components: {},
   props: {
-    id: String
+    id: String,
   },
 
   created() {},
@@ -54,7 +54,7 @@ export default {
     },
     csdkList(oVal, nVal) {
       this.yjdk(this.csdkList, "csdk");
-    }
+    },
   },
   methods: {
     /**
@@ -70,13 +70,13 @@ export default {
             "esri/views/MapView",
             "esri/widgets/Legend",
             "esri/layers/VectorTileLayer",
-            "esri/layers/TileLayer"
+            "esri/layers/TileLayer",
           ],
           OPTION
         ).then(([Map, MapView, Legend, VectorTileLayer]) => {
           // map加载底图
           that.map = new Map({
-            spatialReference
+            spatialReference,
           });
           //设置地图容器
           that.view = new MapView({
@@ -84,19 +84,19 @@ export default {
             spatialReference,
             map: that.map,
             zoom: 13,
-            center: [120.67819448808013, 28.039695289562555]
+            center: [120.67819448808013, 28.039695289562555],
           });
           const layer = new VectorTileLayer({
-            url: IMAGELAYER
+            url: IMAGELAYER,
           });
           that.map.add(layer);
           that.legend = new Legend({
             label: "图例",
-            view: that.view
+            view: that.view,
           });
 
           that.view.ui.add(that.legend, "bottom-left");
-          that.view.on("click", function(evt) {});
+          that.view.on("click", function (evt) {});
           resolve(true);
         });
       });
@@ -105,10 +105,10 @@ export default {
     jQueryBind() {
       const context = this;
       // 地块详情
-      $("body").on("click", ".dk_btn", function() {
-        const glzd = $(this).attr("data-val");
-        const imgName = $(this).attr("data-val2");
-        const name = $(this).attr("data-val3");
+      $("body").on("click", ".dk_btn", function () {
+        const [glzd, imgName, name] = String($(this).attr("summary")).split(
+          "@"
+        );
         context.$parent.rightHidden();
         // 延时等待组件初始化
         setTimeout(() => {
@@ -117,9 +117,8 @@ export default {
         }, 20);
       });
       // 做地出让方案
-      $("body").on("click", ".crfa_btn", function() {
-        const glzd = $(this).attr("data-val");
-        const name = $(this).attr("data-val2");
+      $("body").on("click", ".crfa_btn", function () {
+        const [glzd, name] = String($(this).attr("summary")).split("@");
 
         // 延时等待组件初始化
         setTimeout(() => {
@@ -141,14 +140,14 @@ export default {
               url:
                 "http://172.20.89.7:6082/arcgis/rest/services/lucheng/xzjd_ws/MapServer",
               id: "chanyePlate",
-              opacity: 1
+              opacity: 1,
             });
             //  优先级置顶
             that.map.add(chanyePlate, 2);
 
             that.legend.layerInfos.push({
               title: "五色风险评估",
-              layer: chanyePlate
+              layer: chanyePlate,
             });
 
             // 地块标注图层
@@ -158,13 +157,13 @@ export default {
                 "http://172.20.83.215:6080/arcgis/rest/services/WZZD/WZZDDK/MapServer",
               sublayers: [{ id: 0, definitionExpression: `ssqy = '鹿城区'` }],
               id: "dkImage",
-              opacity: 1
+              opacity: 1,
             });
 
             that.map.add(dkImage, 3);
             that.legend.layerInfos.push({
               title: "做地地块",
-              layer: dkImage
+              layer: dkImage,
             });
             resolve(true);
           }
@@ -190,7 +189,7 @@ export default {
         id: dkVal,
         url:
           // "http://172.20.89.7:6082/arcgis/rest/services/lucheng/ZDDK/MapServer",
-          "http://172.20.83.215:6080/arcgis/rest/services/WZZD/WZZDDK/MapServer/0"
+          "http://172.20.83.215:6080/arcgis/rest/services/WZZD/WZZDDK/MapServer/0",
       };
 
       if (!list) return;
@@ -216,10 +215,10 @@ export default {
                   dkVal == "yjdk" ? "预警" : "超时"
                 }.png`,
                 width: "22px",
-                height: "22px"
+                height: "22px",
               },
-              label: dkVal == "yjdk" ? "预警" : "超时"
-            }
+              label: dkVal == "yjdk" ? "预警" : "超时",
+            },
           };
 
           const feature = new FeatureLayer(option);
@@ -228,7 +227,7 @@ export default {
 
           that.legend.layerInfos.push({
             title: "",
-            layer: feature
+            layer: feature,
           });
 
           resolve(true);
@@ -279,7 +278,7 @@ export default {
           id: "cgdk",
           url:
             "http://172.20.89.7:6082/arcgis/rest/services/lucheng/CZDK/MapServer",
-          sublayers: "0"
+          sublayers: "0",
         };
 
         const { url, id } = item;
@@ -293,7 +292,7 @@ export default {
               url: url + "/" + item.sublayers,
               id,
               outFields: "*",
-              opacity: 0
+              opacity: 0,
             };
             if (tipHash[id] && Hash[tipHash[id]]) {
               const _hash_ = Hash[tipHash[id]];
@@ -302,14 +301,14 @@ export default {
                   <div class="dkTitle">地块基本信息</div>
                   <table class="esri-widget__table" summary="属性和值列表"><tbody>
                     ${_hash_
-                      .map(k => {
+                      .map((k) => {
                         return `<tr>
                             <th class="esri-feature__field-header">${k.label}</th>
                             <td class="esri-feature__field-data">{${k.fieldName}}</td>
                           </tr>`;
                       })
                       .join("")}
-                  </tbody></table>`
+                  </tbody></table>`,
               };
             }
 
@@ -321,7 +320,7 @@ export default {
                 "http://172.20.89.7:6082/arcgis/rest/services/lucheng/CZDK/MapServer",
               sublayers: [{ id: 1 }],
               id: "cgName",
-              opacity: 1
+              opacity: 1,
             });
 
             that.map.add(cgName, 3);
@@ -331,14 +330,14 @@ export default {
                 "http://172.20.89.7:6082/arcgis/rest/services/lucheng/CZDK/MapServer",
               sublayers: [{ id: 0 }],
               id: "cgImage",
-              opacity: 1
+              opacity: 1,
             });
 
             that.map.add(cgImage, 3);
 
             that.legend.layerInfos.push({
               title: "拆改地块",
-              layer: cgImage
+              layer: cgImage,
             });
 
             that.$parent.$refs.bottomBtn.cgdkTag = true;
@@ -366,13 +365,13 @@ export default {
             const imgLayer = new TileLayer({
               url:
                 "https://services.wzmap.gov.cn/server/rest/services/TDT/YX_2019/MapServer",
-              id: "img"
+              id: "img",
             });
             //  优先级置顶
             that.map.add(imgLayer, 1);
             that.legend.layerInfos.push({
               title: "2019年影像图",
-              layer: imgLayer
+              layer: imgLayer,
             });
             this.$parent.$refs.bottomBtn.yxtTag = true;
             this.$parent.$refs.bottomBtn.sltTag = false;
@@ -410,7 +409,7 @@ export default {
                 url:
                   "http://172.20.89.7:6082/arcgis/rest/services/lucheng/LC_KONGGUI/MapServer",
                 sublayers: [{ id: 0 }],
-                id: "kg"
+                id: "kg",
               });
               //  优先级置顶
               that.map.add(mapImg, 2);
@@ -432,7 +431,7 @@ export default {
         url:
           "http://172.20.83.215:6080/arcgis/rest/services/WZZD/WZZDDK/MapServer",
         sublayers: "0",
-        definitionExpression: `ssqy = '鹿城区'`
+        definitionExpression: `ssqy = '鹿城区'`,
       };
 
       const { url, id, definitionExpression } = item;
@@ -445,7 +444,7 @@ export default {
               id,
               definitionExpression,
               outFields: "*",
-              opacity: 0
+              opacity: 0,
             };
             if (tipHash[id] && Hash[tipHash[id]]) {
               const _hash_ = Hash[tipHash[id]];
@@ -454,7 +453,7 @@ export default {
                   <div class="dkTitle">地块基本信息</div>
                   <table class="esri-widget__table" summary="属性和值列表"><tbody>
                     ${_hash_
-                      .map(k => {
+                      .map((k) => {
                         return `<tr>
                             <th class="esri-feature__field-header">${k.label}</th>
                             <td class="esri-feature__field-data">{${k.fieldName}}</td>
@@ -462,8 +461,8 @@ export default {
                       })
                       .join("")}
                   </tbody></table>
-                  <div class="bottomBtn2 dk_btn" data-val="{glzd}" data-val2="{zdxq}" data-val3="{dkmc}">查看详情</div>
-                  <div class="bottomBtn3 crfa_btn" data-val="{glzd}" data-val2="{dkmc}">做地方案</div>`
+                  <div class="bottomBtn2 dk_btn" summary="{glzd}@{zdxq}@{dkmc}">查看详情</div>
+                  <div class="bottomBtn3 crfa_btn" summary="{glzd}@{dkmc}">做地方案</div>`,
               };
             }
 
@@ -484,7 +483,7 @@ export default {
 
       that.view.goTo({
         center: [x, y + 0.0025],
-        zoom: 17
+        zoom: 17,
       });
 
       // 显示地块面
@@ -508,12 +507,12 @@ export default {
             <div class="dkTitle">地块基本信息</div>
             <table class="esri-widget__table" summary="属性和值列表"><tbody>
               ${_hash_
-                .map(k => {
+                .map((k) => {
                   return `<tr>
                     <th class="esri-feature__field-header">${k.label}</th>
-                    <td class="esri-feature__field-data">${attributes[
-                      k.fieldName
-                    ] || ""}</td>
+                    <td class="esri-feature__field-data">${
+                      attributes[k.fieldName] || ""
+                    }</td>
                   </tr>`;
                 })
                 .join("")}
@@ -524,7 +523,7 @@ export default {
                   <div class="bottomBtn3 crfa_btn" data-val="${attributes.glzd}" data-val2="${attributes.dkmc}">做地方案</div>`
                 : ``
             }`,
-          location: [x, y]
+          location: [x, y],
         };
       }
       that.view.popup.alignment = "top-center";
@@ -548,13 +547,13 @@ export default {
       ).then(([QueryTask, Query, Graphic]) => {
         const queryTask = new QueryTask({
           url:
-            "http://172.20.89.7:6082/arcgis/rest/services/lucheng/xzjd_ws/MapServer/0"
+            "http://172.20.89.7:6082/arcgis/rest/services/lucheng/xzjd_ws/MapServer/0",
         });
         const query = new Query();
         query.outFields = ["*"];
         query.where = `${label ? `名称 = '${label}'` : `名称 = ''`}`;
         query.returnGeometry = true;
-        queryTask.execute(query).then(response => {
+        queryTask.execute(query).then((response) => {
           if (response.features.length) {
             const geometry = response.features[0].geometry;
             const fillSymbol = {
@@ -562,12 +561,12 @@ export default {
               color: [21, 249, 253, 0],
               outline: {
                 color: [21, 249, 253],
-                width: 4
-              }
+                width: 4,
+              },
             };
             const polygonGraphic = new Graphic({
               geometry,
-              symbol: fillSymbol
+              symbol: fillSymbol,
             });
             that.view.graphics.add(polygonGraphic);
             that.kgt("show");
@@ -600,14 +599,14 @@ export default {
                 "五马街道",
                 "南郊街道",
                 "滨江街道",
-                "七都街道"
+                "七都街道",
               ].indexOf(label)
                 ? 16
                 : ~["广化街道", "松台街道", "蒲鞋市街道"].indexOf(label)
                 ? 17
                 : ~["藤桥镇", "南汇街道"].indexOf(label)
                 ? 18
-                : 15
+                : 15,
             });
           }
         });
@@ -646,7 +645,7 @@ export default {
             option.sublayers &&
               option.sublayers
                 .sort((a, b) => b - a)
-                .map(id => {
+                .map((id) => {
                   Array.isArray(prop.sublayers)
                     ? prop.sublayers.push({ id })
                     : (prop.sublayers = [{ id }]);
@@ -662,7 +661,7 @@ export default {
             option.legend &&
               that.legend.layerInfos.push({
                 title: option.legend,
-                layer
+                layer,
               });
 
             // 按钮控制
@@ -671,8 +670,8 @@ export default {
           }
         );
       });
-    }
-  }
+    },
+  },
 };
 </script>
  <style scoped lang="less">

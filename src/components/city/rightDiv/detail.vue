@@ -74,7 +74,7 @@
             >
               <span class="finish-tag">{{ item.isFinish ? `已完成` : `未完成` }}</span>
               <p class="module-label">{{ item.label }}</p>
-              <p class="module-enlabel">{{ item.enLabel }}</p>
+              <!-- <p class="module-enlabel">{{ item.enLabel }}</p> -->
             </div>
           </div>
         </Border>
@@ -105,6 +105,7 @@ export default {
           },
         ],
       },
+      tag: 1,
       moduleList: [
         {
           label: "公益宣传",
@@ -154,17 +155,19 @@ export default {
   components: { Border },
   computed: {
     ...mapState({
+      lcwmxxList: (state) => state.lcwmxxList,
       lcwmkcbList: (state) => state.lcwmkcbList,
     }),
   },
   async mounted() {
+    await this.fetchlcwmxxList();
     await this.fetchlcwmkcbList();
     await this.initModule();
 
     await this.initVideo();
   },
   methods: {
-    ...mapActions(["fetchlcwmkcbList"]),
+    ...mapActions(["fetchlcwmxxList", "fetchlcwmkcbList"]),
 
     back() {
       this.$parent.$parent.rightCheckIndex = 0;
@@ -208,25 +211,6 @@ export default {
                 phone: attributes.联系方式,
               });
             });
-
-            // console.log("op", that.option);
-
-            /* that.option = {
-              name,
-              type: "街道办事处",
-              relation: [
-                {
-                  type: "街道负责人",
-                  name: "XXX",
-                  phone: "123456789"
-                },
-                {
-                  type: "部门负责人",
-                  name: "XXX",
-                  phone: "123456789"
-                }
-              ]
-            }; */
           }
         });
       });
@@ -256,9 +240,13 @@ export default {
         const sObj = {};
         const sArr = [];
 
-        list.map(({ KCNR }) => {
-          if (!sObj[KCNR]) sObj[KCNR] = 0;
-          sObj[KCNR]++;
+        list.map(({ TAG, KC_TAG, KCNR, KCBZ }) => {
+          if (!sObj[TAG]) sObj[TAG] = {};
+          if (!sObj[TAG][KC_TAG]) sObj[TAG][KC_TAG] = {};
+          if (!sObj[TAG][KC_TAG]["content"]) sObj[TAG][KC_TAG]["content"] = [];
+          sObj[TAG][KC_TAG]["index"] = KC_TAG;
+          sObj[TAG][KC_TAG]["label"] = KCNR;
+          sObj[TAG][KC_TAG]["content"].push(KCBZ);
         });
 
         // console.log("sobj", sObj);
