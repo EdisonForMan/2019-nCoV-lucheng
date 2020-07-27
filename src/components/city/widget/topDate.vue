@@ -1,5 +1,5 @@
 <template>
-  <div class="topDiv">
+  <div class="topNumber">
     <span class="row1"></span>
     <span class="row2"></span>
     <span class="col2"></span>
@@ -8,14 +8,14 @@
     <div>
       <div class="top_header">
         <div class="header_item">
-          <img src="@/components/common/image/红旗.png" />
+          <img src="@/components/common/image/flag_red.png" />
           <span>红旗数量</span>
         </div>
         <div class="header_item">
           <span>文明城市任务点</span>
         </div>
         <div class="header_item">
-          <img src="@/components/common/image/白旗.png" />
+          <img src="@/components/common/image/flag_white.png" />
           <span>白旗数量</span>
         </div>
       </div>
@@ -50,10 +50,8 @@
 <script>
 /* eslint-disable */
 import { loadModules } from "esri-loader";
-import { OPTION, spatialReference, IMAGELAYER } from "@/components/common/Tmap";
-
+import { OPTION } from "@/components/common/Tmap";
 import { mapState, mapActions } from "vuex";
-
 export default {
   data() {
     return {
@@ -69,132 +67,64 @@ export default {
       lcwmxxList: (state) => state.lcwmxxList,
     }),
   },
-  created() {
-    this.countItems();
-  },
-  /* async mounted() {
-    await this.fetchlcwmxxList();
+  async mounted() {
+    !this.lcwmxxList.length && (await this.fetchlcwmxxList());
     await this.loadData();
-  }, */
+  },
   methods: {
     ...mapActions(["fetchlcwmxxList"]),
 
+    // 加载数据
     loadData() {
-      console.log("load");
       return new Promise((resolve, reject) => {
         const list = this.lcwmxxList;
+        this.taskSum = list.length;
 
-        console.log("data", list);
+        let redNum = 0;
+        let whiteNum = 0;
 
-        // const sObj = {};
-        // const sArr = [];
-
-        /* list.map(({ District, FLAG }) => {
-          if (!sObj[District]) sObj[District] = { redNum: 0, taskNum: 0 };
-          if (FLAG == 1) sObj[District].redNum++;
-          sObj[District].taskNum++;
+        list.map(({ FLAG }) => {
+          if (FLAG == 1) redNum++;
+          else whiteNum++;
         });
 
-        for (let k in sObj) {
-          this.chartData1.push({
-            name: k,
-            redNum: sObj[k].redNum,
-            taskNum: sObj[k].taskNum,
-          });
-        }
+        this.redNum = redNum;
+        this.whiteNum = whiteNum;
 
-        this.chartData1
-          .sort((a, b) => {
-            return b.taskNum - a.taskNum;
-          })
-          .sort((a, b) => {
-            return b.redNum / b.taskNum - a.redNum / a.taskNum;
-          });
-
-        this.chartData2 = [...this.chartData1]; */
+        this.countMap["全区"] = {
+          redNum,
+          whiteNum,
+          taskSum: this.taskSum,
+        };
 
         resolve(true);
       });
     },
 
-    countItems() {
-      loadModules(
-        ["esri/tasks/QueryTask", "esri/tasks/support/Query", "esri/Graphic"],
-        OPTION
-      ).then(([QueryTask, Query, Graphic]) => {
-        const queryTask = new QueryTask({
-          url:
-            "http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer/0",
-        });
-        const query = new Query();
-        query.outFields = ["*"];
-        query.where = `1 = 1`;
-        queryTask.execute(query).then((res) => {
-          if (res.features.length) {
-            this.taskSum = res.features.length;
-
-            const ds = res.features;
-
-            let redNum = 0;
-            let whiteNum = 0;
-
-            ds.map(({ attributes }) => {
-              if (attributes.FLAG == 1) redNum++;
-              else whiteNum++;
-            });
-
-            this.redNum = redNum;
-            this.whiteNum = whiteNum;
-
-            this.countMap["全区"] = {
-              redNum,
-              whiteNum,
-              taskSum: this.taskSum,
-            };
-          }
-        });
-      });
-    },
     filterItems(country) {
-      const that = this;
       if (!this.countMap[country]) {
-        loadModules(
-          ["esri/tasks/QueryTask", "esri/tasks/support/Query", "esri/Graphic"],
-          OPTION
-        ).then(([QueryTask, Query, Graphic]) => {
-          const queryTask = new QueryTask({
-            url:
-              "http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer/0",
-          });
-          const query = new Query();
-          query.outFields = ["*"];
-          query.where = `District = '${country}'`;
-          queryTask.execute(query).then((res) => {
-            if (res.features.length) {
-              const taskSum = res.features.length;
-
-              const ds = res.features;
-
-              let redNum = 0;
-              let whiteNum = 0;
-
-              ds.map(({ attributes }) => {
-                if (attributes.FLAG == 1) redNum++;
-                else whiteNum++;
-              });
-
-              that.countMap[country] = {
-                redNum,
-                whiteNum,
-                taskSum,
-              };
-
-              this.redNum = this.countMap[country].redNum;
-              this.whiteNum = this.countMap[country].whiteNum;
-              this.taskSum = this.countMap[country].taskSum;
-            }
-          });
+        const list = this.lcwmxxList.filter((item) => {
+          return item.District == country;
         });
+
+        const taskSum = list.length;
+        let redNum = 0;
+        let whiteNum = 0;
+
+        list.map(({ FLAG }) => {
+          if (FLAG == 1) redNum++;
+          else whiteNum++;
+        });
+
+        this.countMap[country] = {
+          redNum,
+          whiteNum,
+          taskSum,
+        };
+
+        this.redNum = this.countMap[country].redNum;
+        this.whiteNum = this.countMap[country].whiteNum;
+        this.taskSum = this.countMap[country].taskSum;
       } else {
         this.redNum = this.countMap[country].redNum;
         this.whiteNum = this.countMap[country].whiteNum;
@@ -202,12 +132,11 @@ export default {
       }
     },
   },
-  mounted() {},
 };
 </script>
 
 <style lang="less" scoped>
-.topDiv {
+.topNumber {
   position: fixed;
   top: 60px;
   left: 50%;
@@ -319,28 +248,28 @@ export default {
         height: 44px;
         line-height: 44px;
       }
-    }
 
-    .inner_row,
-    .inner_col {
-      position: absolute;
-      padding: 5px;
-      border-style: solid;
-      border-color: #fff;
-    }
+      .inner_row,
+      .inner_col {
+        position: absolute;
+        padding: 5px;
+        border-style: solid;
+        border-color: #fff;
+      }
 
-    .inner_row {
-      border-top-left-radius: 3px;
-      border-width: 0.2rem 0 0 0.2rem;
-      top: -0.1rem;
-      left: -0.1rem;
-    }
+      .inner_row {
+        border-top-left-radius: 3px;
+        border-width: 0.2rem 0 0 0.2rem;
+        top: -0.1rem;
+        left: -0.1rem;
+      }
 
-    .inner_col {
-      border-bottom-right-radius: 3px;
-      border-width: 0 0.2rem 0.2rem 0;
-      bottom: -0.1rem;
-      right: -0.1rem;
+      .inner_col {
+        border-bottom-right-radius: 3px;
+        border-width: 0 0.2rem 0.2rem 0;
+        bottom: -0.1rem;
+        right: -0.1rem;
+      }
     }
   }
 }
