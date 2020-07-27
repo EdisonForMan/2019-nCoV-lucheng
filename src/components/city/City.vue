@@ -47,7 +47,7 @@
     <topDate ref="topDate" />
     <bottomBtn ref="bottomBtn" />
     <Legend ref="Legend" :class="`animated`" :style="{ left: moveLeft + 'px' }" />
-    <!-- <DoubleRandom ref="DoubleRandom" v-show="randomShow" /> -->
+    <DoubleRandom ref="DoubleRandom" v-show="randomShow" />
   </div>
 </template>
 
@@ -91,7 +91,7 @@ export default {
       moveLeft: "360",
       moveRight: "500",
       listShow: false,
-      randomShow: true,
+      randomShow: false,
       rightCheckIndex: 0,
     };
   },

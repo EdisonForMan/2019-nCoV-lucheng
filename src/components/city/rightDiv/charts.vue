@@ -259,9 +259,11 @@ export default {
           const sObj = {};
           const sArr = [];
 
-          ds.map(({ TAG }) => {
-            if (!sObj[TAG]) sObj[TAG] = 0;
-            sObj[TAG]++;
+          ds.map(({ TAG, District }) => {
+            if (District && District == country) {
+              if (!sObj[TAG]) sObj[TAG] = 0;
+              sObj[TAG]++;
+            }
           });
 
           this.tbData2 = [];
@@ -429,7 +431,6 @@ export default {
         display: flex;
         flex-flow: column;
         justify-content: space-between;
-        // border: 1px solid #fff;
         height: 68px;
         cursor: pointer;
 
@@ -460,21 +461,9 @@ export default {
         box-sizing: border-box;
 
         span:first-child {
-          // display: block;
-          // font-size: 12px;
           color: #fff;
           font-weight: bold;
-          // padding: 2px 3px 0;
         }
-        // span:last-child {
-        //   display: block;
-        //   font-size: 18px;
-        //   text-align: center;
-        // }
-      }
-
-      .cell:first-child {
-        // background-color: orange;
       }
     }
   }

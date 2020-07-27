@@ -51,6 +51,9 @@
 /* eslint-disable */
 import { loadModules } from "esri-loader";
 import { OPTION, spatialReference, IMAGELAYER } from "@/components/common/Tmap";
+
+import { mapState, mapActions } from "vuex";
+
 export default {
   data() {
     return {
@@ -58,13 +61,62 @@ export default {
       taskSum: 0,
       redNum: 0,
       whiteNum: 0,
-      countMap: {}
+      countMap: {},
     };
+  },
+  computed: {
+    ...mapState({
+      lcwmxxList: (state) => state.lcwmxxList,
+    }),
   },
   created() {
     this.countItems();
   },
+  /* async mounted() {
+    await this.fetchlcwmxxList();
+    await this.loadData();
+  }, */
   methods: {
+    ...mapActions(["fetchlcwmxxList"]),
+
+    loadData() {
+      console.log("load");
+      return new Promise((resolve, reject) => {
+        const list = this.lcwmxxList;
+
+        console.log("data", list);
+
+        // const sObj = {};
+        // const sArr = [];
+
+        /* list.map(({ District, FLAG }) => {
+          if (!sObj[District]) sObj[District] = { redNum: 0, taskNum: 0 };
+          if (FLAG == 1) sObj[District].redNum++;
+          sObj[District].taskNum++;
+        });
+
+        for (let k in sObj) {
+          this.chartData1.push({
+            name: k,
+            redNum: sObj[k].redNum,
+            taskNum: sObj[k].taskNum,
+          });
+        }
+
+        this.chartData1
+          .sort((a, b) => {
+            return b.taskNum - a.taskNum;
+          })
+          .sort((a, b) => {
+            return b.redNum / b.taskNum - a.redNum / a.taskNum;
+          });
+
+        this.chartData2 = [...this.chartData1]; */
+
+        resolve(true);
+      });
+    },
+
     countItems() {
       loadModules(
         ["esri/tasks/QueryTask", "esri/tasks/support/Query", "esri/Graphic"],
@@ -72,12 +124,12 @@ export default {
       ).then(([QueryTask, Query, Graphic]) => {
         const queryTask = new QueryTask({
           url:
-            "http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer/0"
+            "http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer/0",
         });
         const query = new Query();
         query.outFields = ["*"];
         query.where = `1 = 1`;
-        queryTask.execute(query).then(res => {
+        queryTask.execute(query).then((res) => {
           if (res.features.length) {
             this.taskSum = res.features.length;
 
@@ -97,7 +149,7 @@ export default {
             this.countMap["全区"] = {
               redNum,
               whiteNum,
-              taskSum: this.taskSum
+              taskSum: this.taskSum,
             };
           }
         });
@@ -112,12 +164,12 @@ export default {
         ).then(([QueryTask, Query, Graphic]) => {
           const queryTask = new QueryTask({
             url:
-              "http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer/0"
+              "http://172.20.89.7:6082/arcgis/rest/services/lucheng/lcwm_lc/MapServer/0",
           });
           const query = new Query();
           query.outFields = ["*"];
           query.where = `District = '${country}'`;
-          queryTask.execute(query).then(res => {
+          queryTask.execute(query).then((res) => {
             if (res.features.length) {
               const taskSum = res.features.length;
 
@@ -134,7 +186,7 @@ export default {
               that.countMap[country] = {
                 redNum,
                 whiteNum,
-                taskSum
+                taskSum,
               };
 
               this.redNum = this.countMap[country].redNum;
@@ -148,9 +200,9 @@ export default {
         this.whiteNum = this.countMap[country].whiteNum;
         this.taskSum = this.countMap[country].taskSum;
       }
-    }
+    },
   },
-  mounted() {}
+  mounted() {},
 };
 </script>
 
